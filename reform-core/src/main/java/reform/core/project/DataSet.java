@@ -49,7 +49,8 @@ public class DataSet {
 		int ownSize = 0;
 
 		for (int i = 0, j = _dataList.size(); i < j; i++) {
-			if (!_parent.hasValueForId(_dataList.getIdAtIndex(i))) {
+			if (parentSize == 0 || !_parent.hasValueForId(_dataList
+                    .getIdAtIndex(i))) {
 				ownSize++;
 			}
 		}
