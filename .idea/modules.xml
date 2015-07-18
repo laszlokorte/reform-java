@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/reform-commands/reform-commands.iml" filepath="$PROJECT_DIR$/reform-commands/reform-commands.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-core/reform-core.iml" filepath="$PROJECT_DIR$/reform-core/reform-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-data/reform-data.iml" filepath="$PROJECT_DIR$/reform-data/reform-data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-evented/reform-evented.iml" filepath="$PROJECT_DIR$/reform-evented/reform-evented.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-identity/reform-identity.iml" filepath="$PROJECT_DIR$/reform-identity/reform-identity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-math/reform-math.iml" filepath="$PROJECT_DIR$/reform-math/reform-math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-naming/reform-naming.iml" filepath="$PROJECT_DIR$/reform-naming/reform-naming.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-playground/reform-playground.iml" filepath="$PROJECT_DIR$/reform-playground/reform-playground.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-rendering/reform-rendering.iml" filepath="$PROJECT_DIR$/reform-rendering/reform-rendering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-serializer/reform-serializer.iml" filepath="$PROJECT_DIR$/reform-serializer/reform-serializer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-stage/reform-stage.iml" filepath="$PROJECT_DIR$/reform-stage/reform-stage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-tools/reform-tools.iml" filepath="$PROJECT_DIR$/reform-tools/reform-tools.iml" />
+    </modules>
+  </component>
+</project>
