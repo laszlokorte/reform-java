@@ -7,7 +7,7 @@
           <element id="directory" name="Java">
             <element id="archive" name="app.jar">
               <element id="directory" name="META-INF">
-                <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/META-INF/MANIFEST.MF" />
+                <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/META-INF/MANIFEST.MF" />
               </element>
               <element id="module-output" name="reform-commands" />
               <element id="module-output" name="reform-core" />
@@ -27,17 +27,17 @@
             </element>
           </element>
           <element id="directory" name="MacOS">
-            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/JavaAppLauncher" />
+            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/JavaAppLauncher" />
           </element>
           <element id="directory" name="Plugins" />
           <element id="directory" name="Resources">
             <element id="directory" name="en.lproj">
-              <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Localizable.strings" />
+              <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Localizable.strings" />
             </element>
-            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Icon.icns" />
+            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Icon.icns" />
           </element>
-          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Info.plist" />
-          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/PkgInfo" />
+          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Info.plist" />
+          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/PkgInfo" />
         </element>
       </element>
     </root>
