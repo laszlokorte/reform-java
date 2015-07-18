@@ -1,0 +1,5 @@
+ - Tool State description
+ - Shape Styles
+ - Glomp Points
+ - Undo/Redo
+ - Recursion
