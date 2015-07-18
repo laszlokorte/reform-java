@@ -54,8 +54,10 @@ public class MoveFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-        _toolState.setState(ToolState.State.Edit);
-		_toolState.setEntityPoints(
+        _toolState.setViewState(ToolState.ViewState.EntityPoint);
+        _toolState.setSelectionState(ToolState.SelectionState.EntityPoint);
+
+        _toolState.setEntityPoints(
 				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
 
@@ -69,7 +71,7 @@ public class MoveFormTool implements Tool {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
-            _toolState.setState(ToolState.State.Edit);
+            _toolState.setViewState(ToolState.ViewState.EntityPoint);
             _toolState.setActiveEntityPoint(null);
 			_toolState.setActiveSnapPoint(null);
 			_state = State.Idle;
@@ -78,21 +80,26 @@ public class MoveFormTool implements Tool {
 			_selectionTool.cancel();
 			_toolState.clearEntityPoints();
 		}
+
+        _toolState.setSelectionState(ToolState.SelectionState.EntityPoint);
 	}
 
 	@Override
 	public void press() {
 		if (_state == State.Snapped) {
 			_state = State.Pressed;
-			_startPosition.set(_currentPoint.getX(), _currentPoint.getY());
+            _toolState.setViewState(ToolState.ViewState.SnapEntity);
+            _startPosition.set(_currentPoint.getX(), _currentPoint.getY());
 			_currentDistance = new ConstantDistance(new Vec2());
 			_currentInstruction = new TranslateInstruction(
 					_currentPoint.getFormId(), _currentDistance);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
 					_focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _currentPoint.getX(),
-					_cursor.getPosition().y - _currentPoint.getY());
+                    _cursor.getPosition().y - _currentPoint.getY());
 			_focus.setFocus(_currentInstruction);
+
+            _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
 		} else {
 			_selectionTool.press();
 			_toolState.setEntityPoints(
@@ -110,11 +117,13 @@ public class MoveFormTool implements Tool {
 
 				_currentInstruction = null;
 				_toolState.setActiveSnapPoint(null);
-                _toolState.setState(ToolState.State.Edit);
+                _toolState.setViewState(ToolState.ViewState.EntityPoint);
             }
 		} else {
 			_selectionTool.release();
 		}
+
+        _toolState.setSelectionState(ToolState.SelectionState.EntityPoint);
 		_swapDirection = false;
 	}
 

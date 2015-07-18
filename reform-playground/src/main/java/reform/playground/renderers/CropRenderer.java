@@ -34,11 +34,12 @@ public class CropRenderer implements CanvasRenderer {
 
 	@Override
 	public void render(final Graphics2D g2, final int width, final int height) {
-		final Vec2i size = _stage.getSize();
 
-		g2.translate((width - size.x) / 2, (height - size.y) / 2);
+        if (_toolState.getViewState() == ToolState.ViewState.Crop) {
+            final Vec2i size = _stage.getSize();
 
-		if (_toolState.getState() == ToolState.State.Crop) {
+            g2.translate((width - size.x) / 2, (height - size.y) / 2);
+
 			CropPoint active = null;
 			g2.setStroke(_borderStroke);
 			g2.setColor(_borderColor);
@@ -55,8 +56,8 @@ public class CropRenderer implements CanvasRenderer {
 			if (active != null) {
 				_cropDotActive.drawAt(g2, active.getX(), active.getY());
 			}
-		}
+            g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+        }
 
-		g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
 	}
 }

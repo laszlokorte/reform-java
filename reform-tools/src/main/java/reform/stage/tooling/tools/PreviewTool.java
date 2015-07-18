@@ -14,8 +14,9 @@ public class PreviewTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setState(ToolState.State.Preview);
-	}
+		_toolState.setViewState(ToolState.ViewState.Preview);
+        _toolState.setSelectionState(ToolState.SelectionState.None);
+    }
 
 	@Override
 	public void tearDown() {

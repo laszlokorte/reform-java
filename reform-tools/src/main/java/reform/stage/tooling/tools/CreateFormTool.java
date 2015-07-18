@@ -66,16 +66,15 @@ public class CreateFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-        _toolState.setState(ToolState.State.Create);
-
-        _toolState.setState(ToolState.State.Create);
-		_toolState.setSnapPoints(
+        _toolState.setViewState(ToolState.ViewState.Snap);
+        _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
+        _toolState.setSnapPoints(
 				_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 	}
 
 	@Override
 	public void tearDown() {
-		_toolState.clearSnapPoints();
+
 	}
 
 	@Override
@@ -84,7 +83,7 @@ public class CreateFormTool implements Tool {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 
-            _toolState.setState(ToolState.State.Create);
+            _toolState.setViewState(ToolState.ViewState.Snap);
 			_toolState.setSnapPoints(
 					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 			_toolState.setActiveSnapPoint(null);
@@ -93,7 +92,7 @@ public class CreateFormTool implements Tool {
 			_state = State.Idle;
 		} else {
 			_selectionTool.cancel();
-		}
+        }
 	}
 
 	@Override
@@ -112,7 +111,7 @@ public class CreateFormTool implements Tool {
 			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
                     _cursor.getPosition().y - _startPoint.getY());
 			_focus.setFocus(_currentInstruction);
-            _toolState.setState(ToolState.State.Create);
+            _toolState.setViewState(ToolState.ViewState.SnapEntity);
 			_toolState.setEntityPoints(
 					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 		} else {
@@ -127,7 +126,7 @@ public class CreateFormTool implements Tool {
 				cancel();
 			} else {
 				_state = State.Idle;
-                _toolState.setState(ToolState.State.Create);
+                _toolState.setViewState(ToolState.ViewState.Snap);
 				_toolState.setSnapPoints(_hitTester
 						.getAllSnapPoints(HitTester.EntityFilter.Any));
 				_currentInstruction = null;
@@ -136,10 +135,10 @@ public class CreateFormTool implements Tool {
 			}
 		} else {
 			_selectionTool.release();
-            _toolState.setState(ToolState.State.Create);
 		}
 
-		_swapDirection = false;
+        _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
+        _swapDirection = false;
 	}
 
 	@Override

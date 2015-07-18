@@ -33,7 +33,8 @@ public class SelectionTool implements Tool {
 
 	@Override
 	public void setUp() {
-        _toolState.setState(ToolState.State.Select);
+        _toolState.setViewState(ToolState.ViewState.Selection);
+        _toolState.setSelectionState(ToolState.SelectionState.None);
 	}
 
 	@Override
@@ -48,27 +49,30 @@ public class SelectionTool implements Tool {
 	@Override
 	public void press() {
 		_state = State.Pressed;
-        _toolState.setState(ToolState.State.Select);
 
 		if (_formSelection.isSet()
 				&& _stage.getEntityForId(_formSelection.getSelected())
 				.contains(_cursor.getPosition())) {
-			return;
+            _toolState.setSelectionState(ToolState.SelectionState.Form);
+
+            return;
 		}
 
 		final Entity e = _cursor.getEntity();
 
 		if (e != null) {
 			_formSelection.setSelection(e.getId());
-		} else {
+            _toolState.setSelectionState(ToolState.SelectionState.Form);
+        } else {
 			_formSelection.reset();
 		}
 	}
 
 	@Override
 	public void release() {
-		_state = State.Idle;
-	}
+        _state = State.Idle;
+        _toolState.setSelectionState(ToolState.SelectionState.None);
+    }
 
 	@Override
 	public void refresh() {

@@ -60,7 +60,8 @@ public class ScaleFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-        _toolState.setState(ToolState.State.Edit);
+        _toolState.setViewState(ToolState.ViewState.Handle);
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
 
         refreshHandles();
 	}
@@ -72,7 +73,6 @@ public class ScaleFormTool implements Tool {
 
 	@Override
 	public void tearDown() {
-		_toolState.clearHandles();
 		_toolState.setPivot(null);
 	}
 
@@ -89,6 +89,8 @@ public class ScaleFormTool implements Tool {
 			_selectionTool.cancel();
 			_toolState.clearHandles();
 		}
+
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
 	}
 
 	@Override
@@ -106,8 +108,10 @@ public class ScaleFormTool implements Tool {
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
 					_baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
-					_cursor.getPosition().y - _currentHandle.getY());
+                    _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
+
+            _toolState.setSelectionState(ToolState.SelectionState.None);
 		} else {
 			_selectionTool.press();
 			refreshHandles();
@@ -129,6 +133,8 @@ public class ScaleFormTool implements Tool {
 		} else {
 			_selectionTool.release();
 		}
+
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
 	}
 
 	@Override

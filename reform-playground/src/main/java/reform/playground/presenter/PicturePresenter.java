@@ -187,7 +187,7 @@ public class PicturePresenter {
 		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer,
 				_focus, _stepCollector, eProcedure));
 		_stagePresenter = new StagePresenter(_stage, _selection, _toolState,
-				_analyzer);
+				_analyzer, _cursor);
 
 
 		_stepCollector.addListener(_procedureView);

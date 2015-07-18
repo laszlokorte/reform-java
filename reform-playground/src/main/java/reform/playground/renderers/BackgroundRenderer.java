@@ -23,7 +23,7 @@ public class BackgroundRenderer implements CanvasRenderer {
 
 	@Override
 	public void render(final Graphics2D g2, final int width, final int height) {
-		if (_isPreview || _toolState.getState() == ToolState.State.Preview) {
+		if (_isPreview || _toolState.getViewState() == ToolState.ViewState.Preview) {
 			g2.setColor(_colorDark);
 
 		} else {

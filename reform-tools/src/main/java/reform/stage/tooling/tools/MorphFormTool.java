@@ -56,7 +56,8 @@ public class MorphFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-        _toolState.setState(ToolState.State.Edit);
+        _toolState.setViewState(ToolState.ViewState.Handle);
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
 
         refreshHandles();
 	}
@@ -76,14 +77,16 @@ public class MorphFormTool implements Tool {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
-			_toolState.setActiveHandle(null);
+            _toolState.setViewState(ToolState.ViewState.Handle);
+
+            _toolState.setActiveHandle(null);
 			_toolState.setActiveSnapPoint(null);
 			_baseInstruction = null;
 			_state = State.Idle;
 		} else {
 			_selectionTool.cancel();
 		}
-        _toolState.setState(ToolState.State.Edit);
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
 	}
 
 	@Override
@@ -99,9 +102,11 @@ public class MorphFormTool implements Tool {
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
 					_baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
-					_cursor.getPosition().y - _currentHandle.getY());
+                    _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
-		} else {
+            _toolState.setViewState(ToolState.ViewState.SnapHandle);
+            _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
+        } else {
 			_selectionTool.press();
 			refreshHandles();
 		}
@@ -117,14 +122,15 @@ public class MorphFormTool implements Tool {
 
 				_currentInstruction = null;
 				_baseInstruction = null;
-                _toolState.setState(ToolState.State.Edit);
+                _toolState.setViewState(ToolState.ViewState.Handle);
                 _toolState.setActiveHandle(null);
 				_toolState.setActiveSnapPoint(null);
 			}
 		} else {
 			_selectionTool.release();
-		}
-	}
+        }
+        _toolState.setSelectionState(ToolState.SelectionState.Handle);
+    }
 
 	@Override
 	public void refresh() {

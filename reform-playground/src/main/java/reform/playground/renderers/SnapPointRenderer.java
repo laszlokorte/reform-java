@@ -37,40 +37,47 @@ public class SnapPointRenderer implements CanvasRenderer {
 
 	@Override
 	public void render(final Graphics2D g2, final int width, final int height) {
-		final Vec2i size = _stage.getSize();
 
-		g2.translate((width - size.x) / 2, (height - size.y) / 2);
+        ToolState.ViewState viewState = _toolState.getViewState();
+        if(viewState == ToolState.ViewState.Snap || viewState == ToolState
+                .ViewState.SnapEntity || viewState == ToolState
+                .ViewState.SnapHandle) {
 
-		SnapPoint active = null;
-		if (_preview) {
-			g2.setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-		}
+            final Vec2i size = _stage.getSize();
 
-		final List<Entity> entities = _stage.getEntities();
-		for (int i = 0, j = entities.size(); i < j; i++) {
-			final Entity entity = entities.get(i);
-			if (_toolState.belongsToActiveSnapPoint(entity)) {
-				g2.setStroke(_borderStroke);
-				g2.setColor(_borderColor);
-				g2.draw(entity.getShape());
-			}
-		}
+            g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
-		final List<SnapPoint> snapPoints = _toolState.getSnapPoints();
-		for (int i = 0, j = snapPoints.size(); i < j; i++) {
-			final SnapPoint p = snapPoints.get(i);
-			if (_toolState.isActiveSnapPoint(p)) {
-				active = p;
-			} else {
-				_cropDot.drawAt(g2, p.getX(), p.getY());
-			}
-		}
-		if (active != null) {
-			_cropDotActive.drawAt(g2, active.getX(), active.getY());
-		}
+            SnapPoint active = null;
+            if (_preview) {
+                g2.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            }
 
-		g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+            final List<Entity> entities = _stage.getEntities();
+            for (int i = 0, j = entities.size(); i < j; i++) {
+                final Entity entity = entities.get(i);
+                if (_toolState.belongsToActiveSnapPoint(entity)) {
+                    g2.setStroke(_borderStroke);
+                    g2.setColor(_borderColor);
+                    g2.draw(entity.getShape());
+                }
+            }
+
+            final List<SnapPoint> snapPoints = _toolState.getSnapPoints();
+            for (int i = 0, j = snapPoints.size(); i < j; i++) {
+                final SnapPoint p = snapPoints.get(i);
+                if (_toolState.isActiveSnapPoint(p)) {
+                    active = p;
+                } else {
+                    _cropDot.drawAt(g2, p.getX(), p.getY());
+                }
+            }
+            if (active != null) {
+                _cropDotActive.drawAt(g2, active.getX(), active.getY());
+            }
+
+            g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+        }
 	}
 
 	public void setPreview(final boolean b) {

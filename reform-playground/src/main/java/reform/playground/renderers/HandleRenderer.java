@@ -32,30 +32,35 @@ public class HandleRenderer implements CanvasRenderer {
 
 	@Override
 	public void render(final Graphics2D g2, final int width, final int height) {
-		final Vec2i size = _stage.getSize();
 
-		g2.translate((width - size.x) / 2, (height - size.y) / 2);
+        ToolState.ViewState viewState = _toolState.getViewState();
+        if(viewState == ToolState.ViewState.Handle ||  viewState == ToolState
+                .ViewState.SnapHandle) {
+            final Vec2i size = _stage.getSize();
 
-		Handle active = null;
-		if (_preview) {
-			g2.setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-		}
+            g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
-		final List<Handle> handles = _toolState.getHandles();
-		for (int i = 0, j = handles.size(); i < j; i++) {
-			final Handle p = handles.get(i);
-			if (_toolState.isActiveHandle(p)) {
-				active = p;
-			} else {
-				_cropDot.drawAt(g2, p.getX(), p.getY());
-			}
-		}
-		if (active != null) {
-			_cropDotActive.drawAt(g2, active.getX(), active.getY());
-		}
+            Handle active = null;
+            if (_preview) {
+                g2.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            }
 
-		g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+            final List<Handle> handles = _toolState.getHandles();
+            for (int i = 0, j = handles.size(); i < j; i++) {
+                final Handle p = handles.get(i);
+                if (_toolState.isActiveHandle(p)) {
+                    active = p;
+                } else {
+                    _cropDot.drawAt(g2, p.getX(), p.getY());
+                }
+            }
+            if (active != null) {
+                _cropDotActive.drawAt(g2, active.getX(), active.getY());
+            }
+
+            g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+        }
 	}
 
 	public void setPreview(final boolean b) {

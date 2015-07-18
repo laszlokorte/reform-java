@@ -13,20 +13,13 @@ import reform.stage.elements.SnapPoint;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
 public class ToolState {
-    public SnapPoint getActiveSnapPoint() {
-        return _activeSnapPoint;
+
+    public enum ViewState {
+        Preview, Selection, Snap, SnapEntity, Handle, EntityPoint, SnapHandle, Crop
     }
 
-    public Handle getActiveHandle() {
-        return _activeHandle;
-    }
-
-    public EntityPoint getActiveEntityPoint() {
-        return _activeEntityPoint;
-    }
-
-    public enum State {
-        Select, Create, Crop, Edit, Preview
+    public enum SelectionState {
+        None, Form, Handle, EntityPoint, SnapPoint, CropPoint
     }
 
 	private final List<ToolStateListener> _listeners = new ArrayList<>();
@@ -43,17 +36,29 @@ public class ToolState {
 
 	private String _description;
 
-    private State _state = State.Select;
+    private ViewState _viewState = ViewState.Selection;
+    private SelectionState _selectionState = SelectionState.None;
 
-    public void setState(State state) {
-        if(_state != state) {
-            _state = state;
+    public void setViewState(ViewState viewState) {
+        if(_viewState != viewState) {
+            _viewState = viewState;
             notifyChange();
         }
     }
 
-    public State getState() {
-        return _state;
+    public ViewState getViewState() {
+        return _viewState;
+    }
+
+    public void setSelectionState(SelectionState selectionState) {
+        if(_selectionState != selectionState) {
+            _selectionState = selectionState;
+            notifyChange();
+        }
+    }
+
+    public SelectionState getSelectionState() {
+        return _selectionState;
     }
 
 	public void setSnapPoints(final Collection<SnapPoint> points) {
@@ -181,5 +186,18 @@ public class ToolState {
 	public List<Handle> getHandles() {
 		return _handles;
 	}
+
+    public SnapPoint getActiveSnapPoint() {
+        return _activeSnapPoint;
+    }
+
+    public Handle getActiveHandle() {
+        return _activeHandle;
+    }
+
+    public EntityPoint getActiveEntityPoint() {
+        return _activeEntityPoint;
+    }
+
 
 }

@@ -11,6 +11,7 @@ import reform.rendering.canvas.CanvasAdapter;
 import reform.stage.Stage;
 import reform.stage.tooling.FormSelection;
 import reform.stage.tooling.ToolState;
+import reform.stage.tooling.cursor.Cursor;
 
 public class StagePresenter {
 	private final Canvas _canvas;
@@ -26,10 +27,13 @@ public class StagePresenter {
 	private final ToolStateDescriptionRenderer _toolStateDescriptionRenderer;
 
 	public StagePresenter(final Stage stage, final FormSelection formSelection,
-						  final ToolState toolState, final Analyzer analyzer) {
+						  final ToolState toolState, final Analyzer analyzer,
+                          Cursor cursor) {
 		_canvas = new Canvas(new StageCollectorAdapter(stage));
 
-		_backgroundRenderer = new BackgroundRenderer(toolState, Color.GRAY,
+        ToolTipRenderer toolTipRenderer = new ToolTipRenderer(cursor);
+
+        _backgroundRenderer = new BackgroundRenderer(toolState, Color.GRAY,
 				Color.DARK_GRAY);
 		_stageRenderer = new StageRenderer(stage, toolState);
 		_selectionRenderer = new SelectionRenderer(stage, formSelection,
@@ -41,7 +45,8 @@ public class StagePresenter {
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
 		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer
-				(stage, toolState, formSelection, analyzer);
+				(stage, toolState, formSelection, analyzer, toolTipRenderer);
+
 
 		_canvas.addRenderer(_backgroundRenderer);
 		_canvas.addRenderer(_stageRenderer);

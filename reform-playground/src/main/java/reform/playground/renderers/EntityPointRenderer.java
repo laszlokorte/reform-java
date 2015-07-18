@@ -33,30 +33,35 @@ public class EntityPointRenderer implements CanvasRenderer {
 
 	@Override
 	public void render(final Graphics2D g2, final int width, final int height) {
-		final Vec2i size = _stage.getSize();
+        ToolState.ViewState viewState = _toolState.getViewState();
+        if(viewState == ToolState.ViewState.EntityPoint || viewState == ToolState
+                .ViewState.SnapEntity) {
 
-		g2.translate((width - size.x) / 2, (height - size.y) / 2);
+            final Vec2i size = _stage.getSize();
 
-		SnapPoint active = null;
-		if (_preview) {
-			g2.setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-		}
+            g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
-		final List<EntityPoint> entityPoints = _toolState.getEntityPoints();
-		for (int i = 0, j = entityPoints.size(); i < j; i++) {
-			final EntityPoint p = entityPoints.get(i);
-			if (_toolState.isActiveEntityPoint(p)) {
-				active = p;
-			} else {
-				_cropDot.drawAt(g2, p.getX(), p.getY());
-			}
-		}
-		if (active != null) {
-			_cropDotActive.drawAt(g2, active.getX(), active.getY());
-		}
+            SnapPoint active = null;
+            if (_preview) {
+                g2.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+            }
 
-		g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+            final List<EntityPoint> entityPoints = _toolState.getEntityPoints();
+            for (int i = 0, j = entityPoints.size(); i < j; i++) {
+                final EntityPoint p = entityPoints.get(i);
+                if (_toolState.isActiveEntityPoint(p)) {
+                    active = p;
+                } else {
+                    _cropDot.drawAt(g2, p.getX(), p.getY());
+                }
+            }
+            if (active != null) {
+                _cropDotActive.drawAt(g2, active.getX(), active.getY());
+            }
+
+            g2.translate(-(width - size.x) / 2, -(height - size.y) / 2);
+        }
 	}
 
 	public void setPreview(final boolean b) {

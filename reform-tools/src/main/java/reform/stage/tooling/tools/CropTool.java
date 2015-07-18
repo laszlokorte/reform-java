@@ -33,8 +33,8 @@ public class CropTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.clearSnapPoints();
-        _toolState.setState(ToolState.State.Crop);
+        _toolState.setViewState(ToolState.ViewState.Crop);
+        _toolState.setSelectionState(ToolState.SelectionState.CropPoint);
 
         _toolState.setDescription("Resize Canvas");
 
@@ -43,8 +43,6 @@ public class CropTool implements Tool {
 
 	@Override
 	public void tearDown() {
-		_toolState.clearSnapPoints();
-
 		_state = State.Idle;
 	}
 

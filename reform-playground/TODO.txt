@@ -6,6 +6,10 @@
  - Recursion
  - Text Shape
  - Rectangle Width/Height scale
+ - Manual No-Snap mode
+ - later instruction changes
+ - Iterate over points
+ - Form Groups
 
 
 =========
