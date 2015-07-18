@@ -6,3 +6,13 @@
  - Recursion
  - Text Shape
  - Rectangle Width/Height scale
+
+
+=========
+= Notes =
+=========
+
+	Concepts:
+	---------
+	 - Tool Selection State (None, Form, Handle, EntityPoint, SnapPoint, CropPoint)
+	 - View (Preview, Selection, Snap, SnapPair, Handle, EntityPoint, Crop)
