@@ -8,7 +8,7 @@ public class IdentifierEmitter {
 	}
 
 	public <T> Identifier<T> emit() {
-		return new Identifier<T>(_counter++);
+		return new Identifier<>(_counter++);
 	}
 
 	public <T> void markUsed(final Identifier<T> identifier) {

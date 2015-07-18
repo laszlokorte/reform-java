@@ -13,9 +13,9 @@ public interface Entity {
 
 	void updateForRuntime(Runtime runtime);
 
-	public List<EntityPoint> getSnapPoints();
+	List<EntityPoint> getSnapPoints();
 
-	public List<Handle> getHandles();
+	List<Handle> getHandles();
 
 	boolean contains(Vec2 position);
 

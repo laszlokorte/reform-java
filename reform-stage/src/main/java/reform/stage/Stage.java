@@ -14,8 +14,8 @@ import reform.stage.elements.Entity;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
 public class Stage {
-	public static interface Listener {
-		public void onStageComplete(Stage stage);
+	public interface Listener {
+		void onStageComplete(Stage stage);
 	}
 
 	private final Vec2i _size = new Vec2i();
@@ -75,7 +75,7 @@ public class Stage {
 		return _shapeMap.get(s);
 	}
 
-	protected void wipe() {
+	void wipe() {
 		_finalShapes.clear();
 		_currentShapes.clear();
 		_entities.clear();
@@ -85,7 +85,7 @@ public class Stage {
 		_size.set(0, 0);
 	}
 
-	protected void setSize(final Vec2i size) {
+	void setSize(final Vec2i size) {
 		_size.set(size);
 
 		for (int i = 0; i < _cropPoints.size(); i++) {
@@ -93,32 +93,32 @@ public class Stage {
 		}
 	}
 
-	protected void complete() {
+	void complete() {
 		Collections.reverse(_entities);
 		for (int i = 0; i < _listeners.size(); i++) {
 			_listeners.get(i).onStageComplete(this);
 		}
 	}
 
-	protected void addShape(final Shape shape,
-			final Identifier<? extends Form> id) {
+	void addShape(final Shape shape,
+                  final Identifier<? extends Form> id) {
 		_currentShapes.add(shape);
 		_shapeMap.put(shape, id);
 	}
 
-	protected void addFinalShape(final Shape shape,
-			final Identifier<? extends Form> id) {
+	void addFinalShape(final Shape shape,
+                       final Identifier<? extends Form> id) {
 		_finalShapes.add(shape);
 		_shapeMap.put(shape, id);
 	}
 
-	protected void addEntity(final Entity entity) {
+	void addEntity(final Entity entity) {
 		_entities.add(entity);
 		_entityMap.put(entity.getId(), entity);
 	}
 
-	protected void addIntersectionPoint(
-			final IntersectionSnapPoint intersectionPoint) {
+	void addIntersectionPoint(
+            final IntersectionSnapPoint intersectionPoint) {
 		_intersectionPoints.add(intersectionPoint);
 	}
 

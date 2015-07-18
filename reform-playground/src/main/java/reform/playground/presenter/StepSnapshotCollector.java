@@ -32,19 +32,14 @@ import reform.math.Vec2i;
 
 public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
-	public static interface Listener {
-		public void onCollectionCompleted(StepSnapshotCollector collector);
+	public interface Listener {
+		void onCollectionCompleted(StepSnapshotCollector collector);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 
 	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-			new PoolFactory<GeneralPath.Double>() {
-				@Override
-				public GeneralPath.Double create() {
-					return new GeneralPath.Double();
-				};
-			});
+            () -> new GeneralPath.Double());
 
 	private final Vec2i _maxSize = new Vec2i();
 	private final HashMap<RenderingHints.Key, Object> _renderOptions = new HashMap<>();
@@ -178,7 +173,6 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 			final int width = (int) Math.round(scale * _currentSize.x);
 			final int height = (int) Math.round(scale * _currentSize.y);
 			_currentScaledSize.set(width, height);
-			return;
 		}
 
 	}

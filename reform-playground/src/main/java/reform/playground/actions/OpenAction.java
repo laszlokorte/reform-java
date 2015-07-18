@@ -41,36 +41,32 @@ public class OpenAction extends AbstractAction {
 	public void actionPerformed(final ActionEvent evt) {
 		final JFileChooser fc = _windowBuilder.getFileChooser();
 
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(() -> {
+            final int returnVal = fc.showOpenDialog(null);
 
-			@Override
-			public void run() {
-				final int returnVal = fc.showOpenDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                final IdentifierEmitter idEmitter = new IdentifierEmitter(
+                        100);
+                final ProjectSerializer serializer = new ProjectSerializer(
+                        idEmitter);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					final IdentifierEmitter idEmitter = new IdentifierEmitter(
-							100);
-					final ProjectSerializer serializer = new ProjectSerializer(
-							idEmitter);
+                try {
+                    final File file = fc.getSelectedFile();
+                    final Project project = serializer
+                            .read(new JSONObject(readFile(file.getPath(),
+                                    Charset.defaultCharset())));
 
-					try {
-						final File file = fc.getSelectedFile();
-						final Project project = serializer
-								.read(new JSONObject(readFile(file.getPath(),
-										Charset.defaultCharset())));
-
-						_windowBuilder.open(file, project, idEmitter, false);
-					} catch (final JSONException e) {
-						JOptionPane.showMessageDialog(null, "JSON Error");
-						e.printStackTrace();
-					} catch (final IOException e) {
-						JOptionPane.showMessageDialog(null, "IO Error");
-					} catch (final Exception e) {
-						JOptionPane.showMessageDialog(null, "Invalid file");
-					}
-				}
-			}
-		});
+                    _windowBuilder.open(file, project, idEmitter, false);
+                } catch (final JSONException e) {
+                    JOptionPane.showMessageDialog(null, "JSON Error");
+                    e.printStackTrace();
+                } catch (final IOException e) {
+                    JOptionPane.showMessageDialog(null, "IO Error");
+                } catch (final Exception e) {
+                    JOptionPane.showMessageDialog(null, "Invalid file");
+                }
+            }
+        });
 	}
 
 	private static String readFile(final String path, final Charset encoding)

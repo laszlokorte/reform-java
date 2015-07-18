@@ -8,14 +8,14 @@ public interface Command {
 	/**
 	 * Run the command to apply the changes it represents.
 	 */
-	public void execute();
+    void execute();
 
 	/**
 	 * Check if the command can be executed.
 	 *
 	 * @return if the command can be executed.
 	 */
-	public boolean canExecute();
+    boolean canExecute();
 
 	/**
 	 * Get the command representing a set of changes which inverse the changes
@@ -23,6 +23,6 @@ public interface Command {
 	 *
 	 * @return the inverse command.
 	 */
-	public Command getInverse();
+    Command getInverse();
 
 }

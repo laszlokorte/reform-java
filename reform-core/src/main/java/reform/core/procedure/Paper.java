@@ -23,9 +23,9 @@ import reform.identity.IdentifiableList;
 import reform.identity.Identifier;
 import reform.naming.Name;
 
-public class Paper implements Form {
+public final class Paper implements Form {
 
-	public static final int ID = 0;
+	private static final int ID = 0;
 
 	private final Identifier<Paper> _id = new Identifier<>(ID);
 	private final Name _name = new Name("Canvas");
@@ -38,7 +38,7 @@ public class Paper implements Form {
 
 	private final Outline _outline = new NullOutline();
 
-	public static enum Point implements ExposedPointToken<Paper> {
+	public enum Point implements ExposedPointToken<Paper> {
 		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(
 				5), Right(6), Bottom(7), Left(8);
 

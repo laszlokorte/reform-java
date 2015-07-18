@@ -16,20 +16,15 @@ import reform.stage.elements.factory.EntityCache;
 import reform.stage.elements.factory.EntityFactory;
 
 public class StageCollector implements ProjectRuntime.Listener {
-	public static interface Adapter {
-		public boolean isInFocus(Evaluatable instruction);
+	public interface Adapter {
+		boolean isInFocus(Evaluatable instruction);
 	}
 
 	private final Stage _stage;
 	private final Adapter _adpter;
 
 	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-			new PoolFactory<GeneralPath.Double>() {
-				@Override
-				public GeneralPath.Double create() {
-					return new GeneralPath.Double();
-				};
-			});
+            () -> new GeneralPath.Double());
 
 	private final StageBuffer _buffer = new StageBuffer();
 	private final EntityCache _entityCache = new EntityCache();

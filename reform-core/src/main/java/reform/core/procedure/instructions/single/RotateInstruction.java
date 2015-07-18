@@ -42,7 +42,7 @@ public class RotateInstruction extends BaseInstruction {
 	@Override
 	public void analyze(final Analyzer analyzer) {
 		final Form form = analyzer.getForm(_target);
-		String formName;
+		final String formName;
 		if (form != null) {
 			formName = form.getName().getValue();
 		} else {

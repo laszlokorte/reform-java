@@ -5,8 +5,8 @@ import reform.identity.IdentifierEmitter;
 import reform.naming.Name;
 
 public class FormFactory<T> {
-	public static interface Builder<T> {
-		public T build(Identifier<T> id, Name name);
+	public interface Builder<T> {
+		T build(Identifier<T> id, Name name);
 	}
 
 	private final IdentifierEmitter _idEmitter;

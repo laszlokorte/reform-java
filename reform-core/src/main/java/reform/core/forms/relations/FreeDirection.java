@@ -19,6 +19,6 @@ public enum FreeDirection implements Direction {
 				final double y) {
 			return y;
 		}
-	};
+	}
 
 }

@@ -60,7 +60,7 @@ import reform.math.Vec2i;
 import reform.naming.Name;
 
 public class ProjectSerializer {
-	public static final int VERSION = 1;
+	private static final int VERSION = 1;
 
 	private final IdentifierEmitter _idEmitter;
 	private final Set<Identifier<? extends Form>> _formIds = new HashSet<>();
@@ -95,7 +95,7 @@ public class ProjectSerializer {
 	}
 
 	private Iterable<Picture> readPictures(final JSONArray jsonArray) {
-		final ArrayList<Picture> result = new ArrayList<Picture>();
+		final ArrayList<Picture> result = new ArrayList<>();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			result.add(readPicture(jsonArray.getJSONObject(i)));
@@ -105,7 +105,7 @@ public class ProjectSerializer {
 	}
 
 	private Picture readPicture(final JSONObject object) {
-		final Identifier<Picture> id = readId(object, "id");
+		final  Identifier<? extends Picture> id = readId(object, "id");
 		final Name name = readName(object);
 		final Vec2i size = readIntegerVector(object.getJSONObject("size"));
 		final Procedure procedure = readProcedure(
@@ -135,10 +135,8 @@ public class ProjectSerializer {
 			if (prevWasGroup && !(instruction instanceof NullInstruction)) {
 				final NullInstruction n = new NullInstruction();
 				root.append(n);
-				n.onAdded(procedure);
 			}
 			root.append(instruction);
-			instruction.onAdded(procedure);
 
 			prevWasGroup = instruction instanceof InstructionGroup;
 
@@ -147,7 +145,6 @@ public class ProjectSerializer {
 		if (prevWasGroup) {
 			final NullInstruction n = new NullInstruction();
 			root.append(n);
-			n.onAdded(procedure);
 		}
 	}
 
@@ -205,7 +202,7 @@ public class ProjectSerializer {
 		}
 	}
 
-	private void registerPictureId(final Identifier<? extends Picture> id) {
+	private void registerPictureId(final  Identifier<? extends Picture> id) {
 		_idEmitter.markUsed(id);
 	}
 
@@ -373,7 +370,7 @@ public class ProjectSerializer {
 
 	private <T> Identifier<T> readId(final JSONObject object,
 			final String key) {
-		return new Identifier<T>(object.getInt(key));
+		return new Identifier<>(object.getInt(key));
 	}
 
 	private TranslateInstruction readTranslateInstruction(
@@ -465,6 +462,7 @@ public class ProjectSerializer {
 			final Procedure procedure, final JSONObject object) {
 		final IfConditionInstruction condition = new IfConditionInstruction();
 
+        condition.setCondition(object.getBoolean("condition"));
 		readInstructionsInto(procedure, condition,
 				object.getJSONArray("children"));
 
@@ -599,8 +597,8 @@ public class ProjectSerializer {
 
 	private void writeIfConditionInstruction(final JSONWriter writer,
 			final IfConditionInstruction instruction) {
-		// TODO Auto-generated method stub
-
+		writer.key("condition");
+        writer.value(instruction.getCondition());
 	}
 
 	private void writeForLoopInstruction(final JSONWriter writer,

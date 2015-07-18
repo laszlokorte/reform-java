@@ -1,9 +1,9 @@
 package reform.core.pool;
 
 public interface Pool<E> {
-	public E take();
+	E take();
 
-	public void release();
+	void release();
 
-	public int size();
+	int size();
 }

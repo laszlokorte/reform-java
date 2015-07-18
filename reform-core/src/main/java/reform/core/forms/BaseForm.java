@@ -16,18 +16,18 @@ public abstract class BaseForm<T extends Form> implements Form {
 	private final Name _name;
 	private DrawingType _type = DrawingType.Draw;
 
-	protected BaseForm(final Identifier<T> id, final int size,
-			final Name name) {
+	BaseForm(final Identifier<T> id, final int size,
+             final Name name) {
 		_id = id;
 		_size = size;
 		_name = name;
 	}
 
-	protected void addSnapPoint(final ExposedPoint point) {
+	void addSnapPoint(final ExposedPoint point) {
 		_snapPoints.add(point);
 	}
 
-	protected void addAnchor(final Anchor point) {
+	void addAnchor(final Anchor point) {
 		_anchors.add(point);
 	}
 

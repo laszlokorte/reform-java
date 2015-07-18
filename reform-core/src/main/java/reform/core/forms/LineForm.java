@@ -20,7 +20,7 @@ import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.naming.Name;
 
-public class LineForm extends BaseForm<LineForm> {
+public final class LineForm extends BaseForm<LineForm> {
 
 	static private final int SIZE = 4;
 
@@ -39,7 +39,7 @@ public class LineForm extends BaseForm<LineForm> {
 
 	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
 
-	public static enum Point implements ExposedPointToken<LineForm> {
+	public enum Point implements ExposedPointToken<LineForm> {
 		Center(0), Start(1), End(2);
 
 		private final int _v;
@@ -54,7 +54,7 @@ public class LineForm extends BaseForm<LineForm> {
 		}
 	}
 
-	public static enum Anchor implements IdentityToken {
+	public enum Anchor implements IdentityToken {
 		Start(1), End(2);
 
 		private final int _v;

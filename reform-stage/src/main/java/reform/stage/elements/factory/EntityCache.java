@@ -15,9 +15,7 @@ public class EntityCache {
 	}
 
 	public void cleanUp() {
-		for (final Form f : _cold) {
-			_cache.remove(f);
-		}
+        _cold.forEach(_cache::remove);
 		_cold.clear();
 	}
 

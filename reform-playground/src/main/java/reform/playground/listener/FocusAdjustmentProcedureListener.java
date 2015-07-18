@@ -32,14 +32,7 @@ public class FocusAdjustmentProcedureListener
 		}
 	}
 
-	@Override
-	public void onInstructionWillBeAdded(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+    @Override
 	public void onInstructionWillBeRemoved(final EventedProcedure procedure,
 			final Instruction instruction, final InstructionGroup parent) {
 		_index = parent.indexOf(instruction);

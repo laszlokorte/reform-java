@@ -1,7 +1,7 @@
 package reform.identity;
 
 public interface FastIterable<T> {
-	public int size();
+	int size();
 
-	public T get(int i);
+	T get(int i);
 }

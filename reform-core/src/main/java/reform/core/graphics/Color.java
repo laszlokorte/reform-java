@@ -32,7 +32,7 @@ public class Color {
 	}
 
 	public double getBlue() {
-		return (0xff & _argb >> 0) / 255.0;
+		return (0xff & _argb) / 255.0;
 	}
 
 	@Override

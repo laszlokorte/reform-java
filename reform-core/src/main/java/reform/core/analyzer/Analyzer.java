@@ -4,19 +4,19 @@ import reform.core.forms.Form;
 import reform.identity.Identifier;
 
 public interface Analyzer {
-	public void begin();
+	void begin();
 
-	public void finish();
+	void finish();
 
-	public void publish(Analyzable instruction, String label);
+	void publish(Analyzable instruction, String label);
 
-	public void publishGroup(Analyzable instruction, String label);
+	void publishGroup(Analyzable instruction, String label);
 
-	public void pushScope();
+	void pushScope();
 
-	public void popScope();
+	void popScope();
 
-	public void announceForm(Form form);
+	void announceForm(Form form);
 
-	public Form getForm(Identifier<? extends Form> _formId);
+	Form getForm(Identifier<? extends Form> _formId);
 }

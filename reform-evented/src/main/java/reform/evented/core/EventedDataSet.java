@@ -8,12 +8,12 @@ import reform.identity.Identifier;
 import reform.naming.Name;
 
 public class EventedDataSet {
-	public static interface Listener {
-		public void onNameChanged(EventedDataSet picture,
-				Identifier<? extends DataDefinition> dataDefinition);
+	public interface Listener {
+		void onNameChanged(EventedDataSet picture,
+                           Identifier<? extends DataDefinition> dataDefinition);
 
-		public void onValueChanged(EventedDataSet picture,
-				Identifier<? extends DataDefinition> dataDefinition);
+		void onValueChanged(EventedDataSet picture,
+                            Identifier<? extends DataDefinition> dataDefinition);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

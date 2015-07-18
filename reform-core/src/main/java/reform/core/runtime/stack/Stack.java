@@ -50,9 +50,7 @@ public class Stack implements Iterable<Identifier<? extends Form>>,
 			final long[] oldData = _data;
 			final int oldLength = oldData.length;
 			_data = new long[_data.length * 2];
-			for (int i = 0; i < oldLength; i++) {
-				_data[i] = oldData[i];
-			}
+            System.arraycopy(oldData, 0, _data, 0, oldLength);
 		}
 	}
 

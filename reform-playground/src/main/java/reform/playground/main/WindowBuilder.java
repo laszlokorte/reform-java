@@ -152,14 +152,14 @@ public class WindowBuilder {
 
 			{
 
-				final Set<KeyStroke> forwardKeys = new HashSet<KeyStroke>(1);
+				final Set<KeyStroke> forwardKeys = new HashSet<>(1);
 				forwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
 						InputEvent.CTRL_MASK));
 				_frame.setFocusTraversalKeys(
 						KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
 						forwardKeys);
 
-				final Set<KeyStroke> backwardKeys = new HashSet<KeyStroke>(1);
+				final Set<KeyStroke> backwardKeys = new HashSet<>(1);
 				backwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
 						InputEvent.SHIFT_MASK | InputEvent.CTRL_MASK));
 				_frame.setFocusTraversalKeys(
@@ -172,7 +172,7 @@ public class WindowBuilder {
 	private final ArrayList<Window> _windows = new ArrayList<>();
 	private Window _currentWindow = null;
 
-	JFileChooser _fileChooser = new JFileChooser();
+	private final JFileChooser _fileChooser = new JFileChooser();
 
 	public WindowBuilder() {
 		_fileChooser.setFileFilter(new FileNameExtensionFilter("JSON", "json"));

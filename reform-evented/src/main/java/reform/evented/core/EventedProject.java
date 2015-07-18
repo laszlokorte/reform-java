@@ -9,15 +9,15 @@ import reform.identity.Identifier;
 
 public class EventedProject {
 
-	public static interface Listener {
-		public void onPictureAdded(EventedProject project,
-				Identifier<? extends Picture> pictureId);
+	public interface Listener {
+		void onPictureAdded(EventedProject project,
+                             Identifier<? extends Picture> pictureId);
 
-		public void onPictureRemoved(EventedProject project,
-				Identifier<? extends Picture> pictureId);
+		void onPictureRemoved(EventedProject project,
+                               Identifier<? extends Picture> pictureId);
 
-		public void onPictureChanged(EventedProject project,
-				Identifier<? extends Picture> pictureId);
+		void onPictureChanged(EventedProject project,
+                               Identifier<? extends Picture> pictureId);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -35,23 +35,23 @@ public class EventedProject {
 		}
 	}
 
-	public void removePicture(final Identifier<? extends Picture> pictureId) {
+	public void removePicture(final  Identifier<? extends Picture> pictureId) {
 		_project.removePicture(pictureId);
 		for (int i = 0, j = _listeners.size(); i < j; i++) {
 			_listeners.get(i).onPictureRemoved(this, pictureId);
 		}
 	}
 
-	public FastIterable<Identifier<? extends Picture>> getPictures() {
+	public FastIterable< Identifier<? extends Picture>> getPictures() {
 		return _project.getPictures();
 	}
 
 	public EventedPicture getEventedPicture(
-			final Identifier<? extends Picture> pictureId) {
+			final  Identifier<? extends Picture> pictureId) {
 		return new EventedPicture(this, pictureId);
 	}
 
-	Picture getPicture(final Identifier<? extends Picture> pictureId) {
+	Picture getPicture(final  Identifier<? extends Picture> pictureId) {
 		return _project.getPicture(pictureId);
 	}
 
@@ -63,7 +63,7 @@ public class EventedProject {
 		_listeners.remove(listener);
 	}
 
-	void propagatePictureChange(final Identifier<? extends Picture> pictureId) {
+	void propagatePictureChange(final  Identifier<? extends Picture> pictureId) {
 		for (int i = 0, j = _listeners.size(); i < j; i++) {
 			_listeners.get(i).onPictureChanged(this, pictureId);
 		}
@@ -73,11 +73,11 @@ public class EventedProject {
 		return _project;
 	}
 
-	public Identifier<? extends Picture> getPictureAtIndex(final int index) {
+	public  Identifier<? extends Picture> getPictureAtIndex(final int index) {
 		return _project.getPictureAtIndex(index);
 	}
 
-	boolean containsPicture(final Identifier<? extends Picture> pictureId) {
+	boolean containsPicture(final  Identifier<? extends Picture> pictureId) {
 		return _project.containsPicture(pictureId);
 	}
 

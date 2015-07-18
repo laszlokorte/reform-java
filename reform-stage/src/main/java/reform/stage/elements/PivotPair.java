@@ -3,7 +3,7 @@ package reform.stage.elements;
 import reform.core.runtime.relations.ReferencePoint;
 
 public class PivotPair {
-	public static enum Choice {
+	public enum Choice {
 		Primary {
 			@Override
 			double getX(final PivotPair p) {

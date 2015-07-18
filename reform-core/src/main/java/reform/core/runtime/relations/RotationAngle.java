@@ -6,8 +6,8 @@ import reform.core.runtime.Validatable;
 
 public interface RotationAngle extends Validatable {
 
-	public double getValueForRuntime(final Runtime runtime);
+	double getValueForRuntime(final Runtime runtime);
 
-	public String getDescription(Analyzer analyzer);
+	String getDescription(Analyzer analyzer);
 
 }

@@ -6,8 +6,8 @@ import reform.core.forms.Form;
 import reform.identity.Identifier;
 
 public class FormSelection {
-	public static interface Listener {
-		public void onSelectionChanged(FormSelection focus);
+	public interface Listener {
+		void onSelectionChanged(FormSelection focus);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

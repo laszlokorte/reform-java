@@ -1,9 +1,9 @@
 package reform.data;
 
 public class Value {
-	public static enum Type {
-		String, Intenger, Double;
-	}
+	public enum Type {
+		String, Intenger, Double
+    }
 
 	private final Type _type;
 	private final int _integer;

@@ -48,42 +48,38 @@ public class SaveAsAction extends AbstractAction {
 		}
 		fc.setFileFilter(new FileNameExtensionFilter("JSON", "json"));
 
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(() -> {
+            final int returnVal = fc.showSaveDialog(null);
 
-			@Override
-			public void run() {
-				final int returnVal = fc.showSaveDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                final ProjectSerializer serializer = new ProjectSerializer(
+                        _idEmitter);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					final ProjectSerializer serializer = new ProjectSerializer(
-							_idEmitter);
+                final JSONWriter writer;
+                try {
+                    final File selectedFile = fc.getSelectedFile();
+                    final PrintWriter textWriter = new PrintWriter(
+                            selectedFile);
+                    writer = new JSONWriter(textWriter);
+                    serializer.write(writer, _project);
+                    textWriter.flush();
+                    _file = selectedFile;
+                } catch (final FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error: File not found");
+                } catch (final SerializationError e) {
+                    JOptionPane.showMessageDialog(null,
+                            String.format(
+                                    "Error while serializing Project. (%s)",
+                                    e.getMessage()));
+                    e.printStackTrace();
+                } catch (final Exception e) {
+                    JOptionPane.showMessageDialog(null, "Unexpected error");
+                    e.printStackTrace();
+                }
 
-					JSONWriter writer;
-					try {
-						final File selectedFile = fc.getSelectedFile();
-						final PrintWriter textWriter = new PrintWriter(
-								selectedFile);
-						writer = new JSONWriter(textWriter);
-						serializer.write(writer, _project);
-						textWriter.flush();
-						_file = selectedFile;
-					} catch (final FileNotFoundException e) {
-						JOptionPane.showMessageDialog(null,
-								"Error: File not found");
-					} catch (final SerializationError e) {
-						JOptionPane.showMessageDialog(null,
-								String.format(
-										"Error while serializing Project. (%s)",
-										e.getMessage()));
-						e.printStackTrace();
-					} catch (final Exception e) {
-						JOptionPane.showMessageDialog(null, "Unexpected error");
-						e.printStackTrace();
-					}
-
-				}
-			}
-		});
+            }
+        });
 	}
 
 }

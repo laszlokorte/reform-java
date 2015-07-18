@@ -32,7 +32,7 @@ import reform.identity.IdentityToken;
 import reform.math.Vector;
 import reform.naming.Name;
 
-public class CircleForm extends BaseForm<CircleForm> {
+public final class CircleForm extends BaseForm<CircleForm> {
 	static private final int SIZE = 4;
 
 	private final transient StaticPoint _centerPoint = new StaticPoint(getId(),
@@ -54,7 +54,7 @@ public class CircleForm extends BaseForm<CircleForm> {
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius,
 			_rotation);
 
-	public static enum Point implements ExposedPointToken<CircleForm> {
+	public enum Point implements ExposedPointToken<CircleForm> {
 		Center(0), Top(1), Right(2), Bottom(3), Left(4);
 
 		private final int _v;
@@ -69,7 +69,7 @@ public class CircleForm extends BaseForm<CircleForm> {
 		}
 	}
 
-	public static enum Anchor implements IdentityToken {
+	public enum Anchor implements IdentityToken {
 		Top(1), Right(2), Bottom(3), Left(4);
 
 		private final int _v;
@@ -174,12 +174,12 @@ public class CircleForm extends BaseForm<CircleForm> {
 
 	static class CircleQuaterAnchor extends BaseAnchor {
 
-		static enum Quater {
+		enum Quater {
 			North(-Math.PI / 2), East(0), South(-3 * Math.PI / 2), West(Math.PI);
 
 			final double angle;
 
-			private Quater(final double angle) {
+			Quater(final double angle) {
 				this.angle = angle;
 			}
 		}

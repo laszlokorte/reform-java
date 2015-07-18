@@ -13,5 +13,5 @@ public interface Identifiable<E> {
 	 *
 	 * @return the Objects identifier
 	 */
-	public Identifier<? extends E> getId();
+    Identifier<? extends E> getId();
 }

@@ -16,32 +16,32 @@ import reform.identity.Identifier;
 import reform.naming.Named;
 
 public interface Form extends Identifiable<Form>, Named {
-	public int getSizeOnStack();
+	int getSizeOnStack();
 
-	public void initialize(Runtime runtime, double minX, double minY,
-			double maxX, double maxY);
+	void initialize(Runtime runtime, double minX, double minY,
+                    double maxX, double maxY);
 
-	public void appendToPathForRuntime(Runtime runtime,
-			GeneralPath.Double target);
+	void appendToPathForRuntime(Runtime runtime,
+                                GeneralPath.Double target);
 
-	public Iterable<Identifier<? extends ExposedPoint>> getPoints();
+	Iterable<Identifier<? extends ExposedPoint>> getPoints();
 
-	public ReferencePoint getPoint(Identifier<? extends ExposedPoint> _pointId);
+	ReferencePoint getPoint(Identifier<? extends ExposedPoint> _pointId);
 
-	public Rotator getRotator();
+	Rotator getRotator();
 
-	public Scaler getScaler();
+	Scaler getScaler();
 
-	public Translator getTranslator();
+	Translator getTranslator();
 
-	public DrawingType getType();
+	DrawingType getType();
 
-	public Iterable<Identifier<? extends Anchor>> getAnchors();
+	Iterable<Identifier<? extends Anchor>> getAnchors();
 
-	public Anchor getAnchor(Identifier<? extends Anchor> anchorId);
+	Anchor getAnchor(Identifier<? extends Anchor> anchorId);
 
-	public Outline getOutline();
+	Outline getOutline();
 
-	public void setType(DrawingType draw);
+	void setType(DrawingType draw);
 
 }

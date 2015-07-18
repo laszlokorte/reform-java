@@ -1,5 +1,8 @@
  - Tool State description
  - Shape Styles
+ - changeable Form names
  - Glomp Points
  - Undo/Redo
  - Recursion
+ - Text Shape
+ - Rectangle Width/Height scale

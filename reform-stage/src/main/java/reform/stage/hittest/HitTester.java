@@ -17,24 +17,24 @@ import reform.stage.elements.outline.IntersectionSnapPoint;
 
 public class HitTester {
 
-	public static enum EntityFilter {
+	public enum EntityFilter {
 		OnlySelected, ExcludeSelected, Any
 	}
 
-	public static enum HandleFilter {
+	public enum HandleFilter {
 		Pivot, Any
 	}
 
-	public static interface Adapter {
-		public boolean isSelected(Entity entity);
+	public interface Adapter {
+		boolean isSelected(Entity entity);
 
-		public boolean belongsToSelected(SnapPoint snapPoint);
+		boolean belongsToSelected(SnapPoint snapPoint);
 	}
 
 	private final Stage _stage;
 	private final Adapter _adpater;
 
-	private final double _snapRadius = 8;
+	static private final double _snapRadius = 8;
 
 	private final ArrayList<SnapPoint> _resultSnapPoint = new ArrayList<>();
 	private final ArrayList<Entity> _resultEntitiy = new ArrayList<>();

@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 
-public abstract class StripePaint {
+public interface StripePaint {
 
 	public static Paint getPaint() {
 		final Color lightBackground = new Color(0xdddddd);

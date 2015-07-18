@@ -3,7 +3,7 @@ package reform.core.runtime.relations;
 import reform.core.runtime.Runtime;
 
 public interface Direction {
-	public static enum CartesianDirection implements Direction {
+	enum CartesianDirection implements Direction {
 		Vertical {
 			@Override
 			public double getAdjustedXForRuntime(final Runtime runtime,
@@ -36,10 +36,10 @@ public interface Direction {
 		}
 	}
 
-	public double getAdjustedXForRuntime(Runtime runtime, double anchorX,
-			double anchorY, double x, double y);
+	double getAdjustedXForRuntime(Runtime runtime, double anchorX,
+                                  double anchorY, double x, double y);
 
-	public double getAdjustedYForRuntime(Runtime runtime, double anchorX,
-			double anchorY, double x, double y);
+	double getAdjustedYForRuntime(Runtime runtime, double anchorX,
+                                  double anchorY, double x, double y);
 
 }

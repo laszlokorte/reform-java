@@ -11,7 +11,7 @@ import reform.stage.tooling.cursor.Cursor;
 
 public class CropTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Hover, Pressed
 	}
 

@@ -15,16 +15,4 @@ public abstract class BaseInstruction implements Instruction {
 		return _parent;
 	}
 
-	@Override
-	public void onAdded(final Procedure procedure) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRemoved(final Procedure procedure) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

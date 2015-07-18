@@ -13,7 +13,7 @@ import reform.core.procedure.instructions.blocks.ForLoopInstruction;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public class WrapInLoopAction extends AbstractAction
+public final class WrapInLoopAction extends AbstractAction
 		implements InstructionFocus.Listener, EventedProcedure.Listener {
 	private static final long serialVersionUID = 1L;
 
@@ -68,14 +68,7 @@ public class WrapInLoopAction extends AbstractAction
 				&& !(_focus.getFocused() instanceof NullInstruction));
 	}
 
-	@Override
-	public void onInstructionWillBeAdded(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+    @Override
 	public void onInstructionWillBeRemoved(final EventedProcedure procedure,
 			final Instruction instruction, final InstructionGroup parent) {
 		// TODO Auto-generated method stub

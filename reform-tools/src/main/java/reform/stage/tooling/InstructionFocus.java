@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import reform.core.procedure.instructions.Instruction;
 
 public class InstructionFocus {
-	public static interface Listener {
-		public void onFocusChanged(InstructionFocus focus);
+	public interface Listener {
+		void onFocusChanged(InstructionFocus focus);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

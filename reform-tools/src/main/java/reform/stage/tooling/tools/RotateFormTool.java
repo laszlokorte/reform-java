@@ -22,7 +22,7 @@ import reform.stage.tooling.cursor.Cursor;
 
 public class RotateFormTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Snapped, Pressed
 	}
 

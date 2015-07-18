@@ -17,11 +17,6 @@ public class ConstantLength implements Length {
 		return _length;
 	}
 
-	@Override
-	public String getDescription(final Analyzer analyzer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public boolean isValidFor(final Runtime runtime) {

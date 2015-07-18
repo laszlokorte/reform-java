@@ -11,21 +11,21 @@ import reform.math.Vec2i;
 import reform.naming.Name;
 
 public class EventedPicture {
-	public static interface Listener {
-		public void onNameChanged(EventedPicture picture);
+	public interface Listener {
+		void onNameChanged(EventedPicture picture);
 
-		public void onSizeChanged(EventedPicture picture);
+		void onSizeChanged(EventedPicture picture);
 
-		public void onProcedureChanged(EventedPicture picture);
+		void onProcedureChanged(EventedPicture picture);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 
 	private final EventedProject _evtProject;
-	private final Identifier<? extends Picture> _pictureId;
+	private final  Identifier<? extends Picture> _pictureId;
 
 	public EventedPicture(final EventedProject evtProject,
-			final Identifier<? extends Picture> pictureId) {
+			final  Identifier<? extends Picture> pictureId) {
 		_evtProject = evtProject;
 		_pictureId = pictureId;
 	}

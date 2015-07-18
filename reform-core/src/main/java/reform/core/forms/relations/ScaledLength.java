@@ -20,12 +20,6 @@ public class ScaledLength implements Length {
 	}
 
 	@Override
-	public String getDescription(final Analyzer analyzer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isValidFor(final Runtime runtime) {
 		return _length.isValidFor(runtime);
 	}

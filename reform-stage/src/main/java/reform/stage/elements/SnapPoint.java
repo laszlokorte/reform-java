@@ -3,9 +3,9 @@ package reform.stage.elements;
 import reform.core.runtime.relations.ReferencePoint;
 
 public interface SnapPoint {
-	public double getX();
+	double getX();
 
-	public double getY();
+	double getY();
 
-	public ReferencePoint createReference();
+	ReferencePoint createReference();
 }

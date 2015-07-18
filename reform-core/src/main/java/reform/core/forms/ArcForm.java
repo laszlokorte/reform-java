@@ -28,7 +28,7 @@ import reform.identity.IdentityToken;
 import reform.math.Vector;
 import reform.naming.Name;
 
-public class ArcForm extends BaseForm<ArcForm> {
+public final class ArcForm extends BaseForm<ArcForm> {
 	static private final int SIZE = 5;
 
 	private final transient StaticPoint _startPoint = new StaticPoint(getId(),
@@ -49,7 +49,7 @@ public class ArcForm extends BaseForm<ArcForm> {
 
 	private final Outline _outline = new NullOutline();
 
-	public static enum Point implements ExposedPointToken<ArcForm> {
+	public enum Point implements ExposedPointToken<ArcForm> {
 		Center(0), Start(1), End(2);
 
 		private final int _v;
@@ -64,7 +64,7 @@ public class ArcForm extends BaseForm<ArcForm> {
 		}
 	}
 
-	public static enum Anchor implements IdentityToken {
+	public enum Anchor implements IdentityToken {
 		Center(0), Start(1), End(2);
 
 		private final int _v;

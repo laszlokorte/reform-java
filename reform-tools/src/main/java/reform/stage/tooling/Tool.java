@@ -1,21 +1,21 @@
 package reform.stage.tooling;
 
 public interface Tool {
-	public void setUp();
+	void setUp();
 
-	public void tearDown();
+	void tearDown();
 
-	public void cancle();
+	void cancle();
 
-	public void press();
+	void press();
 
-	public void release();
+	void release();
 
-	public void refresh();
+	void refresh();
 
-	public void toggleOption();
+	void toggleOption();
 
-	public void cycle();
+	void cycle();
 
-	public void input(Input input);
+	void input(Input input);
 }

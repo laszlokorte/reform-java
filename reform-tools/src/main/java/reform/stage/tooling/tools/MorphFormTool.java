@@ -23,7 +23,7 @@ import reform.stage.tooling.cursor.Cursor;
 
 public class MorphFormTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Snapped, Pressed, PressedSnapped
 	}
 
@@ -38,8 +38,7 @@ public class MorphFormTool implements Tool {
 	private final Vec2 _currentOffset = new Vec2();
 	private final Vec2 _startPosition = new Vec2();
 	private Handle _currentHandle;
-	private SnapPoint _currentSnapPoint;
-	private MorphInstruction _currentInstruction;
+    private MorphInstruction _currentInstruction;
 	private TranslationDistance _currentDistance;
 	private Instruction _baseInstruction;
 
@@ -177,10 +176,10 @@ public class MorphFormTool implements Tool {
 		}
 		case Pressed:
 		case PressedSnapped: {
-			_currentSnapPoint = _cursor
-					.getSnapPoint(HitTester.EntityFilter.ExcludeSelected);
+            SnapPoint currentSnapPoint = _cursor
+                    .getSnapPoint(EntityFilter.ExcludeSelected);
 
-			if (_currentSnapPoint == null) {
+			if (currentSnapPoint == null) {
 				_state = State.Pressed;
 				final Vec2 delta = new Vec2(_cursor.getPosition().x
 						- _startPosition.x - _currentOffset.x,
@@ -202,12 +201,11 @@ public class MorphFormTool implements Tool {
 				final RelativeDistance d;
 				if (_currentDistance instanceof RelativeDistance) {
 					d = (RelativeDistance) _currentDistance;
-					d.setReferenceB(_currentSnapPoint.createReference());
+					d.setReferenceB(currentSnapPoint.createReference());
 				} else {
 					d = new RelativeDistance(_currentHandle.createReference(),
-							_currentSnapPoint.createReference());
-					;
-				}
+							currentSnapPoint.createReference());
+                }
 				if (input.getShiftModifier().isActive()) {
 					d.setDirection(getDirectionFor(_cursor.getX()
 							- _startPosition.x, _cursor.getY()
@@ -216,7 +214,7 @@ public class MorphFormTool implements Tool {
 					d.setDirection(FreeDirection.Free);
 				}
 				_currentDistance = d;
-				_toolState.setActiveSnapPoint(_currentSnapPoint);
+				_toolState.setActiveSnapPoint(currentSnapPoint);
 			}
 			_currentInstruction.setDistance(_currentDistance);
 

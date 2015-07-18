@@ -11,7 +11,7 @@ import reform.stage.elements.Entity;
 import reform.stage.elements.outline.EntityOutline;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
-public class StageBuffer {
+class StageBuffer {
 
 	private final Vec2i _size = new Vec2i();
 	private final ArrayList<Entity> _entities = new ArrayList<>();
@@ -31,7 +31,7 @@ public class StageBuffer {
 	}
 
 	public void flush(final Stage stage) {
-		synchronized (stage) {
+		//synchronized (stage) {
 			stage.wipe();
 			stage.setSize(_size);
 			for (int i = 0; i < _entities.size(); i++) {
@@ -61,7 +61,7 @@ public class StageBuffer {
 				stage.addFinalShape(s, _finalShapeIds.get(i));
 			}
 			stage.complete();
-		}
+		//}
 	}
 
 	public void setSize(final Vec2i size) {

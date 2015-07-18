@@ -29,12 +29,12 @@ import reform.playground.presenter.PicturePresenter.Listener;
 
 public class ProjectPresenter implements Listener {
 	private final EventedProject _project;
-	private final Map<Identifier<? extends Picture>, PicturePresenter> _pictures = new HashMap<>();
+	private final Map< Identifier<? extends Picture>, PicturePresenter> _pictures = new HashMap<>();
 
 	private final ThumbnailView _picturesView = new ThumbnailView(
 			new ThumbnailAdapter(this));
 
-	private Identifier<? extends Picture> _selected;
+	private  Identifier<? extends Picture> _selected;
 
 	final JPanel _bottom = new JPanel(new BorderLayout());
 
@@ -74,7 +74,7 @@ public class ProjectPresenter implements Listener {
 		actionMap.put("newPicture", new NewPictureAction(project, idEmitter));
 	}
 
-	private void initializePicture(final Identifier<? extends Picture> id) {
+	private void initializePicture(final  Identifier<? extends Picture> id) {
 		final PicturePresenter presenter = new PicturePresenter(
 				_project.getEventedPicture(id), _idEmitter);
 		_pictures.put(id, presenter);
@@ -83,7 +83,7 @@ public class ProjectPresenter implements Listener {
 	}
 
 	private void destructPicture(
-			final Identifier<? extends Picture> pictureId) {
+			final  Identifier<? extends Picture> pictureId) {
 		final PicturePresenter presenter = _pictures.remove(pictureId);
 		presenter.removeListener(this);
 		if (_selected != null && _selected.equals(pictureId)) {
@@ -93,17 +93,17 @@ public class ProjectPresenter implements Listener {
 		_picturesView.update();
 	}
 
-	private void updatePicture(final Identifier<? extends Picture> pictureId) {
+	private void updatePicture(final  Identifier<? extends Picture> pictureId) {
 		_pictures.get(pictureId).update();
 	}
 
-	private void selectPicture(final Identifier<? extends Picture> pictureId) {
+	private void selectPicture(final  Identifier<? extends Picture> pictureId) {
 		_selected = pictureId;
 
 		_pictures.get(pictureId).appendTo(_bottom);
 	}
 
-	private boolean isSelected(final Identifier<? extends Picture> pictureId) {
+	private boolean isSelected(final  Identifier<? extends Picture> pictureId) {
 		return _selected != null && _selected.equals(pictureId);
 	}
 

@@ -5,7 +5,7 @@ import reform.core.runtime.Runtime;
 import reform.core.runtime.Validatable;
 
 public interface InitialDestination extends Validatable {
-	public static enum Alignment {
+	enum Alignment {
 		Leading {
 			@Override
 			public double getAlignedMax(final double a, final double b) {
@@ -34,19 +34,19 @@ public interface InitialDestination extends Validatable {
 		abstract public double getAlignedMax(double a, double b);
 	}
 
-	public double getMinXForRuntime(final Runtime runtime);
+	double getMinXForRuntime(final Runtime runtime);
 
-	public double getMinYForRuntime(final Runtime runtime);
+	double getMinYForRuntime(final Runtime runtime);
 
-	public double getMaxXForRuntime(final Runtime runtime);
+	double getMaxXForRuntime(final Runtime runtime);
 
-	public double getMaxYForRuntime(final Runtime runtime);
+	double getMaxYForRuntime(final Runtime runtime);
 
-	public Alignment getAlignment();
+	Alignment getAlignment();
 
-	public String getDescription(Analyzer analyzer);
+	String getDescription(Analyzer analyzer);
 
-	public boolean isDegenerated();
+	boolean isDegenerated();
 
-	public void setAlignment(final Alignment alignment);
+	void setAlignment(final Alignment alignment);
 }

@@ -12,19 +12,19 @@ import reform.identity.Identifier;
 import reform.math.Vec2i;
 
 public class ProjectRuntime implements Runtime {
-	public static interface Listener {
-		public void onBeginEvaluation(ProjectRuntime runtime);
+	public interface Listener {
+		void onBeginEvaluation(ProjectRuntime runtime);
 
-		public void onFinishEvaluation(ProjectRuntime runtime);
+		void onFinishEvaluation(ProjectRuntime runtime);
 
-		public void onEvalInstruction(ProjectRuntime runtime,
-				Evaluatable instruction);
+		void onEvalInstruction(ProjectRuntime runtime,
+                               Evaluatable instruction);
 
-		public void onPopScope(ProjectRuntime runtime,
-				FastIterable<Identifier<? extends Form>> ids);
+		void onPopScope(ProjectRuntime runtime,
+                        FastIterable<Identifier<? extends Form>> ids);
 
-		public void onError(ProjectRuntime runtime, Evaluatable instruction,
-				Error error);
+		void onError(ProjectRuntime runtime, Evaluatable instruction,
+                     Error error);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

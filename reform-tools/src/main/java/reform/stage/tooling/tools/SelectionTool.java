@@ -10,7 +10,7 @@ import reform.stage.tooling.cursor.Cursor;
 
 public class SelectionTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Pressed
 
 	}

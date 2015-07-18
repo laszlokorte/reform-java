@@ -12,19 +12,18 @@ public class ToolMorphIcon implements Icon {
 	private final Shape _shape;
 
 	public ToolMorphIcon() {
-		final GeneralPath p = new GeneralPath();
+		final GeneralPath cursor = new GeneralPath();
 		final Area shape = new Area();
-		p.moveTo(-230.0, -460);
-		p.lineTo(330.0, 100.0);
-		p.lineTo(60.0, 85.0);
-		p.lineTo(210.0, 415.0);
-		p.lineTo(115.0, 460.0);
-		p.lineTo(-45.0, 120.0);
-		p.lineTo(-230.0, 300.0);
-		p.closePath();
+		cursor.moveTo(-230.0, -460);
+		cursor.lineTo(330.0, 100.0);
+		cursor.lineTo(60.0, 85.0);
+		cursor.lineTo(210.0, 415.0);
+		cursor.lineTo(115.0, 460.0);
+		cursor.lineTo(-45.0, 120.0);
+		cursor.lineTo(-230.0, 300.0);
+		cursor.closePath();
 
-		final Shape cursor = p;
-		shape.add(new Area(cursor));
+        shape.add(new Area(cursor));
 
 		final Area dot = new Area(new Ellipse2D.Double(-430, -650, 400, 400));
 		dot.subtract(new Area(new Ellipse2D.Double(-350, -570, 240, 240)));

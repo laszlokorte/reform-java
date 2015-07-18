@@ -7,7 +7,7 @@ import javax.swing.AbstractAction;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public class RemoveInstructionAction extends AbstractAction implements
+public final class RemoveInstructionAction extends AbstractAction implements
 		InstructionFocus.Listener {
 	private static final long serialVersionUID = 1L;
 

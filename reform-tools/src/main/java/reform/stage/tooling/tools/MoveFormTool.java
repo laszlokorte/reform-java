@@ -21,7 +21,7 @@ import reform.stage.tooling.cursor.Cursor;
 
 public class MoveFormTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Snapped, Pressed, PressedSnapped
 	}
 
@@ -37,8 +37,7 @@ public class MoveFormTool implements Tool {
 	private final Vec2 _currentOffset = new Vec2();
 	private final Vec2 _startPosition = new Vec2();
 	private EntityPoint _currentPoint;
-	private SnapPoint _currentSnapPoint;
-	private TranslateInstruction _currentInstruction;
+    private TranslateInstruction _currentInstruction;
 	private TranslationDistance _currentDistance;
 
 	public MoveFormTool(final SelectionTool selectionTool,
@@ -169,10 +168,10 @@ public class MoveFormTool implements Tool {
 		}
 		case Pressed:
 		case PressedSnapped: {
-			_currentSnapPoint = _cursor
-					.getSnapPoint(HitTester.EntityFilter.ExcludeSelected);
+            SnapPoint currentSnapPoint = _cursor
+                    .getSnapPoint(EntityFilter.ExcludeSelected);
 
-			if (_currentSnapPoint == null) {
+			if (currentSnapPoint == null) {
 				_state = State.Pressed;
 				final Vec2 delta = new Vec2(
 						_cursor.getPosition().x - _startPosition.x
@@ -195,22 +194,21 @@ public class MoveFormTool implements Tool {
 				final RelativeDistance d;
 				if (_currentDistance instanceof RelativeDistance) {
 					d = (RelativeDistance) _currentDistance;
-					d.setReferenceB(_currentSnapPoint.createReference());
+					d.setReferenceB(currentSnapPoint.createReference());
 				} else {
 					d = new RelativeDistance(_currentPoint.createReference(),
-							_currentSnapPoint.createReference());
-					;
-				}
+							currentSnapPoint.createReference());
+                }
 				if (input.getShiftModifier().isActive()) {
 					d.setDirection(getDirectionFor(
-							_currentSnapPoint.getX() - _startPosition.x,
-							_currentSnapPoint.getY() - _startPosition.y));
+							currentSnapPoint.getX() - _startPosition.x,
+							currentSnapPoint.getY() - _startPosition.y));
 				} else {
 					d.setDirection(FreeDirection.Free);
 
 				}
 				_currentDistance = d;
-				_toolState.setActiveSnapPoint(_currentSnapPoint);
+				_toolState.setActiveSnapPoint(currentSnapPoint);
 			}
 
 			_currentInstruction.setDistance(_currentDistance);

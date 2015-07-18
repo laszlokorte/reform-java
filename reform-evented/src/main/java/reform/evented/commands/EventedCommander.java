@@ -8,8 +8,8 @@ import reform.commands.Commander;
 
 public class EventedCommander {
 
-	public static interface Listener {
-		public void onCommand(EventedCommander commander);
+	public interface Listener {
+		void onCommand(EventedCommander commander);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

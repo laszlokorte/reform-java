@@ -14,7 +14,7 @@ InstructionGroup {
 
 	private final ArrayList<Instruction> _children = new ArrayList<>();
 
-	public BaseInstructionGroup() {
+	protected BaseInstructionGroup() {
 		_children.add(new NullInstruction(this));
 	}
 
@@ -79,7 +79,7 @@ InstructionGroup {
 		}
 	}
 
-	public void _analyzeChildren(final Analyzer analyzer) {
+	protected void _analyzeChildren(final Analyzer analyzer) {
 		analyzer.pushScope();
 		for (int i = 0; i < _children.size(); i++) {
 			final Analyzable instruction = _children.get(i);

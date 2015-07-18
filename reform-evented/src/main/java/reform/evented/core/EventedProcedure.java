@@ -12,23 +12,20 @@ import reform.core.runtime.Runtime;
 
 public class EventedProcedure {
 
-	public static interface Listener {
-		public void onInstructionAdded(EventedProcedure procedure,
-				Instruction instruction, InstructionGroup parent);
+	public interface Listener {
+		void onInstructionAdded(EventedProcedure procedure,
+                                Instruction instruction, InstructionGroup parent);
 
-		public void onInstructionRemoved(EventedProcedure procedure,
-				Instruction instruction, InstructionGroup parent);
+		void onInstructionRemoved(EventedProcedure procedure,
+                                  Instruction instruction, InstructionGroup parent);
 
-		public void onInstructionWillBeAdded(EventedProcedure procedure,
-				Instruction instruction, InstructionGroup parent);
+        void onInstructionWillBeRemoved(EventedProcedure procedure,
+                                        Instruction instruction, InstructionGroup parent);
 
-		public void onInstructionWillBeRemoved(EventedProcedure procedure,
-				Instruction instruction, InstructionGroup parent);
+		void onInstructionChanged(EventedProcedure procedure,
+                                  Instruction instruction, InstructionGroup parent);
 
-		public void onInstructionChanged(EventedProcedure procedure,
-				Instruction instruction, InstructionGroup parent);
-
-		public void onFormChanged(EventedProcedure procedure, Form form);
+		void onFormChanged(EventedProcedure procedure, Form form);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -43,10 +40,6 @@ public class EventedProcedure {
 			final InstructionGroup.Position pos, final Instruction base) {
 		final InstructionGroup parent = base.getParent();
 
-		for (int i = 0, j = _listeners.size(); i < j; i++) {
-			_listeners.get(i).onInstructionWillBeAdded(this, instruction,
-					parent);
-		}
 		_evtPicture.getProcedure().addInstruction(instruction, pos, base);
 		for (int i = 0, j = _listeners.size(); i < j; i++) {
 			_listeners.get(i).onInstructionAdded(this, instruction, parent);
@@ -115,9 +108,6 @@ public class EventedProcedure {
 			final InstructionGroup group) {
 		final InstructionGroup parent = instruction.getParent();
 
-		for (int i = 0, j = _listeners.size(); i < j; i++) {
-			_listeners.get(i).onInstructionWillBeAdded(this, group, parent);
-		}
 		final Instruction base = parent.get(parent.indexOf(instruction) - 1);
 		_evtPicture.getProcedure().removeInstruction(instruction);
 		group.append(instruction);

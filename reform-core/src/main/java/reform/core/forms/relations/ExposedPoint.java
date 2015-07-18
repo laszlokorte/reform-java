@@ -11,7 +11,7 @@ import reform.naming.Name;
 
 public class ExposedPoint implements ReferencePoint, Identifiable<ExposedPoint> {
 
-	public static interface ExposedPointToken<T> extends IdentityToken {
+	public interface ExposedPointToken<T> extends IdentityToken {
 
 	}
 

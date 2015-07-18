@@ -15,7 +15,6 @@ import java.util.Iterator;
 public class IdentifiableList<E extends Identifiable<E>>
 		implements Iterable<Identifier<? extends E>>,
 		FastIterable<Identifier<? extends E>> {
-	private final ArrayList<E> _elements = new ArrayList<>();
 	private final ArrayList<Identifier<? extends E>> _ids = new ArrayList<>();
 	private final HashMap<Identifier<? extends E>, E> _mapping = new HashMap<>();
 
@@ -29,7 +28,6 @@ public class IdentifiableList<E extends Identifiable<E>>
 		final Identifier<? extends E> id = element.getId();
 		assert!_mapping.containsKey(id);
 
-		_elements.add(element);
 		_ids.add(id);
 		_mapping.put(id, element);
 	}
@@ -43,7 +41,6 @@ public class IdentifiableList<E extends Identifiable<E>>
 	public void remove(final E element) {
 		final Identifier<? extends E> id = element.getId();
 
-		_elements.remove(element);
 		_ids.remove(id);
 		_mapping.remove(id);
 	}
@@ -58,7 +55,6 @@ public class IdentifiableList<E extends Identifiable<E>>
 		final E element = _mapping.remove(id);
 		assert element != null;
 
-		_elements.remove(element);
 		_ids.remove(id);
 	}
 
@@ -108,7 +104,6 @@ public class IdentifiableList<E extends Identifiable<E>>
 	 * Remove all elements from the list.
 	 */
 	public void clear() {
-		_elements.clear();
 		_ids.clear();
 		_mapping.clear();
 	}

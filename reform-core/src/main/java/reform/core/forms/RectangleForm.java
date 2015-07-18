@@ -32,7 +32,7 @@ import reform.identity.IdentityToken;
 import reform.math.Vector;
 import reform.naming.Name;
 
-public class RectangleForm extends BaseForm<RectangleForm> {
+public final class RectangleForm extends BaseForm<RectangleForm> {
 
 	static private final int SIZE = 5;
 
@@ -44,7 +44,7 @@ public class RectangleForm extends BaseForm<RectangleForm> {
 
 	private final Outline _outline = new NullOutline();
 
-	public static enum Point implements ExposedPointToken<RectangleForm> {
+	public enum Point implements ExposedPointToken<RectangleForm> {
 		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(
 				5), Right(6), Bottom(7), Left(8);
 
@@ -60,7 +60,7 @@ public class RectangleForm extends BaseForm<RectangleForm> {
 		}
 	}
 
-	public static enum Anchor implements IdentityToken {
+	public enum Anchor implements IdentityToken {
 		TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(5), Right(
 				6), Bottom(7), Left(8);
 
@@ -250,7 +250,7 @@ public class RectangleForm extends BaseForm<RectangleForm> {
 
 	 static class RectangleAnchor extends BaseAnchor {
 
-		static enum Side {
+		enum Side {
 			Top(0, -1), Right(1, 0), Bottom(0, 1), Left(-1, 0), TopLeft(-1,
 					-1), TopRight(1, -1), BottomRight(1, 1), BottomLeft(-1, 1);
 

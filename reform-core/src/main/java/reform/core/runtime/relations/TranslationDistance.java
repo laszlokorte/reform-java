@@ -6,11 +6,11 @@ import reform.core.runtime.Validatable;
 
 public interface TranslationDistance extends Validatable {
 
-	public double getXValueForRuntime(final Runtime runtime);
+	double getXValueForRuntime(final Runtime runtime);
 
-	public double getYValueForRuntime(final Runtime runtime);
+	double getYValueForRuntime(final Runtime runtime);
 
-	public String getDescription(Analyzer analyzer);
+	String getDescription(Analyzer analyzer);
 
-	public boolean isDegenerated();
+	boolean isDegenerated();
 }

@@ -18,11 +18,16 @@ public class Dot implements Asset {
 	private final BufferedImage _bitmap;
 
 	public Dot(final int radius, final float strokeWidth,
-			final Color fillColor, final Color strokeColor) {
+			   final Color fillColor, final Color strokeColor) {
 		_bitmap = new BufferedImage(radius * 2, radius * 2,
 				BufferedImage.TYPE_4BYTE_ABGR);
 
 		_prerender(strokeWidth, fillColor, strokeColor);
+	}
+
+	public Dot(final int radius, final float strokeWidth,
+			   final Color color) {
+		this(radius, strokeWidth, color, color);
 	}
 
 	@Override

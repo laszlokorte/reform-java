@@ -41,15 +41,7 @@ public class CreateFormInstruction extends BaseInstruction {
 				+ _destination.getDescription(analyzer));
 	}
 
-	@Override
-	public void onAdded(final Procedure procedure) {
-	}
-
-	@Override
-	public void onRemoved(final Procedure procedure) {
-	}
-
-	@Override
+    @Override
 	public Identifier<? extends Form> getTarget() {
 		return _form.getId();
 	}

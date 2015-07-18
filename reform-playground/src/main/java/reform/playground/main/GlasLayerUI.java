@@ -85,7 +85,7 @@ public class GlasLayerUI extends LayerUI<JComponent> {
 				|| e.getID() == MouseEvent.MOUSE_ENTERED) {
 			return;
 		}
-		if (newDown || _down && _down != newDown) {
+		if (_down != newDown) {
 			_down = newDown;
 			if (_down) {
 				final Point p = SwingUtilities.convertPoint(e.getComponent(),

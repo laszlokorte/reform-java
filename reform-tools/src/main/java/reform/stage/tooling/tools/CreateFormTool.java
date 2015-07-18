@@ -26,7 +26,7 @@ import reform.stage.tooling.factory.FormFactory;
 
 public class CreateFormTool implements Tool {
 
-	private static enum State {
+	private enum State {
 		Idle, Snapped, Pressed, PressedSnapped
 
 	}
@@ -49,9 +49,8 @@ public class CreateFormTool implements Tool {
 	private CreateFormInstruction _currentInstruction;
 	private InitialDestination _currentDestination;
 	private ReferencePoint _currentStart;
-	private Form _currentForm;
 
-	public CreateFormTool(final SelectionTool selectionTool,
+    public CreateFormTool(final SelectionTool selectionTool,
 			final FormFactory<? extends Form> formFactory,
 			final ToolState toolState, final Cursor cursor,
 			final HitTester hitTester, final InstructionFocus focus,
@@ -102,8 +101,8 @@ public class CreateFormTool implements Tool {
 			_currentStart = _startPoint.createReference();
 			_currentDestination = new RelativeFixSizeDestination(_currentStart,
 					new Vec2());
-			_currentForm = _formFactory.build();
-			_currentInstruction = new CreateFormInstruction(_currentForm,
+            Form currentForm = _formFactory.build();
+			_currentInstruction = new CreateFormInstruction(currentForm,
 					_currentDestination);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
 					_focus.getFocused());

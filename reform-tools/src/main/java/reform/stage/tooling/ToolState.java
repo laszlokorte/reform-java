@@ -70,20 +70,15 @@ public class ToolState {
 	}
 
 	public boolean belongsToActiveSnapPoint(final Entity e) {
-		if (_activeSnapPoint instanceof EntityPoint) {
-			return ((EntityPoint) _activeSnapPoint).getFormId()
-					.equals(e.getId());
-		}
+        if (_activeSnapPoint instanceof EntityPoint) {
+            return ((EntityPoint) _activeSnapPoint).getFormId()
+                    .equals(e.getId());
+        }
 
-		if (_activeSnapPoint instanceof IntersectionSnapPoint) {
-			return ((IntersectionSnapPoint) _activeSnapPoint).getFormIdA()
-					.equals(e.getId())
-					|| ((IntersectionSnapPoint) _activeSnapPoint).getFormIdB()
-							.equals(e.getId());
-		}
-
-		return false;
-	}
+        return _activeSnapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) _activeSnapPoint)
+                .getFormIdA().equals(e.getId()) || ((IntersectionSnapPoint)
+                _activeSnapPoint).getFormIdB().equals(e.getId()));
+    }
 
 	public void setActiveCropPoint(final CropPoint p) {
 		_activeCropPoint = p;

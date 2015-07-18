@@ -32,13 +32,13 @@ public class ProportionalDirection implements Direction {
 		return anchorY + getProportionedY(dx, dy);
 	}
 
-	public double getProportionedX(final double dx, final double dy) {
+	private double getProportionedX(final double dx, final double dy) {
 		final double min = Math.min(Math.abs(dx), Math.abs(dy / _proportion));
 
 		return Math.signum(dx) * min;
 	}
 
-	public double getProportionedY(final double dx, final double dy) {
+	private double getProportionedY(final double dx, final double dy) {
 		final double min = Math.min(Math.abs(dx), Math.abs(dy / _proportion));
 
 		return Math.signum(dy) * min * _proportion;

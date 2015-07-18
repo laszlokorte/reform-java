@@ -32,7 +32,7 @@ import reform.identity.IdentityToken;
 import reform.math.Vector;
 import reform.naming.Name;
 
-public class PieForm extends BaseForm<PieForm> {
+public final class PieForm extends BaseForm<PieForm> {
 	static private final int SIZE = 5;
 
 	private final transient StaticPoint _centerPoint = new StaticPoint(getId(),
@@ -57,7 +57,7 @@ public class PieForm extends BaseForm<PieForm> {
 
 	private final Outline _outline = new NullOutline();
 
-	public static enum Point implements ExposedPointToken<PieForm> {
+	public enum Point implements ExposedPointToken<PieForm> {
 		Center(0), Start(1), End(2);
 
 		private final int _v;
@@ -72,7 +72,7 @@ public class PieForm extends BaseForm<PieForm> {
 		}
 	}
 
-	public static enum Anchor implements IdentityToken {
+	public enum Anchor implements IdentityToken {
 		Start(1), End(2);
 
 		private final int _v;

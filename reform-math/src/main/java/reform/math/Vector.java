@@ -153,9 +153,11 @@ public final class Vector {
 	public static boolean isInTriangle(final double px, final double py,
 			final double t1x, final double t1y, final double t2x,
 			final double t2y, final double t3x, final double t3y) {
-		boolean b1, b2, b3;
+		final boolean b1;
+        final boolean b2;
+        final boolean b3;
 
-		b1 = sign(px, py, t1x, t1y, t2x, t2y) < 0.0f;
+        b1 = sign(px, py, t1x, t1y, t2x, t2y) < 0.0f;
 		b2 = sign(px, py, t2x, t2y, t3x, t3y) < 0.0f;
 		b3 = sign(px, py, t3x, t3y, t1x, t1y) < 0.0f;
 

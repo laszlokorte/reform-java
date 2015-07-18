@@ -16,8 +16,8 @@ public class Procedure {
 	public Procedure() {
 	}
 
-	public void evaluate(final Runtime runtime) throws InterruptedException {
-		synchronized (runtime) {
+	public void evaluate(final Runtime runtime)  {
+		//synchronized (runtime) {
 			runtime.begin();
 
 			runtime.pushScope();
@@ -28,7 +28,7 @@ public class Procedure {
 			_root.evaluate(runtime);
 			runtime.popScope();
 			runtime.finish();
-		}
+		//}
 	}
 
 	public void analyze(final Analyzer analyzer) {
@@ -53,8 +53,6 @@ public class Procedure {
 		}
 		parent.insertInstruction(instruction, pos, base);
 
-		instruction.onAdded(this);
-
 		if (instruction instanceof InstructionGroup) {
 			addInstruction(new NullInstruction(), Position.After, instruction);
 		}
@@ -72,13 +70,11 @@ public class Procedure {
 			}
 		}
 		parent.removeInstruction(instruction);
-		instruction.onRemoved(this);
 	}
 
 	public void __dbg__addInstruction(final Instruction instruction) {
 		_root.insertInstruction(instruction, Position.After,
 				_root.get(_root.size() - 1));
-		instruction.onAdded(this);
 	}
 
 	public Paper getPaper() {

@@ -26,11 +26,6 @@ public class StaticLength implements Length {
 		runtime.set(_formId, _offset, Double.doubleToRawLongBits(length));
 	}
 
-	@Override
-	public String getDescription(final Analyzer analyzer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public boolean isValidFor(final Runtime runtime) {

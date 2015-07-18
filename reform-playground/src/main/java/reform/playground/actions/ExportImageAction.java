@@ -56,75 +56,71 @@ public class ExportImageAction extends AbstractAction {
 		final Tool prevTool = _toolController.getTool();
 		_toolController.selectTool(_previewTool);
 
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(() -> {
+            final int returnVal = _fileChooser.showSaveDialog(null);
 
-			@Override
-			public void run() {
-				final int returnVal = _fileChooser.showSaveDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                final File selectedFile = _fileChooser.getSelectedFile();
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					final File selectedFile = _fileChooser.getSelectedFile();
+                try {
 
-					try {
+                    final BufferedImage image = new BufferedImage(
+                            _stage.getSize().x, _stage.getSize().y,
+                            BufferedImage.TYPE_INT_RGB);
 
-						final BufferedImage image = new BufferedImage(
-								_stage.getSize().x, _stage.getSize().y,
-								BufferedImage.TYPE_INT_RGB);
+                    final Graphics2D g2 = image.createGraphics();
 
-						final Graphics2D g2 = image.createGraphics();
+                    g2.setColor(Color.WHITE);
+                    g2.fillRect(0, 0, _stage.getSize().x,
+                            _stage.getSize().y);
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
 
-						g2.setColor(Color.WHITE);
-						g2.fillRect(0, 0, _stage.getSize().x,
-								_stage.getSize().y);
-						g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-								RenderingHints.VALUE_ANTIALIAS_ON);
+                    final Color strokeColor = Color.BLACK;
+                    final Color fillColor = new Color(0x99222222, true);
+                    final List<Shape> finalShapes = _stage.getFinalShapes();
+                    for (int i = 0, j = finalShapes.size(); i < j; i++) {
+                        final Shape s = finalShapes.get(i);
 
-						final Color strokeColor = Color.BLACK;
-						final Color fillColor = new Color(0x99222222, true);
-						final List<Shape> finalShapes = _stage.getFinalShapes();
-						for (int i = 0, j = finalShapes.size(); i < j; i++) {
-							final Shape s = finalShapes.get(i);
+                        g2.setColor(strokeColor);
+                        g2.draw(s);
+                        g2.setColor(fillColor);
+                        g2.fill(s);
+                    }
 
-							g2.setColor(strokeColor);
-							g2.draw(s);
-							g2.setColor(fillColor);
-							g2.fill(s);
-						}
+                    final String fileName = selectedFile.getName();
+                    final int lastDot = fileName.lastIndexOf(".");
+                    final String suffix;
 
-						final String fileName = selectedFile.getName();
-						final int lastDot = fileName.lastIndexOf(".");
-						final String suffix;
+                    if (lastDot + 1 < fileName.length()) {
+                        suffix = fileName.substring(lastDot + 1,
+                                fileName.length());
+                    } else {
+                        suffix = "png";
+                    }
 
-						if (lastDot + 1 < fileName.length()) {
-							suffix = fileName.substring(lastDot + 1,
-									fileName.length());
-						} else {
-							suffix = "png";
-						}
+                    final ImageWriter writer = ImageIO
+                            .getImageWritersBySuffix(suffix).next();
 
-						final ImageWriter writer = ImageIO
-								.getImageWritersBySuffix(suffix).next();
+                    final ImageOutputStream stream = ImageIO
+                            .createImageOutputStream(selectedFile);
+                    writer.setOutput(stream);
+                    writer.write(image);
+                    writer.dispose();
+                    stream.close();
+                    g2.dispose();
 
-						final ImageOutputStream stream = ImageIO
-								.createImageOutputStream(selectedFile);
-						writer.setOutput(stream);
-						writer.write(image);
-						writer.dispose();
-						stream.close();
-						g2.dispose();
+                } catch (final IOException ie) {
+                    ie.printStackTrace();
+                } finally {
+                    _toolController.selectTool(prevTool);
+                }
 
-					} catch (final IOException ie) {
-						ie.printStackTrace();
-					} finally {
-						_toolController.selectTool(prevTool);
-					}
+            } else {
+                _toolController.selectTool(prevTool);
 
-				} else {
-					_toolController.selectTool(prevTool);
-
-				}
-			}
-		});
+            }
+        });
 	}
 
 }

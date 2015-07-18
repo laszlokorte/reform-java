@@ -8,7 +8,7 @@ import reform.naming.Name;
 
 public final class Picture implements Identifiable<Picture> {
 
-	private final Identifier<Picture> _id;
+	private final  Identifier<? extends Picture> _id;
 
 	private Name _name;
 	private final Vec2i _size = new Vec2i(400, 400);
@@ -16,7 +16,7 @@ public final class Picture implements Identifiable<Picture> {
 	private final DataSet _dataSet;
 	private final Procedure _procedure;
 
-	public Picture(final Identifier<Picture> id, final Name name,
+	public Picture(final  Identifier<? extends Picture> id, final Name name,
 			final Vec2i size, final DataSet dataSet, final Procedure procedure) {
 		_id = id;
 		_name = name;
@@ -50,7 +50,7 @@ public final class Picture implements Identifiable<Picture> {
 	}
 
 	@Override
-	public Identifier<Picture> getId() {
+	public  Identifier<? extends Picture> getId() {
 		return _id;
 	}
 

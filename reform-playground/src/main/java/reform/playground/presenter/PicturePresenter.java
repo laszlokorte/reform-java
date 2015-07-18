@@ -106,16 +106,16 @@ import reform.stage.tooling.tools.ScaleFormTool;
 import reform.stage.tooling.tools.SelectionTool;
 
 public class PicturePresenter {
-	public static interface Preview {
-		public void draw(Graphics2D g2);
+	public interface Preview {
+		void draw(Graphics2D g2);
 
-		public int getWidth();
+		int getWidth();
 
-		public int getHeight();
+		int getHeight();
 	}
 
-	public static interface Listener {
-		public void onPreviewChange(PicturePresenter presenter);
+	public interface Listener {
+		void onPreviewChange(PicturePresenter presenter);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -506,28 +506,23 @@ public class PicturePresenter {
 				final Vec2i newSize = runtime.getSize();
 				if (!newSize.equals(_oldStageSize)) {
 					_oldStageSize.set(runtime.getSize());
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							final Rectangle bounds = _stageScroller
-									.getViewport().getViewRect();
-							final Dimension size = new Dimension(
-									_oldStageSize.x, _oldStageSize.y);
+					SwingUtilities.invokeLater(() -> {
+                        final Rectangle bounds = _stageScroller
+                                .getViewport().getViewRect();
+                        final Dimension size = new Dimension(
+                                _oldStageSize.x, _oldStageSize.y);
 
-							final int x = (size.width - bounds.width) / 2 + 15;
-							final int y = (size.height - bounds.height) / 2
-									+ 15;
+                        final int x = (size.width - bounds.width) / 2 + 15;
+                        final int y = (size.height - bounds.height) / 2
+                                + 15;
 
-							if (x > 0 || y > 0) {
-								_stageScroller.getViewport().setViewPosition(
-										new Point(x < 0 ? 0 : x,
-												y < 0 ? 0 : y));
-							}
-						}
-					});
+                        if (x > 0 || y > 0) {
+                            _stageScroller.getViewport().setViewPosition(
+                                    new Point(x < 0 ? 0 : x,
+                                            y < 0 ? 0 : y));
+                        }
+                    });
 				}
-
-				_procedureView.updateListIfNeeded();
 			}
 
 			@Override
@@ -599,13 +594,7 @@ public class PicturePresenter {
 			}
 		});
 
-		_selection.addListener(new FormSelection.Listener() {
-
-			@Override
-			public void onSelectionChanged(final FormSelection focus) {
-				_stagePresenter.update();
-			}
-		});
+		_selection.addListener(focus -> _stagePresenter.update());
 
 		_toolController.selectTool(selectionTool);
 
@@ -842,12 +831,7 @@ public class PicturePresenter {
 			implements Preview, ProjectRuntime.Listener {
 
 		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-				new PoolFactory<GeneralPath.Double>() {
-					@Override
-					public GeneralPath.Double create() {
-						return new GeneralPath.Double();
-					};
-				});
+                () -> new GeneralPath.Double());
 
 		private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
 		private final Vec2i _size = new Vec2i();
@@ -1031,21 +1015,14 @@ public class PicturePresenter {
 
 		@Override
 		public boolean belongsToSelected(final SnapPoint snapPoint) {
-			if (snapPoint instanceof EntityPoint) {
-				return ((EntityPoint) snapPoint).getFormId()
-						.equals(_selection.getSelected());
-			}
+            if (snapPoint instanceof EntityPoint) {
+                return ((EntityPoint) snapPoint).getFormId()
+                        .equals(_selection.getSelected());
+            }
 
-			if (snapPoint instanceof IntersectionSnapPoint) {
-				return ((IntersectionSnapPoint) snapPoint).getFormIdA()
-						.equals(_selection.getSelected())
-						|| ((IntersectionSnapPoint) snapPoint).getFormIdB()
-								.equals(_selection.getSelected());
+            return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(_selection.getSelected()));
 
-			}
-
-			return false;
-		}
+        }
 	}
 
 	public void setPreviewMode(final boolean b) {

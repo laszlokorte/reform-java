@@ -16,8 +16,8 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-public class ThumbnailView extends JComponent {
-	public static interface Adapter {
+class ThumbnailView extends JComponent {
+	public interface Adapter {
 
 		int getCount();
 

@@ -8,8 +8,8 @@ import reform.identity.Identifier;
 
 public class ProjectAnalyzer implements Analyzer {
 
-	public static interface Listener {
-		public void onFinishAnalysis(ProjectAnalyzer analyzer);
+	public interface Listener {
+		void onFinishAnalysis(ProjectAnalyzer analyzer);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();

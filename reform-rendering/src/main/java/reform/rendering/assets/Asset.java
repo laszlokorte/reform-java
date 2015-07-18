@@ -19,5 +19,5 @@ public interface Asset {
 	 * @param y
 	 *            the y coordinate to draw the asset at.
 	 */
-	public void drawAt(Graphics g, double x, double y);
+    void drawAt(Graphics g, double x, double y);
 }

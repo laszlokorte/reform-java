@@ -8,35 +8,35 @@ import reform.identity.Identifier;
 import reform.math.Vec2i;
 
 public interface Runtime {
-	public void begin();
+	void begin();
 
-	public void finish();
+	void finish();
 
-	public void beforeEval(Evaluatable instruction);
+	void beforeEval(Evaluatable instruction);
 
-	public void afterEval(Evaluatable instruction);
+	void afterEval(Evaluatable instruction);
 
-	public void pushScope();
+	void pushScope();
 
-	public void popScope();
+	void popScope();
 
-	public void declare(Form form);
+	void declare(Form form);
 
-	public Form get(Identifier<? extends Form> id);
+	Form get(Identifier<? extends Form> id);
 
-	public long get(Identifier<? extends Form> id, int offset);
+	long get(Identifier<? extends Form> id, int offset);
 
-	public void set(Identifier<? extends Form> id, int offset, long value);
+	void set(Identifier<? extends Form> id, int offset, long value);
 
-	public FastIterable<Identifier<? extends Form>> getStackIterator();
+	FastIterable<Identifier<? extends Form>> getStackIterator();
 
-	public void reportError(Evaluatable instruction, Error error);
+	void reportError(Evaluatable instruction, Error error);
 
-	public boolean shouldStop();
+	boolean shouldStop();
 
-	public Runtime getSubroutine(Identifier<? extends Picture> pictureId);
+	Runtime getSubroutine( Identifier<? extends Picture> pictureId);
 
-	public ExpressionContext getExpressionContext();
+	ExpressionContext getExpressionContext();
 
-	public Vec2i getSize();
+	Vec2i getSize();
 }

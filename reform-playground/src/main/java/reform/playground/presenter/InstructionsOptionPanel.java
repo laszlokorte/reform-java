@@ -29,7 +29,7 @@ import reform.core.runtime.relations.ScaleFactor;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public class InstructionsOptionPanel implements InstructionFocus.Listener,
+public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		ChangeListener, EventedProcedure.Listener {
 	private final JPanel _panel = new JPanel(
 			new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -186,14 +186,7 @@ public class InstructionsOptionPanel implements InstructionFocus.Listener,
 
 	}
 
-	@Override
-	public void onInstructionWillBeAdded(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+    @Override
 	public void onInstructionWillBeRemoved(final EventedProcedure procedure,
 			final Instruction instruction, final InstructionGroup parent) {
 		// TODO Auto-generated method stub

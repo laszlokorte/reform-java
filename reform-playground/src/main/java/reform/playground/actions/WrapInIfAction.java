@@ -10,7 +10,7 @@ import reform.core.procedure.instructions.blocks.IfConditionInstruction;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public class WrapInIfAction extends AbstractAction implements
+public final class WrapInIfAction extends AbstractAction implements
 InstructionFocus.Listener {
 
 	private static final long serialVersionUID = 1L;

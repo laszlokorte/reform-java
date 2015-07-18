@@ -14,31 +14,27 @@ import reform.identity.IdentifierEmitter;
 import reform.math.Vec2i;
 import reform.naming.Name;
 
-public class Main {
+public final class Main {
 	public static void main(final String[] args) {
 		initStyle();
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(() -> {
+            final Project project = new Project();
+            final EventedProject eProject = new EventedProject(project);
+            final IdentifierEmitter idEmitter = new IdentifierEmitter(100);
 
-			@Override
-			public void run() {
-				final Project project = new Project();
-				final EventedProject eProject = new EventedProject(project);
-				final IdentifierEmitter idEmitter = new IdentifierEmitter(100);
+            final Picture pic = new Picture(idEmitter.emit(),
+                    new Name("Foo Picture"), new Vec2i(700, 400),
+                    new DataSet(), new Procedure());
+            eProject.addPicture(pic);
 
-				final Picture pic = new Picture(idEmitter.emit(),
-						new Name("Foo Picture"), new Vec2i(700, 400),
-						new DataSet(), new Procedure());
-				eProject.addPicture(pic);
+            final WindowBuilder windowBuilder = new WindowBuilder();
 
-				final WindowBuilder windowBuilder = new WindowBuilder();
-
-				windowBuilder.open(null, project, idEmitter, true);
-			}
-		});
+            windowBuilder.open(null, project, idEmitter, true);
+        });
 
 	}
 
-	public static void initStyle() {
+	private static void initStyle() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		try {
 

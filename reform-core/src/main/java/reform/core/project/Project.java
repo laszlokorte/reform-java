@@ -11,24 +11,24 @@ public final class Project {
 		_pictures.add(picture);
 	}
 
-	public void removePicture(final Identifier<? extends Picture> pictureId) {
+	public void removePicture(final  Identifier<? extends Picture> pictureId) {
 		_pictures.removeById(pictureId);
 	}
 
-	public Picture getPicture(final Identifier<? extends Picture> pictureId) {
+	public Picture getPicture(final  Identifier<? extends Picture> pictureId) {
 		return _pictures.getById(pictureId);
 	}
 
-	public FastIterable<Identifier<? extends Picture>> getPictures() {
+	public FastIterable< Identifier<? extends Picture>> getPictures() {
 		return _pictures;
 	}
 
-	public Identifier<? extends Picture> getPictureAtIndex(final int index) {
+	public  Identifier<? extends Picture> getPictureAtIndex(final int index) {
 		return _pictures.getIdAtIndex(index);
 	}
 
 	public boolean containsPicture(
-			final Identifier<? extends Picture> pictureId) {
+			final  Identifier<? extends Picture> pictureId) {
 		return _pictures.contains(pictureId);
 	}
 

@@ -5,8 +5,6 @@ import reform.core.runtime.Runtime;
 import reform.core.runtime.Validatable;
 
 public interface Length extends Validatable {
-	public double getValueForRuntime(final Runtime runtime);
-
-	public String getDescription(Analyzer analyzer);
+	double getValueForRuntime(final Runtime runtime);
 
 }

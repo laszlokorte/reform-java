@@ -14,8 +14,8 @@ public class ToolController {
 	private Tool _nextTool = null;
 	private boolean _pressed = false;
 
-	private final BasicModifier _shift = new BasicModifier("Shift");
-	private final BasicModifier _alt = new BasicModifier("Shift");
+	private final BasicModifier _shift = new BasicModifier();
+	private final BasicModifier _alt = new BasicModifier();
 	private final Input _input;
 
 	public ToolController(final Cursor cursor) {
