@@ -1,0 +1,45 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="reform:app">
+    <output-path>$PROJECT_DIR$/out/artifacts/reform_app</output-path>
+    <root id="root">
+      <element id="directory" name="Reform.app">
+        <element id="directory" name="Contents">
+          <element id="directory" name="Java">
+            <element id="archive" name="app.jar">
+              <element id="directory" name="META-INF">
+                <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/META-INF/MANIFEST.MF" />
+              </element>
+              <element id="module-output" name="reform-commands" />
+              <element id="module-output" name="reform-core" />
+              <element id="module-output" name="reform-data" />
+              <element id="module-output" name="reform-evented" />
+              <element id="module-output" name="reform-identity" />
+              <element id="module-output" name="reform-math" />
+              <element id="module-output" name="reform-naming" />
+              <element id="module-output" name="reform-playground" />
+              <element id="module-output" name="reform-rendering" />
+              <element id="module-output" name="reform-serializer" />
+              <element id="module-output" name="reform-stage" />
+              <element id="module-output" name="reform-tools" />
+            </element>
+            <element id="directory" name="libs">
+              <element id="file-copy" path="$PROJECT_DIR$/reform-serializer/json.jar" />
+            </element>
+          </element>
+          <element id="directory" name="MacOS">
+            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/JavaAppLauncher" />
+          </element>
+          <element id="directory" name="Plugins" />
+          <element id="directory" name="Resources">
+            <element id="directory" name="en.lproj">
+              <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Localizable.strings" />
+            </element>
+            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Icon.icns" />
+          </element>
+          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/Info.plist" />
+          <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/osx/PkgInfo" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

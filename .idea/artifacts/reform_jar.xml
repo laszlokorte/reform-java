@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="reform.jar">
+  <artifact type="jar" name="reform:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/reform_jar</output-path>
-    <root id="archive" name="reform.jar.jar">
+    <root id="archive" name="reform.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/java/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/jar/META-INF/MANIFEST.MF" />
       </element>
       <element id="module-output" name="reform-commands" />
       <element id="module-output" name="reform-core" />
@@ -18,7 +18,6 @@
       <element id="module-output" name="reform-stage" />
       <element id="module-output" name="reform-tools" />
       <element id="extracted-dir" path="$PROJECT_DIR$/reform-serializer/json.jar" path-in-jar="/" />
-      <element id="dir-copy" path="$PROJECT_DIR$/reform-playground/src/main/resources" />
     </root>
   </artifact>
 </component>
