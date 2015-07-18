@@ -66,8 +66,9 @@ public class CreateFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setSelectionVisible(true);
+        _toolState.setState(ToolState.State.Create);
 
+        _toolState.setState(ToolState.State.Create);
 		_toolState.setSnapPoints(
 				_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 	}
@@ -82,6 +83,8 @@ public class CreateFormTool implements Tool {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
+
+            _toolState.setState(ToolState.State.Create);
 			_toolState.setSnapPoints(
 					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 			_toolState.setActiveSnapPoint(null);
@@ -107,8 +110,9 @@ public class CreateFormTool implements Tool {
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
 					_focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
-					_cursor.getPosition().y - _startPoint.getY());
+                    _cursor.getPosition().y - _startPoint.getY());
 			_focus.setFocus(_currentInstruction);
+            _toolState.setState(ToolState.State.Create);
 			_toolState.setEntityPoints(
 					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 		} else {
@@ -123,6 +127,7 @@ public class CreateFormTool implements Tool {
 				cancel();
 			} else {
 				_state = State.Idle;
+                _toolState.setState(ToolState.State.Create);
 				_toolState.setSnapPoints(_hitTester
 						.getAllSnapPoints(HitTester.EntityFilter.Any));
 				_currentInstruction = null;
@@ -131,6 +136,7 @@ public class CreateFormTool implements Tool {
 			}
 		} else {
 			_selectionTool.release();
+            _toolState.setState(ToolState.State.Create);
 		}
 
 		_swapDirection = false;

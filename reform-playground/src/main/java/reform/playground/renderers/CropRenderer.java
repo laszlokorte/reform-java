@@ -38,7 +38,7 @@ public class CropRenderer implements CanvasRenderer {
 
 		g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
-		if (_toolState.areCropPointsVisible()) {
+		if (_toolState.getState() == ToolState.State.Crop) {
 			CropPoint active = null;
 			g2.setStroke(_borderStroke);
 			g2.setColor(_borderColor);

@@ -36,12 +36,12 @@ public class ProjectPresenter implements Listener {
 
 	private  Identifier<? extends Picture> _selected;
 
-	final JPanel _bottom = new JPanel(new BorderLayout());
+	private final JPanel _bottom = new JPanel(new BorderLayout());
 
-	final JScrollPane _scroller = new JScrollPane(_picturesView,
+	private final JScrollPane _scroller = new JScrollPane(_picturesView,
 			ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
 			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-	final JSplitPane _split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
+	private final JSplitPane _split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
 			_scroller, _bottom);
 	private final IdentifierEmitter _idEmitter;
 

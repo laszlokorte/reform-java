@@ -56,8 +56,9 @@ public class MorphFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setSelectionVisible(true);
-		refreshHandles();
+        _toolState.setState(ToolState.State.Edit);
+
+        refreshHandles();
 	}
 
 	private void refreshHandles() {
@@ -77,13 +78,12 @@ public class MorphFormTool implements Tool {
 			_currentInstruction = null;
 			_toolState.setActiveHandle(null);
 			_toolState.setActiveSnapPoint(null);
-			_toolState.clearSnapPoints();
 			_baseInstruction = null;
 			_state = State.Idle;
 		} else {
 			_selectionTool.cancel();
-			_toolState.clearHandles();
 		}
+        _toolState.setState(ToolState.State.Edit);
 	}
 
 	@Override
@@ -115,10 +115,10 @@ public class MorphFormTool implements Tool {
 			} else {
 				_state = State.Idle;
 
-				_toolState.clearSnapPoints();
 				_currentInstruction = null;
 				_baseInstruction = null;
-				_toolState.setActiveHandle(null);
+                _toolState.setState(ToolState.State.Edit);
+                _toolState.setActiveHandle(null);
 				_toolState.setActiveSnapPoint(null);
 			}
 		} else {
@@ -130,9 +130,7 @@ public class MorphFormTool implements Tool {
 	public void refresh() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_toolState.setSnapPoints(_hitTester
-					.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
-		} else {
-			_toolState.clearSnapPoints();
+                    .getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
 		}
 
 		_selectionTool.refresh();

@@ -33,7 +33,7 @@ public class SelectionTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setSelectionVisible(true);
+        _toolState.setState(ToolState.State.Select);
 	}
 
 	@Override
@@ -48,6 +48,7 @@ public class SelectionTool implements Tool {
 	@Override
 	public void press() {
 		_state = State.Pressed;
+        _toolState.setState(ToolState.State.Select);
 
 		if (_formSelection.isSet()
 				&& _stage.getEntityForId(_formSelection.getSelected())

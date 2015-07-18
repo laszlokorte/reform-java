@@ -140,6 +140,7 @@ public class PicturePresenter {
 	private final StepSnapshotCollector _stepCollector = new StepSnapshotCollector(
 			new Vec2i(100, 60));
 
+
 	private final JSplitPane _splitPane;
 	private final StagePresenter _stagePresenter;
 	private final ProcedureView _procedureView;
@@ -176,7 +177,7 @@ public class PicturePresenter {
 			true);
 
 	public PicturePresenter(final EventedPicture picture,
-			final IdentifierEmitter idEmitter) {
+							final IdentifierEmitter idEmitter) {
 		_picture = picture;
 		_runtime = new ProjectRuntime(_picture.getProject(),
 				_picture.getSize());
@@ -185,7 +186,11 @@ public class PicturePresenter {
 		eProcedure.addListener(_focusAdjustment);
 		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer,
 				_focus, _stepCollector, eProcedure));
-		_stagePresenter = new StagePresenter(_stage, _selection, _toolState);
+		_stagePresenter = new StagePresenter(_stage, _selection, _toolState,
+				_analyzer);
+
+
+		_stepCollector.addListener(_procedureView);
 
 		final JScrollPane procedureScroller = new JScrollPane(_procedureView,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -491,7 +496,7 @@ public class PicturePresenter {
 
 			@Override
 			public void onPopScope(final ProjectRuntime runtime,
-					final FastIterable<Identifier<? extends Form>> ids) {
+								   final FastIterable<Identifier<? extends Form>> ids) {
 				// TODO Auto-generated method stub
 
 			}
@@ -507,34 +512,34 @@ public class PicturePresenter {
 				if (!newSize.equals(_oldStageSize)) {
 					_oldStageSize.set(runtime.getSize());
 					SwingUtilities.invokeLater(() -> {
-                        final Rectangle bounds = _stageScroller
-                                .getViewport().getViewRect();
-                        final Dimension size = new Dimension(
-                                _oldStageSize.x, _oldStageSize.y);
+						final Rectangle bounds = _stageScroller
+								.getViewport().getViewRect();
+						final Dimension size = new Dimension(
+								_oldStageSize.x, _oldStageSize.y);
 
-                        final int x = (size.width - bounds.width) / 2 + 15;
-                        final int y = (size.height - bounds.height) / 2
-                                + 15;
+						final int x = (size.width - bounds.width) / 2 + 15;
+						final int y = (size.height - bounds.height) / 2
+								+ 15;
 
-                        if (x > 0 || y > 0) {
-                            _stageScroller.getViewport().setViewPosition(
-                                    new Point(x < 0 ? 0 : x,
-                                            y < 0 ? 0 : y));
-                        }
-                    });
+						if (x > 0 || y > 0) {
+							_stageScroller.getViewport().setViewPosition(
+									new Point(x < 0 ? 0 : x,
+											y < 0 ? 0 : y));
+						}
+					});
 				}
 			}
 
 			@Override
 			public void onEvalInstruction(final ProjectRuntime runtime,
-					final Evaluable instruction) {
+										  final Evaluable instruction) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onError(final ProjectRuntime runtime,
-					final Evaluable instruction, final Error error) {
+								final Evaluable instruction, final Error error) {
 				// TODO Auto-generated method stub
 
 			}
@@ -622,10 +627,10 @@ public class PicturePresenter {
 
 				final int x = e.getX()
 						- (e.getComponent().getWidth() - _stage.getSize().x)
-								/ 2;
+						/ 2;
 				final int y = e.getY()
 						- (e.getComponent().getHeight() - _stage.getSize().y)
-								/ 2;
+						/ 2;
 
 				_toolController.moveTo(x, y);
 			}
@@ -636,10 +641,10 @@ public class PicturePresenter {
 
 				final int x = e.getX()
 						- (e.getComponent().getWidth() - _stage.getSize().x)
-								/ 2;
+						/ 2;
 				final int y = e.getY()
 						- (e.getComponent().getHeight() - _stage.getSize().y)
-								/ 2;
+						/ 2;
 
 				_toolController.moveTo(x, y);
 			}
@@ -805,9 +810,9 @@ public class PicturePresenter {
 	}
 
 	private void evaluateProcedure() {
-        _runtime.stop();
-        _runtime.setSize(_picture.getSize());
-        _picture.getEventedProcedure().evaluate(_runtime);
+		_runtime.stop();
+		_runtime.setSize(_picture.getSize());
+		_picture.getEventedProcedure().evaluate(_runtime);
 	}
 
 	public Preview getPreview() {
@@ -826,7 +831,7 @@ public class PicturePresenter {
 			implements Preview, ProjectRuntime.Listener {
 
 		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-                Path2D.Double::new);
+				Path2D.Double::new);
 
 		private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
 		private final Vec2i _size = new Vec2i();
@@ -852,13 +857,13 @@ public class PicturePresenter {
 
 		@Override
 		public void onEvalInstruction(final ProjectRuntime runtime,
-				final Evaluable evaluable) {
+									  final Evaluable evaluable) {
 
 		}
 
 		@Override
 		public void onError(final ProjectRuntime runtime,
-				final Evaluable instruction, final Error error) {
+							final Evaluable instruction, final Error error) {
 
 		}
 
@@ -876,7 +881,7 @@ public class PicturePresenter {
 
 		@Override
 		public void onPopScope(final ProjectRuntime runtime,
-				final FastIterable<Identifier<? extends Form>> poppedIds) {
+							   final FastIterable<Identifier<? extends Form>> poppedIds) {
 			for (int i = 0, j = poppedIds.size(); i < j; i++) {
 				final Identifier<? extends Form> id = poppedIds.get(i);
 				final Form form = runtime.get(id);
@@ -899,9 +904,9 @@ public class PicturePresenter {
 		private final EventedProcedure _procedure;
 
 		public ProcedureViewAdapter(final ProjectAnalyzer analyzer,
-				final InstructionFocus focus,
-				final StepSnapshotCollector stepCollector,
-				final EventedProcedure procedure) {
+									final InstructionFocus focus,
+									final StepSnapshotCollector stepCollector,
+									final EventedProcedure procedure) {
 			_analyzer = analyzer;
 			_stepCollector = stepCollector;
 			_focus = focus;
@@ -1010,14 +1015,14 @@ public class PicturePresenter {
 
 		@Override
 		public boolean belongsToSelected(final SnapPoint snapPoint) {
-            if (snapPoint instanceof EntityPoint) {
-                return ((EntityPoint) snapPoint).getFormId()
-                        .equals(_selection.getSelected());
-            }
+			if (snapPoint instanceof EntityPoint) {
+				return ((EntityPoint) snapPoint).getFormId()
+						.equals(_selection.getSelected());
+			}
 
-            return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(_selection.getSelected()));
+			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(_selection.getSelected()));
 
-        }
+		}
 	}
 
 	public void setPreviewMode(final boolean b) {

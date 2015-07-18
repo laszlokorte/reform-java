@@ -60,8 +60,9 @@ public class ScaleFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setSelectionVisible(true);
-		refreshHandles();
+        _toolState.setState(ToolState.State.Edit);
+
+        refreshHandles();
 	}
 
 	private void refreshHandles() {
@@ -121,7 +122,6 @@ public class ScaleFormTool implements Tool {
 			} else {
 				_state = State.Idle;
 
-				_toolState.clearSnapPoints();
 				_currentInstruction = null;
 				_baseInstruction = null;
 				_toolState.setActiveHandle(null);

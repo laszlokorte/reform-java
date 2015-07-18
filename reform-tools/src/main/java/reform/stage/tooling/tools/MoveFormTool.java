@@ -54,7 +54,7 @@ public class MoveFormTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.setSelectionVisible(true);
+        _toolState.setState(ToolState.State.Edit);
 		_toolState.setEntityPoints(
 				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
@@ -69,8 +69,8 @@ public class MoveFormTool implements Tool {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
-			_toolState.clearSnapPoints();
-			_toolState.setActiveEntityPoint(null);
+            _toolState.setState(ToolState.State.Edit);
+            _toolState.setActiveEntityPoint(null);
 			_toolState.setActiveSnapPoint(null);
 			_state = State.Idle;
 			_swapDirection = false;
@@ -108,10 +108,10 @@ public class MoveFormTool implements Tool {
 			} else {
 				_state = State.Idle;
 
-				_toolState.clearSnapPoints();
 				_currentInstruction = null;
 				_toolState.setActiveSnapPoint(null);
-			}
+                _toolState.setState(ToolState.State.Edit);
+            }
 		} else {
 			_selectionTool.release();
 		}
@@ -122,9 +122,7 @@ public class MoveFormTool implements Tool {
 	public void refresh() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_toolState.setSnapPoints(_hitTester
-					.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
-		} else {
-			_toolState.clearSnapPoints();
+                    .getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
 		}
 
 		_selectionTool.refresh();

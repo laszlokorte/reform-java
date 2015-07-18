@@ -38,7 +38,7 @@ public class GuideRenderer implements CanvasRenderer {
 	}
 
 	private void renderElements(final Graphics2D g2) {
-		if (!_preview && !_toolState.isPreviewMode()) {
+		if (!_preview && _toolState.getState() != ToolState.State.Preview) {
 			g2.setStroke(_stroke);
 
 			final List<Entity> entities = _stage.getEntities();

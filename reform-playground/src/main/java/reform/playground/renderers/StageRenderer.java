@@ -40,7 +40,7 @@ public class StageRenderer implements CanvasRenderer {
 
 		g2.translate((width - size.x) / 2, (height - size.y) / 2);
 		final Shape clip = g2.getClip();
-		if (_preview || _toolState.isPreviewMode()) {
+		if (_preview || _toolState.getState() == ToolState.State.Preview) {
 			g2.clipRect(0, 0, size.x, size.y);
 		}
 		renderElements(g2);
@@ -49,7 +49,7 @@ public class StageRenderer implements CanvasRenderer {
 	}
 
 	private void renderElements(final Graphics2D g2) {
-		if (_preview || _toolState.isPreviewMode()) {
+		if (_preview || _toolState.getState() == ToolState.State.Preview) {
 			g2.setStroke(_stroke);
 
 			final List<Shape> finalShapes = _stage.getFinalShapes();

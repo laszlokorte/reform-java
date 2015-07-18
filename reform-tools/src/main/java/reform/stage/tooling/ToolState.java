@@ -13,27 +13,48 @@ import reform.stage.elements.SnapPoint;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
 public class ToolState {
+    public SnapPoint getActiveSnapPoint() {
+        return _activeSnapPoint;
+    }
+
+    public Handle getActiveHandle() {
+        return _activeHandle;
+    }
+
+    public EntityPoint getActiveEntityPoint() {
+        return _activeEntityPoint;
+    }
+
+    public enum State {
+        Select, Create, Crop, Edit, Preview
+    }
+
 	private final List<ToolStateListener> _listeners = new ArrayList<>();
 
 	private final List<SnapPoint> _visibleSnapPoints = new ArrayList<>();
 	private final List<EntityPoint> _entityPoints = new ArrayList<>();
 	private final List<Handle> _handles = new ArrayList<>();
 	private SnapPoint _activeSnapPoint;
-	private SnapPoint _activeEntityPoint;
+	private EntityPoint _activeEntityPoint;
+	private Handle _activeHandle;
+	private CropPoint _activeCropPoint;
 
 	private Vec2 _pivot;
 
-	private Handle _activeHandle;
-
-	private boolean _selectionVisible;
-
 	private String _description;
 
-	private CropPoint _activeCropPoint;
+    private State _state = State.Select;
 
-	private boolean _cropPointsVisible;
+    public void setState(State state) {
+        if(_state != state) {
+            _state = state;
+            notifyChange();
+        }
+    }
 
-	private boolean _preview;
+    public State getState() {
+        return _state;
+    }
 
 	public void setSnapPoints(final Collection<SnapPoint> points) {
 		_visibleSnapPoints.clear();
@@ -60,7 +81,7 @@ public class ToolState {
 		return _activeSnapPoint != null && _activeSnapPoint.equals(p);
 	}
 
-	public void setActiveEntityPoint(final SnapPoint p) {
+	public void setActiveEntityPoint(final EntityPoint p) {
 		_activeEntityPoint = p;
 		notifyChange();
 	}
@@ -87,14 +108,6 @@ public class ToolState {
 
 	public boolean isActiveCropPoint(final CropPoint p) {
 		return _activeCropPoint == p;
-	}
-
-	public void setCropPointsVisible(final boolean value) {
-		_cropPointsVisible = value;
-	}
-
-	public boolean areCropPointsVisible() {
-		return _cropPointsVisible;
 	}
 
 	public void addListener(final ToolStateListener l) {
@@ -126,17 +139,6 @@ public class ToolState {
 
 	public List<EntityPoint> getEntityPoints() {
 		return _entityPoints;
-	}
-
-	public boolean isSelectionVisible() {
-		return _selectionVisible;
-	}
-
-	public void setSelectionVisible(final boolean newValue) {
-		if (newValue != _selectionVisible) {
-			_selectionVisible = newValue;
-			notifyChange();
-		}
 	}
 
 	public void setActiveHandle(final Handle handle) {
@@ -178,15 +180,6 @@ public class ToolState {
 
 	public List<Handle> getHandles() {
 		return _handles;
-	}
-
-	public boolean isPreviewMode() {
-		return _preview;
-	}
-
-	public void setPreviewMode(final boolean enabled) {
-		_preview = enabled;
-		notifyChange();
 	}
 
 }

@@ -4,15 +4,8 @@ import java.awt.Color;
 
 import javax.swing.JComponent;
 
-import reform.playground.renderers.BackgroundRenderer;
-import reform.playground.renderers.CropRenderer;
-import reform.playground.renderers.EntityPointRenderer;
-import reform.playground.renderers.GuideRenderer;
-import reform.playground.renderers.HandleRenderer;
-import reform.playground.renderers.PivotRenderer;
-import reform.playground.renderers.SelectionRenderer;
-import reform.playground.renderers.SnapPointRenderer;
-import reform.playground.renderers.StageRenderer;
+import reform.core.analyzer.Analyzer;
+import reform.playground.renderers.*;
 import reform.rendering.canvas.Canvas;
 import reform.rendering.canvas.CanvasAdapter;
 import reform.stage.Stage;
@@ -30,9 +23,10 @@ public class StagePresenter {
 	private final HandleRenderer _handleRenderer;
 	private final PivotRenderer _pivotRenderer;
 	private final GuideRenderer _guideRenderer;
+	private final ToolStateDescriptionRenderer _toolStateDescriptionRenderer;
 
 	public StagePresenter(final Stage stage, final FormSelection formSelection,
-			final ToolState toolState) {
+						  final ToolState toolState, final Analyzer analyzer) {
 		_canvas = new Canvas(new StageCollectorAdapter(stage));
 
 		_backgroundRenderer = new BackgroundRenderer(toolState, Color.GRAY,
@@ -46,6 +40,8 @@ public class StagePresenter {
 		_handleRenderer = new HandleRenderer(stage, toolState);
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
+		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer
+				(stage, toolState, formSelection, analyzer);
 
 		_canvas.addRenderer(_backgroundRenderer);
 		_canvas.addRenderer(_stageRenderer);
@@ -56,6 +52,7 @@ public class StagePresenter {
 		_canvas.addRenderer(_entityPointRenderer);
 		_canvas.addRenderer(_handleRenderer);
 		_canvas.addRenderer(_pivotRenderer);
+		_canvas.addRenderer(_toolStateDescriptionRenderer);
 
 		toolState.addListener(new ToolStateListener(this));
 

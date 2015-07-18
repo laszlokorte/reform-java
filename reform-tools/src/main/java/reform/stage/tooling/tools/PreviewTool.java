@@ -14,16 +14,12 @@ public class PreviewTool implements Tool {
 
 	@Override
 	public void setUp() {
-		_toolState.clearEntityPoints();
-		_toolState.clearHandles();
-		_toolState.clearSnapPoints();
-		_toolState.setSelectionVisible(false);
-		_toolState.setPreviewMode(true);
+		_toolState.setState(ToolState.State.Preview);
 	}
 
 	@Override
 	public void tearDown() {
-		_toolState.setPreviewMode(false);
+
 	}
 
 	@Override

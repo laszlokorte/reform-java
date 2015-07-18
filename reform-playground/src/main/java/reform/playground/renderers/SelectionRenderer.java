@@ -46,7 +46,8 @@ public class SelectionRenderer implements CanvasRenderer {
 	}
 
 	private void renderElements(final Graphics2D g2) {
-		if (_toolState.isSelectionVisible()) {
+		if (_toolState.getState() != ToolState.State.Preview && _toolState
+                .getState() != ToolState.State.Crop) {
 			g2.setStroke(_stroke);
 			if (_preview) {
 				g2.setColor(_glowColorAssoc);
