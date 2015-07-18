@@ -27,7 +27,7 @@ public class PreviewTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 	}
 
 	@Override

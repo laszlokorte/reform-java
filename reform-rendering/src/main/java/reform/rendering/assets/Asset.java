@@ -6,7 +6,7 @@ import java.awt.Graphics;
  * An {@link Asset} is an object which can be rendered into a {@link Graphics}
  * object at a given position.
  *
- * For example a simple UI element like a snappoint on a canvas.
+ * For example a simple UI element like a snap point on a canvas.
  */
 public interface Asset {
 	/**

@@ -50,7 +50,7 @@ public class CropTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		if (_state == State.Pressed) {
 			_eventedPicture.setSize(_oldSize);
 		}

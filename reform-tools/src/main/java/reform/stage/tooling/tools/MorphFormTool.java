@@ -71,7 +71,7 @@ public class MorphFormTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
@@ -81,7 +81,7 @@ public class MorphFormTool implements Tool {
 			_baseInstruction = null;
 			_state = State.Idle;
 		} else {
-			_selectionTool.cancle();
+			_selectionTool.cancel();
 			_toolState.clearHandles();
 		}
 	}
@@ -111,7 +111,7 @@ public class MorphFormTool implements Tool {
 	public void release() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			if (_currentDistance.isDegenerated()) {
-				cancle();
+				cancel();
 			} else {
 				_state = State.Idle;
 
@@ -176,7 +176,7 @@ public class MorphFormTool implements Tool {
 		}
 		case Pressed:
 		case PressedSnapped: {
-            SnapPoint currentSnapPoint = _cursor
+            final SnapPoint currentSnapPoint = _cursor
                     .getSnapPoint(EntityFilter.ExcludeSelected);
 
 			if (currentSnapPoint == null) {

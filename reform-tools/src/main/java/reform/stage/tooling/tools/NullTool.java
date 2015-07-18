@@ -12,7 +12,7 @@ public class NullTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		// TODO Auto-generated method stub
 
 	}

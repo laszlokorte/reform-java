@@ -35,16 +35,16 @@ public class OrthogonalLengthAnchor extends BaseAnchor {
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		final double orthoX = -Vector.orthogonalX(deltaX, deltaY) / distance;
-		final double orthoY = -Vector.orthogonalY(deltaX, deltaY) / distance;
+		final double orthogonalX = -Vector.orthogonalX(deltaX, deltaY) / distance;
+		final double orthogonalY = -Vector.orthogonalY(deltaX, deltaY) / distance;
 
-		final double oldX = orthoX * oldOffset;
-		final double oldY = orthoY * oldOffset;
+		final double oldX = orthogonalX * oldOffset;
+		final double oldY = orthogonalY * oldOffset;
 
 		final double newX = oldX + x;
 		final double newY = oldY + y;
 
-		_offset.setForRuntime(runtime, Vector.dot(newX, newY, orthoX, orthoY));
+		_offset.setForRuntime(runtime, Vector.dot(newX, newY, orthogonalX, orthogonalY));
 	}
 
 }

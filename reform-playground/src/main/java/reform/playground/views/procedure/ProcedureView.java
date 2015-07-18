@@ -70,25 +70,25 @@ public final class ProcedureView extends JComponent
 			.createLineBorder(Color.red.darker(), 2);
 
 	private static JTextArea getTextArea() {
-		final JTextArea textarea = new JTextArea();
-		textarea.setFocusable(false);
-		textarea.setEnabled(false);
-		textarea.setLineWrap(true);
-		textarea.setForeground(Color.BLACK);
-		textarea.setDisabledTextColor(Color.BLACK);
-		textarea.setEditable(false);
-		textarea.setWrapStyleWord(true);
-		textarea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		textarea.addMouseListener(new MouseAdapter() {
+		final JTextArea textArea = new JTextArea();
+		textArea.setFocusable(false);
+		textArea.setEnabled(false);
+		textArea.setLineWrap(true);
+		textArea.setForeground(Color.BLACK);
+		textArea.setDisabledTextColor(Color.BLACK);
+		textArea.setEditable(false);
+		textArea.setWrapStyleWord(true);
+		textArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		textArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(final MouseEvent e) {
                 e.getComponent().getParent().dispatchEvent(e);
             }
         });
-		final DefaultCaret caret = (DefaultCaret) textarea.getCaret();
+		final DefaultCaret caret = (DefaultCaret) textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
-		return textarea;
+		return textArea;
 
 	}
 
@@ -122,7 +122,7 @@ public final class ProcedureView extends JComponent
 		private final Adapter _adapter;
 		private int _index = -1;
 
-		private BaseItem(final Adapter adapter) {
+		 BaseItem(final Adapter adapter) {
 			_adapter = adapter;
 
 			setLayout(new BorderLayout(5, 5));

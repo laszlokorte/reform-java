@@ -41,7 +41,7 @@ public class SelectionTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		_formSelection.setSelection(null);
 	}
 

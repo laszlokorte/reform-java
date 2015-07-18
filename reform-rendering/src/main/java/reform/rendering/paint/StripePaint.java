@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public interface StripePaint {
 
-	public static Paint getPaint() {
+	static Paint getPaint() {
 		final Color lightBackground = new Color(0xdddddd);
 
 		final BufferedImage stripes = new BufferedImage(10, 10,

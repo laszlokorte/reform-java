@@ -1,13 +1,13 @@
 package reform.stage;
 
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
-import reform.core.pool.PoolFactory;
 import reform.core.pool.SimplePool;
-import reform.core.runtime.Evaluatable;
+import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -17,14 +17,14 @@ import reform.stage.elements.factory.EntityFactory;
 
 public class StageCollector implements ProjectRuntime.Listener {
 	public interface Adapter {
-		boolean isInFocus(Evaluatable instruction);
+		boolean isInFocus(Evaluable instruction);
 	}
 
 	private final Stage _stage;
-	private final Adapter _adpter;
+	private final Adapter _adapter;
 
 	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-            () -> new GeneralPath.Double());
+            Path2D.Double::new);
 
 	private final StageBuffer _buffer = new StageBuffer();
 	private final EntityCache _entityCache = new EntityCache();
@@ -34,7 +34,7 @@ public class StageCollector implements ProjectRuntime.Listener {
 
 	public StageCollector(final Stage stage, final Adapter adapter) {
 		_stage = stage;
-		_adpter = adapter;
+		_adapter = adapter;
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class StageCollector implements ProjectRuntime.Listener {
 
 	@Override
 	public void onEvalInstruction(final ProjectRuntime runtime,
-			final Evaluatable instruction) {
-		if (_adpter.isInFocus(instruction)) {
+			final Evaluable instruction) {
+		if (_adapter.isInFocus(instruction)) {
 			if (_collected) {
 				return;
 			} else {
@@ -104,7 +104,7 @@ public class StageCollector implements ProjectRuntime.Listener {
 
 	@Override
 	public void onError(final ProjectRuntime runtime,
-			final Evaluatable instruction, final Error error) {
+			final Evaluable instruction, final Error error) {
 		// TODO Auto-generated method stub
 
 	}

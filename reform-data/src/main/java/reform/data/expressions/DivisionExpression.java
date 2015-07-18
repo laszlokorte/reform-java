@@ -19,8 +19,8 @@ public class DivisionExpression implements Expression {
 	@Override
 	public Value evaluate(final ExpressionContext context)
 			throws CycleException, SemanticException {
-		return Calculator.devide(_leftHandSide.evaluate(context),
-				_rightHandSide.evaluate(context));
+		return Calculator.divide(_leftHandSide.evaluate(context),
+                _rightHandSide.evaluate(context));
 	}
 
 }

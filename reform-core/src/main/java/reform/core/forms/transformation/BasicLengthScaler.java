@@ -7,13 +7,13 @@ import reform.math.Vector;
 
 public class BasicLengthScaler implements Scaler {
 
-	private final StaticLength _lenght;
+	private final StaticLength _length;
 	private final RotationAngle _angle;
 	private final double _angleOffset;
 
-	public BasicLengthScaler(final StaticLength lenght,
+	public BasicLengthScaler(final StaticLength length,
 			final RotationAngle angle, final double angleOffset) {
-		_lenght = lenght;
+		_length = length;
 		_angle = angle;
 		_angleOffset = angleOffset;
 	}
@@ -24,13 +24,13 @@ public class BasicLengthScaler implements Scaler {
 			final double directionY) {
 
 		if (directionX == 0 && directionY == 0) {
-			final double l = _lenght.getValueForRuntime(runtime);
+			final double l = _length.getValueForRuntime(runtime);
 			final double scaledLength = l * factor;
 
-			_lenght.setForRuntime(runtime, scaledLength);
+			_length.setForRuntime(runtime, scaledLength);
 		} else {
 
-			final double l = _lenght.getValueForRuntime(runtime);
+			final double l = _length.getValueForRuntime(runtime);
 
 			final double a = _angle.getValueForRuntime(runtime) - _angleOffset;
 			final double x = Math.sin(a) * l;
@@ -51,7 +51,7 @@ public class BasicLengthScaler implements Scaler {
 					* scaledY)
 					/ l;
 
-			_lenght.setForRuntime(runtime, scaledLength);
+			_length.setForRuntime(runtime, scaledLength);
 		}
 
 	}

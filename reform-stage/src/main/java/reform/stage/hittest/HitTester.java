@@ -32,19 +32,19 @@ public class HitTester {
 	}
 
 	private final Stage _stage;
-	private final Adapter _adpater;
+	private final Adapter _adapter;
 
 	static private final double _snapRadius = 8;
 
 	private final ArrayList<SnapPoint> _resultSnapPoint = new ArrayList<>();
-	private final ArrayList<Entity> _resultEntitiy = new ArrayList<>();
+	private final ArrayList<Entity> _resultEntity = new ArrayList<>();
 	private final ArrayList<Handle> _resultHandle = new ArrayList<>();
 	final ArrayList<CropPoint> _resultCropPoint = new ArrayList<>();
-	final ArrayList<EntityPoint> _resultEntitiyPoint = new ArrayList<>();
+	final ArrayList<EntityPoint> _resultEntityPoint = new ArrayList<>();
 
-	public HitTester(final Stage stage, final Adapter adpter) {
+	public HitTester(final Stage stage, final Adapter adapter) {
 		_stage = stage;
-		_adpater = adpter;
+		_adapter = adapter;
 	}
 
 	public ArrayList<SnapPoint> getSnapPointsNear(final Vec2 pos, final int max,
@@ -53,14 +53,14 @@ public class HitTester {
 		int i = 0;
 
 		outer: {
-			final List<Entity> entities = _stage.getEnties();
+			final List<Entity> entities = _stage.getEntities();
 			for (int h = 0, j = entities.size(); h < j; h++) {
 				final Entity e = entities.get(h);
-				if (_adpater.isSelected(e)
+				if (_adapter.isSelected(e)
 						&& filter == EntityFilter.ExcludeSelected) {
 					continue;
 				}
-				if (!_adpater.isSelected(e)
+				if (!_adapter.isSelected(e)
 						&& filter == EntityFilter.OnlySelected) {
 					continue;
 				}
@@ -85,11 +85,11 @@ public class HitTester {
 				if (Vector.distance(pos.x, pos.y, p.getX(),
 						p.getY()) <= _snapRadius) {
 					if (filter == EntityFilter.ExcludeSelected
-							&& _adpater.belongsToSelected(p)) {
+							&& _adapter.belongsToSelected(p)) {
 						continue;
 					}
 					if (filter == EntityFilter.OnlySelected
-							&& !_adpater.belongsToSelected(p)) {
+							&& !_adapter.belongsToSelected(p)) {
 						continue;
 					}
 
@@ -107,14 +107,14 @@ public class HitTester {
 	public ArrayList<SnapPoint> getSnapPointsNearGlomp(final Vec2 pos,
 			final int max, final EntityFilter filter) {
 		_resultSnapPoint.clear();
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
-			if (_adpater.isSelected(e)
+			if (_adapter.isSelected(e)
 					&& filter == EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.isSelected(e)
+			if (!_adapter.isSelected(e)
 					&& filter == EntityFilter.OnlySelected) {
 				continue;
 			}
@@ -135,14 +135,14 @@ public class HitTester {
 
 	public Collection<SnapPoint> getAllSnapPoints(final EntityFilter filter) {
 		_resultSnapPoint.clear();
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
-			if (_adpater.isSelected(e)
+			if (_adapter.isSelected(e)
 					&& filter == EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.isSelected(e)
+			if (!_adapter.isSelected(e)
 					&& filter == EntityFilter.OnlySelected) {
 				continue;
 			}
@@ -157,11 +157,11 @@ public class HitTester {
 				.getIntersectionPoints();
 		for (int h = 0, j = intersections.size(); h < j; h++) {
 			final IntersectionSnapPoint s = intersections.get(h);
-			if (_adpater.belongsToSelected(s)
+			if (_adapter.belongsToSelected(s)
 					&& filter == EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.belongsToSelected(s)
+			if (!_adapter.belongsToSelected(s)
 					&& filter == EntityFilter.OnlySelected) {
 				continue;
 			}
@@ -172,9 +172,9 @@ public class HitTester {
 	}
 
 	public ArrayList<Entity> getEntityNear(final Vec2 position, final int max) {
-		_resultEntitiy.clear();
+		_resultEntity.clear();
 		int i = 0;
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
 			if (e instanceof PaperEntity) {
@@ -183,26 +183,26 @@ public class HitTester {
 			if (i >= max) {
 				break;
 			} else if (e.contains(position)) {
-				_resultEntitiy.add(e);
+				_resultEntity.add(e);
 				i++;
 			}
 		}
 
-		return _resultEntitiy;
+		return _resultEntity;
 	}
 
 	public ArrayList<Handle> getHandleNear(final Vec2 pos, final int max,
 			final EntityFilter filter, final HandleFilter handleFilter) {
 		_resultHandle.clear();
 		int i = 0;
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		outer: for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
-			if (_adpater.isSelected(e)
+			if (_adapter.isSelected(e)
 					&& filter == EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.isSelected(e)
+			if (!_adapter.isSelected(e)
 					&& filter == EntityFilter.OnlySelected) {
 				continue;
 			}
@@ -249,17 +249,17 @@ public class HitTester {
 
 	public ArrayList<EntityPoint> getEntityPointsNear(final Vec2 pos,
 			final int max, final EntityFilter filter) {
-		_resultEntitiyPoint.clear();
+		_resultEntityPoint.clear();
 		int i = 0;
 		outer: {
-			final List<Entity> entities = _stage.getEnties();
+			final List<Entity> entities = _stage.getEntities();
 			for (int h = 0, j = entities.size(); h < j; h++) {
 				final Entity e = entities.get(h);
-				if (_adpater.isSelected(e)
+				if (_adapter.isSelected(e)
 						&& filter == EntityFilter.ExcludeSelected) {
 					continue;
 				}
-				if (!_adpater.isSelected(e)
+				if (!_adapter.isSelected(e)
 						&& filter == EntityFilter.OnlySelected) {
 					continue;
 				}
@@ -269,7 +269,7 @@ public class HitTester {
 					final EntityPoint p = entityPoints.get(k);
 					if (Vector.distance(pos.x, pos.y, p.getX(),
 							p.getY()) <= _snapRadius) {
-						_resultEntitiyPoint.add(p);
+						_resultEntityPoint.add(p);
 						if (++i >= max) {
 							break outer;
 						}
@@ -278,20 +278,20 @@ public class HitTester {
 			}
 		}
 
-		return _resultEntitiyPoint;
+		return _resultEntityPoint;
 	}
 
 	public ArrayList<EntityPoint> getAllEntityPoints(
 			final EntityFilter filter) {
-		_resultEntitiyPoint.clear();
-		final List<Entity> entities = _stage.getEnties();
+		_resultEntityPoint.clear();
+		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
-			if (_adpater.isSelected(e)
+			if (_adapter.isSelected(e)
 					&& filter == EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.isSelected(e)
+			if (!_adapter.isSelected(e)
 					&& filter == EntityFilter.OnlySelected) {
 				continue;
 			}
@@ -299,25 +299,25 @@ public class HitTester {
 			final List<EntityPoint> snapPoints = e.getSnapPoints();
 			for (int k = 0, l = snapPoints.size(); k < l; k++) {
 				final EntityPoint p = snapPoints.get(k);
-				_resultEntitiyPoint.add(p);
+				_resultEntityPoint.add(p);
 			}
 
 		}
 
-		return _resultEntitiyPoint;
+		return _resultEntityPoint;
 	}
 
 	public ArrayList<Handle> getAllHandles(final EntityFilter Filter,
 			final HandleFilter handleFilter) {
 		_resultHandle.clear();
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++) {
 			final Entity e = entities.get(h);
-			if (_adpater.isSelected(e)
+			if (_adapter.isSelected(e)
 					&& Filter == reform.stage.hittest.HitTester.EntityFilter.ExcludeSelected) {
 				continue;
 			}
-			if (!_adpater.isSelected(e)
+			if (!_adapter.isSelected(e)
 					&& Filter == reform.stage.hittest.HitTester.EntityFilter.OnlySelected) {
 				continue;
 			}

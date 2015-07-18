@@ -17,7 +17,7 @@ import reform.stage.elements.Handle;
 import reform.stage.elements.PivotPair;
 import reform.stage.elements.outline.EntityOutline;
 
-public class CircleEntitiy implements Entity {
+public class CircleEntity implements Entity {
 	private final Identifier<? extends CircleForm> _formId;
 
 	private final EntityPoint _top;
@@ -40,7 +40,7 @@ public class CircleEntitiy implements Entity {
 
 	private boolean _isGuide = false;
 
-	public CircleEntitiy(final Identifier<? extends CircleForm> formId) {
+	public CircleEntity(final Identifier<? extends CircleForm> formId) {
 		_formId = formId;
 		_top = new EntityPoint(formId, CircleForm.Point.Top);
 		_right = new EntityPoint(formId, CircleForm.Point.Right);

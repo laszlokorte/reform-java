@@ -8,6 +8,6 @@ package reform.commands;
  *
  */
 public interface AmendableCommand extends Command {
-	public void amend();
+	void amend();
 
 }

@@ -48,14 +48,14 @@ public class EventedProcedure {
 	}
 
 	public void removeInstruction(final Instruction instruction) {
-		final Procedure proc = _evtPicture.getProcedure();
-		if (proc.canRemoveInstruction(instruction)) {
+		final Procedure procedure = _evtPicture.getProcedure();
+		if (procedure.canRemoveInstruction(instruction)) {
 			final InstructionGroup parent = instruction.getParent();
 			for (int i = 0, j = _listeners.size(); i < j; i++) {
 				_listeners.get(i).onInstructionWillBeRemoved(this, instruction,
 						parent);
 			}
-			proc.removeInstruction(instruction);
+			procedure.removeInstruction(instruction);
 			for (int i = 0, j = _listeners.size(); i < j; i++) {
 				_listeners.get(i).onInstructionRemoved(this, instruction,
 						parent);
@@ -84,7 +84,7 @@ public class EventedProcedure {
 		_listeners.remove(listener);
 	}
 
-	public void evaluate(final Runtime runtime) throws InterruptedException {
+	public void evaluate(final Runtime runtime)  {
 		_evtPicture.getProcedure().evaluate(runtime);
 	}
 

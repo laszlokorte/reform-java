@@ -2,7 +2,6 @@ package reform.core.procedure.instructions.single;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
-import reform.core.procedure.Procedure;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.identity.Identifier;

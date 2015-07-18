@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,12 +20,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
-import reform.core.pool.PoolFactory;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.core.procedure.instructions.NullInstruction;
-import reform.core.runtime.Evaluatable;
+import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -39,17 +39,17 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 
 	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-            () -> new GeneralPath.Double());
+            Path2D.Double::new);
 
 	private final Vec2i _maxSize = new Vec2i();
 	private final HashMap<RenderingHints.Key, Object> _renderOptions = new HashMap<>();
 
 	private final Vec2i _currentSize = new Vec2i();
 	private final Vec2i _currentScaledSize = new Vec2i(_maxSize);
-	private final Map<Evaluatable, BufferedImage> _instructionBitmaps = new HashMap<>();
-	private final Map<Evaluatable, Error> _errorMap = new HashMap<>();
-	private final Set<Evaluatable> _recordedInstructions = new HashSet<>();
-	private final Set<Evaluatable> _failedInstructions = new HashSet<>();
+	private final Map<Evaluable, BufferedImage> _instructionBitmaps = new HashMap<>();
+	private final Map<Evaluable, Error> _errorMap = new HashMap<>();
+	private final Set<Evaluable> _recordedInstructions = new HashSet<>();
+	private final Set<Evaluable> _failedInstructions = new HashSet<>();
 	private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
 
 	private final Color _colorShape = new Color(0x555555);
@@ -71,34 +71,34 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
 	@Override
 	public void onEvalInstruction(final ProjectRuntime runtime,
-			final Evaluatable evaluatable) {
-		if (evaluatable instanceof NullInstruction) {
+			final Evaluable evaluable) {
+		if (evaluable instanceof NullInstruction) {
 			return;
 		}
 
-		if (evaluatable instanceof InstructionGroup) {
+		if (evaluable instanceof InstructionGroup) {
 			return;
 		}
 
-		if (_failedInstructions.contains(evaluatable)) {
+		if (_failedInstructions.contains(evaluable)) {
 			return;
 		}
 
-		if (!_recordedInstructions.add(evaluatable)
-				|| _failedInstructions.contains(evaluatable)) {
+		if (!_recordedInstructions.add(evaluable)
+				|| _failedInstructions.contains(evaluable)) {
 			return;
 		}
 
-		if (_instructionBitmaps.containsKey(evaluatable) && !_redraw) {
+		if (_instructionBitmaps.containsKey(evaluable) && !_redraw) {
 			return;
 		}
 
-		final BufferedImage bufImg = getBufferedImage(evaluatable);
+		final BufferedImage bufImg = getBufferedImage(evaluable);
 		final int width = bufImg.getWidth();
 		final int height = bufImg.getHeight();
 		final Vec2i size = runtime.getSize();
 
-		final Instruction instruction = (Instruction) evaluatable;
+		final Instruction instruction = (Instruction) evaluable;
 
 		final Graphics2D g2 = (Graphics2D) bufImg.getGraphics();
 		g2.setRenderingHints(_renderOptions);
@@ -153,7 +153,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
 	@Override
 	public void onError(final ProjectRuntime runtime,
-			final Evaluatable instruction, final Error error) {
+			final Evaluable instruction, final Error error) {
 		_failedInstructions.add(instruction);
 		_errorMap.put(instruction, error);
 	}
@@ -179,10 +179,10 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
 	@Override
 	public void onFinishEvaluation(final ProjectRuntime runtime) {
-		final Iterator<Evaluatable> iterator = _instructionBitmaps.keySet()
+		final Iterator<Evaluable> iterator = _instructionBitmaps.keySet()
 				.iterator();
 		while (iterator.hasNext()) {
-			final Evaluatable e = iterator.next();
+			final Evaluable e = iterator.next();
 			if (!_recordedInstructions.contains(e)) {
 				iterator.remove();
 			}
@@ -196,7 +196,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 		}
 	}
 
-	private BufferedImage getBufferedImage(final Evaluatable instruction) {
+	private BufferedImage getBufferedImage(final Evaluable instruction) {
 		if (!_instructionBitmaps.containsKey(instruction)) {
 			_instructionBitmaps.put(instruction,
 					new BufferedImage(_currentScaledSize.x,
@@ -230,7 +230,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 		return _currentScaledSize.y;
 	}
 
-	public Error getError(final Evaluatable instruction) {
+	public Error getError(final Evaluable instruction) {
 		return _errorMap.get(instruction);
 	}
 

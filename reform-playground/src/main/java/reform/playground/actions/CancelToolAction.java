@@ -17,7 +17,7 @@ public class CancelToolAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		_toolController.cancle();
+		_toolController.cancel();
 	}
 
 }

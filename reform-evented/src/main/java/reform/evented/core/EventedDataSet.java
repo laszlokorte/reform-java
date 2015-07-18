@@ -32,8 +32,8 @@ public class EventedDataSet {
 		_listeners.remove(listener);
 	}
 
-	public void setnameForId(final Identifier<? extends DataDefinition> id,
-			final Name name) {
+	public void setNameForId(final Identifier<? extends DataDefinition> id,
+                             final Name name) {
 		_evtPicture.getDataSet().setNameForId(id, name);
 	}
 

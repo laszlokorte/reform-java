@@ -2,11 +2,10 @@ package reform.core.procedure.instructions;
 
 import reform.core.analyzer.Analyzable;
 import reform.core.forms.Form;
-import reform.core.procedure.Procedure;
-import reform.core.runtime.Evaluatable;
+import reform.core.runtime.Evaluable;
 import reform.identity.Identifier;
 
-public interface Instruction extends Evaluatable, Analyzable {
+public interface Instruction extends Evaluable, Analyzable {
 
 	void setParent(InstructionGroup parent);
 

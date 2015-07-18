@@ -12,9 +12,9 @@ public interface Runtime {
 
 	void finish();
 
-	void beforeEval(Evaluatable instruction);
+	void beforeEval(Evaluable instruction);
 
-	void afterEval(Evaluatable instruction);
+	void afterEval(Evaluable instruction);
 
 	void pushScope();
 
@@ -30,7 +30,7 @@ public interface Runtime {
 
 	FastIterable<Identifier<? extends Form>> getStackIterator();
 
-	void reportError(Evaluatable instruction, Error error);
+	void reportError(Evaluable instruction, Error error);
 
 	boolean shouldStop();
 

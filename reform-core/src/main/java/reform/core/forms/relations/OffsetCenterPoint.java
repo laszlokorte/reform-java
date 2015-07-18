@@ -36,9 +36,9 @@ public class OffsetCenterPoint implements ReferencePoint {
 			return aX;
 		}
 
-		final double orthoX = Vector.orthogonalX(deltaX, deltaY) / length;
+		final double orthogonalX = Vector.orthogonalX(deltaX, deltaY) / length;
 
-		return cx - orthoX * offset;
+		return cx - orthogonalX * offset;
 	}
 
 	@Override
@@ -58,9 +58,9 @@ public class OffsetCenterPoint implements ReferencePoint {
 			return aY;
 		}
 
-		final double orthoY = Vector.orthogonalY(deltaX, deltaY) / length;
+		final double orthogonalY = Vector.orthogonalY(deltaX, deltaY) / length;
 
-		return cy - orthoY * offset;
+		return cy - orthogonalY * offset;
 	}
 
 	@Override

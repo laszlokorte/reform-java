@@ -36,10 +36,10 @@ public class TransactionCommand implements Command {
 
 	@Override
 	public Command getInverse() {
-		final Command[] inversed = new Command[_subCommands.length];
+		final Command[] inverse = new Command[_subCommands.length];
 		for (int i = _subCommands.length - 1, j = 0; i >= 0; i--, j++) {
-			inversed[j] = _subCommands[i].getInverse();
+			inverse[j] = _subCommands[i].getInverse();
 		}
-		return new TransactionCommand(inversed);
+		return new TransactionCommand(inverse);
 	}
 }

@@ -41,7 +41,7 @@ public class GuideRenderer implements CanvasRenderer {
 		if (!_preview && !_toolState.isPreviewMode()) {
 			g2.setStroke(_stroke);
 
-			final List<Entity> entities = _stage.getEnties();
+			final List<Entity> entities = _stage.getEntities();
 			for (int i = 0, j = entities.size(); i < j; i++) {
 				final Entity e = entities.get(i);
 				if (e.isGuide()) {

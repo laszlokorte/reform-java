@@ -17,7 +17,7 @@ import reform.stage.elements.Handle;
 import reform.stage.elements.PivotPair;
 import reform.stage.elements.outline.EntityOutline;
 
-public class LineEntitiy implements Entity {
+public class LineEntity implements Entity {
 	private final Identifier<? extends LineForm> _formId;
 
 	private final EntityPoint _start;
@@ -36,7 +36,7 @@ public class LineEntitiy implements Entity {
 
 	private boolean _isGuide = false;
 
-	public LineEntitiy(final Identifier<? extends LineForm> formId) {
+	public LineEntity(final Identifier<? extends LineForm> formId) {
 		_formId = formId;
 
 		_start = new EntityPoint(formId, LineForm.Point.Start);

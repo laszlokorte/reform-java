@@ -18,12 +18,12 @@ public class ProjectRuntime implements Runtime {
 		void onFinishEvaluation(ProjectRuntime runtime);
 
 		void onEvalInstruction(ProjectRuntime runtime,
-                               Evaluatable instruction);
+                               Evaluable instruction);
 
 		void onPopScope(ProjectRuntime runtime,
                         FastIterable<Identifier<? extends Form>> ids);
 
-		void onError(ProjectRuntime runtime, Evaluatable instruction,
+		void onError(ProjectRuntime runtime, Evaluable instruction,
                      Error error);
 	}
 
@@ -67,12 +67,12 @@ public class ProjectRuntime implements Runtime {
 	}
 
 	@Override
-	public void beforeEval(final Evaluatable instruction) {
+	public void beforeEval(final Evaluable instruction) {
 
 	}
 
 	@Override
-	public void afterEval(final Evaluatable instruction) {
+	public void afterEval(final Evaluable instruction) {
 
 		synchronized (_listeners) {
 			for (int i = 0; i < _listeners.size(); i++) {
@@ -123,7 +123,7 @@ public class ProjectRuntime implements Runtime {
 	}
 
 	@Override
-	public void reportError(final Evaluatable instruction, final Error error) {
+	public void reportError(final Evaluable instruction, final Error error) {
 		synchronized (_listeners) {
 
 			for (int i = 0; i < _listeners.size(); i++) {

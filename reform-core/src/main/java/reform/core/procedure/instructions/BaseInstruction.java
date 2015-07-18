@@ -1,7 +1,5 @@
 package reform.core.procedure.instructions;
 
-import reform.core.procedure.Procedure;
-
 public abstract class BaseInstruction implements Instruction {
 	private InstructionGroup _parent;
 

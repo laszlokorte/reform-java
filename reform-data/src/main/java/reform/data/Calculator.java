@@ -1,8 +1,6 @@
 package reform.data;
 
 
-import sun.misc.Regexp;
-
 import java.util.regex.Pattern;
 
 public final class Calculator {
@@ -46,7 +44,7 @@ public final class Calculator {
 		}
 	}
 
-	public static Value devide(final Value lhs, final Value rhs)
+	public static Value divide(final Value lhs, final Value rhs)
 			throws SemanticException {
 		if (lhs.getType() == Value.Type.String
 				|| rhs.getType() == Value.Type.String) {
@@ -62,9 +60,9 @@ public final class Calculator {
 	public static Value multiply(final Value lhs, final Value rhs)
 			throws SemanticException {
 		if (lhs.getType() == Value.Type.String
-				&& rhs.getType() == Value.Type.Intenger) {
+				&& rhs.getType() == Value.Type.Integer) {
 			return new Value(ZERO.matcher(String.format("%0" + rhs.getInteger() + "d", 0)).replaceAll(lhs.getString()));
-		} else if (lhs.getType() == Value.Type.Intenger
+		} else if (lhs.getType() == Value.Type.Integer
 				&& rhs.getType() == Value.Type.String) {
 			return new Value(ZERO.matcher(String.format("%0" + lhs.getInteger()
                     + "d", 0)).replaceAll(rhs.getString()));

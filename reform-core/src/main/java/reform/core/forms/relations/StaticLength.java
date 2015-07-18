@@ -1,6 +1,5 @@
 package reform.core.forms.relations;
 
-import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.Length;

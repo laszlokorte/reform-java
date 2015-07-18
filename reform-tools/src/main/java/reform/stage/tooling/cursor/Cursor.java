@@ -19,16 +19,14 @@ public class Cursor {
 
 	private int _snapCycle = 0;
 	private final ArrayList<SnapPoint> _snapPointCache = new ArrayList<>();
-	private SnapPoint _prevSnap;
 
-	private int _entityPointCycle = 0;
+    private int _entityPointCycle = 0;
 	private final ArrayList<EntityPoint> _entityPointCache = new ArrayList<>();
 
     private int _snapGlompCycle = 0;
 	private final ArrayList<SnapPoint> _snapPointGlompCache = new ArrayList<>();
-	private SnapPoint _prevSnapGlomp;
 
-	private int _entityCycle = 0;
+    private int _entityCycle = 0;
 	private final ArrayList<Entity> _entityCache = new ArrayList<>();
 
     private int _handleCycle = 0;
@@ -58,13 +56,14 @@ public class Cursor {
 			_snapPointCache.addAll(_hitTester.getSnapPointsNear(_position,
                     _snapCycle + 1, filter));
 		}
-		if (!_snapPointCache.isEmpty()) {
-			_prevSnap = _snapPointCache
+        final SnapPoint prevSnap;
+        if (!_snapPointCache.isEmpty()) {
+			prevSnap = _snapPointCache
 					.get(_snapCycle % _snapPointCache.size());
 		} else {
-			_prevSnap = null;
+			prevSnap = null;
 		}
-		return _prevSnap;
+		return prevSnap;
 	}
 
 	public EntityPoint getEntityPoint(final HitTester.EntityFilter filter) {
@@ -74,7 +73,7 @@ public class Cursor {
 			_entityPointCache.addAll(_hitTester.getEntityPointsNear(_position,
                     _entityPointCycle + 1, filter));
 		}
-        EntityPoint prevEntityPoint;
+        final EntityPoint prevEntityPoint;
         if (!_entityPointCache.isEmpty()) {
 			prevEntityPoint = _entityPointCache
 					.get(_entityPointCycle % _entityPointCache.size());
@@ -92,14 +91,15 @@ public class Cursor {
 					_position, _snapGlompCycle + 1, filter));
 
 		}
-		if (!_snapPointGlompCache.isEmpty()) {
-			_prevSnapGlomp = _snapPointGlompCache
+        final SnapPoint prevSnapGlomp;
+        if (!_snapPointGlompCache.isEmpty()) {
+			prevSnapGlomp = _snapPointGlompCache
 					.get(_snapGlompCycle % _snapPointGlompCache.size());
 		} else {
-			_prevSnapGlomp = null;
+			prevSnapGlomp = null;
 		}
 
-		return _prevSnapGlomp;
+		return prevSnapGlomp;
 	}
 
 	public CropPoint getCropPoint() {
@@ -108,7 +108,7 @@ public class Cursor {
 			_cropPointCache.addAll(
 					_hitTester.getCropPointsNear(_position, _cropCycle + 1));
 		}
-        CropPoint prevCropPoint;
+        final CropPoint prevCropPoint;
         if (!_cropPointCache.isEmpty()) {
 			prevCropPoint = _cropPointCache
 					.get(_cropCycle % _cropPointCache.size());
@@ -171,7 +171,7 @@ public class Cursor {
 			_entityCache.addAll(
 					_hitTester.getEntityNear(_position, _entityCycle + 1));
 		}
-        Entity prevEntity;
+        final Entity prevEntity;
         if (!_entityCache.isEmpty()) {
 			prevEntity = _entityCache.get(_entityCycle % _entityCache.size());
 		} else {
@@ -187,7 +187,7 @@ public class Cursor {
 			_handleCache.addAll(_hitTester.getHandleNear(_position,
 					_handleCycle + 1, filter, handleFilter));
 		}
-        Handle prevHandle;
+        final Handle prevHandle;
         if (!_handleCache.isEmpty()) {
 			prevHandle = _handleCache.get(_handleCycle % _handleCache.size());
 		} else {

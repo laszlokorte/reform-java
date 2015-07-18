@@ -52,13 +52,13 @@ public class WindowBuilder {
 			final ProjectPresenter projectPresenter = new ProjectPresenter(
 					eProject, idEmitter);
 
-			// final GlasLayerUI layerUI = new GlasLayerUI();
+			// final GlassLayerUI layerUI = new GlassLayerUI();
 			// final JLayer<JComponent> layer = new JLayer<>(
 			// projectPresenter.getView(), layerUI);
 
 			_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-			final JMenuBar menubar = new JMenuBar();
+			final JMenuBar menuBar = new JMenuBar();
 
 			final SaveAsAction saveAsAction = new SaveAsAction(windowBuilder,
 					project, file, idEmitter);
@@ -74,9 +74,9 @@ public class WindowBuilder {
 			fileMenu.addSeparator();
 			fileMenu.add(new JMenuItem(new CloseAction(windowBuilder)));
 
-			menubar.add(fileMenu);
+			menuBar.add(fileMenu);
 
-			_frame.setJMenuBar(menubar);
+			_frame.setJMenuBar(menuBar);
 			_frame.getContentPane().add(projectPresenter.getView());
 			_frame.pack();
 

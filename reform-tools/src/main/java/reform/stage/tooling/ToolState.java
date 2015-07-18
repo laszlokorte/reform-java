@@ -31,7 +31,7 @@ public class ToolState {
 
 	private CropPoint _activeCropPoint;
 
-	private boolean _cropPointsVisisble;
+	private boolean _cropPointsVisible;
 
 	private boolean _preview;
 
@@ -90,11 +90,11 @@ public class ToolState {
 	}
 
 	public void setCropPointsVisible(final boolean value) {
-		_cropPointsVisisble = value;
+		_cropPointsVisible = value;
 	}
 
 	public boolean areCropPointsVisible() {
-		return _cropPointsVisisble;
+		return _cropPointsVisible;
 	}
 
 	public void addListener(final ToolStateListener l) {

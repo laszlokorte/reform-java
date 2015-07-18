@@ -1,6 +1,6 @@
 package reform.core.runtime;
 
-public interface Evaluatable {
+public interface Evaluable {
 	void evaluate(Runtime runtime);
 
 }

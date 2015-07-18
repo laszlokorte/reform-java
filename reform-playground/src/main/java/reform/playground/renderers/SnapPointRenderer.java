@@ -47,7 +47,7 @@ public class SnapPointRenderer implements CanvasRenderer {
 					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 		}
 
-		final List<Entity> entities = _stage.getEnties();
+		final List<Entity> entities = _stage.getEntities();
 		for (int i = 0, j = entities.size(); i < j; i++) {
 			final Entity entity = entities.get(i);
 			if (_toolState.belongsToActiveSnapPoint(entity)) {

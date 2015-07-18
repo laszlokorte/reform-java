@@ -61,7 +61,7 @@ public class SelectionRenderer implements CanvasRenderer {
 			}
 
 			{
-				final List<Entity> entities = _stage.getEnties();
+				final List<Entity> entities = _stage.getEntities();
 				for (int i = 0, j = entities.size(); i < j; i++) {
 					final Entity e = entities.get(i);
 					if (e.getId().equals(_formSelection.getSelected())) {

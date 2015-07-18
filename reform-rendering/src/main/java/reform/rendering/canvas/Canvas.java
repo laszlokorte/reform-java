@@ -15,7 +15,7 @@ public class Canvas extends JComponent {
 
 	private final CanvasAdapter _adapter;
 	private final HashMap<RenderingHints.Key, Object> _renderingHits = new HashMap<>();
-	private final ArrayList<CanvasRenderer> _rederers = new ArrayList<>();
+	private final ArrayList<CanvasRenderer> _renderers = new ArrayList<>();
 
 	public Canvas(final CanvasAdapter adapter) {
 		_adapter = adapter;
@@ -36,8 +36,8 @@ public class Canvas extends JComponent {
 
 		g2.setRenderingHints(_renderingHits);
 
-		for (int i = 0; i < _rederers.size(); i++) {
-			_rederers.get(i).render(g2, width, height);
+		for (int i = 0; i < _renderers.size(); i++) {
+			_renderers.get(i).render(g2, width, height);
 		}
 
 		g2.dispose();
@@ -49,6 +49,6 @@ public class Canvas extends JComponent {
 	}
 
 	public void addRenderer(final CanvasRenderer renderer) {
-		_rederers.add(renderer);
+		_renderers.add(renderer);
 	}
 }

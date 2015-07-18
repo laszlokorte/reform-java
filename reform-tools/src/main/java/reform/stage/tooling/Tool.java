@@ -5,7 +5,7 @@ public interface Tool {
 
 	void tearDown();
 
-	void cancle();
+	void cancel();
 
 	void press();
 

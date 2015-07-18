@@ -76,7 +76,7 @@ public class ScaleFormTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		if (_state == State.Pressed) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
@@ -85,7 +85,7 @@ public class ScaleFormTool implements Tool {
 			_baseInstruction = null;
 			_state = State.Idle;
 		} else {
-			_selectionTool.cancle();
+			_selectionTool.cancel();
 			_toolState.clearHandles();
 		}
 	}
@@ -117,7 +117,7 @@ public class ScaleFormTool implements Tool {
 	public void release() {
 		if (_state == State.Pressed) {
 			if (_currentFactor.isDegenerated()) {
-				cancle();
+				cancel();
 			} else {
 				_state = State.Idle;
 

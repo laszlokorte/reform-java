@@ -18,7 +18,7 @@ import javax.swing.plaf.LayerUI;
 
 import reform.math.Vec2i;
 
-public class GlasLayerUI extends LayerUI<JComponent> {
+public class GlassLayerUI extends LayerUI<JComponent> {
 
 	/**
 	 *
@@ -34,7 +34,7 @@ public class GlasLayerUI extends LayerUI<JComponent> {
 	private final Stroke _stroke = new BasicStroke(4, BasicStroke.CAP_ROUND,
 			BasicStroke.JOIN_ROUND);
 
-	public GlasLayerUI() {
+	public GlassLayerUI() {
 		_renderOptions.put(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL,
@@ -45,15 +45,15 @@ public class GlasLayerUI extends LayerUI<JComponent> {
 	public void installUI(final JComponent c) {
 		super.installUI(c);
 
-		final JLayer<?> jlayer = (JLayer<?>) c;
-		jlayer.setLayerEventMask(AWTEvent.MOUSE_EVENT_MASK
-				| AWTEvent.MOUSE_MOTION_EVENT_MASK);
+		final JLayer<?> jLayer = (JLayer<?>) c;
+		jLayer.setLayerEventMask(AWTEvent.MOUSE_EVENT_MASK
+                | AWTEvent.MOUSE_MOTION_EVENT_MASK);
 	}
 
 	@Override
 	public void uninstallUI(final JComponent c) {
-		final JLayer<?> jlayer = (JLayer<?>) c;
-		jlayer.setLayerEventMask(0);
+		final JLayer<?> jLayer = (JLayer<?>) c;
+		jLayer.setLayerEventMask(0);
 		super.uninstallUI(c);
 	}
 

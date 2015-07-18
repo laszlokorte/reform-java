@@ -113,17 +113,17 @@ public final class CircleForm extends BaseForm<CircleForm> {
 						0), new ScaledLength(_radius, -1)), _rotation)),
 						new Name("Top"), Point.Top));
 
-		addAnchor(new CircleQuaterAnchor(Anchor.Top, new Name("Top"),
-				CircleQuaterAnchor.Quater.North, _radius, _rotation));
+		addAnchor(new CircleQuarterAnchor(Anchor.Top, new Name("Top"),
+				CircleQuarterAnchor.Quarter.North, _radius, _rotation));
 
-		addAnchor(new CircleQuaterAnchor(Anchor.Right, new Name("Right"),
-				CircleQuaterAnchor.Quater.East, _radius, _rotation));
+		addAnchor(new CircleQuarterAnchor(Anchor.Right, new Name("Right"),
+				CircleQuarterAnchor.Quarter.East, _radius, _rotation));
 
-		addAnchor(new CircleQuaterAnchor(Anchor.Bottom, new Name("Bottom"),
-				CircleQuaterAnchor.Quater.South, _radius, _rotation));
+		addAnchor(new CircleQuarterAnchor(Anchor.Bottom, new Name("Bottom"),
+				CircleQuarterAnchor.Quarter.South, _radius, _rotation));
 
-		addAnchor(new CircleQuaterAnchor(Anchor.Left, new Name("Left"),
-				CircleQuaterAnchor.Quater.West, _radius, _rotation));
+		addAnchor(new CircleQuarterAnchor(Anchor.Left, new Name("Left"),
+				CircleQuarterAnchor.Quarter.West, _radius, _rotation));
 
 	}
 
@@ -172,27 +172,27 @@ public final class CircleForm extends BaseForm<CircleForm> {
 		return _outline;
 	}
 
-	static class CircleQuaterAnchor extends BaseAnchor {
+	static class CircleQuarterAnchor extends BaseAnchor {
 
-		enum Quater {
+		enum Quarter {
 			North(-Math.PI / 2), East(0), South(-3 * Math.PI / 2), West(Math.PI);
 
 			final double angle;
 
-			Quater(final double angle) {
+			Quarter(final double angle) {
 				this.angle = angle;
 			}
 		}
 
-		private final Quater _quater;
+		private final Quarter _quarter;
 		private final StaticLength _radius;
 		private final StaticAngle _angle;
 
-		public CircleQuaterAnchor(final IdentityToken token, final Name name,
-				final Quater quater, final StaticLength radius,
-				final StaticAngle angle) {
+		public CircleQuarterAnchor(final IdentityToken token, final Name name,
+                                   final Quarter quarter, final StaticLength radius,
+                                   final StaticAngle angle) {
 			super(token, name);
-			_quater = quater;
+			_quarter = quarter;
 			_radius = radius;
 			_angle = angle;
 		}
@@ -204,9 +204,9 @@ public final class CircleForm extends BaseForm<CircleForm> {
 			final double oldRadius = _radius.getValueForRuntime(runtime);
 
 			final double oldDeltaX = Vector.getRotatedX(oldRadius, 0, oldAngle
-					+ _quater.angle);
+					+ _quarter.angle);
 			final double oldDeltaY = Vector.getRotatedY(oldRadius, 0, oldAngle
-					+ _quater.angle);
+					+ _quarter.angle);
 
 			final double newDeltaX = oldDeltaX + x;
 			final double newDeltaY = oldDeltaY + y;
@@ -214,7 +214,7 @@ public final class CircleForm extends BaseForm<CircleForm> {
 			final double newRadius = Vector.length(newDeltaX, newDeltaY);
 
 			final double newAngle = Vector.angleOf(newDeltaX, newDeltaY)
-					- _quater.angle;
+					- _quarter.angle;
 
 			_radius.setForRuntime(runtime, newRadius);
 			_angle.setForRuntime(runtime, newAngle);

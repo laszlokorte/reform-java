@@ -2,7 +2,7 @@ package reform.data;
 
 public class Value {
 	public enum Type {
-		String, Intenger, Double
+		String, Integer, Double
     }
 
 	private final Type _type;
@@ -15,17 +15,17 @@ public class Value {
 	}
 
 	public Value(final int integer) {
-		_type = Type.Intenger;
+		_type = Type.Integer;
 		_integer = integer;
 		_double = integer;
 		_string = integer + "";
 	}
 
-	public Value(final double doub) {
+	public Value(final double dbl) {
 		_type = Type.Double;
-		_integer = (int) doub;
-		_double = doub;
-		_string = String.format("%f.2", doub);
+		_integer = (int) dbl;
+		_double = dbl;
+		_string = String.format("%f.2", dbl);
 	}
 
 	public Value(final String string) {

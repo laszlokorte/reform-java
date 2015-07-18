@@ -16,7 +16,7 @@ import reform.stage.elements.Handle;
 import reform.stage.elements.PivotPair;
 import reform.stage.elements.outline.EntityOutline;
 
-public class PieEntitiy implements Entity {
+public class PieEntity implements Entity {
 	private final Identifier<? extends PieForm> _formId;
 
 	private final EntityPoint _start;
@@ -35,7 +35,7 @@ public class PieEntitiy implements Entity {
 
 	private boolean _isGuide = false;
 
-	public PieEntitiy(final Identifier<? extends PieForm> formId) {
+	public PieEntity(final Identifier<? extends PieForm> formId) {
 		_formId = formId;
 		_start = new EntityPoint(formId, PieForm.Point.Start);
 		_end = new EntityPoint(formId, PieForm.Point.End);

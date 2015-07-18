@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,11 +35,10 @@ import reform.core.analyzer.ProjectAnalyzer;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
-import reform.core.pool.PoolFactory;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
-import reform.core.runtime.Evaluatable;
+import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.evented.core.EventedPicture;
 import reform.evented.core.EventedProcedure;
@@ -527,14 +527,14 @@ public class PicturePresenter {
 
 			@Override
 			public void onEvalInstruction(final ProjectRuntime runtime,
-					final Evaluatable instruction) {
+					final Evaluable instruction) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onError(final ProjectRuntime runtime,
-					final Evaluatable instruction, final Error error) {
+					final Evaluable instruction, final Error error) {
 				// TODO Auto-generated method stub
 
 			}
@@ -548,7 +548,7 @@ public class PicturePresenter {
 
 		_analyzer.addListener(new ProjectAnalyzer.Listener() {
 
-			// TODO(laszlo): find a cleaner solution.
+			// TODO(Laszlo): find a cleaner solution.
 			// If the procedure changes, but the focus is not changed
 			// the index of the focused instruction may change. But the
 			// procedureView has still the old index stored, because setFocus is
@@ -590,7 +590,7 @@ public class PicturePresenter {
 					_procedureView.setFocus(-1);
 					_selection.setSelection(null);
 				}
-				evaluteProcedure();
+				evaluateProcedure();
 			}
 		});
 
@@ -801,18 +801,13 @@ public class PicturePresenter {
 
 	public void update() {
 		_picture.getEventedProcedure().analyze(_analyzer);
-		evaluteProcedure();
+		evaluateProcedure();
 	}
 
-	private void evaluteProcedure() {
-		try {
-			_runtime.stop();
-			_runtime.setSize(_picture.getSize());
-			_picture.getEventedProcedure().evaluate(_runtime);
-		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private void evaluateProcedure() {
+        _runtime.stop();
+        _runtime.setSize(_picture.getSize());
+        _picture.getEventedProcedure().evaluate(_runtime);
 	}
 
 	public Preview getPreview() {
@@ -831,7 +826,7 @@ public class PicturePresenter {
 			implements Preview, ProjectRuntime.Listener {
 
 		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-                () -> new GeneralPath.Double());
+                Path2D.Double::new);
 
 		private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
 		private final Vec2i _size = new Vec2i();
@@ -857,13 +852,13 @@ public class PicturePresenter {
 
 		@Override
 		public void onEvalInstruction(final ProjectRuntime runtime,
-				final Evaluatable evaluatable) {
+				final Evaluable evaluable) {
 
 		}
 
 		@Override
 		public void onError(final ProjectRuntime runtime,
-				final Evaluatable instruction, final Error error) {
+				final Evaluable instruction, final Error error) {
 
 		}
 
@@ -995,7 +990,7 @@ public class PicturePresenter {
 		}
 
 		@Override
-		public boolean isInFocus(final Evaluatable instruction) {
+		public boolean isInFocus(final Evaluable instruction) {
 			return instruction.equals(_focus.getFocused());
 		}
 

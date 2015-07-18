@@ -78,7 +78,7 @@ public class CreateFormTool implements Tool {
 	}
 
 	@Override
-	public void cancle() {
+	public void cancel() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
@@ -89,7 +89,7 @@ public class CreateFormTool implements Tool {
 			_swapDirection = false;
 			_state = State.Idle;
 		} else {
-			_selectionTool.cancle();
+			_selectionTool.cancel();
 		}
 	}
 
@@ -101,7 +101,7 @@ public class CreateFormTool implements Tool {
 			_currentStart = _startPoint.createReference();
 			_currentDestination = new RelativeFixSizeDestination(_currentStart,
 					new Vec2());
-            Form currentForm = _formFactory.build();
+            final Form currentForm = _formFactory.build();
 			_currentInstruction = new CreateFormInstruction(currentForm,
 					_currentDestination);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
@@ -120,7 +120,7 @@ public class CreateFormTool implements Tool {
 	public void release() {
 		if (_state == State.Pressed || _state == State.PressedSnapped) {
 			if (_currentDestination.isDegenerated()) {
-				cancle();
+				cancel();
 			} else {
 				_state = State.Idle;
 				_toolState.setSnapPoints(_hitTester

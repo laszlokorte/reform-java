@@ -74,8 +74,8 @@ public class ToolController {
 		_tool.input(_input);
 	}
 
-	public void cancle() {
-		_tool.cancle();
+	public void cancel() {
+		_tool.cancel();
 	}
 
 	public void cycleNext() {

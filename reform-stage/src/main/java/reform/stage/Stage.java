@@ -51,7 +51,7 @@ public class Stage {
 		_listeners.remove(listener);
 	}
 
-	public List<Entity> getEnties() {
+	public List<Entity> getEntities() {
 		return _entities;
 	}
 

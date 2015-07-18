@@ -2,7 +2,6 @@ package reform.core.procedure.instructions.single;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
-import reform.core.procedure.Procedure;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.InitialDestination;
