@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="reform">
-    <output-path>$PROJECT_DIR$/out/artifacts/reform</output-path>
-    <root id="archive" name="reform.jar">
+  <artifact type="jar" name="reform.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/reform_jar</output-path>
+    <root id="archive" name="reform.jar.jar">
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/reform-playground/src/main/java/META-INF/MANIFEST.MF" />
       </element>

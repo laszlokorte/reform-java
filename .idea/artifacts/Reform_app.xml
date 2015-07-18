@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="Reform.app">
+    <output-path>$PROJECT_DIR$/out/artifacts/Reform_app</output-path>
+    <root id="root">
+      <element id="directory" name="Reform.app" />
+    </root>
+  </artifact>
+</component>
