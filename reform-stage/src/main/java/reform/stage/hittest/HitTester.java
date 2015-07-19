@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import reform.math.Vec2;
-import reform.math.Vector;
 import reform.stage.Stage;
 import reform.stage.elements.CropPoint;
 import reform.stage.elements.Entity;
@@ -68,8 +67,7 @@ public class HitTester {
 				final List<EntityPoint> entityPoints = e.getSnapPoints();
 				for (int k = 0, l = entityPoints.size(); k < l; k++) {
 					final EntityPoint p = entityPoints.get(k);
-					if (Vector.distance(pos.x, pos.y, p.getX(),
-							p.getY()) <= _snapRadius) {
+					if (p.isInSnapRadius(pos.x, pos.y)) {
 						_resultSnapPoint.add(p);
 						if (++i >= max) {
 							break outer;
@@ -82,8 +80,7 @@ public class HitTester {
 					.getIntersectionPoints();
 			for (int h = 0, j = intersections.size(); h < j; h++) {
 				final IntersectionSnapPoint p = intersections.get(h);
-				if (Vector.distance(pos.x, pos.y, p.getX(),
-						p.getY()) <= _snapRadius) {
+				if (p.isInSnapRadius(pos.x, pos.y)) {
 					if (filter == EntityFilter.ExcludeSelected
 							&& _adapter.belongsToSelected(p)) {
 						continue;
@@ -213,8 +210,7 @@ public class HitTester {
 				if (handleFilter == HandleFilter.Pivot && !handle.hasPivot()) {
 					continue;
 				}
-				if (Vector.distance(pos.x, pos.y, handle.getX(),
-						handle.getY()) <= _snapRadius) {
+				if (handle.isInGrabRadius(pos.x, pos.y)) {
 					_resultHandle.add(handle);
 					if (++i >= max) {
 						break outer;
@@ -233,8 +229,7 @@ public class HitTester {
 			final List<CropPoint> cropPoints = _stage.getCropPoints();
 			for (int h = 0, j = cropPoints.size(); h < j; h++) {
 				final CropPoint c = cropPoints.get(h);
-				if (Vector.distance(pos.x, pos.y, c.getX(),
-						c.getY()) <= _snapRadius) {
+				if (c.isInGrabRadius(pos.x, pos.y)) {
 					_resultCropPoint.add(c);
 					if (++i >= max) {
 						break outer;
@@ -267,8 +262,7 @@ public class HitTester {
 				final List<EntityPoint> entityPoints = e.getSnapPoints();
 				for (int k = 0, l = entityPoints.size(); k < l; k++) {
 					final EntityPoint p = entityPoints.get(k);
-					if (Vector.distance(pos.x, pos.y, p.getX(),
-							p.getY()) <= _snapRadius) {
+					if (p.isInGrabRadius(pos.x, pos.y)) {
 						_resultEntityPoint.add(p);
 						if (++i >= max) {
 							break outer;

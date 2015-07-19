@@ -11,9 +11,13 @@ import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.math.Vec2;
+import reform.math.Vector;
 
 public class Handle {
-	private final Identifier<? extends Form> _formId;
+    public static final double GRAB_RADIUS = 10;
+    private static final double GRAB_RADIUS2 = GRAB_RADIUS * GRAB_RADIUS;
+
+    private final Identifier<? extends Form> _formId;
 	private final Identifier<? extends ExposedPoint> _pointId;
 	private final Identifier<? extends Anchor> _anchorId;
 	private final Vec2 _value = new Vec2();
@@ -82,4 +86,7 @@ public class Handle {
         return _label.toString();
     }
 
+    public boolean isInGrabRadius(double x, double y) {
+        return Vector.distance2(x, y, _value.x, _value.y) < GRAB_RADIUS2;
+    }
 }

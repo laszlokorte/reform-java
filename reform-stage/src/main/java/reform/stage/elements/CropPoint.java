@@ -1,8 +1,12 @@
 package reform.stage.elements;
 
 import reform.math.Vec2i;
+import reform.math.Vector;
 
 public class CropPoint {
+    public static final double GRAB_RADIUS = 10;
+    private static final double GRAB_RADIUS2 = GRAB_RADIUS * GRAB_RADIUS;
+
 	private final Vec2i _position = new Vec2i();
 	private final Vec2i _offset = new Vec2i();
 
@@ -34,4 +38,8 @@ public class CropPoint {
 	public boolean isCorner() {
 		return _offset.x != 0 && _offset.y != 0;
 	}
+
+    public boolean isInGrabRadius(double x, double y) {
+        return Vector.distance2(x,y, _position.x, _position.y) < GRAB_RADIUS2;
+    }
 }

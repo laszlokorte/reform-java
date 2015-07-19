@@ -11,6 +11,7 @@
  - Iterate over points
  - Form Groups
  - Export animation
+ - Snap point filter: option to show only snap points of selected form
 
 =========
 = Notes =
@@ -20,9 +21,3 @@
 	---------
 	 - Tool Selection State (None, Form, Handle, EntityPoint, SnapPoint, CropPoint)
 	 - View (Preview, Selection, Snap, SnapPair, Handle, EntityPoint, Crop)
-
-========
-= Bugs =
-========
-
-Focus in ProcedureView

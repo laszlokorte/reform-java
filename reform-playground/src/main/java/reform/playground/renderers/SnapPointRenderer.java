@@ -26,7 +26,7 @@ public class SnapPointRenderer implements CanvasRenderer {
 	private final Asset _cropDot = new Dot(5, 1, new Color(0xE3B424),
 			new Color(0xE3B424));
 
-	private final Asset _cropDotActive = new Dot(6, 1, new Color(0xE3B424),
+	private final Asset _cropDotActive = new Dot(7, 1, new Color(0xE3B424),
 			new Color(0xE3B424));
 	private boolean _preview;
 

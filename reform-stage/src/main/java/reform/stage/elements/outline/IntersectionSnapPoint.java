@@ -5,11 +5,15 @@ import reform.core.forms.relations.IntersectionPoint;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifier;
 import reform.math.Vec2;
+import reform.math.Vector;
 import reform.stage.elements.Entity;
 import reform.stage.elements.SnapPoint;
 
 public class IntersectionSnapPoint implements SnapPoint {
-	private final Entity _entityA;
+    private static final double SNAP_RADIUS2 = SnapPoint
+            .SNAP_RADIUS*SnapPoint.SNAP_RADIUS;
+
+    private final Entity _entityA;
 	private final Entity _entityB;
 
 	private final Vec2 _value = new Vec2();
@@ -67,6 +71,10 @@ public class IntersectionSnapPoint implements SnapPoint {
     public String getLabel() {
         return "Intersection of " + _entityA.getLabel() + " and " + _entityB
                 .getLabel();
+    }
+
+    public boolean isInSnapRadius(double x, double y) {
+        return Vector.distance2(x, y, _value.x, _value.y) < SNAP_RADIUS2;
     }
 
 }

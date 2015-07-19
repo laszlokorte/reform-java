@@ -9,9 +9,15 @@ import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifier;
 import reform.math.Vec2;
+import reform.math.Vector;
 
 public class EntityPoint implements SnapPoint {
-	private final Identifier<? extends Form> _formId;
+    private static final double SNAP_RADIUS2 = SnapPoint
+            .SNAP_RADIUS*SnapPoint.SNAP_RADIUS;
+    private static final double GRAB_RADIUS = 10;
+    private static final double GRAB_RADIUS2 = GRAB_RADIUS * GRAB_RADIUS;
+
+    private final Identifier<? extends Form> _formId;
 	private final Identifier<? extends ExposedPoint> _pointId;
 	private final Vec2 _value = new Vec2();
     private StringBuilder _label = new StringBuilder(50);
@@ -75,5 +81,13 @@ public class EntityPoint implements SnapPoint {
 
     public String getLabel() {
         return _label.toString();
+    }
+
+    public boolean isInSnapRadius(double x, double y) {
+        return Vector.distance2(x, y, _value.x, _value.y) < SNAP_RADIUS2;
+    }
+
+    public boolean isInGrabRadius(double x, double y) {
+        return Vector.distance2(x, y, _value.x, _value.y) < GRAB_RADIUS2;
     }
 }
