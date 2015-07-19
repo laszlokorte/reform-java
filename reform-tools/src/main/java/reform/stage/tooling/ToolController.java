@@ -36,7 +36,8 @@ public class ToolController {
 			if (_tool != null) {
 				_tool.tearDown();
 			}
-			_tool = tool;
+            _cursor.resetCycle();
+            _tool = tool;
 			_tool.setUp();
 			_tool.refresh();
 			notifyChange();
@@ -65,7 +66,9 @@ public class ToolController {
 	}
 
 	public void release() {
-		_pressed = false;
+        _cursor.resetCycle();
+
+        _pressed = false;
 		_tool.release();
 		if (_nextTool != null) {
 			setTool(_nextTool);
@@ -75,7 +78,9 @@ public class ToolController {
 	}
 
 	public void cancel() {
-		_tool.cancel();
+        _cursor.resetCycle();
+        _tool.cancel();
+        _tool.input(_input);
 	}
 
 	public void cycleNext() {

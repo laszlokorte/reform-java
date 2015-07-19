@@ -35,6 +35,8 @@ public class Cursor {
     private int _cropCycle = 0;
 	private final ArrayList<CropPoint> _cropPointCache = new ArrayList<>();
 
+    private boolean _cycled = false;
+
     public Cursor(final HitTester hitTester) {
 		_hitTester = hitTester;
 	}
@@ -88,7 +90,7 @@ public class Cursor {
 				|| _snapGlompCycle >= _snapPointGlompCache.size()) {
 			_snapPointGlompCache.clear();
 			_snapPointGlompCache.addAll(_hitTester.getSnapPointsNearGlomp(
-					_position, _snapGlompCycle + 1, filter));
+                    _position, _snapGlompCycle + 1, filter));
 
 		}
         final SnapPoint prevSnapGlomp;
@@ -131,34 +133,46 @@ public class Cursor {
 		_handleCache.clear();
 		_cropPointCache.clear();
 		_entityPointCache.clear();
+
+        _cycled = false;
 	}
+
+    public boolean isCycled() {
+        return _cycled;
+    }
 
 	public void cycleNextHandle() {
 		_handleCycle++;
+        _cycled = true;
 
 	}
 
 	public void cycleNextSnap() {
 		_snapCycle++;
+        _cycled = true;
 
 	}
 
 	public void cycleNextSnapGlomp() {
 		_snapGlompCycle++;
+        _cycled = true;
 
 	}
 
 	public void cycleNextEntity() {
 		_entityCycle++;
+        _cycled = true;
 
 	}
 
 	public void cycleNextCropPoint() {
-		_cropCycle++;
+        _cropCycle++;
+        _cycled = true;
 	}
 
 	public void cycleNextEntityPoint() {
 		_entityPointCycle++;
+        _cycled = true;
 	}
 
 	public Vec2 getPosition() {

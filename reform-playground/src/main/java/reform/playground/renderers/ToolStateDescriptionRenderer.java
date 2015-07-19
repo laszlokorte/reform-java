@@ -13,6 +13,7 @@ import reform.stage.elements.Handle;
 import reform.stage.elements.SnapPoint;
 import reform.stage.tooling.FormSelection;
 import reform.stage.tooling.ToolState;
+import reform.stage.tooling.cursor.Cursor;
 
 import java.awt.*;
 
@@ -22,6 +23,7 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
     private final ToolState _toolState;
     private final Analyzer _analyzer;
     private final FormSelection _selection;
+    private final Cursor _cursor;
 
 
     private final Asset _cropDot = new Dot(6, 2, new Color(0xB14BEC),
@@ -34,19 +36,22 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
 
     public ToolStateDescriptionRenderer(final Stage stage, final ToolState
             toolState, final FormSelection selection, final Analyzer
-                                                analyzer, ToolTipRenderer toolTipRenderer) {
+                                                analyzer, ToolTipRenderer
+            toolTipRenderer, Cursor cursor) {
         _stage = stage;
         _toolState = toolState;
         _analyzer = analyzer;
         _selection = selection;
         _toolTipRenderer = toolTipRenderer;
+        _cursor = cursor;
     }
 
     @Override
     public void render(final Graphics2D g2, final int width, final int height) {
         final Vec2i size = _stage.getSize();
 
-        if (!_preview && _toolState.getViewState() != ToolState.ViewState.Preview) {
+        if (!_preview && _toolState.getViewState() != ToolState.ViewState
+                .Preview && _cursor.isCycled()) {
             g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
             ToolState.SelectionState selectionState = _toolState
