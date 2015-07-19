@@ -25,14 +25,13 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
     private final FormSelection _selection;
     private final Cursor _cursor;
 
-
-    private final Asset _cropDot = new Dot(6, 2, new Color(0xB14BEC),
-            new Color(0xB14BEC));
     private final ToolTipRenderer _toolTipRenderer;
 
     private boolean _preview;
-    private final Color _backgroundColor = new Color(0x88333333, true);
-    private final Color _selectionTextColor = new Color(0xffffff);
+    private final Color _snapTextColor = new Color(0xFFD88A);
+    private final Color _handleTextColor = new Color(0x97FFAF);
+    private final Color _pointTextColor = new Color(0xBBECFF);
+    private final Color _selectionTextColor = new Color(0xDCDCDC);
 
     public ToolStateDescriptionRenderer(final Stage stage, final ToolState
             toolState, final FormSelection selection, final Analyzer
@@ -61,21 +60,21 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
                 if (snap != null) {
                     _toolTipRenderer.render(g2, snap.getX(), snap
                                     .getY(),
-                            snap.getLabel());
+                            snap.getLabel(), _snapTextColor);
 
                 }
             } else if (selectionState == ToolState.SelectionState.Handle) {
                 Handle handle = _toolState.getActiveHandle();
                 if (handle != null) {
                     _toolTipRenderer.render(g2, handle.getX(), handle.getY(),
-                            handle.getLabel());
+                            handle.getLabel(), _handleTextColor);
 
                 }
             }else if (selectionState == ToolState.SelectionState.EntityPoint) {
                 EntityPoint point = _toolState.getActiveEntityPoint();
                 if (point != null) {
                     _toolTipRenderer.render(g2, point.getX(), point.getY(),
-                            point.getLabel());
+                            point.getLabel(), _pointTextColor);
 
                 }
             }else if (selectionState == ToolState.SelectionState.Form) {
@@ -84,7 +83,7 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
                     String formName = _analyzer.getForm(formId).getName()
                             .getValue();
                     _toolTipRenderer.renderCentered(g2,size.x/2,size.y/2,
-                            formName);
+                            formName, _selectionTextColor);
                 }
             }
 

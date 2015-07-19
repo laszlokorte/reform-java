@@ -417,10 +417,11 @@ public final class ProcedureView extends JComponent
 
                     }
                     _inner.add(_views[i]);
-                    _views[i].repaint();
+                    _views[i].revalidate();
+
                 }
 
-                _inner.repaint();
+                getParent().repaint();
 
                 revalidate();
 

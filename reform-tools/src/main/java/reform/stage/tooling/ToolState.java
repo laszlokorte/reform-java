@@ -132,7 +132,7 @@ public class ToolState {
 		notifyChange();
 	}
 
-	private void notifyChange() {
+	public void notifyChange() {
 		for (int i = 0, j = _listeners.size(); i < j; i++) {
 			_listeners.get(i).onToolStateChange(this);
 		}

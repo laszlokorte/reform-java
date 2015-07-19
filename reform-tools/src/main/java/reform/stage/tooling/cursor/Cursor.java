@@ -162,8 +162,7 @@ public class Cursor {
 	public void cycleNextEntity() {
 		_entityCycle++;
         _cycled = true;
-
-	}
+    }
 
 	public void cycleNextCropPoint() {
         _cropCycle++;

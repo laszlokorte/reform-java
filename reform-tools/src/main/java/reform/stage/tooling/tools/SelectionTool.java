@@ -88,9 +88,11 @@ public class SelectionTool implements Tool {
 
 	@Override
 	public void cycle() {
-		if (_state == State.Pressed) {
+
+        if (_state == State.Pressed) {
 			_cursor.cycleNextEntity();
-		}
+
+        }
 	}
 
 	@Override
@@ -101,6 +103,8 @@ public class SelectionTool implements Tool {
 			if (e != null) {
 				_formSelection.setSelection(e.getId());
 			}
+
+            _toolState.notifyChange();
 		}
 	}
 
