@@ -10,7 +10,7 @@
  - later instruction changes
  - Iterate over points
  - Form Groups
-
+ - Export animation
 
 =========
 = Notes =
@@ -20,3 +20,9 @@
 	---------
 	 - Tool Selection State (None, Form, Handle, EntityPoint, SnapPoint, CropPoint)
 	 - View (Preview, Selection, Snap, SnapPair, Handle, EntityPoint, Crop)
+
+========
+= Bugs =
+========
+
+Focus in ProcedureView
