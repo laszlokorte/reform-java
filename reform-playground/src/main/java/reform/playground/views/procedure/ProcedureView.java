@@ -346,6 +346,7 @@ public final class ProcedureView extends JComponent
 			_focused.setFocused(false);
 		}
 		_focusedIndex = i;
+
 		if (i > -1 && _views.length > i && !_incomplete) {
 			_focused = _views[i];
 			_views[i].setFocused(true);
@@ -460,5 +461,9 @@ public final class ProcedureView extends JComponent
 
 	public void requireUpdate() {
 		_incomplete = true;
+	}
+
+	public int getFocus() {
+		return _focusedIndex;
 	}
 }

@@ -562,7 +562,7 @@ public class PicturePresenter {
 			// So we have memorize the index and compare it each time the
 			// procedure changes. First we compare just the size to avoid linear
 			// search indexOf()
-			private int _focusIndex = -1;
+			// private int _focusIndex = -1;
 			private int _oldSize = -1;
 
 			@Override
@@ -571,12 +571,14 @@ public class PicturePresenter {
 				_stepCollector.requireRedraw();
 				if (_oldSize != analyzer.getNodeCount() && _focus.isSet()) {
 					final int index = analyzer.indexOf(_focus.getFocused());
-					if (index != _focusIndex) {
-						_focusIndex = index;
+					int oldFocusIndex = _procedureView.getFocus();
+					if (index != oldFocusIndex) {
 						_procedureView.setFocus(index);
 					}
 					_oldSize = analyzer.getNodeCount();
 				}
+
+				evaluateProcedure();
 			}
 		});
 
@@ -588,8 +590,9 @@ public class PicturePresenter {
 			@Override
 			public void onFocusChanged(final InstructionFocus focus) {
 				if (focus.isSet()) {
+					int index = _analyzer.indexOf(focus.getFocused());
 					_procedureView
-							.setFocus(_analyzer.indexOf(focus.getFocused()));
+							.setFocus(index);
 					_selection.setSelection(_focus.getFocused().getTarget());
 				} else {
 					_procedureView.setFocus(-1);
@@ -806,7 +809,6 @@ public class PicturePresenter {
 
 	public void update() {
 		_picture.getEventedProcedure().analyze(_analyzer);
-		evaluateProcedure();
 	}
 
 	private void evaluateProcedure() {
