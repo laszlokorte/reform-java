@@ -89,6 +89,8 @@ public class ProjectPresenter implements Listener {
 		if (_selected != null && _selected.equals(pictureId)) {
 			_selected = null;
 			_bottom.removeAll();
+            _bottom.revalidate();
+            _bottom.repaint();
 		}
 		_picturesView.update();
 	}
