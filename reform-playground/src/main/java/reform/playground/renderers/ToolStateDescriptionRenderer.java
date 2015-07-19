@@ -59,22 +59,23 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer {
             if (selectionState == ToolState.SelectionState.SnapPoint) {
                 SnapPoint snap = _toolState.getActiveSnapPoint();
                 if (snap != null) {
-                    _toolTipRenderer.render(g2, snap.getX(), snap.getY(),
-                            "Snap to...");
+                    _toolTipRenderer.render(g2, snap.getX(), snap
+                                    .getY(),
+                            snap.getLabel());
 
                 }
             } else if (selectionState == ToolState.SelectionState.Handle) {
                 Handle handle = _toolState.getActiveHandle();
                 if (handle != null) {
                     _toolTipRenderer.render(g2, handle.getX(), handle.getY(),
-                            "Grab...");
+                            handle.getLabel());
 
                 }
             }else if (selectionState == ToolState.SelectionState.EntityPoint) {
                 EntityPoint point = _toolState.getActiveEntityPoint();
                 if (point != null) {
                     _toolTipRenderer.render(g2, point.getX(), point.getY(),
-                            "Grab...");
+                            point.getLabel());
 
                 }
             }else if (selectionState == ToolState.SelectionState.Form) {

@@ -3,6 +3,7 @@ package reform.stage;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
@@ -16,7 +17,9 @@ import reform.stage.elements.factory.EntityCache;
 import reform.stage.elements.factory.EntityFactory;
 
 public class StageCollector implements ProjectRuntime.Listener {
-	public interface Adapter {
+    private final Analyzer _analyzer;
+
+    public interface Adapter {
 		boolean isInFocus(Evaluable instruction);
 	}
 
@@ -32,8 +35,10 @@ public class StageCollector implements ProjectRuntime.Listener {
 
 	private boolean _collected;
 
-	public StageCollector(final Stage stage, final Adapter adapter) {
+	public StageCollector(final Stage stage, final Adapter adapter, Analyzer
+            analyzer) {
 		_stage = stage;
+        _analyzer = analyzer;
 		_adapter = adapter;
 	}
 
@@ -68,7 +73,7 @@ public class StageCollector implements ProjectRuntime.Listener {
 				final Form form = runtime.get(id);
 
 				final Entity entity = _entityCache.fetch(form, _entityFactory);
-				entity.updateForRuntime(runtime);
+				entity.updateForRuntime(runtime, _analyzer);
 				_buffer.addEntity(entity);
 
 				if (form.getType() == DrawingType.Draw) {

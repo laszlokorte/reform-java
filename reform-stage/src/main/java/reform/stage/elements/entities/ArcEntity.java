@@ -5,7 +5,9 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.ArcForm;
+import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
@@ -34,7 +36,9 @@ public class ArcEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	private boolean _isGuide = false;
+    private String _label = "Arc";
+
+    private boolean _isGuide = false;
 
 	public ArcEntity(final Identifier<? extends ArcForm> formId) {
 		_formId = formId;
@@ -62,19 +66,22 @@ public class ArcEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_start.updateForRuntime(runtime);
-		_end.updateForRuntime(runtime);
-		_center.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_start.updateForRuntime(runtime, analyzer);
+		_end.updateForRuntime(runtime, analyzer);
+		_center.updateForRuntime(runtime, analyzer);
 
-		_startHandle.updateForRuntime(runtime);
-		_endHandle.updateForRuntime(runtime);
-		_centerHandle.updateForRuntime(runtime);
+		_startHandle.updateForRuntime(runtime, analyzer);
+		_endHandle.updateForRuntime(runtime, analyzer);
+		_centerHandle.updateForRuntime(runtime, analyzer);
 
 		_shape.reset();
-		runtime.get(_formId).appendToPathForRuntime(runtime, _shape);
+        Form form = runtime.get(_formId);
+        form.appendToPathForRuntime(runtime, _shape);
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
+
+        _label = form.getName().getValue();
 	}
 
 	@Override
@@ -111,4 +118,11 @@ public class ArcEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
+
 }

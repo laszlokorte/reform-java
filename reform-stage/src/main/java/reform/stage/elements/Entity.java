@@ -3,6 +3,7 @@ package reform.stage.elements;
 import java.awt.Shape;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
@@ -11,7 +12,7 @@ import reform.stage.elements.outline.EntityOutline;
 
 public interface Entity {
 
-	void updateForRuntime(Runtime runtime);
+	void updateForRuntime(Runtime runtime, Analyzer analyzer);
 
 	List<EntityPoint> getSnapPoints();
 
@@ -26,5 +27,7 @@ public interface Entity {
 	Shape getShape();
 
 	boolean isGuide();
+
+    String getLabel();
 
 }

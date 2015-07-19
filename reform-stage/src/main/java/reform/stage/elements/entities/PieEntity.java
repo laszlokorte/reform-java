@@ -5,6 +5,8 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
+import reform.core.forms.Form;
 import reform.core.forms.PieForm;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
@@ -33,7 +35,9 @@ public class PieEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	private boolean _isGuide = false;
+    private String _label = "Pie";
+
+    private boolean _isGuide = false;
 
 	public PieEntity(final Identifier<? extends PieForm> formId) {
 		_formId = formId;
@@ -57,16 +61,19 @@ public class PieEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_start.updateForRuntime(runtime);
-		_end.updateForRuntime(runtime);
-		_center.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_start.updateForRuntime(runtime, analyzer);
+		_end.updateForRuntime(runtime, analyzer);
+		_center.updateForRuntime(runtime, analyzer);
 
-		_startHandle.updateForRuntime(runtime);
-		_endHandle.updateForRuntime(runtime);
+		_startHandle.updateForRuntime(runtime, analyzer);
+		_endHandle.updateForRuntime(runtime, analyzer);
 
-		_shape.reset();
-		runtime.get(_formId).appendToPathForRuntime(runtime, _shape);
+        _shape.reset();
+        Form form = runtime.get(_formId);
+        form.appendToPathForRuntime(runtime, _shape);
+
+        _label = form.getName().getValue();
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 	}
@@ -105,4 +112,11 @@ public class PieEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 }

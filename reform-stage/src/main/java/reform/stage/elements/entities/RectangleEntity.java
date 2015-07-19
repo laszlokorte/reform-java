@@ -5,6 +5,9 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzable;
+import reform.core.analyzer.Analyzer;
+import reform.core.forms.Form;
 import reform.core.forms.RectangleForm;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
@@ -48,7 +51,9 @@ public class RectangleEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	private boolean _isGuide = false;
+    private String _label = "Ractangle";
+
+    private boolean _isGuide = false;
 
 	public RectangleEntity(final Identifier<? extends RectangleForm> formId) {
 		_formId = formId;
@@ -115,31 +120,34 @@ public class RectangleEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_topLeft.updateForRuntime(runtime);
-		_bottomLeft.updateForRuntime(runtime);
-		_topRight.updateForRuntime(runtime);
-		_bottomRight.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_topLeft.updateForRuntime(runtime, analyzer);
+		_bottomLeft.updateForRuntime(runtime, analyzer);
+		_topRight.updateForRuntime(runtime, analyzer);
+		_bottomRight.updateForRuntime(runtime, analyzer);
 
-		_center.updateForRuntime(runtime);
+		_center.updateForRuntime(runtime, analyzer);
 
-		_top.updateForRuntime(runtime);
-		_right.updateForRuntime(runtime);
-		_bottom.updateForRuntime(runtime);
-		_left.updateForRuntime(runtime);
+		_top.updateForRuntime(runtime, analyzer);
+		_right.updateForRuntime(runtime, analyzer);
+		_bottom.updateForRuntime(runtime, analyzer);
+		_left.updateForRuntime(runtime, analyzer);
 
-		_topLeftHandle.updateForRuntime(runtime);
-		_bottomLeftHandle.updateForRuntime(runtime);
-		_topRightHandle.updateForRuntime(runtime);
-		_bottomRightHandle.updateForRuntime(runtime);
+		_topLeftHandle.updateForRuntime(runtime, analyzer);
+		_bottomLeftHandle.updateForRuntime(runtime, analyzer);
+		_topRightHandle.updateForRuntime(runtime, analyzer);
+		_bottomRightHandle.updateForRuntime(runtime, analyzer);
 
-		_topHandle.updateForRuntime(runtime);
-		_rightHandle.updateForRuntime(runtime);
-		_bottomHandle.updateForRuntime(runtime);
-		_leftHandle.updateForRuntime(runtime);
+		_topHandle.updateForRuntime(runtime, analyzer);
+		_rightHandle.updateForRuntime(runtime, analyzer);
+		_bottomHandle.updateForRuntime(runtime, analyzer);
+		_leftHandle.updateForRuntime(runtime, analyzer);
 
-		_shape.reset();
-		runtime.get(_formId).appendToPathForRuntime(runtime, _shape);
+        _shape.reset();
+        Form form = runtime.get(_formId);
+        form.appendToPathForRuntime(runtime, _shape);
+
+        _label = form.getName().getValue();
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 
@@ -179,4 +187,11 @@ public class RectangleEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 }

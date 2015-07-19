@@ -1,5 +1,6 @@
 package reform.stage.elements;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.relations.ExposedPoint;
@@ -18,8 +19,9 @@ public class Handle {
 	private final Vec2 _value = new Vec2();
 
 	private final PivotPair _pivot;
+    private StringBuilder _label = new StringBuilder();
 
-	public <T extends Form> Handle(final Identifier<T> formId,
+    public <T extends Form> Handle(final Identifier<T> formId,
 			final ExposedPointToken<? super T> pointToken,
 			final IdentityToken anchorToken, final PivotPair pivot) {
 		_formId = formId;
@@ -50,10 +52,18 @@ public class Handle {
 		return _formId;
 	}
 
-	public void updateForRuntime(final Runtime runtime) {
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
 		final ReferencePoint p = runtime.get(_formId).getPoint(_pointId);
 		_value.set(p.getXValueForRuntime(runtime),
 				p.getYValueForRuntime(runtime));
+
+        _label.setLength(0);
+        _label.append(analyzer.getForm(_formId).getName()
+                .getValue());
+        _label.append("'s ");
+        _label.append(p
+                .getDescription
+                        (analyzer));
 	}
 
 	public PivotPair getPivot() {
@@ -67,5 +77,9 @@ public class Handle {
 	public ReferencePoint createReference() {
 		return new ForeignFormsPoint(_formId, _pointId);
 	}
+
+    public String getLabel() {
+        return _label.toString();
+    }
 
 }

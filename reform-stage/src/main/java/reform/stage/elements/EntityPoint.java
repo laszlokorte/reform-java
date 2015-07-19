@@ -1,5 +1,6 @@
 package reform.stage.elements;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.forms.relations.ExposedPoint;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
@@ -13,8 +14,9 @@ public class EntityPoint implements SnapPoint {
 	private final Identifier<? extends Form> _formId;
 	private final Identifier<? extends ExposedPoint> _pointId;
 	private final Vec2 _value = new Vec2();
+    private StringBuilder _label = new StringBuilder(50);
 
-	public <T extends Form> EntityPoint(final Identifier<T> formId,
+    public <T extends Form> EntityPoint(final Identifier<T> formId,
 			final ExposedPointToken<? super T> token) {
 		_formId = formId;
 		_pointId = new Identifier<>(token);
@@ -38,10 +40,19 @@ public class EntityPoint implements SnapPoint {
 		return _pointId;
 	}
 
-	public void updateForRuntime(final Runtime runtime) {
-		final ReferencePoint p = runtime.get(_formId).getPoint(_pointId);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+        Form form = runtime.get(_formId);
+		final ReferencePoint p = form.getPoint(_pointId);
 		_value.set(p.getXValueForRuntime(runtime),
 				p.getYValueForRuntime(runtime));
+
+        _label.setLength(0);
+        _label.append(analyzer.getForm(_formId).getName()
+                .getValue());
+        _label.append("'s ");
+        _label.append(p
+                .getDescription
+                        (analyzer));
 	}
 
 	@Override
@@ -61,4 +72,8 @@ public class EntityPoint implements SnapPoint {
 
 		return _formId.equals(other._formId) && _pointId.equals(other._pointId);
 	}
+
+    public String getLabel() {
+        return _label.toString();
+    }
 }

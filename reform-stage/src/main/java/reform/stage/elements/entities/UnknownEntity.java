@@ -5,6 +5,7 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
@@ -25,7 +26,9 @@ public class UnknownEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	private boolean _isGuide = false;
+    private String _label = "Unknown";
+
+    private boolean _isGuide = false;
 
 	public UnknownEntity(final Identifier<? extends Form> formId) {
 		_formId = formId;
@@ -33,7 +36,7 @@ public class UnknownEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 	}
 
@@ -71,4 +74,11 @@ public class UnknownEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 }

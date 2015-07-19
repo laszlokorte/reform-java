@@ -5,6 +5,8 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
+import reform.core.forms.Form;
 import reform.core.forms.LineForm;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
@@ -34,7 +36,9 @@ public class LineEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	private boolean _isGuide = false;
+    private String _label = "Line";
+
+    private boolean _isGuide = false;
 
 	public LineEntity(final Identifier<? extends LineForm> formId) {
 		_formId = formId;
@@ -60,18 +64,21 @@ public class LineEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_start.updateForRuntime(runtime);
-		_end.updateForRuntime(runtime);
-		_center.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_start.updateForRuntime(runtime, analyzer);
+		_end.updateForRuntime(runtime, analyzer);
+		_center.updateForRuntime(runtime, analyzer);
 
 		_outline.update(_start.getX(), _start.getY(), _end.getX(), _end.getY());
 
-		_startHandle.updateForRuntime(runtime);
-		_endHandle.updateForRuntime(runtime);
+		_startHandle.updateForRuntime(runtime, analyzer);
+		_endHandle.updateForRuntime(runtime, analyzer);
 
-		_shape.reset();
-		runtime.get(_formId).appendToPathForRuntime(runtime, _shape);
+        _shape.reset();
+        Form form = runtime.get(_formId);
+        form.appendToPathForRuntime(runtime, _shape);
+
+        _label = form.getName().getValue();
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 
@@ -112,4 +119,11 @@ public class LineEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 }

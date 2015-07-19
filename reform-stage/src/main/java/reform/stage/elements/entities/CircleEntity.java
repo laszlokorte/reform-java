@@ -5,7 +5,9 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
 import reform.core.forms.CircleForm;
+import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
@@ -37,6 +39,8 @@ public class CircleEntity implements Entity {
 
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
+
+    private String _label = "Circle";
 
 	private boolean _isGuide = false;
 
@@ -72,25 +76,28 @@ public class CircleEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_top.updateForRuntime(runtime);
-		_right.updateForRuntime(runtime);
-		_bottom.updateForRuntime(runtime);
-		_left.updateForRuntime(runtime);
-		_center.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_top.updateForRuntime(runtime, analyzer);
+		_right.updateForRuntime(runtime, analyzer);
+		_bottom.updateForRuntime(runtime, analyzer);
+		_left.updateForRuntime(runtime, analyzer);
+		_center.updateForRuntime(runtime, analyzer);
 
-		_topHandle.updateForRuntime(runtime);
-		_bottomHandle.updateForRuntime(runtime);
-		_leftHandle.updateForRuntime(runtime);
-		_rightHandle.updateForRuntime(runtime);
+		_topHandle.updateForRuntime(runtime, analyzer);
+		_bottomHandle.updateForRuntime(runtime, analyzer);
+		_leftHandle.updateForRuntime(runtime, analyzer);
+		_rightHandle.updateForRuntime(runtime, analyzer);
 
 		_outline.update(_center.getX(), _center.getY(), Vector.distance(
-				_center.getX(), _center.getY(), _top.getX(), _top.getY()));
+                _center.getX(), _center.getY(), _top.getX(), _top.getY()));
 
 		_shape.reset();
-		runtime.get(_formId).appendToPathForRuntime(runtime, _shape);
+        Form form = runtime.get(_formId);
+		form.appendToPathForRuntime(runtime, _shape);
 
-		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
+        _label = form.getName().getValue();
+
+        _isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 
 	}
 
@@ -128,4 +135,11 @@ public class CircleEntity implements Entity {
 	public boolean isGuide() {
 		return _isGuide;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 }

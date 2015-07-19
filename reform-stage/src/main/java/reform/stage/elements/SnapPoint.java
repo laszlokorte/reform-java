@@ -8,4 +8,6 @@ public interface SnapPoint {
 	double getY();
 
 	ReferencePoint createReference();
+
+    String getLabel();
 }

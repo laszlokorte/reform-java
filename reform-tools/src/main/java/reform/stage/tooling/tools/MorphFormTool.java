@@ -176,7 +176,6 @@ public class MorphFormTool implements Tool {
 			}
 
 			_toolState.setActiveHandle(_currentHandle);
-            System.out.println(_currentHandle);
 			break;
 		}
 		case Pressed:

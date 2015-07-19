@@ -5,6 +5,8 @@ import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.List;
 
+import reform.core.analyzer.Analyzer;
+import reform.core.forms.Form;
 import reform.core.procedure.Paper;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
@@ -36,7 +38,9 @@ public class PaperEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-	public PaperEntity(final Identifier<? extends Paper> formId) {
+    private String _label = "Paper";
+
+    public PaperEntity(final Identifier<? extends Paper> formId) {
 		_formId = formId;
 		_topLeft = new EntityPoint(formId, Paper.Point.TopLeft);
 		_bottomLeft = new EntityPoint(formId, Paper.Point.BottomLeft);
@@ -64,18 +68,18 @@ public class PaperEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime) {
-		_topLeft.updateForRuntime(runtime);
-		_bottomLeft.updateForRuntime(runtime);
-		_topRight.updateForRuntime(runtime);
-		_bottomRight.updateForRuntime(runtime);
+	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+		_topLeft.updateForRuntime(runtime, analyzer);
+		_bottomLeft.updateForRuntime(runtime, analyzer);
+		_topRight.updateForRuntime(runtime, analyzer);
+		_bottomRight.updateForRuntime(runtime, analyzer);
 
-		_center.updateForRuntime(runtime);
+		_center.updateForRuntime(runtime, analyzer);
 
-		_top.updateForRuntime(runtime);
-		_right.updateForRuntime(runtime);
-		_bottom.updateForRuntime(runtime);
-		_left.updateForRuntime(runtime);
+		_top.updateForRuntime(runtime, analyzer);
+		_right.updateForRuntime(runtime, analyzer);
+		_bottom.updateForRuntime(runtime, analyzer);
+		_left.updateForRuntime(runtime, analyzer);
 
 		_shape.reset();
 		_shape.moveTo(_topLeft.getX(), _topLeft.getY());
@@ -83,6 +87,10 @@ public class PaperEntity implements Entity {
 		_shape.lineTo(_bottomRight.getX(), _bottomRight.getY());
 		_shape.lineTo(_bottomLeft.getX(), _bottomLeft.getY());
 		_shape.closePath();
+
+        Form form = runtime.get(_formId);
+
+        _label = form.getName().getValue();
 	}
 
 	@Override
@@ -121,5 +129,12 @@ public class PaperEntity implements Entity {
 	public boolean isGuide() {
 		return false;
 	}
+
+
+    @Override
+    public String getLabel() {
+        return _label;
+    }
+
 
 }

@@ -5,20 +5,21 @@ import reform.core.forms.relations.IntersectionPoint;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifier;
 import reform.math.Vec2;
+import reform.stage.elements.Entity;
 import reform.stage.elements.SnapPoint;
 
 public class IntersectionSnapPoint implements SnapPoint {
-	private final Identifier<? extends Form> _formIdB;
-	private final Identifier<? extends Form> _formIdA;
+	private final Entity _entityA;
+	private final Entity _entityB;
 
 	private final Vec2 _value = new Vec2();
 	private final int _index;
 
-	public IntersectionSnapPoint(final Identifier<? extends Form> formIdA,
-			final Identifier<? extends Form> formIdB, final int index,
+	public IntersectionSnapPoint(final Entity entityA,
+			final Entity entityB, final int index,
 			final Vec2 pos) {
-		_formIdA = formIdA;
-		_formIdB = formIdB;
+		_entityA = entityA;
+		_entityB = entityB;
 		_index = index;
 		_value.set(pos);
 	}
@@ -34,16 +35,17 @@ public class IntersectionSnapPoint implements SnapPoint {
 	}
 
 	public Identifier<? extends Form> getFormIdA() {
-		return _formIdA;
+		return _entityA.getId();
 	}
 
 	public Identifier<? extends Form> getFormIdB() {
-		return _formIdB;
+		return _entityB.getId();
 	}
 
 	@Override
 	public ReferencePoint createReference() {
-		return new IntersectionPoint(_index, _formIdA, _formIdB);
+		return new IntersectionPoint(_index, _entityA.getId(), _entityB.getId
+                ());
 	}
 
 	@Override
@@ -56,8 +58,15 @@ public class IntersectionSnapPoint implements SnapPoint {
 		}
 		final IntersectionSnapPoint other = (IntersectionSnapPoint) obj;
 
-		return _formIdA.equals(other._formIdA)
-				&& _formIdB.equals(other._formIdB) && _index == other._index;
+		return _entityA.getId().equals(other._entityA.getId())
+				&& _entityB.getId().equals(other._entityB.getId()) && _index
+                == other
+                ._index;
 	}
+
+    public String getLabel() {
+        return "Intersection of " + _entityA.getLabel() + " and " + _entityB
+                .getLabel();
+    }
 
 }

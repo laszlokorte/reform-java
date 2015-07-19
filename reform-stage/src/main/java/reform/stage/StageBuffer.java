@@ -45,8 +45,8 @@ class StageBuffer {
 					for (int k = intersections.length - 1; k >= 0; k--) {
 						if (intersections[k] != null) {
 							stage.addIntersectionPoint(
-									new IntersectionSnapPoint(e.getId(),
-											other.getId(), k,
+									new IntersectionSnapPoint(e,
+											other, k,
 											intersections[k]));
 						}
 					}

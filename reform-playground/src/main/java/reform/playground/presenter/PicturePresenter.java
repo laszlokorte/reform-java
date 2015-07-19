@@ -136,7 +136,7 @@ public class PicturePresenter {
 	private final ProjectRuntime _runtime;
 	private final PreviewCollector _previewCollector = new PreviewCollector();
 	private final StageCollector _stageCollector = new StageCollector(_stage,
-			new StageAdapter(_focus));
+			new StageAdapter(_focus), _analyzer);
 	private final StepSnapshotCollector _stepCollector = new StepSnapshotCollector(
 			new Vec2i(100, 60));
 
