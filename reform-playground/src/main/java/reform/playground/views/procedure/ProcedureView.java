@@ -80,11 +80,11 @@ public final class ProcedureView extends JComponent
 		textArea.setWrapStyleWord(true);
 		textArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		textArea.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(final MouseEvent e) {
-                e.getComponent().getParent().dispatchEvent(e);
-            }
-        });
+			@Override
+			public void mousePressed(final MouseEvent e) {
+				e.getComponent().getParent().dispatchEvent(e);
+			}
+		});
 		final DefaultCaret caret = (DefaultCaret) textArea.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
@@ -93,28 +93,28 @@ public final class ProcedureView extends JComponent
 	}
 
 	private final Pool<NullItem> _nullItemPool = new SimplePool<>(
-            new PoolFactory<NullItem>() {
-                @Override
-                public NullItem create() {
-                    return new NullItem(ProcedureView.this._adapter);
-                }
-            });
+			new PoolFactory<NullItem>() {
+				@Override
+				public NullItem create() {
+					return new NullItem(ProcedureView.this._adapter);
+				}
+			});
 
 	private final Pool<GroupItem> _groupItemPool = new SimplePool<>(
-            new PoolFactory<GroupItem>() {
-                @Override
-                public GroupItem create() {
-                    return new GroupItem(ProcedureView.this._adapter);
-                }
-            });
+			new PoolFactory<GroupItem>() {
+				@Override
+				public GroupItem create() {
+					return new GroupItem(ProcedureView.this._adapter);
+				}
+			});
 
 	private final Pool<PicturedItem> _picturedItemPool = new SimplePool<>(
-            new PoolFactory<PicturedItem>() {
-                @Override
-                public PicturedItem create() {
-                    return new PicturedItem(ProcedureView.this._adapter);
-                }
-            });
+			new PoolFactory<PicturedItem>() {
+				@Override
+				public PicturedItem create() {
+					return new PicturedItem(ProcedureView.this._adapter);
+				}
+			});
 
 	private static abstract class BaseItem extends JPanel {
 		private static final long serialVersionUID = 1L;
@@ -309,7 +309,7 @@ public final class ProcedureView extends JComponent
 	private final Box _inner = Box.createVerticalBox();
 	private final Adapter _adapter;
 
-    private final static BaseItem[] _emptyViews = new BaseItem[0];
+	private final static BaseItem[] _emptyViews = new BaseItem[0];
 	private BaseItem[] _views = _emptyViews;
 	private BaseItem _focused = null;
 	private int _focusedIndex = -1;
@@ -332,8 +332,8 @@ public final class ProcedureView extends JComponent
 
 	@Override
 	public void onCollectionCompleted(final StepSnapshotCollector collector) {
-        updateListIfNeeded();
-    }
+		updateListIfNeeded();
+	}
 
 	@Override
 	public void onFocusChanged(final InstructionFocus focus) {
@@ -346,7 +346,7 @@ public final class ProcedureView extends JComponent
 			_focused.setFocused(false);
 		}
 		_focusedIndex = i;
-		if (i > -1 && _views.length > i) {
+		if (i > -1 && _views.length > i && !_incomplete) {
 			_focused = _views[i];
 			_views[i].setFocused(true);
 
@@ -355,7 +355,6 @@ public final class ProcedureView extends JComponent
 					bounds.width, bounds.height + 30);
 
 			scrollRectToVisible(rect);
-
 		} else {
 			_focused = null;
 		}
@@ -364,79 +363,79 @@ public final class ProcedureView extends JComponent
 	private void updateListIfNeeded() {
 		if (_incomplete) {
 			SwingUtilities.invokeLater(() -> {
-                _emptyImg = null;
-                _views = new BaseItem[_adapter.getSize()];
-                _inner.removeAll();
-                _nullItemPool.release();
-                _groupItemPool.release();
-                _picturedItemPool.release();
+				_emptyImg = null;
+				_views = new BaseItem[_adapter.getSize()];
+				_inner.removeAll();
+				_nullItemPool.release();
+				_groupItemPool.release();
+				_picturedItemPool.release();
 
-                boolean shouldFocus = false;
-                for (int i = 0; i < _adapter.getSize(); i++) {
-                    if (_adapter.isEmptySlot(i)) {
-                        final NullItem item = _nullItemPool.take();
-                        item.setIndex(i);
-                        item.setFocused(false);
-                        _views[i] = item;
-                    } else if (_adapter.isGroup(i)) {
-                        final GroupItem item = _groupItemPool.take();
-                        item.setFocused(false);
-                        item.setIndex(i);
-                        item.setIndent(_adapter.getIndentation(i));
-                        item.setText(_adapter.getDescription(i));
-                        _views[i] = item;
-                    } else {
-                        Image img = _adapter.getImageAt(i);
-                        if (img == null) {
-                            img = getEmptyImage(_adapter.getImageWidth(),
-                                    _adapter.getImageHeight());
-                        }
-                        final PicturedItem item = _picturedItemPool.take();
-                        item.setFocused(false);
-                        item.setIndex(i);
-                        item.setIndent(_adapter.getIndentation(i));
-                        item.setText(_adapter.getDescription(i));
-                        item.setImage(img);
-                        _views[i] = item;
+				boolean shouldFocus = false;
+				for (int i = 0; i < _adapter.getSize(); i++) {
+					if (_adapter.isEmptySlot(i)) {
+						final NullItem item = _nullItemPool.take();
+						item.setIndex(i);
+						item.setFocused(false);
+						_views[i] = item;
+					} else if (_adapter.isGroup(i)) {
+						final GroupItem item = _groupItemPool.take();
+						item.setFocused(false);
+						item.setIndex(i);
+						item.setIndent(_adapter.getIndentation(i));
+						item.setText(_adapter.getDescription(i));
+						_views[i] = item;
+					} else {
+						Image img = _adapter.getImageAt(i);
+						if (img == null) {
+							img = getEmptyImage(_adapter.getImageWidth(),
+									_adapter.getImageHeight());
+						}
+						final PicturedItem item = _picturedItemPool.take();
+						item.setFocused(false);
+						item.setIndex(i);
+						item.setIndent(_adapter.getIndentation(i));
+						item.setText(_adapter.getDescription(i));
+						item.setImage(img);
+						_views[i] = item;
 
-                    }
+					}
 
-                    if (_adapter.hasFailed(i)) {
-                        _views[i].setError(
-                                _adapter.getError(i).getMessage());
-                    } else {
-                        _views[i].resetError();
-                    }
+					if (_adapter.hasFailed(i)) {
+						_views[i].setError(
+								_adapter.getError(i).getMessage());
+					} else {
+						_views[i].resetError();
+					}
 
-                    if (i == _focusedIndex) {
-                        if (_focused == null) {
-                            shouldFocus = true;
-                        }
-                        _views[i].setFocused(true);
-                        _focused = _views[i];
+					if (i == _focusedIndex) {
+						if (_focused == null) {
+							shouldFocus = true;
+						}
+						_views[i].setFocused(true);
+						_focused = _views[i];
 
-                    }
-                    _inner.add(_views[i]);
-                    _views[i].revalidate();
+					}
+					_inner.add(_views[i]);
+					_views[i].validate();
 
-                }
+				}
 
-                getParent().repaint();
+				getParent().repaint();
 
-                revalidate();
+				revalidate();
 
-                if (shouldFocus) {
-                    SwingUtilities.invokeLater(() -> {
-                        final Rectangle bounds = _focused.getBounds();
-                        final Rectangle rect = new Rectangle(bounds.x,
-                                bounds.y - 15, bounds.width,
-                                bounds.height + 30);
-                        scrollRectToVisible(rect);
-                    });
-                }
+				if (shouldFocus) {
+					SwingUtilities.invokeLater(() -> {
+						final Rectangle bounds = _focused.getBounds();
+						final Rectangle rect = new Rectangle(bounds.x,
+								bounds.y - 15, bounds.width,
+								bounds.height + 30);
+						scrollRectToVisible(rect);
+					});
+				}
 
-                _incomplete = false;
-            });
+				_incomplete = false;
+			});
 		}
 	}
 
