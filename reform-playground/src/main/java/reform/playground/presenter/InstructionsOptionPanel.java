@@ -54,6 +54,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		_panel.add(_spinner);
 		_panel.add(_checkbox);
 
+        _checkbox.setFocusable(false);
+
 		_spinner.addChangeListener(this);
 		_checkbox.addChangeListener(this);
 

@@ -61,6 +61,7 @@ import reform.playground.actions.ToggleToolOptionAction;
 import reform.playground.actions.WrapInIfAction;
 import reform.playground.actions.WrapInLoopAction;
 import reform.playground.listener.FocusAdjustmentProcedureListener;
+import reform.playground.listener.SelectionAdjustmentProcedureListener;
 import reform.playground.views.procedure.ProcedureView;
 import reform.rendering.icons.ActionBranchIcon;
 import reform.rendering.icons.ActionExportIcon;
@@ -125,6 +126,10 @@ public class PicturePresenter {
 	private final FocusAdjustmentProcedureListener _focusAdjustment = new FocusAdjustmentProcedureListener(
 			_focus);
 	private final FormSelection _selection = new FormSelection();
+    private final SelectionAdjustmentProcedureListener _selectionAdjustment =
+            new
+            SelectionAdjustmentProcedureListener(
+            _selection);
 	// private final Commander _commander = new Commander();
 	private final Stage _stage = new Stage();
 	private final HitTester _hitTester = new HitTester(_stage,
@@ -184,6 +189,7 @@ public class PicturePresenter {
 
 		final EventedProcedure eProcedure = picture.getEventedProcedure();
 		eProcedure.addListener(_focusAdjustment);
+        eProcedure.addListener(_selectionAdjustment);
 		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer,
 				_focus, _stepCollector, eProcedure));
 		_stagePresenter = new StagePresenter(_stage, _selection, _toolState,
@@ -477,6 +483,18 @@ public class PicturePresenter {
 
 			toolBarRight.add(button);
 		}
+
+        toolBarRight.addSeparator();
+
+
+        {
+            final FormOptionPanel formOptionPanelPanel = new
+                    FormOptionPanel(
+                    eProcedure, _analyzer, _selection);
+
+            toolBarRight.add(formOptionPanelPanel.getComponent());
+
+        }
 
 		rightSide.add(toolBarRight, BorderLayout.PAGE_START);
 		_stageScroller = new JScrollPane(_stagePresenter.getView(),
