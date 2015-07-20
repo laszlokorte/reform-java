@@ -430,6 +430,9 @@ public class PicturePresenter
 			@Override
 			public void onFinishEvaluation(final ProjectRuntime runtime)
 			{
+				if(_selection.isSet() && _stage.getEntityForId(_selection.getSelected()) == null) {
+					_selection.reset();
+				}
 				_toolController.refresh();
 				for (int i = 0; i < _listeners.size(); i++)
 				{
@@ -770,7 +773,6 @@ public class PicturePresenter
 		public void onFinishEvaluation(final ProjectRuntime runtime)
 		{
 			_pathPool.release();
-
 		}
 
 		@Override
