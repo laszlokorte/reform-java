@@ -519,7 +519,12 @@ public class PicturePresenter
 				{
 					final int index = _analyzer.indexOf(focus.getFocused());
 					_procedureView.setFocus(index);
-					
+
+					Identifier<?extends Form> form = _focus.getFocused().getTarget();
+					if(_analyzer.getForm(form) != null)
+					{
+						_selection.setSelection(form);
+					}
 				}
 				else
 				{
