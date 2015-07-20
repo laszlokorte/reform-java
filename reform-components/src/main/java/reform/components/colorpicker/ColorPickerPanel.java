@@ -7,8 +7,9 @@ import java.awt.*;
 
 public class ColorPickerPanel extends JPanel {
     private final ColorModel _model;
-    private final HSVColorPlane _plane;
-    private final HSVColorTrack _track;
+    private final HSVColorPlane _svPlane;
+    private final HSVColorTrack _hueTrack;
+    private final AlphaTrack _alphaTrack;
     private final JPanel _numberPanel = new JPanel();
     private final JPanel _hsvPanel = new JPanel();
 
@@ -37,19 +38,22 @@ public class ColorPickerPanel extends JPanel {
 
     public ColorPickerPanel(ColorModel model) {
         _model = model;
-        _plane = new HSVColorPlane(_model);
-        _track = new HSVColorTrack(_model);
+        _svPlane = new HSVColorPlane(_model);
+        _hueTrack = new HSVColorTrack(_model);
+        _alphaTrack = new AlphaTrack(_model);
         setLayout(new BorderLayout());
         add(_hsvPanel, BorderLayout.CENTER);
         add(_numberPanel, BorderLayout.SOUTH);
 
 
-        _plane.setPreferredSize(new Dimension(250, 250));
-        _track.setPreferredSize(new Dimension(250, 25));
+        _svPlane.setPreferredSize(new Dimension(250, 250));
+        _hueTrack.setPreferredSize(new Dimension(24, 250));
+        _alphaTrack.setPreferredSize(new Dimension(250, 24));
 
-        _hsvPanel.setLayout(new BoxLayout(_hsvPanel, BoxLayout.Y_AXIS));
-        _hsvPanel.add(_plane);
-        _hsvPanel.add(_track);
+        _hsvPanel.setLayout(new BorderLayout());
+        _hsvPanel.add(_svPlane, BorderLayout.CENTER);
+        _hsvPanel.add(_hueTrack, BorderLayout.EAST);
+        _hsvPanel.add(_alphaTrack,BorderLayout.SOUTH);
 
 
         _model.addListener(this::onChangePlane);

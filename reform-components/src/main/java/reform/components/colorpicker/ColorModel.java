@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by laszlokorte on 19.07.15.
  */
 public class ColorModel {
+
     public static interface Listener {
         public void onColorChange(ColorModel model);
     }
@@ -22,10 +23,14 @@ public class ColorModel {
     private double _value = 0;
 
     public void setRGBA(double r, double g, double b, double a) {
+        _alpha = a;
+        setRGB(r,g,b);
+    }
+
+    public void setRGB(double r, double g, double b) {
         _red = r;
         _green = g;
         _blue = b;
-        _alpha = a;
 
         updateHSV();
 
@@ -35,10 +40,15 @@ public class ColorModel {
     }
 
     public void setHSVA(double h, double s, double v, double a) {
+        _alpha = a;
+
+        setHSV(h,s,v);
+    }
+
+    public void setHSV(double h, double s, double v) {
         _hue = h;
         _saturation = s;
         _value = v;
-        _alpha = a;
 
         updateRGB();
 
@@ -47,9 +57,15 @@ public class ColorModel {
         }
     }
 
+    public void setAlpha(final double alpha) {
+        _alpha = alpha;
+        for(int i=0,j=_listeners.size();i<j;i++) {
+            _listeners.get(i).onColorChange(this);
+        }
+    }
 
     private void updateRGB() {
-        double h = _hue, s = _saturation, v = _value, a = _alpha;
+        double h = _hue, s = _saturation, v = _value;
         if (s == 0 || v == 0) {
             _red = _green = _blue= v;
             return;
@@ -108,7 +124,7 @@ public class ColorModel {
 
 
     private void updateHSV() {
-        double r = _red, g = _green, b = _blue, a = _alpha;
+        double r = _red, g = _green, b = _blue;
         double h,s,v;
 
         double min = Math.min(Math.min(r,g),b);

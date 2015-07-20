@@ -30,7 +30,7 @@ public class HSVColorTrack extends JComponent {
         public void mousePressed(final MouseEvent e) {
             super.mousePressed(e);
             requestFocus();
-            double h = 1.0* e.getX() / (getWidth() - 4);
+            double h = 1.0* e.getY() / (getHeight() - 4);
 
             _model.setHSVA(Math.min(1,Math.max(0, h)), _model.getSaturation()
                     , _model.getValue(), _model.getAlpha());
@@ -39,7 +39,7 @@ public class HSVColorTrack extends JComponent {
         @Override
         public void mouseDragged(final MouseEvent e) {
             super.mousePressed(e);
-            double h = 1.0* e.getX() / (getWidth() - 4);
+            double h = 1.0* e.getY() / (getHeight() - 4);
 
             _model.setHSVA(Math.min(1, Math.max(0, h)), _model.getSaturation()
                     , _model.getValue(), _model.getAlpha());
@@ -51,8 +51,8 @@ public class HSVColorTrack extends JComponent {
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                _linGrad = new LinearGradientPaint(0,0,getWidth(),
-                        0,
+                _linGrad = new LinearGradientPaint(0,0,0,
+                        getHeight(),
                         gradientPositions, gradientColors);
             }
         });
@@ -79,6 +79,10 @@ public class HSVColorTrack extends JComponent {
         g.fillRect(0, 0, width, height);
 
         g.setColor(Color.WHITE);
-        g.drawRect((int)((width-4)*_model.getHue()),1,6,height-2);
+        g.fillRoundRect(3, 4+(int) ((height - 11) * _model.getHue()), width - 6,
+                3,2,2);
+        g.setColor(Color.BLACK);
+        g.drawRoundRect(3, 4+(int) ((height - 11) * _model.getHue()), width - 6,
+                3,2,2);
     }
 }
