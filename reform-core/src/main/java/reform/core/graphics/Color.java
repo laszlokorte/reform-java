@@ -56,22 +56,22 @@ public class Color
 
 	public void setAlpha(final double alpha)
 	{
-		_argb = (_argb & ~MASK_ALPHA) | (((int) (alpha * 255)) << 24);
+		_argb = (_argb & ~MASK_ALPHA) | (((int) Math.round(alpha * 255)) << 24);
 	}
 
 	public void setRed(final double red)
 	{
-		_argb = (_argb & ~MASK_RED) | (((int) (red * 255)) << 16);
+		_argb = (_argb & ~MASK_RED) | (((int) Math.round(red * 255)) << 16);
 	}
 
 	public void setGreen(final double green)
 	{
-		_argb = (_argb & ~MASK_GREEN) | (((int) (green * 255)) << 8);
+		_argb = (_argb & ~MASK_GREEN) | (((int) Math.round(green * 255)) << 8);
 	}
 
 	public void setBlue(final double blue)
 	{
-		_argb = (_argb & ~MASK_BLUE) | ((int) (blue * 255));
+		_argb = (_argb & ~MASK_BLUE) | ((int) Math.round(blue * 255));
 	}
 
 

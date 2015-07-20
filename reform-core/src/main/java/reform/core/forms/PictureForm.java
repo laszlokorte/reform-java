@@ -96,8 +96,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ScaledLength(_width, Side.Right.x * 0.5),
-				                           new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)),
-		                              new Name("Top Right"), Point.TopRight));
+				                           new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)), new Name("Top Right"), Point.TopRight));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ScaledLength(_width, Side.Right.x * 0.5),

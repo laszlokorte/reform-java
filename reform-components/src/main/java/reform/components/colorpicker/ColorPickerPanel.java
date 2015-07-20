@@ -89,10 +89,10 @@ public class ColorPickerPanel extends JPanel
 	private void onChangePlane(final ColorModel colorModel)
 	{
 		_ownChange = true;
-		_fieldRed.setValue((int) (_model.getRed() * MAX));
-		_fieldGreen.setValue((int) (_model.getGreen() * MAX));
-		_fieldBlue.setValue((int) (_model.getBlue() * MAX));
-		_fieldAlpha.setValue((int) (_model.getAlpha() * MAX));
+		_fieldRed.setValue((int) Math.round(_model.getRed() * MAX));
+		_fieldGreen.setValue((int) Math.round(_model.getGreen() * MAX));
+		_fieldBlue.setValue((int) Math.round(_model.getBlue() * MAX));
+		_fieldAlpha.setValue((int) Math.round(_model.getAlpha() * MAX));
 		_ownChange = false;
 	}
 
