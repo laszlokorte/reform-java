@@ -13,12 +13,6 @@
  - Form Groups
  - Export animation
  - Snap point filter: option to show only snap points of selected form
+ - Zoom
 
-=========
-= Notes =
-=========
-
-	Concepts:
-	---------
-	 - Tool Selection State (None, Form, Handle, EntityPoint, SnapPoint, CropPoint)
-	 - View (Preview, Selection, Snap, SnapPair, Handle, EntityPoint, Crop)
+ - improve scrolling when resizing canvas
