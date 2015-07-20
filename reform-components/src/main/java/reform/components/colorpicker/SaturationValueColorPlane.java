@@ -2,23 +2,17 @@ package reform.components.colorpicker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 
-public class AlphaTrack extends JComponent {
+public class SaturationValueColorPlane extends JComponent {
     private BufferedImage _overlay;
     private final Color[] BASEH = {Color.WHITE, new Color
             (0x00FFFFFF, true)};
     private final Color[] BASEV = {Color.BLACK, new Color
             (0x00000000, true)};
     private final float[] POS = {0, 1};
-
-    private final Composite _composite = AlphaComposite.getInstance
-            (AlphaComposite.DST_IN, 1.0F);
 
     private final ColorModel _model;
 
@@ -31,21 +25,26 @@ public class AlphaTrack extends JComponent {
         public void mousePressed(final MouseEvent e) {
             super.mousePressed(e);
             requestFocus();
-            double alpha = 1.0 * e.getX() / getWidth();
+            double s = 1.0 * e.getX() / getWidth();
+            double v = 1 - 1.0 * e.getY() / getHeight();
 
-            _model.setAlpha(Math.min(1, Math.max(0, alpha)));
+            _model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math
+                    .min(1, Math.max(0, v)), _model.getAlpha());
         }
 
         @Override
         public void mouseDragged(final MouseEvent e) {
             super.mouseDragged(e);
-            double alpha = 1.0 * e.getX() / getWidth();
+            double s = 1.0 * e.getX() / getWidth();
+            double v = 1 - 1.0 * e.getY() / getHeight();
 
-            _model.setAlpha(Math.min(1, Math.max(0, alpha)));
+            _model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math
+                            .min(1, Math.max(0, v)),
+                    _model.getAlpha());
         }
     };
 
-    public AlphaTrack(ColorModel model) {
+    public SaturationValueColorPlane(ColorModel model) {
         _model = model;
         setFocusable(true);
         addMouseListener(_listener);
@@ -62,30 +61,16 @@ public class AlphaTrack extends JComponent {
                                 , getWidth(), 0, POS, BASEH);
 
 
+                LinearGradientPaint verticalGrad = new LinearGradientPaint
+                        (0, getHeight(), 0, 0, POS, BASEV);
+
                 Graphics2D g2 = (Graphics2D) _overlay.getGraphics();
-
-
-
-                int rows = 3;
-                int cellSize = getHeight() / rows;
-                int cols = (getWidth()) / cellSize;
-
-                for(int j=0;j<=cols;j++) {
-                    for(int i=0;i<=rows;i++) {
-                        if(i%2 == j%2) {
-                            g2.setColor(Color.GRAY);
-                        } else {
-                            g2.setColor(Color.WHITE);
-                        }
-                        g2.fillRect(j*cellSize, i*cellSize, cellSize,cellSize);
-                    }
-                }
-
-                g2.setComposite(_composite);
 
                 g2.setPaint(horizontalGrad);
                 g2.fillRect(0, 0, getWidth(), getHeight());
 
+                g2.setPaint(verticalGrad);
+                g2.fillRect(0, 0, getWidth(), getHeight());
 
                 g2.dispose();
             }
@@ -95,8 +80,7 @@ public class AlphaTrack extends JComponent {
     }
 
     private void onChange(final ColorModel colorModel) {
-        _color = new Color((float)colorModel.getRed(), (float)colorModel.getGreen(),
-                (float) colorModel.getBlue());
+        _color = Color.getHSBColor((float) colorModel.getHue(), 1, 1);
         repaint();
     }
 
@@ -110,14 +94,26 @@ public class AlphaTrack extends JComponent {
 
         g2.drawImage(_overlay, 0, 0, null);
 
-        g.setColor(Color.WHITE);
-        g.fillRoundRect(4+(int) ((width - 11) * _model.getAlpha()), 3, 3,
-                height - 6,
-                2,2);
-        g.setColor(Color.BLACK);
-        g.drawRoundRect(4+(int) ((width - 11) * _model.getAlpha()), 3, 3,
-                height - 6,
-                2,2);
+        double cr = _model.getRed();
+        double cg = _model.getGreen();
+        double cb = _model.getBlue();
+
+
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints
+                .VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.BLACK);
+        g2.drawOval((int) (width * _model.getSaturation()) - 4, height - (int)
+                (height *
+                        _model.getValue()
+                ) - 4, 8, 8);
+
+        g2.setColor(Color.WHITE);
+        g2.drawOval((int) (width * _model.getSaturation()) - 5, height - (int)
+                (height *
+                        _model.getValue()
+                ) - 5, 10, 10);
+
 
     }
 

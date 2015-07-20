@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
-public class HSVColorTrack extends JComponent {
+public class HueColorTrack extends JComponent {
     private static final Color C1 = new Color(255, 0, 0);
     private static final Color C2 = new Color(255, 255, 0);
     private static final Color C3 = new Color(0, 255, 0);
@@ -46,7 +46,7 @@ public class HSVColorTrack extends JComponent {
         }
     };
 
-    public HSVColorTrack(ColorModel model) {
+    public HueColorTrack(ColorModel model) {
         _model = model;
 
         addComponentListener(new ComponentAdapter() {

@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class ColorPickerPanel extends JPanel {
     private final ColorModel _model;
-    private final HSVColorPlane _svPlane;
-    private final HSVColorTrack _hueTrack;
-    private final AlphaTrack _alphaTrack;
+    private final SaturationValueColorPlane _svPlane;
+    private final HueColorTrack _hueTrack;
+    private final AlphaColorTrack _alphaTrack;
     private final JPanel _numberPanel = new JPanel();
     private final JPanel _hsvPanel = new JPanel();
 
@@ -38,9 +38,9 @@ public class ColorPickerPanel extends JPanel {
 
     public ColorPickerPanel(ColorModel model) {
         _model = model;
-        _svPlane = new HSVColorPlane(_model);
-        _hueTrack = new HSVColorTrack(_model);
-        _alphaTrack = new AlphaTrack(_model);
+        _svPlane = new SaturationValueColorPlane(_model);
+        _hueTrack = new HueColorTrack(_model);
+        _alphaTrack = new AlphaColorTrack(_model);
         setLayout(new BorderLayout());
         add(_hsvPanel, BorderLayout.CENTER);
         add(_numberPanel, BorderLayout.SOUTH);
