@@ -21,6 +21,7 @@
               <element id="module-output" name="reform-serializer" />
               <element id="module-output" name="reform-stage" />
               <element id="module-output" name="reform-tools" />
+              <element id="module-output" name="reform-components" />
             </element>
             <element id="directory" name="libs">
               <element id="file-copy" path="$PROJECT_DIR$/reform-serializer/json.jar" />

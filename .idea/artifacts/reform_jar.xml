@@ -18,6 +18,7 @@
       <element id="module-output" name="reform-stage" />
       <element id="module-output" name="reform-tools" />
       <element id="extracted-dir" path="$PROJECT_DIR$/reform-serializer/json.jar" path-in-jar="/" />
+      <element id="module-output" name="reform-components" />
     </root>
   </artifact>
 </component>
