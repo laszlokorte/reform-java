@@ -33,8 +33,9 @@ public class ColorPicker
 
 	private void onChange(final ColorModel colorModel)
 	{
-		_icon.setColor(new Color((float) colorModel.getRed(), (float) colorModel.getGreen(), (float) colorModel
-				.getBlue(), (float) colorModel.getAlpha()));
+		_icon.setColor(
+				new Color((float) colorModel.getRed(), (float) colorModel.getGreen(), (float) colorModel.getBlue(),
+				          (float) colorModel.getAlpha()));
 		_button.repaint();
 	}
 

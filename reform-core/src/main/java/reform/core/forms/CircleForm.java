@@ -28,11 +28,11 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 	private final transient Translator _translator = new BasicTranslator(_centerPoint);
 
-	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint), new
-			BasicAngleRotator(_rotation));
+	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint),
+	                                                                new BasicAngleRotator(_rotation));
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint), new
-			BasicLengthScaler(_radius, _rotation, 0));
+	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint),
+	                                                             new BasicLengthScaler(_radius, _rotation, 0));
 
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius, _rotation);
 
@@ -86,29 +86,34 @@ public final class CircleForm extends BaseForm<CircleForm>
 	{
 		super(id, SIZE, name);
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint
-				(_radius, new ConstantLength(0)), _rotation)), new Name("Right"), Point.Right));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _rotation)), new Name("Right"), Point
+				.Right));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ConstantLength(0), _radius), _rotation)), new Name("Bottom"), Point.Bottom));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), _radius), _rotation)), new Name("Bottom"),
+		                              Point.Bottom));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_radius, -1), new ConstantLength(0)), _rotation)), new Name("Left"), Point.Left));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_radius, -1), new ConstantLength(0)), _rotation)),
+		                              new Name("Left"), Point.Left));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ConstantLength(0), new ScaledLength(_radius, -1)), _rotation)), new Name("Top"), Point.Top));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_radius, -1)), _rotation)),
+		                              new Name("Top"), Point.Top));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Top, new Name("Top"), CircleQuarterAnchor.Quarter.North, _radius,
-				_rotation));
+		                                  _rotation));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Right, new Name("Right"), CircleQuarterAnchor.Quarter.East, _radius,
-				_rotation));
+		                                  _rotation));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Bottom, new Name("Bottom"), CircleQuarterAnchor.Quarter.South,
-				_radius, _rotation));
+		                                  _radius,
+		                                  _rotation));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Left, new Name("Left"), CircleQuarterAnchor.Quarter.West, _radius,
-				_rotation));
+		                                  _rotation));
 
 	}
 

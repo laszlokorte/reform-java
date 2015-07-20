@@ -29,11 +29,13 @@ public final class PieForm extends BaseForm<PieForm>
 
 	private final transient Translator _translator = new BasicTranslator(_centerPoint);
 
-	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint), new
-			BasicAngleRotator(_angleUpperBound), new BasicAngleRotator(_angleLowerBound));
+	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint),
+	                                                                new BasicAngleRotator(_angleUpperBound),
+	                                                                new BasicAngleRotator(_angleLowerBound));
 
 	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint), new
-			AbsoluteScaler(new BasicLengthScaler(_radius, _angleUpperBound, 0)));
+			AbsoluteScaler(
+			new BasicLengthScaler(_radius, _angleUpperBound, 0)));
 
 	private final Outline _outline = new NullOutline();
 
@@ -87,11 +89,12 @@ public final class PieForm extends BaseForm<PieForm>
 	{
 		super(id, SIZE, name);
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint
-				(_radius, new ConstantLength(0)), _angleLowerBound)), new Name("Start"), Point.Start));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _angleLowerBound)), new Name("Start"), Point.Start));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint
-				(_radius, new ConstantLength(0)), _angleUpperBound)), new Name("End"), Point.End));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _angleUpperBound)), new Name("End"),
+		                              Point.End));
 
 		addAnchor(new PieCornerAnchor(Anchor.Start, new Name("Start"), _radius, _angleLowerBound));
 		addAnchor(new PieCornerAnchor(Anchor.End, new Name("End"), _radius, _angleUpperBound));

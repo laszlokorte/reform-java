@@ -41,24 +41,29 @@ public final class WrapInLoopAction extends AbstractAction implements Instructio
 	@Override
 	public void onFocusChanged(final InstructionFocus focus)
 	{
-		setEnabled(focus.isSet() && !(focus.getFocused() instanceof ForLoopInstruction) && !(focus.getFocused()
-				.getParent() instanceof ForLoopInstruction) && !(focus.getFocused() instanceof NullInstruction));
+		setEnabled(
+				focus.isSet() && !(focus.getFocused() instanceof ForLoopInstruction) && !(focus.getFocused().getParent
+						() instanceof ForLoopInstruction) && !(focus.getFocused() instanceof NullInstruction));
 	}
 
 	@Override
 	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
 	InstructionGroup parent)
 	{
-		setEnabled(_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
-				.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof NullInstruction));
+		setEnabled(
+				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
+						.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof
+						NullInstruction));
 	}
 
 	@Override
 	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
 	InstructionGroup parent)
 	{
-		setEnabled(_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
-				.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof NullInstruction));
+		setEnabled(
+				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
+						.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof
+						NullInstruction));
 	}
 
 	@Override

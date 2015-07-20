@@ -62,7 +62,7 @@ public class ExportImageAction extends AbstractAction
 				{
 
 					final BufferedImage image = new BufferedImage(_stage.getSize().x, _stage.getSize().y,
-							BufferedImage.TYPE_INT_RGB);
+					                                              BufferedImage.TYPE_INT_RGB);
 
 					final Graphics2D g2 = image.createGraphics();
 

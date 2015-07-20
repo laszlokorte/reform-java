@@ -115,8 +115,8 @@ public class ToolState
 		}
 
 		return _activeSnapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) _activeSnapPoint)
-				.getFormIdA().equals(e.getId()) || ((IntersectionSnapPoint) _activeSnapPoint).getFormIdB().equals(e
-				.getId()));
+				.getFormIdA().equals(
+				e.getId()) || ((IntersectionSnapPoint) _activeSnapPoint).getFormIdB().equals(e.getId()));
 	}
 
 	public void setActiveCropPoint(final CropPoint p)

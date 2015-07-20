@@ -57,29 +57,30 @@ public final class Paper implements Form
 
 	public Paper()
 	{
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)), new
-				Name("Top Left"), Point.TopLeft));
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, new ConstantLength(0)), new Name("Top " +
-				"Right"), Point.TopRight));
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, _height), new Name("Bottom Right"), Point
-				.BottomRight));
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), _height), new Name("Bottom " +
-				"" + "Left"), Point.BottomLeft));
-
-		_snapPoints.add(new ExposedPoint(new CenterPoint(new ComposedCartesianPoint(new ConstantLength(0), new
-				ConstantLength(0)), new ComposedCartesianPoint(_width, _height)), new Name("Center"), Point.Center));
-
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), new ConstantLength
-				(0)), new Name("Top"), Point.Top));
-
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_height, 0
-		.5)), new Name("Right"), Point.Right));
-
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), _height), new Name
-				("Bottom"), Point.Bottom));
-
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, new ScaledLength(_height, 0.5)), new Name
-				("Left"), Point.Left));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
+		                                 new Name("Top Left"), Point.TopLeft));
+		_snapPoints.add(
+				new ExposedPoint(new ComposedCartesianPoint(_width, new ConstantLength(0)), new Name("Top " + "Right"),
+				                 Point.TopRight));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, _height), new Name("Bottom Right"),
+		                                 Point.BottomRight));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), _height),
+		                                 new Name("Bottom" + " " + "" + "Left"), Point.BottomLeft));
+		_snapPoints.add(new ExposedPoint(
+				new CenterPoint(new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
+				                new ComposedCartesianPoint(_width, _height)), new Name("Center"), Point.Center));
+		_snapPoints.add(
+				new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), new ConstantLength(0)),
+				                 new Name("Top"), Point.Top));
+		_snapPoints.add(
+				new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_height, 0.5)),
+				                 new Name("Right"), Point.Right));
+		_snapPoints.add(
+				new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), _height), new Name
+						("Bottom"), Point.Bottom));
+		_snapPoints.add(
+				new ExposedPoint(new ComposedCartesianPoint(_width, new ScaledLength(_height, 0.5)), new Name("Left"),
+				                 Point.Left));
 	}
 
 	@Override

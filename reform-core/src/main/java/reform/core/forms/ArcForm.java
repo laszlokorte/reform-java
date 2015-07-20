@@ -31,8 +31,9 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint, _endPoint);
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint), new
-			BasicPointScaler(_endPoint), new AbsoluteScaler(new BasicLengthScaler(_offset, new ConstantAngle(0), 0)));
+	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint),
+	                                                             new BasicPointScaler(_endPoint), new AbsoluteScaler(
+			new BasicLengthScaler(_offset, new ConstantAngle(0), 0)));
 
 	private final Outline _outline = new NullOutline();
 
@@ -90,13 +91,13 @@ public final class ArcForm extends BaseForm<ArcForm>
 		addSnapPoint(new ExposedPoint(_endPoint, new Name("End"), Point.End));
 
 		addSnapPoint(new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _offset), new Name("Center"),
-				Point.Center));
+		                              Point.Center));
 
 		addAnchor(new StaticPointAnchor(Anchor.Start, new Name("Start"), _startPoint));
 		addAnchor(new StaticPointAnchor(Anchor.End, new Name("End"), _endPoint));
 
 		addAnchor(new OrthogonalLengthAnchor(Anchor.Center, new Name("ControlPoint"), _offset, _startPoint,
-				_endPoint));
+		                                     _endPoint));
 	}
 
 	@Override
@@ -142,8 +143,8 @@ public final class ArcForm extends BaseForm<ArcForm>
 			angleB = tmp - 2 * Math.PI;
 		}
 
-		_arc.setArc(centerX - absRad, centerY - absRad, 2 * absRad, 2 * absRad, Math.toDegrees(angleA), Math.toDegrees
-				(angleB - angleA), Arc2D.CHORD);
+		_arc.setArc(centerX - absRad, centerY - absRad, 2 * absRad, 2 * absRad, Math.toDegrees(angleA),
+		            Math.toDegrees(angleB - angleA), Arc2D.CHORD);
 
 		target.append(_arc, false);
 	}

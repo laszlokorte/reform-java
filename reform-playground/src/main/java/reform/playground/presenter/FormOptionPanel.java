@@ -55,8 +55,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				_attribute = null; // prevent cycle
 				final Color currentColor = attr.getValue();
 
-				_colorPicker.getModel().setRGBA(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue()
-						, currentColor.getAlpha());
+				_colorPicker.getModel().setRGBA(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(),
+				                                currentColor.getAlpha());
 			}
 			_attribute = attr;
 		}

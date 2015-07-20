@@ -56,8 +56,8 @@ public class SelectionTool implements Tool
 	{
 		_state = State.Pressed;
 
-		if (_formSelection.isSet() && _stage.getEntityForId(_formSelection.getSelected()).contains(_cursor.getPosition
-				()))
+		if (_formSelection.isSet() && _stage.getEntityForId(_formSelection.getSelected()).contains(
+				_cursor.getPosition()))
 		{
 			_toolState.setSelectionState(ToolState.SelectionState.Form);
 

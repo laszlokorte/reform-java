@@ -206,7 +206,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 		if (!_instructionBitmaps.containsKey(instruction))
 		{
 			_instructionBitmaps.put(instruction, new BufferedImage(_currentScaledSize.x, _currentScaledSize.y,
-					BufferedImage.TYPE_4BYTE_ABGR));
+			                                                       BufferedImage.TYPE_4BYTE_ABGR));
 		}
 		return _instructionBitmaps.get(instruction);
 	}

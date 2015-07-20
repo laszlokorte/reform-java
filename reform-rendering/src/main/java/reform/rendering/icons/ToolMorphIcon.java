@@ -32,8 +32,8 @@ public class ToolMorphIcon implements Icon
 		shape.add(dot);
 		shape.subtract(new Area(new Ellipse2D.Double(-270, -490, 80, 80)));
 
-		_shape = AffineTransform.getTranslateInstance(100, 100).createTransformedShape(AffineTransform
-				.getScaleInstance(0.85, 0.85).createTransformedShape(shape));
+		_shape = AffineTransform.getTranslateInstance(100, 100).createTransformedShape(
+				AffineTransform.getScaleInstance(0.85, 0.85).createTransformedShape(shape));
 
 	}
 

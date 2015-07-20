@@ -67,8 +67,8 @@ public class SaveAsAction extends AbstractAction
 					JOptionPane.showMessageDialog(null, "Error: File not found");
 				} catch (final SerializationError e)
 				{
-					JOptionPane.showMessageDialog(null, String.format("Error while serializing Project. (%s)", e
-							.getMessage()));
+					JOptionPane.showMessageDialog(null, String.format("Error while serializing Project. (%s)",
+					                                                  e.getMessage()));
 					e.printStackTrace();
 				} catch (final Exception e)
 				{

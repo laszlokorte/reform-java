@@ -76,8 +76,8 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return directionAsString() + (_alignment == Alignment.Leading ? "from " : "around ") + _refA.getDescription
-				(analyzer) + " to " + _refB.getDescription(analyzer);
+		return directionAsString() + (_alignment == Alignment.Leading ? "from " : "around ") + _refA.getDescription(
+				analyzer) + " to " + _refB.getDescription(analyzer);
 	}
 
 	private String directionAsString()

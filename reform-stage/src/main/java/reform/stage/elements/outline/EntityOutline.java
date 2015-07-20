@@ -45,9 +45,9 @@ public abstract class EntityOutline
 		final double circleRadius = circle._radius;
 
 		_two[0] = Vector.intersectionForCircleLine(lineP1.x, lineP1.y, lineP2.x, lineP2.y, circleCenter.x,
-				circleCenter.y, circleRadius, 0);
+		                                           circleCenter.y, circleRadius, 0);
 		_two[1] = Vector.intersectionForCircleLine(lineP1.x, lineP1.y, lineP2.x, lineP2.y, circleCenter.x,
-				circleCenter.y, circleRadius, 1);
+		                                           circleCenter.y, circleRadius, 1);
 
 		return _two;
 	}

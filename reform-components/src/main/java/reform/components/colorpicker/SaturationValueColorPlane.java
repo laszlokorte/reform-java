@@ -33,8 +33,8 @@ public class SaturationValueColorPlane extends JComponent
 				final double s = 1.0 * e.getX() / getWidth();
 				final double v = 1 - 1.0 * e.getY() / getHeight();
 
-				_model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math.min(1, Math.max(0, v)), _model
-						.getAlpha());
+				_model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math.min(1, Math.max(0, v)),
+				               _model.getAlpha());
 			}
 
 			@Override
@@ -44,8 +44,8 @@ public class SaturationValueColorPlane extends JComponent
 				final double s = 1.0 * e.getX() / getWidth();
 				final double v = 1 - 1.0 * e.getY() / getHeight();
 
-				_model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math.min(1, Math.max(0, v)), _model
-						.getAlpha());
+				_model.setHSVA(_model.getHue(), Math.min(1, Math.max(0, s)), Math.min(1, Math.max(0, v)),
+				               _model.getAlpha());
 			}
 		};
 		addMouseListener(listener);
@@ -58,11 +58,15 @@ public class SaturationValueColorPlane extends JComponent
 			{
 				_overlay = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
-				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0, getWidth(), 0, new float[]{0,
-						1}, new Color[]{Color.WHITE, new Color(0x00ffffff, true)});
+				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0, getWidth(), 0,
+				                                                                   new float[]{0, 1},
+				                                                                   new Color[]{Color.WHITE, new Color(
+						                                                                   0x00ffffff, true)});
 
-				final LinearGradientPaint verticalGrad = new LinearGradientPaint(0, getHeight(), 0, 0, new float[]{0,
-						1}, new Color[]{Color.BLACK, new Color(0x00000000, true)});
+				final LinearGradientPaint verticalGrad = new LinearGradientPaint(0, getHeight(), 0, 0,
+				                                                                 new float[]{0, 1},
+				                                                                 new Color[]{Color.BLACK, new Color(
+						                                                                 0x00000000, true)});
 
 				final Graphics2D g2 = (Graphics2D) _overlay.getGraphics();
 
@@ -102,7 +106,7 @@ public class SaturationValueColorPlane extends JComponent
 
 		g2.setColor(Color.WHITE);
 		g2.drawOval((int) (width * _model.getSaturation()) - 5, height - (int) (height * _model.getValue()) - 5, 10,
-				10);
+		            10);
 
 
 	}

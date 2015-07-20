@@ -113,8 +113,8 @@ public class ScaleFormTool implements Tool
 
 			_currentInstruction = new ScaleInstruction(_currentHandle.getFormId(), _currentFactor, pivotPoint);
 			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
-			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(), _cursor.getPosition().y -
-					_currentHandle.getY());
+			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
+			                   _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 
 			_toolState.setSelectionState(ToolState.SelectionState.None);
@@ -263,8 +263,8 @@ public class ScaleFormTool implements Tool
 			return 0;
 		}
 
-		final double factor = Math.signum(Vector.dot(deltaProjectedX, deltaProjectedY, deltaStartX, deltaStartY)) *
-				projectedDistance / startDistance;
+		final double factor = Math.signum(Vector.dot(deltaProjectedX, deltaProjectedY, deltaStartX,
+		                                             deltaStartY)) * projectedDistance / startDistance;
 
 		return stepped ? Vector.inStepsOf(factor, 0.1) : factor;
 

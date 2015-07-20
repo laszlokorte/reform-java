@@ -65,7 +65,8 @@ public class IntersectionPoint implements ReferencePoint
 		final Form formA = analyzer.getForm(_formAId);
 		final Form formB = analyzer.getForm(_formBId);
 
-		return "Intersection#" + (_index + 1) + " of " + (formA != null ? formA.getName().getValue() : "???") + " and" +
+		return "Intersection#" + (_index + 1) + " of " + (formA != null ? formA.getName().getValue() : "???") + " " +
+				"and" +
 				" " +
 				"" + (formB != null ? formB.getName().getValue() : "???");
 	}

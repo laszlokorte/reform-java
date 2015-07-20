@@ -29,7 +29,7 @@ public class ProjectPresenter implements Listener
 	private final JPanel _bottom = new JPanel(new BorderLayout());
 
 	private final JScrollPane _scroller = new JScrollPane(_picturesView, ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
-			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+	                                                      ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 	private final JSplitPane _split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, _scroller, _bottom);
 	private final IdentifierEmitter _idEmitter;
 
@@ -192,8 +192,8 @@ public class ProjectPresenter implements Listener
 		@Override
 		public void onDoubleClick()
 		{
-			final Picture newPicture = new Picture(_presenter._idEmitter.emit(), new Name("New Picture"), new Vec2i
-					(400, 400), new DataSet(), new Procedure());
+			final Picture newPicture = new Picture(_presenter._idEmitter.emit(), new Name("New Picture"),
+			                                       new Vec2i(400, 400), new DataSet(), new Procedure());
 			_presenter._project.addPicture(newPicture);
 			_presenter.selectPicture(newPicture.getId());
 		}

@@ -26,8 +26,9 @@ public class OpenExampleAction extends AbstractAction
 		_windowBuilder = windowBuilder;
 
 		putValue(NAME, "Open Example");
-		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit()
-				.getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('O',
+		                                                        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
+				                                                        InputEvent.SHIFT_DOWN_MASK));
 	}
 
 	@Override
@@ -42,8 +43,8 @@ public class OpenExampleAction extends AbstractAction
 		try
 		{
 
-			final Project project = serializer.read(new JSONObject(new JSONTokener(getClass().getResourceAsStream
-					("/new.json"))));
+			final Project project = serializer.read(
+					new JSONObject(new JSONTokener(getClass().getResourceAsStream("/new.json"))));
 
 			_windowBuilder.open(null, project, idEmitter, false);
 		} catch (final JSONException e)

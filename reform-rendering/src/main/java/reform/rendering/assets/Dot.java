@@ -41,12 +41,12 @@ public class Dot implements Asset
 		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setPaint(new GradientPaint(0, 0, fillColor.brighter(), 0, _bitmap.getHeight(), fillColor));
-		g.fillOval(strokeWidthInt, strokeWidthInt, _bitmap.getWidth() - 2 * strokeWidthInt, _bitmap.getHeight() - 2 *
-				strokeWidthInt);
+		g.fillOval(strokeWidthInt, strokeWidthInt, _bitmap.getWidth() - 2 * strokeWidthInt,
+		           _bitmap.getHeight() - 2 * strokeWidthInt);
 		g.setColor(strokeColor);
 		g.setStroke(stroke);
-		g.drawOval(strokeWidthInt, strokeWidthInt, _bitmap.getWidth() - 2 * strokeWidthInt, _bitmap.getHeight() - 2 *
-				strokeWidthInt);
+		g.drawOval(strokeWidthInt, strokeWidthInt, _bitmap.getWidth() - 2 * strokeWidthInt,
+		           _bitmap.getHeight() - 2 * strokeWidthInt);
 		g.setColor(strokeColor);
 	}
 

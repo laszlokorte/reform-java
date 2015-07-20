@@ -106,10 +106,10 @@ public class MorphFormTool implements Tool
 			_baseInstruction = _focus.getFocused();
 			_currentDistance = new ConstantDistance(new Vec2());
 			_currentInstruction = new MorphInstruction(_currentHandle.getFormId(), _currentHandle.getAnchorId(),
-					_currentDistance);
+			                                           _currentDistance);
 			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
-			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(), _cursor.getPosition().y -
-					_currentHandle.getY());
+			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
+			                   _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 			_toolState.setViewState(ToolState.ViewState.SnapHandle);
 			_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
@@ -213,8 +213,8 @@ public class MorphFormTool implements Tool
 				if (currentSnapPoint == null)
 				{
 					_state = State.Pressed;
-					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPosition.x - _currentOffset.x, _cursor
-							.getPosition().y - _startPosition.y - _currentOffset.y);
+					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPosition.x - _currentOffset.x,
+					                            _cursor.getPosition().y - _startPosition.y - _currentOffset.y);
 					if (input.getShiftModifier().isActive())
 					{
 						adjustVector(delta);
@@ -246,8 +246,8 @@ public class MorphFormTool implements Tool
 					}
 					if (input.getShiftModifier().isActive())
 					{
-						d.setDirection(getDirectionFor(_cursor.getX() - _startPosition.x, _cursor.getY() -
-								_startPosition.y));
+						d.setDirection(
+								getDirectionFor(_cursor.getX() - _startPosition.x, _cursor.getY() - _startPosition.y));
 					}
 					else
 					{

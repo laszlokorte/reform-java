@@ -18,8 +18,8 @@ public class ShapeTextIcon implements Icon
 		final Shape s = v.getOutline();
 		final Rectangle bounds = s.getBounds();
 		_size = Math.max(bounds.width, bounds.height) + 10;
-		_shape = AffineTransform.getTranslateInstance(-bounds.x - bounds.width / 2, -bounds.y - bounds.height / 2)
-				.createTransformedShape(s);
+		_shape = AffineTransform.getTranslateInstance(-bounds.x - bounds.width / 2,
+		                                              -bounds.y - bounds.height / 2).createTransformedShape(s);
 	}
 
 	@Override

@@ -149,7 +149,9 @@ public final class Vector
 			bX, final double bY, final double eps)
 	{
 		final double delta = Vector.distance(pX, pY, aX, aY) + Vector.distance(pX, pY, bX, bY) - Vector.distance(aX,
-				aY, bX, bY);
+		                                                                                                         aY,
+		                                                                                                         bX,
+		                                                                                                         bY);
 		return -eps < delta && delta < eps;
 	}
 

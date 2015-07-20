@@ -28,8 +28,8 @@ public class NewProjectAction extends AbstractAction
 		_idEmitter = idEmitter;
 
 		putValue(NAME, "New");
-		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit()
-				.getMenuShortcutKeyMask()));
+		putValue(Action.ACCELERATOR_KEY,
+		         KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class NewProjectAction extends AbstractAction
 	{
 		final Project project = new Project();
 
-		project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350), new DataSet(), new
-				Procedure()));
+		project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350), new DataSet(),
+		                               new Procedure()));
 
 		_windowBuilder.open(null, project, _idEmitter, false);
 	}

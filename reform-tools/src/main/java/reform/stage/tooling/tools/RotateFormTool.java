@@ -113,8 +113,8 @@ public class RotateFormTool implements Tool
 
 			_currentInstruction = new RotateInstruction(_currentHandle.getFormId(), _currentAngle, pivotPoint);
 			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
-			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(), _cursor.getPosition().y -
-					_currentHandle.getY());
+			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
+			                   _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 
 			_toolState.setSelectionState(ToolState.SelectionState.None);
@@ -241,7 +241,8 @@ public class RotateFormTool implements Tool
 		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos;
 
 		final double angle = -Vector.angle(_cursor.getX() - _currentOffset.x, _cursor.getY() - _currentOffset.y,
-				pivotPos.x, pivotPos.y) + Vector.angle(_startPosition.x, _startPosition.y, pivotPos.x, pivotPos.y);
+		                                   pivotPos.x, pivotPos.y) + Vector.angle(_startPosition.x, _startPosition.y,
+		                                                                          pivotPos.x, pivotPos.y);
 
 		return stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle;
 	}

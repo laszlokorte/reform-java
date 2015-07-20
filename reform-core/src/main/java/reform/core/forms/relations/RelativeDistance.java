@@ -40,8 +40,8 @@ public class RelativeDistance implements TranslationDistance
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return getDirectionString() + " so " + _refA.getDescription(analyzer) + " matches " + _refB.getDescription
-				(analyzer);
+		return getDirectionString() + " so " + _refA.getDescription(analyzer) + " matches " + _refB.getDescription(
+				analyzer);
 	}
 
 	private String getDirectionString()

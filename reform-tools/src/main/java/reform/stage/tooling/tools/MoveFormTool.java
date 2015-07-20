@@ -101,8 +101,8 @@ public class MoveFormTool implements Tool
 			_currentDistance = new ConstantDistance(new Vec2());
 			_currentInstruction = new TranslateInstruction(_currentPoint.getFormId(), _currentDistance);
 			_eProcedure.addInstruction(_currentInstruction, Position.After, _focus.getFocused());
-			_currentOffset.set(_cursor.getPosition().x - _currentPoint.getX(), _cursor.getPosition().y - _currentPoint
-					.getY());
+			_currentOffset.set(_cursor.getPosition().x - _currentPoint.getX(),
+			                   _cursor.getPosition().y - _currentPoint.getY());
 			_focus.setFocus(_currentInstruction);
 
 			_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
@@ -204,8 +204,8 @@ public class MoveFormTool implements Tool
 				if (currentSnapPoint == null)
 				{
 					_state = State.Pressed;
-					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPosition.x - _currentOffset.x, _cursor
-							.getPosition().y - _startPosition.y - _currentOffset.y);
+					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPosition.x - _currentOffset.x,
+					                            _cursor.getPosition().y - _startPosition.y - _currentOffset.y);
 					if (input.getShiftModifier().isActive())
 					{
 						adjustVector(delta);
@@ -237,8 +237,8 @@ public class MoveFormTool implements Tool
 					}
 					if (input.getShiftModifier().isActive())
 					{
-						d.setDirection(getDirectionFor(currentSnapPoint.getX() - _startPosition.x, currentSnapPoint
-								.getY() - _startPosition.y));
+						d.setDirection(getDirectionFor(currentSnapPoint.getX() - _startPosition.x,
+						                               currentSnapPoint.getY() - _startPosition.y));
 					}
 					else
 					{

@@ -54,8 +54,10 @@ public class AlphaColorTrack extends JComponent
 			{
 				_overlay = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
-				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0, getWidth(), 0, new float[]{0,
-						1}, new Color[]{Color.WHITE, new Color(0x00ffffff, true)});
+				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0, getWidth(), 0,
+				                                                                   new float[]{0, 1},
+				                                                                   new Color[]{Color.WHITE, new Color(
+						                                                                   0x00ffffff, true)});
 
 				final Graphics2D g2 = (Graphics2D) _overlay.getGraphics();
 

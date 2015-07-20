@@ -232,16 +232,18 @@ public class ProjectSerializer
 
 	private RelativeFixSizeDestination readRelativeFixSizeDestination(final JSONObject jsonObject)
 	{
-		final RelativeFixSizeDestination d = new RelativeFixSizeDestination(readPoint(jsonObject.getJSONObject("ref"))
-				, readVector(jsonObject.getJSONObject("delta")));
+		final RelativeFixSizeDestination d = new RelativeFixSizeDestination(readPoint(jsonObject.getJSONObject("ref")),
+		                                                                    readVector(
+				                                                                    jsonObject.getJSONObject
+						                                                                    ("delta")));
 		d.setAlignment(readAlignment(jsonObject.getJSONObject("alignment")));
 		return d;
 	}
 
 	private InitialDestination readRelativeDynamicSizeDestination(final JSONObject jsonObject)
 	{
-		final RelativeDynamicSizeDestination d = new RelativeDynamicSizeDestination(readPoint(jsonObject.getJSONObject
-				("refA")), readPoint(jsonObject.getJSONObject("refB")));
+		final RelativeDynamicSizeDestination d = new RelativeDynamicSizeDestination(
+				readPoint(jsonObject.getJSONObject("refA")), readPoint(jsonObject.getJSONObject("refB")));
 		d.setAlignment(readAlignment(jsonObject.getJSONObject("alignment")));
 		d.setDirection(readDirection(jsonObject.getJSONObject("direction")));
 		return d;
@@ -409,8 +411,8 @@ public class ProjectSerializer
 
 	private TranslationDistance readRelativeDistance(final JSONObject jsonObject)
 	{
-		final RelativeDistance d = new RelativeDistance(readPoint(jsonObject.getJSONObject("refA")), readPoint
-				(jsonObject.getJSONObject("refB")));
+		final RelativeDistance d = new RelativeDistance(readPoint(jsonObject.getJSONObject("refA")),
+		                                                readPoint(jsonObject.getJSONObject("refB")));
 
 		d.setDirection(readDirection(jsonObject.getJSONObject("direction")));
 
@@ -434,8 +436,8 @@ public class ProjectSerializer
 
 	private ScaleInstruction readScaleInstruction(final JSONObject object)
 	{
-		return new ScaleInstruction(readId(object, "form"), readScaleFactor(object.getJSONObject("factor")), readPoint
-				(object.getJSONObject("fixpoint")));
+		return new ScaleInstruction(readId(object, "form"), readScaleFactor(object.getJSONObject("factor")),
+		                            readPoint(object.getJSONObject("fixpoint")));
 	}
 
 	private ReferencePoint readPoint(final JSONObject jsonObject)
@@ -467,8 +469,8 @@ public class ProjectSerializer
 
 	private ReferencePoint readIntersectionPoint(final JSONObject jsonObject)
 	{
-		return new IntersectionPoint(jsonObject.getInt("index"), readId(jsonObject, "formAId"), readId(jsonObject,
-				"formBId"));
+		return new IntersectionPoint(jsonObject.getInt("index"), readId(jsonObject, "formAId"),
+		                             readId(jsonObject, "formBId"));
 	}
 
 	private ReferencePoint readForeignFormsPoint(final JSONObject jsonObject)
@@ -503,7 +505,7 @@ public class ProjectSerializer
 	private RotateInstruction readRotateInstruction(final JSONObject object)
 	{
 		return new RotateInstruction(readId(object, "form"), readRotationAngle(object.getJSONObject("angle")),
-				readPoint(object.getJSONObject("fixpoint")));
+		                             readPoint(object.getJSONObject("fixpoint")));
 	}
 
 	private RotationAngle readRotationAngle(final JSONObject jsonObject)

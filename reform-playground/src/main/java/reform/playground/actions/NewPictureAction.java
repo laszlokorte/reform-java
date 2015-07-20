@@ -33,7 +33,7 @@ public class NewPictureAction extends AbstractAction
 	public void actionPerformed(final ActionEvent e)
 	{
 		_project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(400, 400), new DataSet(),
-				new Procedure()));
+		                                new Procedure()));
 	}
 
 }

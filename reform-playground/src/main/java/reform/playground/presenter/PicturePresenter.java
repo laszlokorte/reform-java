@@ -67,8 +67,8 @@ public class PicturePresenter
 	private final InstructionFocus _focus = new InstructionFocus();
 	private final FocusAdjustmentProcedureListener _focusAdjustment = new FocusAdjustmentProcedureListener(_focus);
 	private final FormSelection _selection = new FormSelection();
-	private final SelectionAdjustmentProcedureListener _selectionAdjustment = new SelectionAdjustmentProcedureListener
-			(_selection);
+	private final SelectionAdjustmentProcedureListener _selectionAdjustment = new SelectionAdjustmentProcedureListener(
+			_selection);
 	// private final Commander _commander = new Commander();
 	private final Stage _stage = new Stage();
 	private final HitTester _hitTester = new HitTester(_stage, new HitTesterAdapter(_selection));
@@ -124,8 +124,9 @@ public class PicturePresenter
 
 		_stepCollector.addListener(_procedureView);
 
-		final JScrollPane procedureScroller = new JScrollPane(_procedureView, ScrollPaneConstants
-				.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		final JScrollPane procedureScroller = new JScrollPane(_procedureView,
+		                                                      ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+		                                                      ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		procedureScroller.setMinimumSize(_procedureView.getMinimumSize());
 
 		final JPanel rightSide = new JPanel(new BorderLayout());
@@ -213,18 +214,19 @@ public class PicturePresenter
 
 		final SelectionTool selectionTool = new SelectionTool(_toolState, _selection, _cursor, _stage);
 		final MoveFormTool translationTool = new MoveFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
-				eProcedure);
+		                                                      eProcedure);
 		final ScaleFormTool scaleTool = new ScaleFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
-				eProcedure);
+		                                                  eProcedure);
 		final RotateFormTool rotateTool = new RotateFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
-				eProcedure);
+		                                                     eProcedure);
 		final MorphFormTool morphTool = new MorphFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
-				eProcedure);
+		                                                  eProcedure);
 		final Tool cropTool = new CropTool(_toolState, _cursor, _picture);
 		final PreviewTool previewTool = new PreviewTool(_toolState);
 		{
-			final Tool createLineTool = new CreateFormTool(selectionTool, new FormFactory<>("Line", idEmitter,
-					Builders.Line), _toolState, _cursor, _hitTester, _focus, eProcedure);
+			final Tool createLineTool = new CreateFormTool(selectionTool,
+			                                               new FormFactory<>("Line", idEmitter, Builders.Line),
+			                                               _toolState, _cursor, _hitTester, _focus, eProcedure);
 
 			final JButton button = new JButton(new SelectToolAction(_toolController, createLineTool, "Create Line"));
 			button.setFocusable(false);
@@ -235,12 +237,14 @@ public class PicturePresenter
 		}
 
 		{
-			final CreateFormTool createRectTool = new CreateFormTool(selectionTool, new FormFactory<>("Rectangle",
-					idEmitter, Builders.Rectangle), _toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createRectTool = new CreateFormTool(selectionTool,
+			                                                         new FormFactory<>("Rectangle", idEmitter,
+			                                                                           Builders.Rectangle), _toolState,
+			                                                         _cursor, _hitTester, _focus, eProcedure);
 			createRectTool.setDiagonalDirection(true);
 
-			final JButton button = new JButton(new SelectToolAction(_toolController, createRectTool, "Create " +
-					"Rectangle"));
+			final JButton button = new JButton(
+					new SelectToolAction(_toolController, createRectTool, "Create " + "Rectangle"));
 			button.setFocusable(false);
 
 			button.setIcon(_rectIcon);
@@ -249,12 +253,14 @@ public class PicturePresenter
 		}
 
 		{
-			final CreateFormTool createCircleTool = new CreateFormTool(selectionTool, new FormFactory<>("Circle",
-					idEmitter, Builders.Circle), _toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createCircleTool = new CreateFormTool(selectionTool,
+			                                                           new FormFactory<>("Circle", idEmitter,
+			                                                                             Builders.Circle), _toolState,
+			                                                           _cursor, _hitTester, _focus, eProcedure);
 			createCircleTool.setAutoCenter(true);
 
-			final JButton button = new JButton(new SelectToolAction(_toolController, createCircleTool, "Create " +
-					"Circle"));
+			final JButton button = new JButton(
+					new SelectToolAction(_toolController, createCircleTool, "Create " + "Circle"));
 			button.setFocusable(false);
 
 			button.setIcon(_circleIcon);
@@ -263,12 +269,14 @@ public class PicturePresenter
 		}
 
 		{
-			final CreateFormTool createPieTool = new CreateFormTool(selectionTool, new FormFactory<>("Pie", idEmitter,
-					Builders.Pie), _toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createPieTool = new CreateFormTool(selectionTool,
+			                                                        new FormFactory<>("Pie", idEmitter, Builders.Pie),
+			                                                        _toolState, _cursor, _hitTester, _focus,
+			                                                        eProcedure);
 			createPieTool.setAutoCenter(true);
 
-			final JButton button = new JButton(new SelectToolAction(_toolController, createPieTool, "Create Pie " +
-					"Segment"));
+			final JButton button = new JButton(
+					new SelectToolAction(_toolController, createPieTool, "Create Pie " + "Segment"));
 			button.setFocusable(false);
 
 			button.setIcon(_pieIcon);
@@ -277,8 +285,10 @@ public class PicturePresenter
 		}
 
 		{
-			final Tool createArcTool = new CreateFormTool(selectionTool, new FormFactory<>("Arc", idEmitter, Builders
-					.Arc), _toolState, _cursor, _hitTester, _focus, eProcedure);
+			final Tool createArcTool = new CreateFormTool(selectionTool,
+			                                              new FormFactory<>("Arc", idEmitter, Builders.Arc),
+			                                              _toolState,
+			                                              _cursor, _hitTester, _focus, eProcedure);
 
 			final JButton button = new JButton(new SelectToolAction(_toolController, createArcTool, "Create Arc"));
 			button.setFocusable(false);
@@ -397,7 +407,7 @@ public class PicturePresenter
 
 		rightSide.add(toolBarRight, BorderLayout.PAGE_START);
 		_stageScroller = new JScrollPane(_stagePresenter.getView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		                                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		rightSide.add(_stageScroller, BorderLayout.CENTER);
 
@@ -920,9 +930,9 @@ public class PicturePresenter
 				return ((EntityPoint) snapPoint).getFormId().equals(_selection.getSelected());
 			}
 
-			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA()
-					.equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals
-					(_selection.getSelected()));
+			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(
+					_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(
+					_selection.getSelected()));
 
 		}
 	}

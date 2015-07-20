@@ -75,11 +75,12 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Translator _translator = new BasicTranslator(_centerPoint);
 
-	private final Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint), new BasicAngleRotator
-			(_rotation));
+	private final Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint),
+	                                                      new BasicAngleRotator(_rotation));
 
-	private final Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint), new BasicLengthScaler
-			(_width, _rotation, 0), new BasicLengthScaler(_height, _rotation, Math.PI / 2));
+	private final Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint),
+	                                                   new BasicLengthScaler(_width, _rotation, 0),
+	                                                   new BasicLengthScaler(_height, _rotation, Math.PI / 2));
 
 	public static PictureForm construct(final Identifier<PictureForm> id, final Name name)
 	{
@@ -91,55 +92,58 @@ public final class PictureForm extends BaseForm<PictureForm>
 		super(id, SIZE, name);
 
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Right.x * 0.5), new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)),
-				new Name("Top Right"), Point.TopRight));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Right.x * 0.5),
+				                           new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)), new Name("Top Right"), Point.TopRight));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Right.x * 0.5), new ScaledLength(_height, Side.Bottom.y * 0.5)), _rotation))
-				, new Name("Bottom Right"), Point.BottomRight));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Right.x * 0.5),
+				                           new ScaledLength(_height, Side.Bottom.y * 0.5)), _rotation)),
+		                              new Name("Bottom Right"), Point.BottomRight));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Left.x * 0.5), new ScaledLength(_height, Side.Bottom.y * 0.5)), _rotation)),
-				new Name("Bottom Left"), Point.BottomLeft));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Left.x * 0.5),
+				                           new ScaledLength(_height, Side.Bottom.y * 0.5)), _rotation)),
+		                              new Name("Bottom Left"), Point.BottomLeft));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Left.x * 0.5), new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)),
-				new Name("Top Left"), Point.TopLeft));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Left.x * 0.5),
+				                           new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)),
+		                              new Name("Top Left"), Point.TopLeft));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Right.x * 0.5), new ConstantLength(0)), _rotation)), new Name("Right"),
-				Point.Right));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Right.x * 0.5), new ConstantLength(0)),
+				_rotation)), new Name("Right"), Point.Right));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ConstantLength(0), new ScaledLength(_height, Side.Bottom.y * 0.5)), _rotation)), new Name("Bottom"),
-				Point.Bottom));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_height, Side.Bottom.y * 0.5)),
+				_rotation)), new Name("Bottom"), Point.Bottom));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ScaledLength(_width, Side.Left.x * 0.5), new ConstantLength(0)), _rotation)), new Name("Left"), Point
-				.Left));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_width, Side.Left.x * 0.5), new ConstantLength(0)),
+				_rotation)), new Name("Left"), Point.Left));
 
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(new ComposedCartesianPoint(new
-				ConstantLength(0), new ScaledLength(_height, Side.Top.y * 0.5)), _rotation)), new Name("Top"), Point
-				.Top));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_height, Side.Top.y * 0.5)),
+				_rotation)), new Name("Top"), Point.Top));
 
 		addAnchor(new RectangleAnchor(Anchor.TopLeft, new Name("Top Left"), _centerPoint, _rotation, _width, _height,
-				Side.TopLeft));
-		addAnchor(new RectangleAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint, _rotation, _width,
-				_height, Side.TopRight));
+		                              Side.TopLeft));
+		addAnchor(new RectangleAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint, _rotation, _width, _height,
+		                              Side.TopRight));
 		addAnchor(new RectangleAnchor(Anchor.BottomRight, new Name("Bottom Right"), _centerPoint, _rotation, _width,
-				_height, Side.BottomRight));
+		                              _height, Side.BottomRight));
 		addAnchor(new RectangleAnchor(Anchor.BottomLeft, new Name("Bottom Left"), _centerPoint, _rotation, _width,
-				_height, Side.BottomLeft));
+		                              _height, Side.BottomLeft));
 
-		addAnchor(new RectangleAnchor(Anchor.Top, new Name("Center"), _centerPoint, _rotation, _width, _height, Side
-				.Top));
-		addAnchor(new RectangleAnchor(Anchor.Right, new Name("Right"), _centerPoint, _rotation, _width, _height, Side
-				.Right));
+		addAnchor(new RectangleAnchor(Anchor.Top, new Name("Center"), _centerPoint, _rotation, _width, _height,
+		                              Side.Top));
+		addAnchor(new RectangleAnchor(Anchor.Right, new Name("Right"), _centerPoint, _rotation, _width, _height,
+		                              Side.Right));
 		addAnchor(new RectangleAnchor(Anchor.Bottom, new Name("Bottom"), _centerPoint, _rotation, _width, _height,
-				Side.Bottom));
-		addAnchor(new RectangleAnchor(Anchor.Left, new Name("Left"), _centerPoint, _rotation, _width, _height, Side
-				.Left));
+		                              Side.Bottom));
+		addAnchor(new RectangleAnchor(Anchor.Left, new Name("Left"), _centerPoint, _rotation, _width, _height,
+		                              Side.Left));
 	}
 
 	@Override
@@ -258,9 +262,9 @@ public final class PictureForm extends BaseForm<PictureForm>
 			final double oppY = oldCenterY - oldDeltaY;
 
 			final double newX = oldX + Vector.projectionX(deltaX, deltaY, _side.projectionMultiplier * oldDeltaX,
-					_side.projectionMultiplier * oldDeltaY);
+			                                              _side.projectionMultiplier * oldDeltaY);
 			final double newY = oldY + Vector.projectionY(deltaX, deltaY, _side.projectionMultiplier * oldDeltaX,
-					_side.projectionMultiplier * oldDeltaY);
+			                                              _side.projectionMultiplier * oldDeltaY);
 
 			final double newCenterX = (oppX + newX) / 2;
 			final double newCenterY = (oppY + newY) / 2;
@@ -341,8 +345,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		}
 
 		@Override
-		public void scale(final Runtime runtime, final double factor, final double fixX, final double fixY, final
-		double directionX, final double directionY)
+		public void scale(final Runtime runtime, final double factor, final double fixX, final double fixY, final double directionX, final double directionY)
 		{
 			_otherScaler.scale(runtime, factor, fixX, fixY, directionX, directionY);
 			_form.refresh(runtime);

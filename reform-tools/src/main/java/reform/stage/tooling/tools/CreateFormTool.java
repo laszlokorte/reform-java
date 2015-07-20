@@ -113,8 +113,8 @@ public class CreateFormTool implements Tool
 			final Form currentForm = _formFactory.build();
 			_currentInstruction = new CreateFormInstruction(currentForm, _currentDestination);
 			_eProcedure.addInstruction(_currentInstruction, Position.After, _focus.getFocused());
-			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(), _cursor.getPosition().y - _startPoint
-					.getY());
+			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
+			                   _cursor.getPosition().y - _startPoint.getY());
 			_focus.setFocus(_currentInstruction);
 			_toolState.setViewState(ToolState.ViewState.SnapEntity);
 			_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
@@ -209,7 +209,7 @@ public class CreateFormTool implements Tool
 				{
 					final RelativeFixSizeDestination d;
 					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPoint.getX() - _currentOffset.x,
-							_cursor.getPosition().y - _startPoint.getY() - _currentOffset.y);
+					                            _cursor.getPosition().y - _startPoint.getY() - _currentOffset.y);
 					if (input.getShiftModifier().isActive())
 					{
 						adjustVector(delta);
@@ -240,8 +240,8 @@ public class CreateFormTool implements Tool
 					}
 					if (input.getShiftModifier().isActive())
 					{
-						d.setDirection(getDirectionFor(_currentPoint.getX() - _startPoint.getX(), _currentPoint.getY()
-								- _startPoint.getY()));
+						d.setDirection(getDirectionFor(_currentPoint.getX() - _startPoint.getX(),
+						                               _currentPoint.getY() - _startPoint.getY()));
 					}
 					else
 					{
@@ -250,8 +250,8 @@ public class CreateFormTool implements Tool
 					_state = State.PressedSnapped;
 					_currentDestination = d;
 				}
-				_currentDestination.setAlignment(input.getAltModifier().isActive() != _autoCenter ? Alignment.Center :
-						Alignment.Leading);
+				_currentDestination.setAlignment(
+						input.getAltModifier().isActive() != _autoCenter ? Alignment.Center : Alignment.Leading);
 				_currentInstruction.setDestination(_currentDestination);
 				_eProcedure.publishInstructionChange(_currentInstruction);
 				break;

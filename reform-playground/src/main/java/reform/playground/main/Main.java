@@ -21,8 +21,8 @@ public final class Main
 			final EventedProject eProject = new EventedProject(project);
 			final IdentifierEmitter idEmitter = new IdentifierEmitter(100);
 
-			final Picture pic = new Picture(idEmitter.emit(), new Name("Foo Picture"), new Vec2i(700, 400), new
-					DataSet(), new Procedure());
+			final Picture pic = new Picture(idEmitter.emit(), new Name("Foo Picture"), new Vec2i(700, 400),
+			                                new DataSet(), new Procedure());
 			eProject.addPicture(pic);
 
 			final WindowBuilder windowBuilder = new WindowBuilder();

@@ -43,7 +43,7 @@ public class StagePresenter
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
 		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer(stage, toolState, formSelection, analyzer,
-				toolTipRenderer, cursor);
+		                                                                 toolTipRenderer, cursor);
 
 
 		_canvas.addRenderer(_backgroundRenderer);
