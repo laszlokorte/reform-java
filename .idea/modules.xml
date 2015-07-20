@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/reform-commands/reform-commands.iml" filepath="$PROJECT_DIR$/reform-commands/reform-commands.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reform-components/reform-components.iml" filepath="$PROJECT_DIR$/reform-components/reform-components.iml" />
       <module fileurl="file://$PROJECT_DIR$/reform-core/reform-core.iml" filepath="$PROJECT_DIR$/reform-core/reform-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/reform-data/reform-data.iml" filepath="$PROJECT_DIR$/reform-data/reform-data.iml" />
       <module fileurl="file://$PROJECT_DIR$/reform-evented/reform-evented.iml" filepath="$PROJECT_DIR$/reform-evented/reform-evented.iml" />

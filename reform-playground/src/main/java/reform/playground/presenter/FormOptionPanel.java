@@ -1,5 +1,6 @@
 package reform.playground.presenter;
 
+import reform.components.colorpicker.ColorPicker;
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.forms.LineForm;
@@ -33,11 +34,13 @@ public final class FormOptionPanel implements FormSelection.Listener,
     private final JLabel _label = new JLabel("");
     private final JLabel _guideLabel = new JLabel("Guide:");
 
-    private final ColorIcon _colorIconBackground = new ColorIcon(new Color
-            (0xB7B7B7), 18);
-    private final ColorIcon _colorIconStroke = new ColorIcon(Color.BLACK, 18);
-    private final JButton _colorChooserBackground = new JButton(_colorIconBackground);
-    private final JButton _colorChooserStroke = new JButton(_colorIconStroke);
+    private final ColorPicker _colorPickerBackground = new ColorPicker();
+    private final ColorPicker _colorPickerStroke = new ColorPicker();
+
+    private final JButton _colorPickerBackgroundButton = _colorPickerBackground
+            .getButton();
+    private final JButton _colorPickerStrokeButton = _colorPickerStroke
+            .getButton();
 
     private final JCheckBox _guideCheckbox = new JCheckBox();
 
@@ -57,10 +60,8 @@ public final class FormOptionPanel implements FormSelection.Listener,
         _panel.add(_guideCheckbox);
         _guideCheckbox.setBorder(null);
 
-        _panel.add(_colorChooserBackground);
-        _colorChooserBackground.setBorder(null);
-        _panel.add(_colorChooserStroke);
-        _colorChooserStroke.setBorder(null);
+        _panel.add(_colorPickerBackgroundButton);
+        _panel.add(_colorPickerStrokeButton);
 
 
         _guideCheckbox.setFocusable(false);
@@ -122,9 +123,9 @@ public final class FormOptionPanel implements FormSelection.Listener,
                     .getName().getValue());
             _panel.setVisible(true);
 
-            _colorChooserStroke.setEnabled(drawType == DrawingType.Draw);
-            _colorChooserBackground.setEnabled(drawType == DrawingType.Draw);
-            _colorChooserBackground.setVisible(
+            _colorPickerStrokeButton.setEnabled(drawType == DrawingType.Draw);
+            _colorPickerBackgroundButton.setEnabled(drawType == DrawingType.Draw);
+            _colorPickerBackgroundButton.setVisible(
                     formClass != LineForm
                     .class);
             _guideCheckbox.setSelected(drawType == DrawingType.Guide);
