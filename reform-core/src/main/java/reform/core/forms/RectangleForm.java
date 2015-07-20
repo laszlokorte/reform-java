@@ -3,6 +3,8 @@ package reform.core.forms;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.NullOutline;
 import reform.core.forms.outline.Outline;
@@ -26,6 +28,7 @@ import reform.core.forms.transformation.CompositeScaler;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
+import reform.core.graphics.Color;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -43,6 +46,14 @@ public final class RectangleForm extends BaseForm<RectangleForm> {
 	private final transient StaticAngle _rotation = new StaticAngle(getId(), 4);
 
 	private final Outline _outline = new NullOutline();
+
+    private final Attribute<Color> _fillColorAttribute = new Attribute<>
+            ("Fill", Color.class, new Color());
+    private final Attribute<Color> _strokeColorAttribute = new Attribute<>
+            ("Stroke", Color.class, new Color());
+
+    private final AttributeSet _attributes = new AttributeSet
+            (_fillColorAttribute, _strokeColorAttribute);
 
 	public enum Point implements ExposedPointToken<RectangleForm> {
 		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(
@@ -335,4 +346,8 @@ public final class RectangleForm extends BaseForm<RectangleForm> {
 		}
 	}
 
+    @Override
+    public AttributeSet getAttributes() {
+        return _attributes;
+    }
 }

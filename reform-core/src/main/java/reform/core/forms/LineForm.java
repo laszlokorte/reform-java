@@ -2,6 +2,8 @@ package reform.core.forms;
 
 import java.awt.geom.GeneralPath;
 
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.StaticPointAnchor;
 import reform.core.forms.outline.LineOutline;
 import reform.core.forms.outline.Outline;
@@ -15,6 +17,7 @@ import reform.core.forms.transformation.BasicTranslator;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
+import reform.core.graphics.Color;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -38,6 +41,12 @@ public final class LineForm extends BaseForm<LineForm> {
 			_endPoint);
 
 	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
+
+    private final Attribute<Color> _strokeColorAttribute = new Attribute<>
+            ("Color", Color.class, new Color());
+
+    private final AttributeSet _attributes = new AttributeSet
+            (_strokeColorAttribute);
 
 	public enum Point implements ExposedPointToken<LineForm> {
 		Center(0), Start(1), End(2);
@@ -103,9 +112,9 @@ public final class LineForm extends BaseForm<LineForm> {
 			final GeneralPath.Double target) {
 
 		target.moveTo(_startPoint.getXValueForRuntime(runtime),
-				_startPoint.getYValueForRuntime(runtime));
+                _startPoint.getYValueForRuntime(runtime));
 		target.lineTo(_endPoint.getXValueForRuntime(runtime),
-				_endPoint.getYValueForRuntime(runtime));
+                _endPoint.getYValueForRuntime(runtime));
 	}
 
 	@Override
@@ -127,4 +136,9 @@ public final class LineForm extends BaseForm<LineForm> {
 	public Outline getOutline() {
 		return _outline;
 	}
+
+    @Override
+    public AttributeSet getAttributes() {
+        return _attributes;
+    }
 }

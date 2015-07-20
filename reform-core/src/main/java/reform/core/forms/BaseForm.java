@@ -1,5 +1,7 @@
 package reform.core.forms;
 
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.relations.ExposedPoint;
 import reform.core.graphics.DrawingType;
@@ -14,7 +16,7 @@ public abstract class BaseForm<T extends Form> implements Form {
 	private final transient int _size;
 	private final Identifier<T> _id;
 	private final Name _name;
-	private DrawingType _type = DrawingType.Draw;
+    private DrawingType _type = DrawingType.Draw;
 
 	BaseForm(final Identifier<T> id, final int size,
              final Name name) {
@@ -76,5 +78,6 @@ public abstract class BaseForm<T extends Form> implements Form {
 	public void setType(final DrawingType type) {
 		_type = type;
 	}
+
 
 }

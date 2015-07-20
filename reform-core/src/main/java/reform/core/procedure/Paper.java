@@ -2,6 +2,8 @@ package reform.core.procedure;
 
 import java.awt.geom.GeneralPath;
 
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.outline.NullOutline;
@@ -16,6 +18,7 @@ import reform.core.forms.relations.StaticLength;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
+import reform.core.graphics.Color;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
@@ -37,6 +40,8 @@ public final class Paper implements Form {
 	private final StaticLength _height = new StaticLength(getId(), 1);
 
 	private final Outline _outline = new NullOutline();
+
+    private final AttributeSet _attributes = new AttributeSet();
 
 	public enum Point implements ExposedPointToken<Paper> {
 		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(
@@ -178,5 +183,11 @@ public final class Paper implements Form {
 	public void setType(final DrawingType draw) {
 		throw new Error("Can not set drawing type of paper");
 	}
+
+    @Override
+    public AttributeSet getAttributes() {
+        return _attributes;
+    }
+
 
 }

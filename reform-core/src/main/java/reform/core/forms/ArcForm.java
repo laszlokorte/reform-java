@@ -3,6 +3,8 @@ package reform.core.forms;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.OrthogonalLengthAnchor;
 import reform.core.forms.anchors.StaticPointAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -22,6 +24,7 @@ import reform.core.forms.transformation.CompositeScaler;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
+import reform.core.graphics.Color;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -48,6 +51,14 @@ public final class ArcForm extends BaseForm<ArcForm> {
 					new BasicLengthScaler(_offset, new ConstantAngle(0), 0)));
 
 	private final Outline _outline = new NullOutline();
+
+    private final Attribute<Color> _fillColorAttribute = new Attribute<>
+            ("Fill", Color.class, new Color());
+    private final Attribute<Color> _strokeColorAttribute = new Attribute<>
+            ("Stroke", Color.class, new Color());
+
+    private final AttributeSet _attributes = new AttributeSet
+            (_fillColorAttribute, _strokeColorAttribute);
 
 	public enum Point implements ExposedPointToken<ArcForm> {
 		Center(0), Start(1), End(2);
@@ -175,5 +186,10 @@ public final class ArcForm extends BaseForm<ArcForm> {
 	public Outline getOutline() {
 		return _outline;
 	}
+
+    @Override
+    public AttributeSet getAttributes() {
+        return _attributes;
+    }
 
 }

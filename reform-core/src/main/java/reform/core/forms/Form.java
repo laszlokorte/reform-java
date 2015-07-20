@@ -2,6 +2,7 @@ package reform.core.forms;
 
 import java.awt.geom.GeneralPath;
 
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.outline.Outline;
 import reform.core.forms.relations.ExposedPoint;
@@ -44,4 +45,5 @@ public interface Form extends Identifiable<Form>, Named {
 
 	void setType(DrawingType draw);
 
+    AttributeSet getAttributes();
 }
