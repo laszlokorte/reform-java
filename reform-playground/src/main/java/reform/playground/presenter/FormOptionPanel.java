@@ -6,7 +6,6 @@ import reform.core.analyzer.Analyzer;
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
-import reform.core.forms.LineForm;
 import reform.core.graphics.*;
 import reform.core.graphics.Color;
 import reform.core.pool.Pool;
@@ -14,21 +13,21 @@ import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.evented.core.EventedProcedure;
+import reform.rendering.icons.*;
+import reform.rendering.icons.Icon;
+import reform.rendering.icons.swing.SwingIcon;
 import reform.stage.tooling.FormSelection;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.ArrayList;
 
 public final class FormOptionPanel implements FormSelection.Listener,
 		 EventedProcedure.Listener, ChangeListener {
     private static class ColorPanel {
         private Attribute<reform.core.graphics.Color> _attribute;
         private final ColorPicker _colorPicker = new ColorPicker();
-        private final JButton _colorPickerButton = _colorPicker
-                .getButton();
         private final ChangeListener _listener;
 
         ColorPanel(ChangeListener listener) {
@@ -37,7 +36,8 @@ public final class FormOptionPanel implements FormSelection.Listener,
         }
 
         private void onModelChange(final ColorModel colorModel) {
-            if(_attribute != null) {
+            if(_attribute != null && _colorPicker
+                    .getButton().isEnabled()) {
                 Color c = _attribute.getValue();
                 c.setRed(colorModel.getRed());
                 c.setGreen(colorModel.getGreen());
@@ -66,12 +66,19 @@ public final class FormOptionPanel implements FormSelection.Listener,
         public void dispose() {
             _colorPicker.dispose();
         }
+
+        public void setEnabled(final boolean enabled) {
+            _colorPicker
+                    .getButton().setEnabled(enabled);
+            if(!enabled) {
+                _colorPicker.dispose();
+            }
+        }
     }
 
 	private final JPanel _panel = new JPanel(
 			new FlowLayout(FlowLayout.RIGHT));
     private final JLabel _label = new JLabel("");
-    private final JLabel _guideLabel = new JLabel("Guide:");
 
     private final Pool<ColorPanel> _colorPanels = new SimplePool<>(()-> {
         return new ColorPanel(this);
@@ -79,7 +86,10 @@ public final class FormOptionPanel implements FormSelection.Listener,
 
 
 
-    private final JCheckBox _guideCheckbox = new JCheckBox();
+    private final SwingIcon _rulerIcon = new SwingIcon(new
+            RulerIcon
+            (), 18, true);
+    private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
 
 	private final FormSelection _selection;
 	private final EventedProcedure _eProcedure;
@@ -93,12 +103,11 @@ public final class FormOptionPanel implements FormSelection.Listener,
         _analyzer = analyzer;
 		_panel.add(_label);
 
-        _panel.add(_guideLabel);
-        _panel.add(_guideCheckbox);
-        _guideCheckbox.setBorder(null);
+        _panel.add(_guideToggle);
+        _guideToggle.setBorder(null);
 
-        _guideCheckbox.setFocusable(false);
-        _guideCheckbox.addChangeListener(this);
+        _guideToggle.setFocusable(false);
+        _guideToggle.addChangeListener(this);
 
 		selection.addListener(this);
 		onSelectionChanged(selection);
@@ -164,15 +173,15 @@ public final class FormOptionPanel implements FormSelection.Listener,
                 Class<?> type = attr.getType();
 
                 if (type == Color.class) {
-                    if (drawType == DrawingType.Draw) {
                         ColorPanel panel = getColorPanelFor((Attribute<Color>)
                                 attr);
-                        _panel.add(panel.getButton());
-                    }
+                    _panel.add(panel.getButton());
+                    panel.setEnabled(drawType == DrawingType.Draw);
+
                 }
             }
 
-            _guideCheckbox.setSelected(drawType == DrawingType.Guide);
+            _guideToggle.setSelected(drawType == DrawingType.Guide);
         } else {
             _panel.setVisible(false);
         }
@@ -201,8 +210,8 @@ public final class FormOptionPanel implements FormSelection.Listener,
         if(_selection.isSet()) {
             Form form = _analyzer.getForm(_selection.getSelected());
 
-            if(e.getSource() == _guideCheckbox) {
-                form.setType(_guideCheckbox.isSelected() ? DrawingType.Guide :
+            if(e.getSource() == _guideToggle) {
+                form.setType(_guideToggle.isSelected() ? DrawingType.Guide :
                         DrawingType.Draw);
             }
 

@@ -9,6 +9,7 @@ import reform.core.forms.relations.ExposedPoint;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
+import reform.core.graphics.Color;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
@@ -17,6 +18,9 @@ import reform.identity.Identifier;
 import reform.naming.Named;
 
 public interface Form extends Identifiable<Form>, Named {
+    static final Color DEFAULT_FILL = new Color(0x99888888);
+    static final Color DEFAULT_STROKE = new Color(0xff333333);
+
 	int getSizeOnStack();
 
 	void initialize(Runtime runtime, double minX, double minY,

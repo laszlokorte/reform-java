@@ -43,7 +43,7 @@ public final class LineForm extends BaseForm<LineForm> {
 	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
 
     private final Attribute<Color> _strokeColorAttribute = new Attribute<>
-            ("Color", Color.class, new Color());
+            ("Color", Color.class, Form.DEFAULT_STROKE);
 
     private final AttributeSet _attributes = new AttributeSet
             (_strokeColorAttribute);

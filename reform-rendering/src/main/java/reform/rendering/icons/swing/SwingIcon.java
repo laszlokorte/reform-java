@@ -7,6 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import reform.rendering.icons.Icon;
+import reform.rendering.icons.RulerIcon;
+
+import javax.swing.*;
 
 public class SwingIcon implements javax.swing.Icon {
 
@@ -28,7 +31,9 @@ public class SwingIcon implements javax.swing.Icon {
 		this(icon, 24, smooth);
 	}
 
-	@Override
+
+
+    @Override
 	public void paintIcon(final Component c, final Graphics g, final int x,
 			final int y) {
 		final Graphics2D g2 = (Graphics2D) g.create();
@@ -38,7 +43,10 @@ public class SwingIcon implements javax.swing.Icon {
 		}
 		if (!c.isEnabled()) {
 			g2.setColor(Color.LIGHT_GRAY);
-		} else {
+		} else if(c instanceof JToggleButton && !((JToggleButton)c)
+                .isSelected()) {
+            g2.setColor(Color.LIGHT_GRAY);
+        } else {
 			g2.setColor(Color.BLACK);
 		}
 		_icon.draw(g2, x + _size / 2, y + _size / 2, _size - 4);
