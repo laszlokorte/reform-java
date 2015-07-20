@@ -16,6 +16,8 @@
  - Snap point filter: option to show only snap points of selected form
  - Zoom
 
+ - serialize colors
+
  - improve scrolling when resizing canvas
  - simplify arc calculation
 
