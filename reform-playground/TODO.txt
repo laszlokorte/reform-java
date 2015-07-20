@@ -11,7 +11,9 @@
  - merge consecutive instructions if possible
  - Iterate over points
  - Form Groups
- - Export animation
+ - Export animation (eg gif)
+ - Export SVG
+ - Export JavaScript (eg d3)
  - Snap point filter: option to show only snap points of selected form
  - Zoom
 
