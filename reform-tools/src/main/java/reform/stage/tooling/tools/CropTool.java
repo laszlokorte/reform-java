@@ -89,6 +89,7 @@ public class CropTool implements Tool
 			_state = State.Idle;
 		}
 
+		_eventedPicture.setSize(_eventedPicture.getSize());
 		_toolState.setActiveCropPoint(_currentPoint);
 
 	}
@@ -144,7 +145,6 @@ public class CropTool implements Tool
 			}
 			case Pressed:
 			{
-
 				_eventedPicture.setSize(calcSize(input.getShiftModifier().isActive()));
 			}
 		}
@@ -174,6 +174,10 @@ public class CropTool implements Tool
 			return new Vec2i(newWidth, newHeight);
 		}
 
+	}
+
+	public boolean isActive() {
+		return _state == State.Pressed;
 	}
 
 }

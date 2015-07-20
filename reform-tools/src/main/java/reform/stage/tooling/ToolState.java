@@ -130,6 +130,11 @@ public class ToolState
 		return _activeCropPoint == p;
 	}
 
+	public CropPoint getActiveCropPoint()
+	{
+		return _activeCropPoint;
+	}
+
 	public void addListener(final ToolStateListener l)
 	{
 		_listeners.add(l);

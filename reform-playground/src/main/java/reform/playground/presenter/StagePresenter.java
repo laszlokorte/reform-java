@@ -14,6 +14,7 @@ import java.awt.*;
 
 public class StagePresenter
 {
+	private final Stage _stage;
 	private final Canvas _canvas;
 	private final StageRenderer _stageRenderer;
 	private final BackgroundRenderer _backgroundRenderer;
@@ -29,7 +30,8 @@ public class StagePresenter
 	public StagePresenter(final Stage stage, final FormSelection formSelection, final ToolState toolState, final
 	Analyzer analyzer, final Cursor cursor)
 	{
-		_canvas = new Canvas(new StageCollectorAdapter(stage));
+		_stage = stage;
+		_canvas = new Canvas();
 
 		final ToolTipRenderer toolTipRenderer = new ToolTipRenderer();
 
@@ -73,6 +75,13 @@ public class StagePresenter
 		_canvas.repaint();
 	}
 
+	public void updateSize()
+	{
+		_canvas.setPreferredSize(new Dimension(_stage.getSize().x + 30, _stage.getSize().y + 30));
+		_canvas.revalidate();
+		_canvas.repaint();
+	}
+
 	private static class StageListener implements Stage.Listener
 	{
 
@@ -105,30 +114,6 @@ public class StagePresenter
 		public void onToolStateChange(final ToolState state)
 		{
 			_stagePresenter.update();
-		}
-
-	}
-
-	private static class StageCollectorAdapter implements CanvasAdapter
-	{
-
-		private final Stage _stage;
-
-		public StageCollectorAdapter(final Stage stage)
-		{
-			_stage = stage;
-		}
-
-		@Override
-		public int getWidth()
-		{
-			return _stage.getSize().x + 30;
-		}
-
-		@Override
-		public int getHeight()
-		{
-			return _stage.getSize().y + 30;
 		}
 
 	}

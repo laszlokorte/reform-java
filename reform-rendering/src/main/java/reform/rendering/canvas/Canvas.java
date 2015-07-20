@@ -10,14 +10,11 @@ public class Canvas extends JComponent
 
 	private static final long serialVersionUID = 1L;
 
-	private final CanvasAdapter _adapter;
 	private final HashMap<RenderingHints.Key, Object> _renderingHits = new HashMap<>();
 	private final ArrayList<CanvasRenderer> _renderers = new ArrayList<>();
 
-	public Canvas(final CanvasAdapter adapter)
+	public Canvas()
 	{
-		_adapter = adapter;
-
 		_renderingHits.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
@@ -39,13 +36,7 @@ public class Canvas extends JComponent
 
 		g2.dispose();
 	}
-
-	@Override
-	public Dimension getPreferredSize()
-	{
-		return new Dimension(_adapter.getWidth(), _adapter.getHeight());
-	}
-
+	
 	public void addRenderer(final CanvasRenderer renderer)
 	{
 		_renderers.add(renderer);

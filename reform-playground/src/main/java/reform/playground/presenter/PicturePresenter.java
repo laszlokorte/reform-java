@@ -221,10 +221,10 @@ public class PicturePresenter
 		                                                     eProcedure);
 		final MorphFormTool morphTool = new MorphFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
 		                                                  eProcedure);
-		final Tool cropTool = new CropTool(_toolState, _cursor, _picture);
+		final CropTool cropTool = new CropTool(_toolState, _cursor, _picture);
 		final PreviewTool previewTool = new PreviewTool(_toolState);
 		{
-			final Tool createLineTool = new CreateFormTool(selectionTool,
+			final CreateFormTool createLineTool = new CreateFormTool(selectionTool,
 			                                               new FormFactory<>("Line", idEmitter, Builders.Line),
 			                                               _toolState, _cursor, _hitTester, _focus, eProcedure);
 
@@ -442,19 +442,10 @@ public class PicturePresenter
 				final Vec2i newSize = runtime.getSize();
 				if (!newSize.equals(_oldStageSize))
 				{
-					_oldStageSize.set(runtime.getSize());
-					SwingUtilities.invokeLater(() -> {
-						final Rectangle bounds = _stageScroller.getViewport().getViewRect();
-						final Dimension size = new Dimension(_oldStageSize.x, _oldStageSize.y);
-
-						final int x = (size.width - bounds.width) / 2 + 15;
-						final int y = (size.height - bounds.height) / 2 + 15;
-
-						if (x > 0 || y > 0)
-						{
-							_stageScroller.getViewport().setViewPosition(new Point(x < 0 ? 0 : x, y < 0 ? 0 : y));
-						}
-					});
+					if(!cropTool.isActive()) {
+						_stagePresenter.updateSize();
+						_oldStageSize.set(newSize);
+					}
 				}
 			}
 
