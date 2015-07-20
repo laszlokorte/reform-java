@@ -95,7 +95,8 @@ public class AlphaTrack extends JComponent {
     }
 
     private void onChange(final ColorModel colorModel) {
-        _color = Color.getHSBColor((float) colorModel.getHue(), 1, 1);
+        _color = new Color((float)colorModel.getRed(), (float)colorModel.getGreen(),
+                (float) colorModel.getBlue());
         repaint();
     }
 
