@@ -1,43 +1,65 @@
 package reform.core.graphics;
 
 public class Color {
-	private int _argb;
+    private static int MASK_ALPHA = 0xff000000;
+    private static int MASK_RED = 0x00ff0000;
+    private static int MASK_GREEN = 0x0000ff00;
+    private static int MASK_BLUE = 0x000000ff;
 
-	public Color() {
-		_argb = 0xff000000;
-	}
+    private int _argb;
 
-	public Color(final int argb) {
-		_argb = argb;
-	}
+    public Color() {
+        _argb = 0xff000000;
+    }
 
-	public int getARGB() {
-		return _argb;
-	}
+    public Color(final int argb) {
+        _argb = argb;
+    }
 
-	public void setARGB(final int argb) {
-		_argb = argb;
-	}
+    public int getARGB() {
+        return _argb;
+    }
 
-	public double getAlpha() {
-		return (0xff & _argb >> 24) / 255.0;
-	}
+    public void setARGB(final int argb) {
+        _argb = argb;
+    }
 
-	public double getRed() {
-		return (0xff & _argb >> 16) / 255.0;
-	}
+    public double getAlpha() {
+        return (0xff & _argb >> 24) / 255.0;
+    }
 
-	public double getGreen() {
-		return (0xff & _argb >> 8) / 255.0;
-	}
+    public double getRed() {
+        return (0xff & _argb >> 16) / 255.0;
+    }
 
-	public double getBlue() {
-		return (0xff & _argb) / 255.0;
-	}
+    public double getGreen() {
+        return (0xff & _argb >> 8) / 255.0;
+    }
 
-	@Override
-	public String toString() {
-		return "argb(" + getAlpha() + ", " + getRed() + ", " + getGreen()
-				+ ", " + getBlue() + ", " + ")";
-	}
+    public double getBlue() {
+        return (0xff & _argb) / 255.0;
+    }
+
+    public void setAlpha(double alpha) {
+        _argb = (_argb & ~MASK_ALPHA) | (((int) (alpha * 255)) << 24);
+    }
+
+    public void setRed(double red) {
+        _argb = (_argb & ~MASK_RED) | (((int) (red * 255)) << 16);
+    }
+
+    public void setGreen(double green) {
+        _argb = (_argb & ~MASK_GREEN) | (((int) (green * 255)) << 8);
+    }
+
+    public void setBlue(double blue) {
+        _argb = (_argb & ~MASK_BLUE) | ((int) (blue * 255));
+    }
+
+
+    @Override
+    public String toString() {
+        return "argb(" + getAlpha() + ", " + getRed() + ", " + getGreen()
+                + ", " + getBlue() + ", " + ")";
+    }
 }

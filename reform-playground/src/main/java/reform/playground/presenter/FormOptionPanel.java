@@ -1,46 +1,83 @@
 package reform.playground.presenter;
 
+import reform.components.colorpicker.ColorModel;
 import reform.components.colorpicker.ColorPicker;
 import reform.core.analyzer.Analyzer;
+import reform.core.attributes.Attribute;
+import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
 import reform.core.forms.LineForm;
-import reform.core.forms.relations.ConstantAngle;
-import reform.core.forms.relations.ConstantScaleFactor;
-import reform.core.graphics.DrawingType;
+import reform.core.graphics.*;
+import reform.core.graphics.Color;
+import reform.core.pool.Pool;
+import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
-import reform.core.procedure.instructions.blocks.ForLoopInstruction;
-import reform.core.procedure.instructions.blocks.IfConditionInstruction;
-import reform.core.procedure.instructions.single.RotateInstruction;
-import reform.core.procedure.instructions.single.ScaleInstruction;
-import reform.core.runtime.relations.RotationAngle;
-import reform.core.runtime.relations.ScaleFactor;
 import reform.evented.core.EventedProcedure;
-import reform.rendering.icons.swing.ColorIcon;
 import reform.stage.tooling.FormSelection;
-import reform.stage.tooling.InstructionFocus;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public final class FormOptionPanel implements FormSelection.Listener,
 		 EventedProcedure.Listener, ChangeListener {
+    private static class ColorPanel {
+        private Attribute<reform.core.graphics.Color> _attribute;
+        private final ColorPicker _colorPicker = new ColorPicker();
+        private final JButton _colorPickerButton = _colorPicker
+                .getButton();
+        private final ChangeListener _listener;
+
+        ColorPanel(ChangeListener listener) {
+            _colorPicker.getModel().addListener(this::onModelChange);
+            _listener = listener;
+        }
+
+        private void onModelChange(final ColorModel colorModel) {
+            if(_attribute != null) {
+                Color c = _attribute.getValue();
+                c.setRed(colorModel.getRed());
+                c.setGreen(colorModel.getGreen());
+                c.setBlue(colorModel.getBlue());
+                c.setAlpha(colorModel.getAlpha());
+            }
+        }
+
+        void setAttribute(Attribute<Color> attr) {
+            if(attr != null) {
+                _attribute = null; // prevent cycle
+                Color currentColor = attr.getValue();
+
+                _colorPicker.getModel().setRGBA(currentColor.getRed(),
+                        currentColor.getGreen(), currentColor.getBlue(),
+                        currentColor.getAlpha());
+            }
+            _attribute = attr;
+        }
+
+        public Component getButton() {
+            return _colorPicker
+                    .getButton();
+        }
+
+        public void dispose() {
+            _colorPicker.dispose();
+        }
+    }
+
 	private final JPanel _panel = new JPanel(
 			new FlowLayout(FlowLayout.RIGHT));
     private final JLabel _label = new JLabel("");
     private final JLabel _guideLabel = new JLabel("Guide:");
 
-    private final ColorPicker _colorPickerBackground = new ColorPicker();
-    private final ColorPicker _colorPickerStroke = new ColorPicker();
+    private final Pool<ColorPanel> _colorPanels = new SimplePool<>(()-> {
+        return new ColorPanel(this);
+    });
 
-    private final JButton _colorPickerBackgroundButton = _colorPickerBackground
-            .getButton();
-    private final JButton _colorPickerStrokeButton = _colorPickerStroke
-            .getButton();
+
 
     private final JCheckBox _guideCheckbox = new JCheckBox();
 
@@ -59,10 +96,6 @@ public final class FormOptionPanel implements FormSelection.Listener,
         _panel.add(_guideLabel);
         _panel.add(_guideCheckbox);
         _guideCheckbox.setBorder(null);
-
-        _panel.add(_colorPickerBackgroundButton);
-        _panel.add(_colorPickerStrokeButton);
-
 
         _guideCheckbox.setFocusable(false);
         _guideCheckbox.addChangeListener(this);
@@ -115,7 +148,9 @@ public final class FormOptionPanel implements FormSelection.Listener,
 
     @Override
     public void onSelectionChanged(final FormSelection selection) {
-        if(_selection.isSet()) {
+        releaseColorPanels();
+
+        if (_selection.isSet()) {
             Form form = _analyzer.getForm(_selection.getSelected());
             Class<? extends Form> formClass = form.getClass();
             DrawingType drawType = form.getType();
@@ -123,23 +158,53 @@ public final class FormOptionPanel implements FormSelection.Listener,
                     .getName().getValue());
             _panel.setVisible(true);
 
-            _colorPickerStrokeButton.setEnabled(drawType == DrawingType.Draw);
-            _colorPickerBackgroundButton.setEnabled(drawType == DrawingType.Draw);
-            _colorPickerBackgroundButton.setVisible(
-                    formClass != LineForm
-                    .class);
+            AttributeSet attributes = form.getAttributes();
+            for (int i = 0, j = attributes.size(); i < j; i++) {
+                Attribute<?> attr = attributes.get(i);
+                Class<?> type = attr.getType();
+
+                if (type == Color.class) {
+                    if (drawType == DrawingType.Draw) {
+                        ColorPanel panel = getColorPanelFor((Attribute<Color>)
+                                attr);
+                        _panel.add(panel.getButton());
+                    }
+                }
+            }
+
             _guideCheckbox.setSelected(drawType == DrawingType.Guide);
         } else {
             _panel.setVisible(false);
         }
+
+        _panel.revalidate();
+        _panel.repaint();
+        _colorPanels.clean(ColorPanel::dispose);
+    }
+
+    private ColorPanel getColorPanelFor(final Attribute<Color> attr) {
+        ColorPanel p = _colorPanels.take();
+        p.setAttribute(attr);
+
+        return p;
+    }
+
+    private void releaseColorPanels() {
+        _colorPanels.release((ColorPanel p) -> {
+            p.setAttribute(null);
+            _panel.remove(p.getButton());
+        });
     }
 
     @Override
     public void stateChanged(final ChangeEvent e) {
         if(_selection.isSet()) {
             Form form = _analyzer.getForm(_selection.getSelected());
-            form.setType(_guideCheckbox.isSelected() ? DrawingType.Guide :
-                    DrawingType.Draw);
+
+            if(e.getSource() == _guideCheckbox) {
+                form.setType(_guideCheckbox.isSelected() ? DrawingType.Guide :
+                        DrawingType.Draw);
+            }
 
             _eProcedure.publishFormChange(form);
         }

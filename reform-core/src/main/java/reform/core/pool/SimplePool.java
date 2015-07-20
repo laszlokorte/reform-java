@@ -18,7 +18,25 @@ public class SimplePool<E> implements Pool<E> {
 		_inUse.clear();
 	}
 
-	@Override
+    @Override
+    public void release(final PoolReleaser<E> releaser) {
+        _notInUse.addAll(_inUse);
+        while(_inUse.size() > 0) {
+            releaser.release(_inUse.poll());
+        }
+    }
+
+    @Override
+    public void clean(final PoolCleaner<E> cleaner) {
+        int i = _notInUse.size();
+        while(i-- > 0) {
+            E e = _notInUse.poll();
+            cleaner.clean(e);
+            _notInUse.add(e);
+        }
+    }
+
+    @Override
 	public E take() {
 		E element;
 

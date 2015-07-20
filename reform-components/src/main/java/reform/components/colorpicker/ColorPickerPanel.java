@@ -53,7 +53,7 @@ public class ColorPickerPanel extends JPanel {
         _hsvPanel.setLayout(new BorderLayout());
         _hsvPanel.add(_svPlane, BorderLayout.CENTER);
         _hsvPanel.add(_hueTrack, BorderLayout.EAST);
-        _hsvPanel.add(_alphaTrack,BorderLayout.SOUTH);
+        _hsvPanel.add(_alphaTrack, BorderLayout.SOUTH);
 
 
         _model.addListener(this::onChangePlane);
@@ -79,6 +79,11 @@ public class ColorPickerPanel extends JPanel {
         _fieldAlpha.addChangeListener(this::onChangeField);
 
         onChangePlane(_model);
+
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "cancel");
     }
 
     private void configureSpinner(final JSpinner fieldRed) {
@@ -105,7 +110,4 @@ public class ColorPickerPanel extends JPanel {
         _ownChange = false;
     }
 
-    public ColorModel getModel() {
-        return _model;
-    }
 }
