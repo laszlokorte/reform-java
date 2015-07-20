@@ -12,21 +12,22 @@ public class ColorPickerPanel extends JPanel {
     private final JPanel _numberPanel = new JPanel();
     private final JPanel _hsvPanel = new JPanel();
 
+    private static final int MAX = 100;
 
     private final SpinnerModel _colorSpinnerModelRed = new SpinnerNumberModel(1,
-            0, 255,
+            0, MAX,
             1);
     private final SpinnerModel _colorSpinnerModelGreen = new
             SpinnerNumberModel(1,
-            0, 255,
+            0, MAX,
             1);
     private final SpinnerModel _colorSpinnerModelBlue = new
             SpinnerNumberModel(1,
-            0, 255,
+            0, MAX,
             1);
     private final SpinnerModel _colorSpinnerModelAlpha = new
             SpinnerNumberModel(1,
-            0, 255,
+            0, MAX,
             1);
 
     private final JSpinner _fieldRed = new JSpinner(_colorSpinnerModelRed);
@@ -72,6 +73,8 @@ public class ColorPickerPanel extends JPanel {
         _fieldGreen.addChangeListener(this::onChangeField);
         _fieldBlue.addChangeListener(this::onChangeField);
         _fieldAlpha.addChangeListener(this::onChangeField);
+
+        onChangePlane(_model);
     }
 
     private void configureSpinner(final JSpinner fieldRed) {
@@ -81,20 +84,20 @@ public class ColorPickerPanel extends JPanel {
 
     private void onChangeField(final ChangeEvent changeEvent) {
     if(_ownChange) return;
-        double r = 1.0 * (Integer)_fieldRed.getValue() / 255;
-        double g = 1.0 * (Integer)_fieldGreen.getValue() / 255;
-        double b = 1.0 * (Integer)_fieldBlue.getValue() / 255;
-        double a = 1.0 * (Integer)_fieldAlpha.getValue() / 255;
+        double r = 1.0 * (Integer)_fieldRed.getValue() / MAX;
+        double g = 1.0 * (Integer)_fieldGreen.getValue() / MAX;
+        double b = 1.0 * (Integer)_fieldBlue.getValue() / MAX;
+        double a = 1.0 * (Integer)_fieldAlpha.getValue() / MAX;
 
         _model.setRGBA(r,g,b,a);
     }
 
     private void onChangePlane(final ColorModel colorModel) {
         _ownChange = true;
-        _fieldRed.setValue((int)(_model.getRed() * 255));
-        _fieldGreen.setValue((int)(_model.getGreen() * 255));
-        _fieldBlue.setValue((int)(_model.getBlue() * 255));
-        _fieldAlpha.setValue((int)(_model.getAlpha() * 255));
+        _fieldRed.setValue((int)(_model.getRed() * MAX));
+        _fieldGreen.setValue((int)(_model.getGreen() * MAX));
+        _fieldBlue.setValue((int)(_model.getBlue() * MAX));
+        _fieldAlpha.setValue((int)(_model.getAlpha() * MAX));
         _ownChange = false;
     }
 

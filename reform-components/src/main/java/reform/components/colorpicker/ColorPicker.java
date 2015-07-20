@@ -35,7 +35,6 @@ public class ColorPicker {
     }
 
     private void buttonClick(final ActionEvent actionEvent) {
-
         _frame.setContentPane(_panel);
         _frame.pack();
         _frame.setVisible(true);

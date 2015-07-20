@@ -8,7 +8,9 @@ import java.awt.image.BufferedImage;
 
 public class HSVColorPlane extends JComponent {
     private BufferedImage _overlay;
-    private final Color[] BASEH = {Color.BLACK, new Color
+    private final Color[] BASEH = {Color.WHITE, new Color
+            (0x00FFFFFF, true)};
+    private final Color[] BASEV = {Color.BLACK, new Color
             (0x00000000, true)};
     private final float[] POS = {0, 1};
     private final Composite _composite = AlphaComposite.getInstance
@@ -62,20 +64,12 @@ public class HSVColorPlane extends JComponent {
 
 
                 LinearGradientPaint verticalGrad = new LinearGradientPaint
-                        (0, getHeight(), 0,0, POS, BASEH);
+                        (0, getHeight(), 0,0, POS, BASEV);
 
                 Graphics2D g2 = (Graphics2D) _overlay.getGraphics();
 
-                g2.setColor(Color.WHITE);
-                g2.fillRect(0, 0, getWidth(), getHeight());
-
-                Composite oldComposit = g2.getComposite();
-
-                g2.setComposite(_composite);
                 g2.setPaint(horizontalGrad);
                 g2.fillRect(0, 0, getWidth(), getHeight());
-
-                g2.setComposite(oldComposit);
 
                 g2.setPaint(verticalGrad);
                 g2.fillRect(0, 0, getWidth(), getHeight());

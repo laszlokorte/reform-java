@@ -12,14 +12,14 @@ public class ColorModel {
 
     private final ArrayList<Listener> _listeners = new ArrayList<>();
 
-    private double _red;
-    private double _green;
-    private double _blue;
-    private double _alpha;
+    private double _red = 0;
+    private double _green = 0;
+    private double _blue = 0;
+    private double _alpha = 1;
 
-    private double _hue;
-    private double _saturation;
-    private double _value;
+    private double _hue = 0;
+    private double _saturation = 0;
+    private double _value = 0;
 
     public void setRGBA(double r, double g, double b, double a) {
         _red = r;
