@@ -15,6 +15,7 @@ import reform.evented.core.EventedProcedure;
 import reform.math.Vec2;
 import reform.math.Vector;
 import reform.stage.elements.SnapPoint;
+import reform.stage.elements.outline.IntersectionSnapPointPool;
 import reform.stage.hittest.HitTester;
 import reform.stage.hittest.HitTester.EntityFilter;
 import reform.stage.tooling.Input;
@@ -99,7 +100,7 @@ public class CreateFormTool implements Tool {
 	public void press() {
 		if (_state == State.Snapped) {
 			_state = State.Pressed;
-			_startPoint = _currentPoint;
+			_startPoint = IntersectionSnapPointPool.copyIfNeeded(_currentPoint);
 			_currentStart = _startPoint.createReference();
 			_currentDestination = new RelativeFixSizeDestination(_currentStart,
 					new Vec2());

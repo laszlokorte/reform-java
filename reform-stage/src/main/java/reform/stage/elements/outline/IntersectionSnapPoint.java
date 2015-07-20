@@ -13,11 +13,11 @@ public class IntersectionSnapPoint implements SnapPoint {
     private static final double SNAP_RADIUS2 = SnapPoint
             .SNAP_RADIUS*SnapPoint.SNAP_RADIUS;
 
-    private Entity _entityA;
-	private Entity _entityB;
+    Entity _entityA;
+    Entity _entityB;
 
-	private Vec2 _value = new Vec2();
-	private int _index;
+    Vec2 _position = new Vec2();
+    int _index;
 
     IntersectionSnapPoint() {
     }
@@ -28,17 +28,17 @@ public class IntersectionSnapPoint implements SnapPoint {
         _entityA = entityA;
         _entityB = entityB;
         _index = index;
-        _value.set(pos);
+        _position.set(pos);
     }
 
     @Override
 	public double getX() {
-		return _value.x;
+		return _position.x;
 	}
 
 	@Override
 	public double getY() {
-		return _value.y;
+		return _position.y;
 	}
 
 	public Identifier<? extends Form> getFormIdA() {
@@ -77,7 +77,7 @@ public class IntersectionSnapPoint implements SnapPoint {
     }
 
     public boolean isInSnapRadius(double x, double y) {
-        return Vector.distance2(x, y, _value.x, _value.y) < SNAP_RADIUS2;
+        return Vector.distance2(x, y, _position.x, _position.y) < SNAP_RADIUS2;
     }
 
 }
