@@ -8,6 +8,7 @@
  - Rectangle Width/Height scale
  - Manual No-Snap mode
  - later instruction changes
+ - merge consecutive instructions if possible
  - Iterate over points
  - Form Groups
  - Export animation
