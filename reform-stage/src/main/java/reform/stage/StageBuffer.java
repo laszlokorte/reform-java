@@ -10,6 +10,7 @@ import reform.math.Vec2i;
 import reform.stage.elements.Entity;
 import reform.stage.elements.outline.EntityOutline;
 import reform.stage.elements.outline.IntersectionSnapPoint;
+import reform.stage.elements.outline.IntersectionSnapPointPool;
 
 class StageBuffer {
 
@@ -20,6 +21,9 @@ class StageBuffer {
 
 	private final ArrayList<Identifier<? extends Form>> _currentShapeIds = new ArrayList<>();
 	private final ArrayList<Identifier<? extends Form>> _finalShapeIds = new ArrayList<>();
+
+	private final IntersectionSnapPointPool _intersectionSnapPointPool = new
+			IntersectionSnapPointPool();
 
 	public void clear() {
 		_finalShapes.clear();
@@ -34,6 +38,7 @@ class StageBuffer {
 		//synchronized (stage) {
 			stage.wipe();
 			stage.setSize(_size);
+			_intersectionSnapPointPool.release();
 			for (int i = 0; i < _entities.size(); i++) {
 				final Entity e = _entities.get(i);
 				stage.addEntity(e);
@@ -45,7 +50,7 @@ class StageBuffer {
 					for (int k = intersections.length - 1; k >= 0; k--) {
 						if (intersections[k] != null) {
 							stage.addIntersectionPoint(
-									new IntersectionSnapPoint(e,
+									_intersectionSnapPointPool.create(e,
 											other, k,
 											intersections[k]));
 						}

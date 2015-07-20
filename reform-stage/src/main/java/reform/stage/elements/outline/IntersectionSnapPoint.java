@@ -13,11 +13,11 @@ public class IntersectionSnapPoint implements SnapPoint {
     private static final double SNAP_RADIUS2 = SnapPoint
             .SNAP_RADIUS*SnapPoint.SNAP_RADIUS;
 
-    private final Entity _entityA;
-	private final Entity _entityB;
+    private Entity _entityA;
+	private Entity _entityB;
 
-	private final Vec2 _value = new Vec2();
-	private final int _index;
+	private Vec2 _value = new Vec2();
+	private int _index;
 
 	public IntersectionSnapPoint(final Entity entityA,
 			final Entity entityB, final int index,
@@ -28,7 +28,20 @@ public class IntersectionSnapPoint implements SnapPoint {
 		_value.set(pos);
 	}
 
-	@Override
+    IntersectionSnapPoint() {
+
+    }
+
+    void reset(final Entity entityA,
+                                 final Entity entityB, final int index,
+                                 final Vec2 pos) {
+        _entityA = entityA;
+        _entityB = entityB;
+        _index = index;
+        _value.set(pos);
+    }
+
+    @Override
 	public double getX() {
 		return _value.x;
 	}
