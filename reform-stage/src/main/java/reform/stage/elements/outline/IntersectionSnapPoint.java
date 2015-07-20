@@ -19,17 +19,7 @@ public class IntersectionSnapPoint implements SnapPoint {
 	private Vec2 _value = new Vec2();
 	private int _index;
 
-	public IntersectionSnapPoint(final Entity entityA,
-			final Entity entityB, final int index,
-			final Vec2 pos) {
-		_entityA = entityA;
-		_entityB = entityB;
-		_index = index;
-		_value.set(pos);
-	}
-
     IntersectionSnapPoint() {
-
     }
 
     void reset(final Entity entityA,
