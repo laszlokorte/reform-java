@@ -117,6 +117,7 @@ public final class LineForm extends BaseForm<LineForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
+		coloredShape.setBackgroundColor(null);
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
 		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
 

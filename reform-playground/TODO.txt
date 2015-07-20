@@ -1,5 +1,4 @@
- - Tool State description
- - Shape Styles
+ - Tool State description (anymore???)
  - changeable Form names
  - Glomp Points
  - Undo/Redo
@@ -19,3 +18,8 @@
 
  - improve scrolling when resizing canvas
  - simplify arc calculation
+
+
+Done
+====
+ - Shape Styles

@@ -51,6 +51,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					tf.transferFocus();
 				}
 			});
+
+			_spinner.setBorder(null);
 		}
 
 		private void onModelChange(final ChangeEvent changeEvent)
@@ -78,6 +80,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		public Component getSpinner()
 		{
 			return _spinner;
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_spinner.setVisible(enabled);
 		}
 	}
 
@@ -146,6 +153,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
 
 	private final Pool<NumberPanel> _numberPanels = new SimplePool<>(() -> new NumberPanel(this));
+	private final ArrayList<NumberPanel> _currentNumberPanels = new ArrayList<>();
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
@@ -229,6 +237,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		releaseColorPanels();
 		releaseNumberPanels();
+		_panel.remove(_guideToggle);
 
 		if (_selection.isSet())
 		{
@@ -253,10 +262,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				{
 					NumberPanel panel = getNumberPanelFor((Attribute<Integer>) attr);
 					_panel.add(panel.getSpinner());
+					panel.setEnabled(drawType == DrawingType.Draw);
+
 				}
 			}
 
+
 			_guideToggle.setSelected(drawType == DrawingType.Guide);
+			_panel.add(_guideToggle);
 		}
 		else
 		{
@@ -272,6 +285,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		final NumberPanel p = _numberPanels.take();
 		p.setAttribute(attr);
+		_currentNumberPanels.add(p);
 
 		return p;
 	}
@@ -301,6 +315,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			p.setAttribute(null);
 			_panel.remove(p.getSpinner());
 		});
+
+		_currentNumberPanels.clear();
 	}
 
 	@Override
@@ -314,6 +330,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			{
 				form.setType(_guideToggle.isSelected() ? DrawingType.Guide : DrawingType.Draw);
 				_currentColorPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_currentNumberPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
 			_ownChange = true;

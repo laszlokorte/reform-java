@@ -25,11 +25,11 @@ public class ColoredShape
 	}
 
 	public void setBackgroundColor(final reform.core.graphics.Color color) {
-		_backgroundColor = new Color(color.getARGB(), true);
+		_backgroundColor = color != null ? new Color(color.getARGB(), true) : null;
 	}
 
 	public void setStrokeColor(final reform.core.graphics.Color color) {
-		_strokeColor = new Color(color.getARGB(), true);
+		_strokeColor = color != null ? new Color(color.getARGB(), true) : null;
 	}
 
 	public void reset() {
@@ -45,13 +45,16 @@ public class ColoredShape
 			g2.setColor(_backgroundColor);
 			g2.fill(_path);
 		}
-		g2.setColor(_strokeColor);
-		g2.setStroke(_stroke);
-		g2.draw(_path);
+		if(_stroke != null && _strokeColor != null)
+		{
+			g2.setColor(_strokeColor);
+			g2.setStroke(_stroke);
+			g2.draw(_path);
+		}
 	}
 
 	public void setStrokeWidth(final int strokeWidth)
 	{
-		_stroke = new BasicStroke(strokeWidth);
+		_stroke = strokeWidth > 0 ? new BasicStroke(strokeWidth) : null;
 	}
 }

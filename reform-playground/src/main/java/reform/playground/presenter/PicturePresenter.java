@@ -519,7 +519,7 @@ public class PicturePresenter
 				{
 					final int index = _analyzer.indexOf(focus.getFocused());
 					_procedureView.setFocus(index);
-					_selection.setSelection(_focus.getFocused().getTarget());
+					
 				}
 				else
 				{

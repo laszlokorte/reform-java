@@ -60,7 +60,7 @@ public class SwingIcon implements javax.swing.Icon
 		{
 			g2.setColor(Color.BLACK);
 		}
-		_icon.draw(g2, x + _size / 2, y + _size / 2, _size - 4);
+		_icon.draw(g2, x + _size / 2, 1+ y + _size / 2, _size - 4);
 		g2.dispose();
 	}
 
@@ -73,7 +73,7 @@ public class SwingIcon implements javax.swing.Icon
 	@Override
 	public int getIconHeight()
 	{
-		return _size;
+		return _size+2;
 	}
 
 }
