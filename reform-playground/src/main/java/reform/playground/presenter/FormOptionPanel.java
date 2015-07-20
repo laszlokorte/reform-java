@@ -81,13 +81,13 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		}
 	}
 
-	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,1));
 	private final JLabel _label = new JLabel("");
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
 
 
-	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon(), 18, true);
+	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
 
 	private final FormSelection _selection;

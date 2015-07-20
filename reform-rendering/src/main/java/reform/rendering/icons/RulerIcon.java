@@ -13,12 +13,12 @@ public class RulerIcon implements Icon
 	public RulerIcon()
 	{
 		final Area shape = new Area();
-		shape.add(new Area(new Rectangle2D.Double(-705, -250, 1410, 500)));
-		shape.subtract(new Area(new Rectangle2D.Double(-605, -150, 1210, 300)));
+		shape.add(new Area(new Rectangle2D.Double(-600, -250, 1200, 500)));
+		shape.subtract(new Area(new Rectangle2D.Double(-525, -175, 1050, 350)));
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 4; i++)
 		{
-			shape.add(new Area(new Rectangle2D.Double(-500 + 225 * i, -250, 100, i % 2 == 0 ? 300 : 200)));
+			shape.add(new Area(new Rectangle2D.Double(-360 + 225 * i, -250, 75, i % 2 == 0 ? 300 : 230)));
 		}
 
 		_shape = AffineTransform.getRotateInstance(-Math.PI / 4).createTransformedShape(shape);

@@ -14,6 +14,11 @@ public class ColorIcon implements javax.swing.Icon
 		_size = size;
 	}
 
+	public ColorIcon(final Color color)
+	{
+		this(color, 24);
+	}
+
 	@Override
 	public void paintIcon(final Component c, final Graphics g, final int x, final int y)
 	{
@@ -37,7 +42,7 @@ public class ColorIcon implements javax.swing.Icon
 					{
 						g2.setColor(Color.WHITE);
 					}
-					g2.fillRect(1 + j * cellSize, 1 + i * cellSize, cellSize, cellSize);
+					g2.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
 				}
 			}
 			g2.setColor(Color.GRAY);

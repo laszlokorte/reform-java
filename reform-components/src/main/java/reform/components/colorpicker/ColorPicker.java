@@ -10,7 +10,7 @@ public class ColorPicker
 {
 
 	private final ColorModel _model = new ColorModel();
-	private final ColorIcon _icon = new ColorIcon(Color.BLACK, 18);
+	private final ColorIcon _icon = new ColorIcon(Color.BLACK);
 	private final JButton _button = new JButton(_icon);
 	private static final JFrame _frame = new JFrame("Color Picker");
 	private static ColorPicker _current = null;
