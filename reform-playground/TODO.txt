@@ -16,3 +16,4 @@
  - Zoom
 
  - improve scrolling when resizing canvas
+ - simplify arc calculation
