@@ -1,6 +1,7 @@
 package reform.stage;
 
 import reform.core.forms.Form;
+import reform.core.graphics.ColoredShape;
 import reform.identity.Identifier;
 import reform.math.Vec2;
 import reform.math.Vec2i;
@@ -16,8 +17,8 @@ class StageBuffer
 
 	private final Vec2i _size = new Vec2i();
 	private final ArrayList<Entity> _entities = new ArrayList<>();
-	private final ArrayList<Shape> _currentShapes = new ArrayList<>();
-	private final ArrayList<Shape> _finalShapes = new ArrayList<>();
+	private final ArrayList<ColoredShape> _currentShapes = new ArrayList<>();
+	private final ArrayList<ColoredShape> _finalShapes = new ArrayList<>();
 
 	private final ArrayList<Identifier<? extends Form>> _currentShapeIds = new ArrayList<>();
 	private final ArrayList<Identifier<? extends Form>> _finalShapeIds = new ArrayList<>();
@@ -60,12 +61,12 @@ class StageBuffer
 		}
 		for (int i = 0; i < _currentShapes.size(); i++)
 		{
-			final Shape s = _currentShapes.get(i);
+			final ColoredShape s = _currentShapes.get(i);
 			stage.addShape(s, _currentShapeIds.get(i));
 		}
 		for (int i = 0; i < _finalShapes.size(); i++)
 		{
-			final Shape s = _finalShapes.get(i);
+			final ColoredShape s = _finalShapes.get(i);
 			stage.addFinalShape(s, _finalShapeIds.get(i));
 		}
 		stage.complete();
@@ -77,13 +78,13 @@ class StageBuffer
 		_size.set(size);
 	}
 
-	public void addShape(final Shape shape, final Identifier<? extends Form> id)
+	public void addShape(final ColoredShape shape, final Identifier<? extends Form> id)
 	{
 		_currentShapes.add(shape);
 		_currentShapeIds.add(id);
 	}
 
-	public void addFinalShape(final Shape shape, final Identifier<? extends Form> id)
+	public void addFinalShape(final ColoredShape shape, final Identifier<? extends Form> id)
 	{
 		_finalShapes.add(shape);
 		_finalShapeIds.add(id);

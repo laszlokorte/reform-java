@@ -11,6 +11,7 @@ import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.relations.StaticPoint;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.Color;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -109,6 +110,13 @@ public final class LineForm extends BaseForm<LineForm>
 
 		target.moveTo(_startPoint.getXValueForRuntime(runtime), _startPoint.getYValueForRuntime(runtime));
 		target.lineTo(_endPoint.getXValueForRuntime(runtime), _endPoint.getYValueForRuntime(runtime));
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	{
+		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 
 	@Override

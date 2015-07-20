@@ -78,6 +78,7 @@ public class ColorPickerPanel extends JPanel
 		{
 			return;
 		}
+
 		final double r = 1.0 * (Integer) _fieldRed.getValue() / MAX;
 		final double g = 1.0 * (Integer) _fieldGreen.getValue() / MAX;
 		final double b = 1.0 * (Integer) _fieldBlue.getValue() / MAX;

@@ -9,6 +9,7 @@ import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.Color;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -140,6 +141,14 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 		_circle.setFrame(cx - radius, cy - radius, 2 * radius, 2 * radius);
 		target.append(_circle, false);
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	{
+		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
+		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 
 	private final Ellipse2D.Double _circle = new Ellipse2D.Double();

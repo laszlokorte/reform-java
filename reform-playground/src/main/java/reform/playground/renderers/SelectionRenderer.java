@@ -1,5 +1,6 @@
 package reform.playground.renderers;
 
+import reform.core.graphics.ColoredShape;
 import reform.math.Vec2i;
 import reform.rendering.canvas.CanvasRenderer;
 import reform.stage.Stage;
@@ -51,13 +52,13 @@ public class SelectionRenderer implements CanvasRenderer
 			if (_preview)
 			{
 				g2.setColor(_glowColorAssoc);
-				final List<Shape> shapes = _stage.getFinalShapes();
+				final List<ColoredShape> shapes = _stage.getFinalShapes();
 				for (int i = 0, j = shapes.size(); i < j; i++)
 				{
-					final Shape s = shapes.get(i);
+					final ColoredShape s = shapes.get(i);
 					if (_stage.getIdFor(s).equals(_formSelection.getSelected()))
 					{
-						g2.draw(s);
+						g2.draw(s.getPath());
 					}
 				}
 			}
@@ -72,7 +73,7 @@ public class SelectionRenderer implements CanvasRenderer
 						final Shape s = e.getShape();
 						g2.setColor(_glowColorCurrent);
 						g2.draw(s);
-						if (!e.isGuide())
+						if (!e.isGuide() && _preview)
 						{
 							g2.setColor(_backgroundColorCurrent);
 							g2.fill(s);

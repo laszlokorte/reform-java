@@ -1,6 +1,7 @@
 package reform.stage;
 
 import reform.core.forms.Form;
+import reform.core.graphics.ColoredShape;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
 import reform.stage.elements.CropPoint;
@@ -23,12 +24,12 @@ public class Stage
 	private final Vec2i _size = new Vec2i();
 	private final CopyOnWriteArrayList<Listener> _listeners = new CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<Entity> _entities = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<Shape> _currentShapes = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<Shape> _finalShapes = new CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<ColoredShape> _currentShapes = new CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<ColoredShape> _finalShapes = new CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<CropPoint> _cropPoints = new CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<IntersectionSnapPoint> _intersectionPoints = new CopyOnWriteArrayList<>();
 
-	private final HashMap<Shape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
+	private final HashMap<ColoredShape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
 	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new HashMap<>();
 
 	public Stage()
@@ -71,17 +72,17 @@ public class Stage
 		return _size;
 	}
 
-	public List<Shape> getCurrentShapes()
+	public List<ColoredShape> getCurrentShapes()
 	{
 		return _currentShapes;
 	}
 
-	public List<Shape> getFinalShapes()
+	public List<ColoredShape> getFinalShapes()
 	{
 		return _finalShapes;
 	}
 
-	public Identifier<? extends Form> getIdFor(final Shape s)
+	public Identifier<? extends Form> getIdFor(final ColoredShape s)
 	{
 		return _shapeMap.get(s);
 	}
@@ -116,13 +117,13 @@ public class Stage
 		}
 	}
 
-	void addShape(final Shape shape, final Identifier<? extends Form> id)
+	void addShape(final ColoredShape shape, final Identifier<? extends Form> id)
 	{
 		_currentShapes.add(shape);
 		_shapeMap.put(shape, id);
 	}
 
-	void addFinalShape(final Shape shape, final Identifier<? extends Form> id)
+	void addFinalShape(final ColoredShape shape, final Identifier<? extends Form> id)
 	{
 		_finalShapes.add(shape);
 		_shapeMap.put(shape, id);

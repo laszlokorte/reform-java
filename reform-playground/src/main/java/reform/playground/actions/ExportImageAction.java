@@ -1,5 +1,6 @@
 package reform.playground.actions;
 
+import reform.core.graphics.ColoredShape;
 import reform.stage.Stage;
 import reform.stage.tooling.Tool;
 import reform.stage.tooling.ToolController;
@@ -72,15 +73,12 @@ public class ExportImageAction extends AbstractAction
 
 					final Color strokeColor = Color.BLACK;
 					final Color fillColor = new Color(0x99222222, true);
-					final List<Shape> finalShapes = _stage.getFinalShapes();
+					final List<ColoredShape> finalShapes = _stage.getFinalShapes();
 					for (int i = 0, j = finalShapes.size(); i < j; i++)
 					{
-						final Shape s = finalShapes.get(i);
+						final ColoredShape s = finalShapes.get(i);
 
-						g2.setColor(strokeColor);
-						g2.draw(s);
-						g2.setColor(fillColor);
-						g2.fill(s);
+						s.draw(g2);
 					}
 
 					final String fileName = selectedFile.getName();

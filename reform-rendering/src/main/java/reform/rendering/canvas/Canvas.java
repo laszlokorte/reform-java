@@ -19,7 +19,6 @@ public class Canvas extends JComponent
 		_adapter = adapter;
 
 		_renderingHits.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		_renderingHits.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 	}
 
 	@Override

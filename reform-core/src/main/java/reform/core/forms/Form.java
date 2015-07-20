@@ -9,6 +9,7 @@ import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
 import reform.core.graphics.Color;
 import reform.core.graphics.DrawingType;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifiable;
@@ -27,6 +28,8 @@ public interface Form extends Identifiable<Form>, Named
 	void initialize(Runtime runtime, double minX, double minY, double maxX, double maxY);
 
 	void appendToPathForRuntime(Runtime runtime, GeneralPath.Double target);
+
+	void writeColoredShapeForRuntime(Runtime runtime, ColoredShape coloredShape);
 
 	Iterable<Identifier<? extends ExposedPoint>> getPoints();
 

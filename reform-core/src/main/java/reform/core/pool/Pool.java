@@ -6,9 +6,9 @@ public interface Pool<E>
 
 	void release();
 
-	void release(PoolReleaser<E> releaser);
+	void release(PoolModifier<E> releaser);
 
-	void clean(PoolCleaner<E> cleaner);
+	void clean(PoolModifier<E> cleaner);
 
 	int size();
 }

@@ -11,6 +11,7 @@ import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.Color;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -175,6 +176,14 @@ public final class PictureForm extends BaseForm<PictureForm>
 		target.transform(AffineTransform.getRotateInstance(_rotation.getValueForRuntime(runtime)));
 
 		target.transform(AffineTransform.getTranslateInstance(x, y));
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	{
+		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
+		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 
 	@Override

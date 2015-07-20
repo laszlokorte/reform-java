@@ -80,4 +80,9 @@ public class Color
 	{
 		return "argb(" + getAlpha() + ", " + getRed() + ", " + getGreen() + ", " + getBlue() + ", " + ")";
 	}
+
+	public void set(final Color color)
+	{
+		_argb = color._argb;
+	}
 }

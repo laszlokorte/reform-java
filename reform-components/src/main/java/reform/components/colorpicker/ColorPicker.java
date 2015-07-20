@@ -22,6 +22,7 @@ public class ColorPicker
 	{
 		_button.setBorder(null);
 		_button.addActionListener(this::buttonClick);
+		_button.setFocusable(false);
 
 		_frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		_frame.setResizable(false);

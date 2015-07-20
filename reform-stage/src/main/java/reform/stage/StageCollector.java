@@ -2,6 +2,7 @@ package reform.stage;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
+import reform.core.graphics.ColoredShape;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
@@ -28,7 +29,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	private final Stage _stage;
 	private final Adapter _adapter;
 
-	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(Path2D.Double::new);
+	private final Pool<ColoredShape> _pathPool = new SimplePool<>(ColoredShape::new);
 
 	private final StageBuffer _buffer = new StageBuffer();
 	private final EntityCache _entityCache = new EntityCache();
@@ -85,9 +86,9 @@ public class StageCollector implements ProjectRuntime.Listener
 
 				if (form.getType() == DrawingType.Draw)
 				{
-					final GeneralPath.Double shape = _pathPool.take();
+					final ColoredShape shape = _pathPool.take();
 					shape.reset();
-					runtime.get(id).appendToPathForRuntime(runtime, shape);
+					runtime.get(id).writeColoredShapeForRuntime(runtime, shape);
 					_buffer.addShape(shape, id);
 				}
 			}
@@ -105,9 +106,9 @@ public class StageCollector implements ProjectRuntime.Listener
 
 			if (form.getType() == DrawingType.Draw)
 			{
-				final GeneralPath.Double shape = _pathPool.take();
+				final ColoredShape shape = _pathPool.take();
 				shape.reset();
-				form.appendToPathForRuntime(runtime, shape);
+				form.writeColoredShapeForRuntime(runtime, shape);
 				if (!_collected)
 				{
 					_buffer.addShape(shape, id);

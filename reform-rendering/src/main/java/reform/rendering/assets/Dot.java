@@ -38,7 +38,6 @@ public class Dot implements Asset
 		final int strokeWidthInt = (int) Math.ceil(strokeWidth);
 		final Stroke stroke = new BasicStroke(strokeWidth);
 		final Graphics2D g = (Graphics2D) _bitmap.getGraphics();
-		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setPaint(new GradientPaint(0, 0, fillColor.brighter(), 0, _bitmap.getHeight(), fillColor));
 		g.fillOval(strokeWidthInt, strokeWidthInt, _bitmap.getWidth() - 2 * strokeWidthInt,

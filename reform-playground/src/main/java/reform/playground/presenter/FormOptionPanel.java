@@ -21,19 +21,23 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ChangeListener
+public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ActionListener
 {
+
 	private static class ColorPanel
 	{
 		private Attribute<reform.core.graphics.Color> _attribute;
 		private final ColorPicker _colorPicker = new ColorPicker();
-		private final ChangeListener _listener;
+		private final FormOptionPanel _delegate;
 
-		ColorPanel(final ChangeListener listener)
+		ColorPanel(final FormOptionPanel delegate)
 		{
 			_colorPicker.getModel().addListener(this::onModelChange);
-			_listener = listener;
+			_delegate = delegate;
 		}
 
 		private void onModelChange(final ColorModel colorModel)
@@ -45,6 +49,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				c.setGreen(colorModel.getGreen());
 				c.setBlue(colorModel.getBlue());
 				c.setAlpha(colorModel.getAlpha());
+
+				_delegate.onChange();
 			}
 		}
 
@@ -81,11 +87,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		}
 	}
 
-	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,1));
+	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 1));
 	private final JLabel _label = new JLabel("");
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
-
+	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
@@ -105,7 +111,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_guideToggle.setBorder(null);
 
 		_guideToggle.setFocusable(false);
-		_guideToggle.addChangeListener(this);
+		_guideToggle.addActionListener(this);
 
 		selection.addListener(this);
 		onSelectionChanged(selection);
@@ -150,9 +156,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	}
 
+	private boolean _ownChange = false;
+
 	@Override
 	public void onFormChanged(final EventedProcedure procedure, final Form form)
 	{
+		if(_ownChange) {
+			return;
+		}
 		if (_selection.isSet() && _selection.isSelected(form.getId()))
 		{
 			onSelectionChanged(_selection);
@@ -202,6 +213,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		final ColorPanel p = _colorPanels.take();
 		p.setAttribute(attr);
+		_currentColorPanels.add(p);
 
 		return p;
 	}
@@ -212,10 +224,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			p.setAttribute(null);
 			_panel.remove(p.getButton());
 		});
+
+		_currentColorPanels.clear();
 	}
 
 	@Override
-	public void stateChanged(final ChangeEvent e)
+	public void actionPerformed(final ActionEvent e)
 	{
 		if (_selection.isSet())
 		{
@@ -224,9 +238,24 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			if (e.getSource() == _guideToggle)
 			{
 				form.setType(_guideToggle.isSelected() ? DrawingType.Guide : DrawingType.Draw);
+				_currentColorPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
+			_ownChange = true;
 			_eProcedure.publishFormChange(form);
+			_ownChange = false;
+		}
+	}
+
+	private void onChange()
+	{
+		if (_selection.isSet())
+		{
+			final Form form = _analyzer.getForm(_selection.getSelected());
+
+			_ownChange = true;
+			_eProcedure.publishFormChange(form);
+			_ownChange = false;
 		}
 	}
 }

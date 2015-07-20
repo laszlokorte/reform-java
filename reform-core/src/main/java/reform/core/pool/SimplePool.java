@@ -22,23 +22,23 @@ public class SimplePool<E> implements Pool<E>
 	}
 
 	@Override
-	public void release(final PoolReleaser<E> releaser)
+	public void release(final PoolModifier<E> releaser)
 	{
 		_notInUse.addAll(_inUse);
 		while (_inUse.size() > 0)
 		{
-			releaser.release(_inUse.poll());
+			releaser.modify(_inUse.poll());
 		}
 	}
 
 	@Override
-	public void clean(final PoolCleaner<E> cleaner)
+	public void clean(final PoolModifier<E> cleaner)
 	{
 		int i = _notInUse.size();
 		while (i-- > 0)
 		{
 			final E e = _notInUse.poll();
-			cleaner.clean(e);
+			cleaner.modify(e);
 			_notInUse.add(e);
 		}
 	}

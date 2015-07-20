@@ -9,6 +9,7 @@ import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.Color;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -184,6 +185,14 @@ public final class RectangleForm extends BaseForm<RectangleForm>
 		_transform.rotate(_rotation.getValueForRuntime(runtime));
 
 		target.transform(_transform);
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	{
+		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
+		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
 import reform.core.graphics.DrawingType;
+import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.IdentifiableList;
@@ -106,6 +107,14 @@ public final class Paper implements Form
 	@Override
 	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double reuse)
 	{
+	}
+
+
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	{
+		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 
 	@Override

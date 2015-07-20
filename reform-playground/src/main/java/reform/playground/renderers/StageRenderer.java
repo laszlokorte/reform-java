@@ -1,5 +1,6 @@
 package reform.playground.renderers;
 
+import reform.core.graphics.ColoredShape;
 import reform.math.Vec2i;
 import reform.rendering.canvas.CanvasRenderer;
 import reform.stage.Stage;
@@ -52,27 +53,21 @@ public class StageRenderer implements CanvasRenderer
 		{
 			g2.setStroke(_stroke);
 
-			final List<Shape> finalShapes = _stage.getFinalShapes();
+			final List<ColoredShape> finalShapes = _stage.getFinalShapes();
 			for (int i = 0, j = finalShapes.size(); i < j; i++)
 			{
-				final Shape s = finalShapes.get(i);
-				g2.setColor(_fillColor);
-				g2.fill(s);
-				g2.setColor(_borderColor);
-				g2.draw(s);
+				final ColoredShape s = finalShapes.get(i);
+				s.draw(g2);
 			}
 		}
 		else
 		{
 			g2.setStroke(_stroke);
-			final List<Shape> currentShapes = _stage.getCurrentShapes();
+			final List<ColoredShape> currentShapes = _stage.getCurrentShapes();
 			for (int i = 0, j = currentShapes.size(); i < j; i++)
 			{
-				final Shape s = currentShapes.get(i);
-				g2.setColor(_fillColor);
-				g2.fill(s);
-				g2.setColor(_borderColor);
-				g2.draw(s);
+				final ColoredShape s = currentShapes.get(i);
+				s.draw(g2);
 			}
 
 		}

@@ -45,11 +45,13 @@ public class ColorIcon implements javax.swing.Icon
 					g2.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
 				}
 			}
-			g2.setColor(Color.GRAY);
-			g2.drawRect(0, 0, _size - 1, _size - 1);
 
 			g2.setColor(_color);
 			g2.fillRect(x, y, _size, _size);
+
+			g2.setColor(Color.GRAY);
+			g2.drawRect(0, 0, _size - 1, _size - 1);
+
 			g2.dispose();
 		}
 	}
