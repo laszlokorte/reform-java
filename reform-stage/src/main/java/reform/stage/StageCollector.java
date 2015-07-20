@@ -1,8 +1,5 @@
 package reform.stage;
 
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
@@ -16,18 +13,22 @@ import reform.stage.elements.Entity;
 import reform.stage.elements.factory.EntityCache;
 import reform.stage.elements.factory.EntityFactory;
 
-public class StageCollector implements ProjectRuntime.Listener {
-    private final Analyzer _analyzer;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 
-    public interface Adapter {
+public class StageCollector implements ProjectRuntime.Listener
+{
+	private final Analyzer _analyzer;
+
+	public interface Adapter
+	{
 		boolean isInFocus(Evaluable instruction);
 	}
 
 	private final Stage _stage;
 	private final Adapter _adapter;
 
-	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-            Path2D.Double::new);
+	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(Path2D.Double::new);
 
 	private final StageBuffer _buffer = new StageBuffer();
 	private final EntityCache _entityCache = new EntityCache();
@@ -35,15 +36,16 @@ public class StageCollector implements ProjectRuntime.Listener {
 
 	private boolean _collected;
 
-	public StageCollector(final Stage stage, final Adapter adapter, Analyzer
-            analyzer) {
+	public StageCollector(final Stage stage, final Adapter adapter, final Analyzer analyzer)
+	{
 		_stage = stage;
-        _analyzer = analyzer;
+		_analyzer = analyzer;
 		_adapter = adapter;
 	}
 
 	@Override
-	public void onBeginEvaluation(final ProjectRuntime runtime) {
+	public void onBeginEvaluation(final ProjectRuntime runtime)
+	{
 		_entityCache.coolDown();
 		_collected = false;
 		_buffer.clear();
@@ -51,24 +53,29 @@ public class StageCollector implements ProjectRuntime.Listener {
 	}
 
 	@Override
-	public void onFinishEvaluation(final ProjectRuntime runtime) {
+	public void onFinishEvaluation(final ProjectRuntime runtime)
+	{
 		_entityCache.cleanUp();
 		_buffer.flush(_stage);
 		_pathPool.release();
 	}
 
 	@Override
-	public void onEvalInstruction(final ProjectRuntime runtime,
-			final Evaluable instruction) {
-		if (_adapter.isInFocus(instruction)) {
-			if (_collected) {
+	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable instruction)
+	{
+		if (_adapter.isInFocus(instruction))
+		{
+			if (_collected)
+			{
 				return;
-			} else {
+			}
+			else
+			{
 				_collected = true;
 			}
-			final FastIterable<Identifier<? extends Form>> it = runtime
-					.getStackIterator();
-			for (int i = 0; i < it.size(); i++) {
+			final FastIterable<Identifier<? extends Form>> it = runtime.getStackIterator();
+			for (int i = 0; i < it.size(); i++)
+			{
 				final Identifier<? extends Form> id = it.get(i);
 				final Form form = runtime.get(id);
 
@@ -76,7 +83,8 @@ public class StageCollector implements ProjectRuntime.Listener {
 				entity.updateForRuntime(runtime, _analyzer);
 				_buffer.addEntity(entity);
 
-				if (form.getType() == DrawingType.Draw) {
+				if (form.getType() == DrawingType.Draw)
+				{
 					final GeneralPath.Double shape = _pathPool.take();
 					shape.reset();
 					runtime.get(id).appendToPathForRuntime(runtime, shape);
@@ -88,17 +96,20 @@ public class StageCollector implements ProjectRuntime.Listener {
 	}
 
 	@Override
-	public void onPopScope(final ProjectRuntime runtime,
-			final FastIterable<Identifier<? extends Form>> poppedIds) {
-		for (int i = 0, j = poppedIds.size(); i < j; i++) {
+	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<? extends Form>> poppedIds)
+	{
+		for (int i = 0, j = poppedIds.size(); i < j; i++)
+		{
 			final Identifier<? extends Form> id = poppedIds.get(i);
 			final Form form = runtime.get(id);
 
-			if (form.getType() == DrawingType.Draw) {
+			if (form.getType() == DrawingType.Draw)
+			{
 				final GeneralPath.Double shape = _pathPool.take();
 				shape.reset();
 				form.appendToPathForRuntime(runtime, shape);
-				if (!_collected) {
+				if (!_collected)
+				{
 					_buffer.addShape(shape, id);
 				}
 
@@ -108,8 +119,8 @@ public class StageCollector implements ProjectRuntime.Listener {
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime,
-			final Evaluable instruction, final Error error) {
+	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+	{
 		// TODO Auto-generated method stub
 
 	}

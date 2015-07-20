@@ -4,56 +4,67 @@ import reform.stage.tooling.Input;
 import reform.stage.tooling.Tool;
 import reform.stage.tooling.ToolState;
 
-public class PreviewTool implements Tool {
+public class PreviewTool implements Tool
+{
 
 	private final ToolState _toolState;
 
-	public PreviewTool(final ToolState toolState) {
+	public PreviewTool(final ToolState toolState)
+	{
 		_toolState = toolState;
 	}
 
 	@Override
-	public void setUp() {
+	public void setUp()
+	{
 		_toolState.setViewState(ToolState.ViewState.Preview);
-        _toolState.setSelectionState(ToolState.SelectionState.None);
-    }
+		_toolState.setSelectionState(ToolState.SelectionState.None);
+	}
 
 	@Override
-	public void tearDown() {
+	public void tearDown()
+	{
 
 	}
 
 	@Override
-	public void cancel() {
+	public void cancel()
+	{
 	}
 
 	@Override
-	public void press() {
+	public void press()
+	{
 
 	}
 
 	@Override
-	public void release() {
+	public void release()
+	{
 	}
 
 	@Override
-	public void refresh() {
+	public void refresh()
+	{
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void toggleOption() {
+	public void toggleOption()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void cycle() {
+	public void cycle()
+	{
 
 	}
 
 	@Override
-	public void input(final Input input) {
+	public void input(final Input input)
+	{
 
 	}
 

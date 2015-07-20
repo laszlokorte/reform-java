@@ -7,7 +7,8 @@ import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
 
-public interface Runtime {
+public interface Runtime
+{
 	void begin();
 
 	void finish();
@@ -34,7 +35,7 @@ public interface Runtime {
 
 	boolean shouldStop();
 
-	Runtime getSubroutine( Identifier<? extends Picture> pictureId);
+	Runtime getSubroutine(Identifier<? extends Picture> pictureId);
 
 	ExpressionContext getExpressionContext();
 

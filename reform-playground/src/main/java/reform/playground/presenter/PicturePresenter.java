@@ -1,36 +1,5 @@
 package reform.playground.presenter;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-
 import reform.core.analyzer.ProjectAnalyzer;
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
@@ -46,41 +15,11 @@ import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentifierEmitter;
 import reform.math.Vec2i;
-import reform.playground.actions.AltModifierAction;
-import reform.playground.actions.CancelToolAction;
-import reform.playground.actions.CycleToolAction;
-import reform.playground.actions.ExportImageAction;
-import reform.playground.actions.FocusNextInstructionAction;
-import reform.playground.actions.FocusPreviousInstructionAction;
-import reform.playground.actions.RemoveInstructionAction;
-import reform.playground.actions.SelectToolAction;
-import reform.playground.actions.SetPreviewAction;
-import reform.playground.actions.ShiftModifierAction;
-import reform.playground.actions.ToggleGuideAction;
-import reform.playground.actions.ToggleToolOptionAction;
-import reform.playground.actions.WrapInIfAction;
-import reform.playground.actions.WrapInLoopAction;
+import reform.playground.actions.*;
 import reform.playground.listener.FocusAdjustmentProcedureListener;
 import reform.playground.listener.SelectionAdjustmentProcedureListener;
 import reform.playground.views.procedure.ProcedureView;
-import reform.rendering.icons.ActionBranchIcon;
-import reform.rendering.icons.ActionExportIcon;
-import reform.rendering.icons.ActionLoopIcon;
-import reform.rendering.icons.ActionTrashIcon;
-import reform.rendering.icons.EyeIcon;
-import reform.rendering.icons.ShapeArcIcon;
-import reform.rendering.icons.ShapeCircleIcon;
-import reform.rendering.icons.ShapeLineIcon;
-import reform.rendering.icons.ShapePictureIcon;
-import reform.rendering.icons.ShapePieIcon;
-import reform.rendering.icons.ShapeRectangleIcon;
-import reform.rendering.icons.ShapeTextIcon;
-import reform.rendering.icons.ToolCropIcon;
-import reform.rendering.icons.ToolCursorIcon;
-import reform.rendering.icons.ToolMorphIcon;
-import reform.rendering.icons.ToolRotateIcon;
-import reform.rendering.icons.ToolScaleIcon;
-import reform.rendering.icons.ToolTranslateIcon;
+import reform.rendering.icons.*;
 import reform.rendering.icons.swing.SwingIcon;
 import reform.stage.Stage;
 import reform.stage.StageCollector;
@@ -89,25 +28,27 @@ import reform.stage.elements.EntityPoint;
 import reform.stage.elements.SnapPoint;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 import reform.stage.hittest.HitTester;
-import reform.stage.tooling.FormSelection;
-import reform.stage.tooling.InstructionFocus;
-import reform.stage.tooling.Tool;
-import reform.stage.tooling.ToolController;
-import reform.stage.tooling.ToolState;
+import reform.stage.tooling.*;
 import reform.stage.tooling.cursor.Cursor;
 import reform.stage.tooling.factory.Builders;
 import reform.stage.tooling.factory.FormFactory;
-import reform.stage.tooling.tools.CreateFormTool;
-import reform.stage.tooling.tools.CropTool;
-import reform.stage.tooling.tools.MorphFormTool;
-import reform.stage.tooling.tools.MoveFormTool;
-import reform.stage.tooling.tools.PreviewTool;
-import reform.stage.tooling.tools.RotateFormTool;
-import reform.stage.tooling.tools.ScaleFormTool;
-import reform.stage.tooling.tools.SelectionTool;
+import reform.stage.tooling.tools.*;
 
-public class PicturePresenter {
-	public interface Preview {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class PicturePresenter
+{
+	public interface Preview
+	{
 		void draw(Graphics2D g2);
 
 		int getWidth();
@@ -115,7 +56,8 @@ public class PicturePresenter {
 		int getHeight();
 	}
 
-	public interface Listener {
+	public interface Listener
+	{
 		void onPreviewChange(PicturePresenter presenter);
 	}
 
@@ -123,27 +65,21 @@ public class PicturePresenter {
 
 	private final EventedPicture _picture;
 	private final InstructionFocus _focus = new InstructionFocus();
-	private final FocusAdjustmentProcedureListener _focusAdjustment = new FocusAdjustmentProcedureListener(
-			_focus);
+	private final FocusAdjustmentProcedureListener _focusAdjustment = new FocusAdjustmentProcedureListener(_focus);
 	private final FormSelection _selection = new FormSelection();
-    private final SelectionAdjustmentProcedureListener _selectionAdjustment =
-            new
-            SelectionAdjustmentProcedureListener(
-            _selection);
+	private final SelectionAdjustmentProcedureListener _selectionAdjustment = new SelectionAdjustmentProcedureListener
+			(_selection);
 	// private final Commander _commander = new Commander();
 	private final Stage _stage = new Stage();
-	private final HitTester _hitTester = new HitTester(_stage,
-			new HitTesterAdapter(_selection));
+	private final HitTester _hitTester = new HitTester(_stage, new HitTesterAdapter(_selection));
 	private final Cursor _cursor = new Cursor(_hitTester);
 	private final ToolState _toolState = new ToolState();
 	private final ToolController _toolController = new ToolController(_cursor);
 	private final ProjectAnalyzer _analyzer = new ProjectAnalyzer();
 	private final ProjectRuntime _runtime;
 	private final PreviewCollector _previewCollector = new PreviewCollector();
-	private final StageCollector _stageCollector = new StageCollector(_stage,
-			new StageAdapter(_focus), _analyzer);
-	private final StepSnapshotCollector _stepCollector = new StepSnapshotCollector(
-			new Vec2i(100, 60));
+	private final StageCollector _stageCollector = new StageCollector(_stage, new StageAdapter(_focus), _analyzer);
+	private final StepSnapshotCollector _stepCollector = new StepSnapshotCollector(new Vec2i(100, 60));
 
 
 	private final JSplitPane _splitPane;
@@ -154,53 +90,42 @@ public class PicturePresenter {
 	private final Vec2i _oldStageSize = new Vec2i();
 
 	private final SwingIcon _cursorIcon = new SwingIcon(new ToolCursorIcon());
-	private final SwingIcon _cropIcon = new SwingIcon(new ToolCropIcon(),
-			false);
+	private final SwingIcon _cropIcon = new SwingIcon(new ToolCropIcon(), false);
 	private final SwingIcon _previewIcon = new SwingIcon(new EyeIcon());
 	private final SwingIcon _exportIcon = new SwingIcon(new ActionExportIcon());
 	private final SwingIcon _lineIcon = new SwingIcon(new ShapeLineIcon());
-	private final SwingIcon _rectIcon = new SwingIcon(new ShapeRectangleIcon(),
-			false);
+	private final SwingIcon _rectIcon = new SwingIcon(new ShapeRectangleIcon(), false);
 	private final SwingIcon _circleIcon = new SwingIcon(new ShapeCircleIcon());
 	private final SwingIcon _pieIcon = new SwingIcon(new ShapePieIcon());
 	private final SwingIcon _arcIcon = new SwingIcon(new ShapeArcIcon());
 	private final SwingIcon _textIcon = new SwingIcon(new ShapeTextIcon());
-	private final SwingIcon _pictureIcon = new SwingIcon(
-			new ShapePictureIcon());
+	private final SwingIcon _pictureIcon = new SwingIcon(new ShapePictureIcon());
 
-	private final SwingIcon _translateIcon = new SwingIcon(
-			new ToolTranslateIcon());
+	private final SwingIcon _translateIcon = new SwingIcon(new ToolTranslateIcon());
 	private final SwingIcon _scaleIcon = new SwingIcon(new ToolScaleIcon());
 	private final SwingIcon _rotateIcon = new SwingIcon(new ToolRotateIcon());
 	private final SwingIcon _morphIcon = new SwingIcon(new ToolMorphIcon());
 
-	private final SwingIcon _trashIcon = new SwingIcon(new ActionTrashIcon(),
-			22, false);
-	private final SwingIcon _loopIcon = new SwingIcon(new ActionLoopIcon(),
-			true);
-	private final SwingIcon _branchIcon = new SwingIcon(new ActionBranchIcon(),
-			true);
+	private final SwingIcon _trashIcon = new SwingIcon(new ActionTrashIcon(), 22, false);
+	private final SwingIcon _loopIcon = new SwingIcon(new ActionLoopIcon(), true);
+	private final SwingIcon _branchIcon = new SwingIcon(new ActionBranchIcon(), true);
 
-	public PicturePresenter(final EventedPicture picture,
-							final IdentifierEmitter idEmitter) {
+	public PicturePresenter(final EventedPicture picture, final IdentifierEmitter idEmitter)
+	{
 		_picture = picture;
-		_runtime = new ProjectRuntime(_picture.getProject(),
-				_picture.getSize());
+		_runtime = new ProjectRuntime(_picture.getProject(), _picture.getSize());
 
 		final EventedProcedure eProcedure = picture.getEventedProcedure();
 		eProcedure.addListener(_focusAdjustment);
-        eProcedure.addListener(_selectionAdjustment);
-		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer,
-				_focus, _stepCollector, eProcedure));
-		_stagePresenter = new StagePresenter(_stage, _selection, _toolState,
-				_analyzer, _cursor);
+		eProcedure.addListener(_selectionAdjustment);
+		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer, _focus, _stepCollector, eProcedure));
+		_stagePresenter = new StagePresenter(_stage, _selection, _toolState, _analyzer, _cursor);
 
 
 		_stepCollector.addListener(_procedureView);
 
-		final JScrollPane procedureScroller = new JScrollPane(_procedureView,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		final JScrollPane procedureScroller = new JScrollPane(_procedureView, ScrollPaneConstants
+				.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		procedureScroller.setMinimumSize(_procedureView.getMinimumSize());
 
 		final JPanel rightSide = new JPanel(new BorderLayout());
@@ -236,15 +161,13 @@ public class PicturePresenter {
 		headBarLeft.add(procedureToolbar, BorderLayout.EAST);
 		{
 
-			final InstructionsOptionPanel instructionOptionPanel = new InstructionsOptionPanel(
-					eProcedure, _focus);
+			final InstructionsOptionPanel instructionOptionPanel = new InstructionsOptionPanel(eProcedure, _focus);
 
 			procedureToolbar.add(instructionOptionPanel.getComponent());
 
 			procedureToolbar.addSeparator();
 			{
-				final JButton branchButton = new JButton(
-						new WrapInIfAction(_focus, eProcedure));
+				final JButton branchButton = new JButton(new WrapInIfAction(_focus, eProcedure));
 				branchButton.setFocusable(false);
 
 				branchButton.setIcon(_branchIcon);
@@ -254,8 +177,7 @@ public class PicturePresenter {
 			}
 
 			{
-				final JButton loopButton = new JButton(
-						new WrapInLoopAction(_focus, eProcedure));
+				final JButton loopButton = new JButton(new WrapInLoopAction(_focus, eProcedure));
 				loopButton.setFocusable(false);
 
 				loopButton.setIcon(_loopIcon);
@@ -267,8 +189,7 @@ public class PicturePresenter {
 			procedureToolbar.addSeparator();
 
 			{
-				final JButton deleteInstructionButton = new JButton(
-						new RemoveInstructionAction(_focus, eProcedure));
+				final JButton deleteInstructionButton = new JButton(new RemoveInstructionAction(_focus, eProcedure));
 				deleteInstructionButton.setFocusable(false);
 
 				deleteInstructionButton.setIcon(_trashIcon);
@@ -290,25 +211,22 @@ public class PicturePresenter {
 		toolBarRight.setFloatable(false);
 		toolBarRight.setRollover(false);
 
-		final SelectionTool selectionTool = new SelectionTool(_toolState,
-				_selection, _cursor, _stage);
-		final MoveFormTool translationTool = new MoveFormTool(selectionTool,
-				_toolState, _cursor, _hitTester, _focus, eProcedure);
-		final ScaleFormTool scaleTool = new ScaleFormTool(selectionTool,
-				_toolState, _cursor, _hitTester, _focus, eProcedure);
-		final RotateFormTool rotateTool = new RotateFormTool(selectionTool,
-				_toolState, _cursor, _hitTester, _focus, eProcedure);
-		final MorphFormTool morphTool = new MorphFormTool(selectionTool,
-				_toolState, _cursor, _hitTester, _focus, eProcedure);
+		final SelectionTool selectionTool = new SelectionTool(_toolState, _selection, _cursor, _stage);
+		final MoveFormTool translationTool = new MoveFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
+				eProcedure);
+		final ScaleFormTool scaleTool = new ScaleFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
+				eProcedure);
+		final RotateFormTool rotateTool = new RotateFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
+				eProcedure);
+		final MorphFormTool morphTool = new MorphFormTool(selectionTool, _toolState, _cursor, _hitTester, _focus,
+				eProcedure);
 		final Tool cropTool = new CropTool(_toolState, _cursor, _picture);
 		final PreviewTool previewTool = new PreviewTool(_toolState);
 		{
-			final Tool createLineTool = new CreateFormTool(selectionTool,
-					new FormFactory<>("Line", idEmitter, Builders.Line),
-					_toolState, _cursor, _hitTester, _focus, eProcedure);
+			final Tool createLineTool = new CreateFormTool(selectionTool, new FormFactory<>("Line", idEmitter,
+					Builders.Line), _toolState, _cursor, _hitTester, _focus, eProcedure);
 
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, createLineTool, "Create Line"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, createLineTool, "Create Line"));
 			button.setFocusable(false);
 
 			button.setIcon(_lineIcon);
@@ -317,15 +235,12 @@ public class PicturePresenter {
 		}
 
 		{
-			final CreateFormTool createRectTool = new CreateFormTool(
-					selectionTool,
-					new FormFactory<>("Rectangle", idEmitter,
-							Builders.Rectangle),
-					_toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createRectTool = new CreateFormTool(selectionTool, new FormFactory<>("Rectangle",
+					idEmitter, Builders.Rectangle), _toolState, _cursor, _hitTester, _focus, eProcedure);
 			createRectTool.setDiagonalDirection(true);
 
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, createRectTool, "Create Rectangle"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, createRectTool, "Create " +
+					"Rectangle"));
 			button.setFocusable(false);
 
 			button.setIcon(_rectIcon);
@@ -334,14 +249,12 @@ public class PicturePresenter {
 		}
 
 		{
-			final CreateFormTool createCircleTool = new CreateFormTool(
-					selectionTool,
-					new FormFactory<>("Circle", idEmitter, Builders.Circle),
-					_toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createCircleTool = new CreateFormTool(selectionTool, new FormFactory<>("Circle",
+					idEmitter, Builders.Circle), _toolState, _cursor, _hitTester, _focus, eProcedure);
 			createCircleTool.setAutoCenter(true);
 
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, createCircleTool, "Create Circle"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, createCircleTool, "Create " +
+					"Circle"));
 			button.setFocusable(false);
 
 			button.setIcon(_circleIcon);
@@ -350,14 +263,12 @@ public class PicturePresenter {
 		}
 
 		{
-			final CreateFormTool createPieTool = new CreateFormTool(
-					selectionTool,
-					new FormFactory<>("Pie", idEmitter, Builders.Pie),
-					_toolState, _cursor, _hitTester, _focus, eProcedure);
+			final CreateFormTool createPieTool = new CreateFormTool(selectionTool, new FormFactory<>("Pie", idEmitter,
+					Builders.Pie), _toolState, _cursor, _hitTester, _focus, eProcedure);
 			createPieTool.setAutoCenter(true);
 
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, createPieTool, "Create Pie Segment"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, createPieTool, "Create Pie " +
+					"Segment"));
 			button.setFocusable(false);
 
 			button.setIcon(_pieIcon);
@@ -366,12 +277,10 @@ public class PicturePresenter {
 		}
 
 		{
-			final Tool createArcTool = new CreateFormTool(selectionTool,
-					new FormFactory<>("Arc", idEmitter, Builders.Arc),
-					_toolState, _cursor, _hitTester, _focus, eProcedure);
+			final Tool createArcTool = new CreateFormTool(selectionTool, new FormFactory<>("Arc", idEmitter, Builders
+					.Arc), _toolState, _cursor, _hitTester, _focus, eProcedure);
 
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, createArcTool, "Create Arc"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, createArcTool, "Create Arc"));
 			button.setFocusable(false);
 
 			button.setIcon(_arcIcon);
@@ -400,8 +309,7 @@ public class PicturePresenter {
 		toolBarRight.addSeparator();
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, selectionTool, "Select Form"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, selectionTool, "Select Form"));
 			button.setFocusable(false);
 
 			button.setIcon(_cursorIcon);
@@ -410,8 +318,7 @@ public class PicturePresenter {
 		}
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, translationTool, "Move Form"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, translationTool, "Move Form"));
 			button.setFocusable(false);
 
 			button.setIcon(_translateIcon);
@@ -420,8 +327,7 @@ public class PicturePresenter {
 		}
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, scaleTool, "Scale Form"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, scaleTool, "Scale Form"));
 			button.setFocusable(false);
 
 			button.setIcon(_scaleIcon);
@@ -430,8 +336,7 @@ public class PicturePresenter {
 		}
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, rotateTool, "Rotate Form"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, rotateTool, "Rotate Form"));
 			button.setFocusable(false);
 
 			button.setIcon(_rotateIcon);
@@ -440,8 +345,7 @@ public class PicturePresenter {
 		}
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, morphTool, "Morph Form"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, morphTool, "Morph Form"));
 			button.setFocusable(false);
 
 			button.setIcon(_morphIcon);
@@ -452,8 +356,7 @@ public class PicturePresenter {
 		toolBarRight.addSeparator();
 
 		{
-			final JButton button = new JButton(
-					new SelectToolAction(_toolController, cropTool, "Crop"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, cropTool, "Crop"));
 			button.setFocusable(false);
 
 			button.setIcon(_cropIcon);
@@ -462,8 +365,7 @@ public class PicturePresenter {
 		}
 
 		{
-			final JButton button = new JButton(new SelectToolAction(
-					_toolController, previewTool, "Preview"));
+			final JButton button = new JButton(new SelectToolAction(_toolController, previewTool, "Preview"));
 			button.setFocusable(false);
 
 			button.setIcon(_previewIcon);
@@ -474,8 +376,7 @@ public class PicturePresenter {
 		toolBarRight.addSeparator();
 
 		{
-			final JButton button = new JButton(new ExportImageAction(_stage,
-					_toolController, previewTool));
+			final JButton button = new JButton(new ExportImageAction(_stage, _toolController, previewTool));
 
 			button.setIcon(_exportIcon);
 			button.setHideActionText(true);
@@ -484,92 +385,90 @@ public class PicturePresenter {
 			toolBarRight.add(button);
 		}
 
-        toolBarRight.addSeparator();
+		toolBarRight.addSeparator();
 
 
-        {
-            final FormOptionPanel formOptionPanelPanel = new
-                    FormOptionPanel(
-                    eProcedure, _analyzer, _selection);
+		{
+			final FormOptionPanel formOptionPanelPanel = new FormOptionPanel(eProcedure, _analyzer, _selection);
 
-            toolBarRight.add(formOptionPanelPanel.getComponent());
+			toolBarRight.add(formOptionPanelPanel.getComponent());
 
-        }
+		}
 
 		rightSide.add(toolBarRight, BorderLayout.PAGE_START);
-		_stageScroller = new JScrollPane(_stagePresenter.getView(),
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+		_stageScroller = new JScrollPane(_stagePresenter.getView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		rightSide.add(_stageScroller, BorderLayout.CENTER);
 
-		_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftSide,
-				rightSide);
+		_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftSide, rightSide);
 
 		_runtime.addListener(_previewCollector);
 		_runtime.addListener(_stageCollector);
 		_runtime.addListener(_stepCollector);
 
-		_runtime.addListener(new ProjectRuntime.Listener() {
+		_runtime.addListener(new ProjectRuntime.Listener()
+		{
 
 			@Override
-			public void onPopScope(final ProjectRuntime runtime,
-								   final FastIterable<Identifier<? extends Form>> ids) {
+			public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<? extends Form>> ids)
+			{
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onFinishEvaluation(final ProjectRuntime runtime) {
+			public void onFinishEvaluation(final ProjectRuntime runtime)
+			{
 				_toolController.refresh();
-				for (int i = 0; i < _listeners.size(); i++) {
+				for (int i = 0; i < _listeners.size(); i++)
+				{
 					_listeners.get(i).onPreviewChange(PicturePresenter.this);
 				}
 
 				final Vec2i newSize = runtime.getSize();
-				if (!newSize.equals(_oldStageSize)) {
+				if (!newSize.equals(_oldStageSize))
+				{
 					_oldStageSize.set(runtime.getSize());
 					SwingUtilities.invokeLater(() -> {
-						final Rectangle bounds = _stageScroller
-								.getViewport().getViewRect();
-						final Dimension size = new Dimension(
-								_oldStageSize.x, _oldStageSize.y);
+						final Rectangle bounds = _stageScroller.getViewport().getViewRect();
+						final Dimension size = new Dimension(_oldStageSize.x, _oldStageSize.y);
 
 						final int x = (size.width - bounds.width) / 2 + 15;
-						final int y = (size.height - bounds.height) / 2
-								+ 15;
+						final int y = (size.height - bounds.height) / 2 + 15;
 
-						if (x > 0 || y > 0) {
-							_stageScroller.getViewport().setViewPosition(
-									new Point(x < 0 ? 0 : x,
-											y < 0 ? 0 : y));
+						if (x > 0 || y > 0)
+						{
+							_stageScroller.getViewport().setViewPosition(new Point(x < 0 ? 0 : x, y < 0 ? 0 : y));
 						}
 					});
 				}
 			}
 
 			@Override
-			public void onEvalInstruction(final ProjectRuntime runtime,
-										  final Evaluable instruction) {
+			public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable instruction)
+			{
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onError(final ProjectRuntime runtime,
-								final Evaluable instruction, final Error error) {
+			public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+			{
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onBeginEvaluation(final ProjectRuntime runtime) {
+			public void onBeginEvaluation(final ProjectRuntime runtime)
+			{
 				// TODO Auto-generated method stub
 
 			}
 		});
 
-		_analyzer.addListener(new ProjectAnalyzer.Listener() {
+		_analyzer.addListener(new ProjectAnalyzer.Listener()
+		{
 
 			// TODO(Laszlo): find a cleaner solution.
 			// If the procedure changes, but the focus is not changed
@@ -584,13 +483,16 @@ public class PicturePresenter {
 			private int _oldSize = -1;
 
 			@Override
-			public void onFinishAnalysis(final ProjectAnalyzer analyzer) {
+			public void onFinishAnalysis(final ProjectAnalyzer analyzer)
+			{
 				_procedureView.requireUpdate();
 				_stepCollector.requireRedraw();
-				if (_oldSize != analyzer.getNodeCount() && _focus.isSet()) {
+				if (_oldSize != analyzer.getNodeCount() && _focus.isSet())
+				{
 					final int index = analyzer.indexOf(_focus.getFocused());
-					int oldFocusIndex = _procedureView.getFocus();
-					if (index != oldFocusIndex) {
+					final int oldFocusIndex = _procedureView.getFocus();
+					if (index != oldFocusIndex)
+					{
 						_procedureView.setFocus(index);
 					}
 					_oldSize = analyzer.getNodeCount();
@@ -603,16 +505,20 @@ public class PicturePresenter {
 		_focus.setFocus(picture.getEventedProcedure().getRoot().get(0));
 		_procedureView.setFocus(0);
 
-		_focus.addListener(new InstructionFocus.Listener() {
+		_focus.addListener(new InstructionFocus.Listener()
+		{
 
 			@Override
-			public void onFocusChanged(final InstructionFocus focus) {
-				if (focus.isSet()) {
-					int index = _analyzer.indexOf(focus.getFocused());
-					_procedureView
-							.setFocus(index);
+			public void onFocusChanged(final InstructionFocus focus)
+			{
+				if (focus.isSet())
+				{
+					final int index = _analyzer.indexOf(focus.getFocused());
+					_procedureView.setFocus(index);
 					_selection.setSelection(_focus.getFocused().getTarget());
-				} else {
+				}
+				else
+				{
 					_procedureView.setFocus(-1);
 					_selection.setSelection(null);
 				}
@@ -626,57 +532,53 @@ public class PicturePresenter {
 
 		final JComponent stage = _stagePresenter.getView();
 
-		stage.addMouseListener(new MouseAdapter() {
+		stage.addMouseListener(new MouseAdapter()
+		{
 			@Override
-			public void mousePressed(final MouseEvent e) {
+			public void mousePressed(final MouseEvent e)
+			{
 				super.mousePressed(e);
 				_toolController.press();
 			}
 
 			@Override
-			public void mouseReleased(final MouseEvent e) {
+			public void mouseReleased(final MouseEvent e)
+			{
 				// TODO Auto-generated method stub
 				super.mouseReleased(e);
 				_toolController.release();
 			}
 		});
 
-		stage.addMouseMotionListener(new MouseMotionAdapter() {
+		stage.addMouseMotionListener(new MouseMotionAdapter()
+		{
 			@Override
-			public void mouseMoved(final MouseEvent e) {
+			public void mouseMoved(final MouseEvent e)
+			{
 				super.mouseMoved(e);
 
-				final int x = e.getX()
-						- (e.getComponent().getWidth() - _stage.getSize().x)
-						/ 2;
-				final int y = e.getY()
-						- (e.getComponent().getHeight() - _stage.getSize().y)
-						/ 2;
+				final int x = e.getX() - (e.getComponent().getWidth() - _stage.getSize().x) / 2;
+				final int y = e.getY() - (e.getComponent().getHeight() - _stage.getSize().y) / 2;
 
 				_toolController.moveTo(x, y);
 			}
 
 			@Override
-			public void mouseDragged(final MouseEvent e) {
+			public void mouseDragged(final MouseEvent e)
+			{
 				super.mouseMoved(e);
 
-				final int x = e.getX()
-						- (e.getComponent().getWidth() - _stage.getSize().x)
-						/ 2;
-				final int y = e.getY()
-						- (e.getComponent().getHeight() - _stage.getSize().y)
-						/ 2;
+				final int x = e.getX() - (e.getComponent().getWidth() - _stage.getSize().x) / 2;
+				final int y = e.getY() - (e.getComponent().getHeight() - _stage.getSize().y) / 2;
 
 				_toolController.moveTo(x, y);
 			}
 		});
 
-		final InputMap inputMapStage = stage
-				.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		final InputMap inputMapStage = stage.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		final ActionMap actionMapStage = stage.getActionMap();
 
-		final InputMap inputMapProcedure = _procedureView
-				.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		final InputMap inputMapProcedure = _procedureView.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		final ActionMap actionMapProcedure = _procedureView.getActionMap();
 
 		inputMapProcedure.put(KeyStroke.getKeyStroke("UP"), "up");
@@ -688,10 +590,8 @@ public class PicturePresenter {
 		inputMapStage.put(KeyStroke.getKeyStroke("alt TAB"), "cycle");
 
 		inputMapStage.put(KeyStroke.getKeyStroke("W"), "toggleToolOption");
-		inputMapStage.put(KeyStroke.getKeyStroke("shift W"),
-				"toggleToolOption");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt shift W"),
-				"toggleToolOption");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift W"), "toggleToolOption");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift W"), "toggleToolOption");
 		inputMapStage.put(KeyStroke.getKeyStroke("alt  W"), "toggleToolOption");
 
 		inputMapStage.put(KeyStroke.getKeyStroke("G"), "toggleGuide");
@@ -699,147 +599,106 @@ public class PicturePresenter {
 		inputMapStage.put(KeyStroke.getKeyStroke("alt shift G"), "toggleGuide");
 		inputMapStage.put(KeyStroke.getKeyStroke("alt G"), "toggleGuide");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("shift pressed SHIFT"),
-				"shiftModifierOn");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift pressed SHIFT"), "shiftModifierOn");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("alt shift pressed SHIFT"),
-				"shiftModifierOn");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift pressed SHIFT"), "shiftModifierOn");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("released SHIFT"),
-				"shiftModifierOff");
+		inputMapStage.put(KeyStroke.getKeyStroke("released SHIFT"), "shiftModifierOff");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("alt released SHIFT"),
-				"shiftModifierOff");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt released SHIFT"), "shiftModifierOff");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("alt pressed ALT"),
-				"altModifierOn");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt pressed ALT"), "altModifierOn");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("shift alt pressed ALT"),
-				"altModifierOn");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift alt pressed ALT"), "altModifierOn");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("released ALT"),
-				"altModifierOff");
+		inputMapStage.put(KeyStroke.getKeyStroke("released ALT"), "altModifierOff");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("shift released ALT"),
-				"altModifierOff");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift released ALT"), "altModifierOff");
 
 		inputMapStage.put(KeyStroke.getKeyStroke("ESCAPE"), "cancel");
 		inputMapStage.put(KeyStroke.getKeyStroke("SPACE"), "showPreview");
 		inputMapStage.put(KeyStroke.getKeyStroke("ctrl SPACE"), "showPreview");
 		inputMapStage.put(KeyStroke.getKeyStroke("shift SPACE"), "showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("shift ctrl SPACE"),
-				"showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift ctrl SPACE"), "showPreview");
 		inputMapStage.put(KeyStroke.getKeyStroke("alt SPACE"), "showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt ctrl SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt shift SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt shift ctrl SPACE"),
-				"showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt ctrl SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift ctrl SPACE"), "showPreview");
 		inputMapStage.put(KeyStroke.getKeyStroke("meta SPACE"), "showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta shift SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta ctrl SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta alt SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta shift ctrl SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta alt ctrl SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift SPACE"),
-				"showPreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift ctrl SPACE"),
-				"showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta shift SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta ctrl SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta shift ctrl SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt ctrl SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift SPACE"), "showPreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift ctrl SPACE"), "showPreview");
 
-		inputMapStage.put(KeyStroke.getKeyStroke("released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("shift released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("shift ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("alt shift released SPACE"),
-				"hidePreview");
-		inputMapStage.put(
-				KeyStroke.getKeyStroke("alt shift ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta shift released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(KeyStroke.getKeyStroke("meta alt released SPACE"),
-				"hidePreview");
-		inputMapStage.put(
-				KeyStroke.getKeyStroke("meta shift ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(
-				KeyStroke.getKeyStroke("meta alt ctrl released SPACE"),
-				"hidePreview");
-		inputMapStage.put(
-				KeyStroke.getKeyStroke("meta alt shift released SPACE"),
-				"hidePreview");
-		inputMapStage.put(
-				KeyStroke.getKeyStroke("meta alt shift ctrl released SPACE"),
-				"hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("shift ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("alt shift ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta shift released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta shift ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt ctrl released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift released SPACE"), "hidePreview");
+		inputMapStage.put(KeyStroke.getKeyStroke("meta alt shift ctrl released SPACE"), "hidePreview");
 
 		actionMapStage.put("showPreview", new SetPreviewAction(this, true));
 		actionMapStage.put("hidePreview", new SetPreviewAction(this, false));
 		actionMapStage.put("cancel", new CancelToolAction(_toolController));
 
 		actionMapStage.put("cycle", new CycleToolAction(_toolController));
-		actionMapStage.put("toggleGuide",
-				new ToggleGuideAction(eProcedure, _analyzer, _selection));
+		actionMapStage.put("toggleGuide", new ToggleGuideAction(eProcedure, _analyzer, _selection));
 
-		actionMapStage.put("toggleToolOption",
-				new ToggleToolOptionAction(_toolController));
+		actionMapStage.put("toggleToolOption", new ToggleToolOptionAction(_toolController));
 
-		actionMapStage.put("shiftModifierOn",
-				new ShiftModifierAction(_toolController, true));
-		actionMapStage.put("shiftModifierOff",
-				new ShiftModifierAction(_toolController, false));
+		actionMapStage.put("shiftModifierOn", new ShiftModifierAction(_toolController, true));
+		actionMapStage.put("shiftModifierOff", new ShiftModifierAction(_toolController, false));
 
-		actionMapStage.put("altModifierOn",
-				new AltModifierAction(_toolController, true));
-		actionMapStage.put("altModifierOff",
-				new AltModifierAction(_toolController, false));
+		actionMapStage.put("altModifierOn", new AltModifierAction(_toolController, true));
+		actionMapStage.put("altModifierOff", new AltModifierAction(_toolController, false));
 
-		actionMapProcedure.put("up",
-				new FocusPreviousInstructionAction(_focus));
+		actionMapProcedure.put("up", new FocusPreviousInstructionAction(_focus));
 
 		actionMapProcedure.put("down", new FocusNextInstructionAction(_focus));
 	}
 
-	public void addListener(final Listener listener) {
+	public void addListener(final Listener listener)
+	{
 		_listeners.add(listener);
 	}
 
-	public void removeListener(final Listener listener) {
+	public void removeListener(final Listener listener)
+	{
 		_listeners.remove(listener);
 	}
 
-	public void update() {
+	public void update()
+	{
 		_picture.getEventedProcedure().analyze(_analyzer);
 	}
 
-	private void evaluateProcedure() {
+	private void evaluateProcedure()
+	{
 		_runtime.stop();
 		_runtime.setSize(_picture.getSize());
 		_picture.getEventedProcedure().evaluate(_runtime);
 	}
 
-	public Preview getPreview() {
+	public Preview getPreview()
+	{
 		return _previewCollector;
 	}
 
-	public void appendTo(final Container container) {
+	public void appendTo(final Container container)
+	{
 		container.removeAll();
 		container.add(_splitPane, BorderLayout.CENTER);
 
@@ -847,65 +706,72 @@ public class PicturePresenter {
 		container.repaint();
 	}
 
-	private static class PreviewCollector
-			implements Preview, ProjectRuntime.Listener {
+	private static class PreviewCollector implements Preview, ProjectRuntime.Listener
+	{
 
-		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-				Path2D.Double::new);
+		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(Path2D.Double::new);
 
 		private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
 		private final Vec2i _size = new Vec2i();
 
 		@Override
-		public void draw(final Graphics2D g2) {
+		public void draw(final Graphics2D g2)
+		{
 			g2.setColor(Color.DARK_GRAY);
-			for (int i = 0, j = _collectedShapes.size(); i < j; i++) {
+			for (int i = 0, j = _collectedShapes.size(); i < j; i++)
+			{
 				g2.fill(_collectedShapes.get(i));
 				g2.draw(_collectedShapes.get(i));
 			}
 		}
 
 		@Override
-		public int getWidth() {
+		public int getWidth()
+		{
 			return _size.x;
 		}
 
 		@Override
-		public int getHeight() {
+		public int getHeight()
+		{
 			return _size.y;
 		}
 
 		@Override
-		public void onEvalInstruction(final ProjectRuntime runtime,
-									  final Evaluable evaluable) {
+		public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable evaluable)
+		{
 
 		}
 
 		@Override
-		public void onError(final ProjectRuntime runtime,
-							final Evaluable instruction, final Error error) {
+		public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+		{
 
 		}
 
 		@Override
-		public void onBeginEvaluation(final ProjectRuntime runtime) {
+		public void onBeginEvaluation(final ProjectRuntime runtime)
+		{
 			_collectedShapes.clear();
 			_size.set(runtime.getSize());
 		}
 
 		@Override
-		public void onFinishEvaluation(final ProjectRuntime runtime) {
+		public void onFinishEvaluation(final ProjectRuntime runtime)
+		{
 			_pathPool.release();
 
 		}
 
 		@Override
-		public void onPopScope(final ProjectRuntime runtime,
-							   final FastIterable<Identifier<? extends Form>> poppedIds) {
-			for (int i = 0, j = poppedIds.size(); i < j; i++) {
+		public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<? extends Form>> poppedIds)
+		{
+			for (int i = 0, j = poppedIds.size(); i < j; i++)
+			{
 				final Identifier<? extends Form> id = poppedIds.get(i);
 				final Form form = runtime.get(id);
-				if (form.getType() == DrawingType.Draw) {
+				if (form.getType() == DrawingType.Draw)
+				{
 					final GeneralPath.Double shape = _pathPool.take();
 					shape.reset();
 					form.appendToPathForRuntime(runtime, shape);
@@ -916,17 +782,17 @@ public class PicturePresenter {
 
 	}
 
-	private static class ProcedureViewAdapter implements ProcedureView.Adapter {
+	private static class ProcedureViewAdapter implements ProcedureView.Adapter
+	{
 
 		private final ProjectAnalyzer _analyzer;
 		private final StepSnapshotCollector _stepCollector;
 		private final InstructionFocus _focus;
 		private final EventedProcedure _procedure;
 
-		public ProcedureViewAdapter(final ProjectAnalyzer analyzer,
-									final InstructionFocus focus,
-									final StepSnapshotCollector stepCollector,
-									final EventedProcedure procedure) {
+		public ProcedureViewAdapter(final ProjectAnalyzer analyzer, final InstructionFocus focus, final
+		StepSnapshotCollector stepCollector, final EventedProcedure procedure)
+		{
 			_analyzer = analyzer;
 			_stepCollector = stepCollector;
 			_focus = focus;
@@ -934,118 +800,135 @@ public class PicturePresenter {
 		}
 
 		@Override
-		public void onSelect(final int index) {
+		public void onSelect(final int index)
+		{
 			_focus.setFocus((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public BufferedImage getImageAt(final int index) {
-			return _stepCollector.getImageOf(
-					(Instruction) _analyzer.getNode(index).getSource());
+		public BufferedImage getImageAt(final int index)
+		{
+			return _stepCollector.getImageOf((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public int getImageWidth() {
+		public int getImageWidth()
+		{
 			return _stepCollector.getWidth();
 		}
 
 		@Override
-		public int getImageHeight() {
+		public int getImageHeight()
+		{
 			return _stepCollector.getHeight();
 		}
 
 		@Override
-		public boolean hasFailed(final int index) {
-			return _stepCollector.hasFailed(
-					(Instruction) _analyzer.getNode(index).getSource());
+		public boolean hasFailed(final int index)
+		{
+			return _stepCollector.hasFailed((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public boolean hasBeenEvaluated(final int index) {
-			return _stepCollector.hasBeenEvaluated(
-					(Instruction) _analyzer.getNode(index).getSource());
+		public boolean hasBeenEvaluated(final int index)
+		{
+			return _stepCollector.hasBeenEvaluated((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public Error getError(final int index) {
-			return _stepCollector.getError(
-					(Instruction) _analyzer.getNode(index).getSource());
+		public Error getError(final int index)
+		{
+			return _stepCollector.getError((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public String getDescription(final int index) {
+		public String getDescription(final int index)
+		{
 			return _analyzer.getNode(index).getLabel();
 		}
 
 		@Override
-		public void removeInstruction(final int index) {
-			_procedure.removeInstruction(
-					(Instruction) _analyzer.getNode(index).getSource());
+		public void removeInstruction(final int index)
+		{
+			_procedure.removeInstruction((Instruction) _analyzer.getNode(index).getSource());
 		}
 
 		@Override
-		public int getSize() {
+		public int getSize()
+		{
 			return _analyzer.getNodeCount();
 		}
 
 		@Override
-		public int getIndentation(final int i) {
+		public int getIndentation(final int i)
+		{
 			return _analyzer.getNode(i).getIndentation();
 		}
 
 		@Override
-		public boolean isEmptySlot(final int index) {
-			return _analyzer.getNode(index)
-					.getSource() instanceof NullInstruction;
+		public boolean isEmptySlot(final int index)
+		{
+			return _analyzer.getNode(index).getSource() instanceof NullInstruction;
 		}
 
 		@Override
-		public boolean isGroup(final int index) {
+		public boolean isGroup(final int index)
+		{
 			return _analyzer.getNode(index).isGroup();
 		}
 
 	}
 
-	public static class StageAdapter implements StageCollector.Adapter {
+	public static class StageAdapter implements StageCollector.Adapter
+	{
 
 		private final InstructionFocus _focus;
 
-		public StageAdapter(final InstructionFocus focus) {
+		public StageAdapter(final InstructionFocus focus)
+		{
 			_focus = focus;
 		}
 
 		@Override
-		public boolean isInFocus(final Evaluable instruction) {
+		public boolean isInFocus(final Evaluable instruction)
+		{
 			return instruction.equals(_focus.getFocused());
 		}
 
 	}
 
-	private static class HitTesterAdapter implements HitTester.Adapter {
+	private static class HitTesterAdapter implements HitTester.Adapter
+	{
 		private final FormSelection _selection;
 
-		public HitTesterAdapter(final FormSelection selection) {
+		public HitTesterAdapter(final FormSelection selection)
+		{
 			_selection = selection;
 		}
 
 		@Override
-		public boolean isSelected(final Entity entity) {
+		public boolean isSelected(final Entity entity)
+		{
 			return entity.getId().equals(_selection.getSelected());
 		}
 
 		@Override
-		public boolean belongsToSelected(final SnapPoint snapPoint) {
-			if (snapPoint instanceof EntityPoint) {
-				return ((EntityPoint) snapPoint).getFormId()
-						.equals(_selection.getSelected());
+		public boolean belongsToSelected(final SnapPoint snapPoint)
+		{
+			if (snapPoint instanceof EntityPoint)
+			{
+				return ((EntityPoint) snapPoint).getFormId().equals(_selection.getSelected());
 			}
 
-			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(_selection.getSelected()));
+			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA()
+					.equals(_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals
+					(_selection.getSelected()));
 
 		}
 	}
 
-	public void setPreviewMode(final boolean b) {
+	public void setPreviewMode(final boolean b)
+	{
 		_stagePresenter.setPreview(b);
 	}
 }

@@ -1,6 +1,7 @@
 package reform.naming;
 
 
-public interface Named {
+public interface Named
+{
 	Name getName();
 }

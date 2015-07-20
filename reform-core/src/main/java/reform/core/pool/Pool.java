@@ -1,13 +1,14 @@
 package reform.core.pool;
 
-public interface Pool<E> {
+public interface Pool<E>
+{
 	E take();
 
-    void release();
+	void release();
 
-    void release(PoolReleaser<E> releaser);
+	void release(PoolReleaser<E> releaser);
 
-    void clean(PoolCleaner<E> cleaner);
+	void clean(PoolCleaner<E> cleaner);
 
-    int size();
+	int size();
 }

@@ -20,9 +20,11 @@ import reform.stage.tooling.Tool;
 import reform.stage.tooling.ToolState;
 import reform.stage.tooling.cursor.Cursor;
 
-public class ScaleFormTool implements Tool {
+public class ScaleFormTool implements Tool
+{
 
-	private enum State {
+	private enum State
+	{
 		Idle, Snapped, Pressed
 	}
 
@@ -46,10 +48,9 @@ public class ScaleFormTool implements Tool {
 	private ConstantScaleFactor _currentFactor;
 	private Instruction _baseInstruction;
 
-	public ScaleFormTool(final SelectionTool selectionTool,
-			final ToolState toolState, final Cursor cursor,
-			final HitTester hitTester, final InstructionFocus focus,
-			final EventedProcedure eProcedure) {
+	public ScaleFormTool(final SelectionTool selectionTool, final ToolState toolState, final Cursor cursor, final
+	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
+	{
 		_selectionTool = selectionTool;
 		_toolState = toolState;
 		_cursor = cursor;
@@ -59,102 +60,122 @@ public class ScaleFormTool implements Tool {
 	}
 
 	@Override
-	public void setUp() {
-        _toolState.setViewState(ToolState.ViewState.Handle);
-        _toolState.setSelectionState(ToolState.SelectionState.Handle);
+	public void setUp()
+	{
+		_toolState.setViewState(ToolState.ViewState.Handle);
+		_toolState.setSelectionState(ToolState.SelectionState.Handle);
 
-        refreshHandles();
+		refreshHandles();
 	}
 
-	private void refreshHandles() {
-		_toolState.setHandles(_hitTester
-				.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
+	private void refreshHandles()
+	{
+		_toolState.setHandles(_hitTester.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
 	}
 
 	@Override
-	public void tearDown() {
+	public void tearDown()
+	{
 		_toolState.setPivot(null);
 	}
 
 	@Override
-	public void cancel() {
-		if (_state == State.Pressed) {
+	public void cancel()
+	{
+		if (_state == State.Pressed)
+		{
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 			_toolState.setActiveHandle(null);
 			_toolState.setPivot(null);
 			_baseInstruction = null;
 			_state = State.Idle;
-		} else {
+		}
+		else
+		{
 			_selectionTool.cancel();
 			_toolState.clearHandles();
 		}
 
-        _toolState.setSelectionState(ToolState.SelectionState.Handle);
+		_toolState.setSelectionState(ToolState.SelectionState.Handle);
 	}
 
 	@Override
-	public void press() {
-		if (_state == State.Snapped) {
+	public void press()
+	{
+		if (_state == State.Snapped)
+		{
 			_state = State.Pressed;
 			_startPosition.set(_currentHandle.getX(), _currentHandle.getY());
 			_baseInstruction = _focus.getFocused();
 			_currentFactor = new ConstantScaleFactor(1);
-			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary
-					? _pivotPrimary : _pivotSecondary;
+			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary;
 
-			_currentInstruction = new ScaleInstruction(
-					_currentHandle.getFormId(), _currentFactor, pivotPoint);
-			_eProcedure.addInstruction(_currentInstruction, Position.After,
-					_baseInstruction);
-			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
-                    _cursor.getPosition().y - _currentHandle.getY());
+			_currentInstruction = new ScaleInstruction(_currentHandle.getFormId(), _currentFactor, pivotPoint);
+			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
+			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(), _cursor.getPosition().y -
+					_currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 
-            _toolState.setSelectionState(ToolState.SelectionState.None);
-		} else {
+			_toolState.setSelectionState(ToolState.SelectionState.None);
+		}
+		else
+		{
 			_selectionTool.press();
 			refreshHandles();
 		}
 	}
 
 	@Override
-	public void release() {
-		if (_state == State.Pressed) {
-			if (_currentFactor.isDegenerated()) {
+	public void release()
+	{
+		if (_state == State.Pressed)
+		{
+			if (_currentFactor.isDegenerated())
+			{
 				cancel();
-			} else {
+			}
+			else
+			{
 				_state = State.Idle;
 
 				_currentInstruction = null;
 				_baseInstruction = null;
 				_toolState.setActiveHandle(null);
 			}
-		} else {
+		}
+		else
+		{
 			_selectionTool.release();
 		}
 
-        _toolState.setSelectionState(ToolState.SelectionState.Handle);
+		_toolState.setSelectionState(ToolState.SelectionState.Handle);
 	}
 
 	@Override
-	public void refresh() {
+	public void refresh()
+	{
 		_selectionTool.refresh();
 		refreshHandles();
 
 	}
 
 	@Override
-	public void toggleOption() {
+	public void toggleOption()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void cycle() {
-		if (_state == State.Snapped) {
+	public void cycle()
+	{
+		if (_state == State.Snapped)
+		{
 			_cursor.cycleNextHandle();
-		} else {
+		}
+		else
+		{
 			_cursor.cycleNextSnap();
 		}
 		_selectionTool.cycle();
@@ -164,46 +185,49 @@ public class ScaleFormTool implements Tool {
 	}
 
 	@Override
-	public void input(final Input input) {
-		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary
-				: Choice.Primary;
+	public void input(final Input input)
+	{
+		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary : Choice.Primary;
 
-		switch (_state) {
-		case Idle:
-		case Snapped: {
-			_currentHandle = _cursor.getHandle(
-					HitTester.EntityFilter.OnlySelected, HandleFilter.Pivot);
-			if (_currentHandle == null) {
-				_state = State.Idle;
-			} else {
-				final PivotPair pivotPair = _currentHandle.getPivot();
-				_pivotPrimary = pivotPair.createReference(Choice.Primary);
-				_pivotSecondary = pivotPair.createReference(Choice.Secondary);
-				_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary),
-						pivotPair.getY(Choice.Primary));
-				_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary),
-						pivotPair.getY(Choice.Secondary));
-				_state = State.Snapped;
+		switch (_state)
+		{
+			case Idle:
+			case Snapped:
+			{
+				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected, HandleFilter.Pivot);
+				if (_currentHandle == null)
+				{
+					_state = State.Idle;
+				}
+				else
+				{
+					final PivotPair pivotPair = _currentHandle.getPivot();
+					_pivotPrimary = pivotPair.createReference(Choice.Primary);
+					_pivotSecondary = pivotPair.createReference(Choice.Secondary);
+					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary), pivotPair.getY(Choice.Primary));
+					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary), pivotPair.getY(Choice.Secondary));
+					_state = State.Snapped;
+				}
+
+				_toolState.setActiveHandle(_currentHandle);
+				break;
 			}
+			case Pressed:
+			{
+				_currentFactor.setFactor(calcFactor(input.getShiftModifier().isActive()));
+				_currentInstruction.setFixPoint(_pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary);
 
-			_toolState.setActiveHandle(_currentHandle);
-			break;
-		}
-		case Pressed: {
-			_currentFactor
-					.setFactor(calcFactor(input.getShiftModifier().isActive()));
-			_currentInstruction.setFixPoint(_pivotChoice == Choice.Primary
-					? _pivotPrimary : _pivotSecondary);
-
-			_eProcedure.publishInstructionChange(_currentInstruction);
-			break;
-		}
+				_eProcedure.publishInstructionChange(_currentInstruction);
+				break;
+			}
 		}
 
-		if (_state != State.Idle) {
-			_toolState.setPivot(_pivotChoice == Choice.Primary
-					? _pivotPrimaryPos : _pivotSecondaryPos);
-		} else {
+		if (_state != State.Idle)
+		{
+			_toolState.setPivot(_pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos);
+		}
+		else
+		{
 			_toolState.setPivot(null);
 		}
 
@@ -212,9 +236,9 @@ public class ScaleFormTool implements Tool {
 		refreshHandles();
 	}
 
-	private double calcFactor(final boolean stepped) {
-		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos
-				: _pivotSecondaryPos;
+	private double calcFactor(final boolean stepped)
+	{
+		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos;
 
 		final double startPosX = _startPosition.x;
 		final double startPosY = _startPosition.y;
@@ -228,23 +252,19 @@ public class ScaleFormTool implements Tool {
 		final double deltaCurrentX = currentX - pivotPos.x;
 		final double deltaCurrentY = currentY - pivotPos.y;
 
-		final double deltaProjectedX = Vector.projectionX(deltaCurrentX,
-				deltaCurrentY, deltaStartX, deltaStartY);
-		final double deltaProjectedY = Vector.projectionY(deltaCurrentX,
-				deltaCurrentY, deltaStartX, deltaStartY);
+		final double deltaProjectedX = Vector.projectionX(deltaCurrentX, deltaCurrentY, deltaStartX, deltaStartY);
+		final double deltaProjectedY = Vector.projectionY(deltaCurrentX, deltaCurrentY, deltaStartX, deltaStartY);
 
 		final double startDistance = Vector.length(deltaStartX, deltaStartY);
-		final double projectedDistance = Vector.length(deltaProjectedX,
-				deltaProjectedY);
+		final double projectedDistance = Vector.length(deltaProjectedX, deltaProjectedY);
 
-		if (startDistance == 0) {
+		if (startDistance == 0)
+		{
 			return 0;
 		}
 
-		final double factor = Math
-				.signum(Vector.dot(deltaProjectedX, deltaProjectedY,
-						deltaStartX, deltaStartY))
-				* projectedDistance / startDistance;
+		final double factor = Math.signum(Vector.dot(deltaProjectedX, deltaProjectedY, deltaStartX, deltaStartY)) *
+				projectedDistance / startDistance;
 
 		return stepped ? Vector.inStepsOf(factor, 0.1) : factor;
 

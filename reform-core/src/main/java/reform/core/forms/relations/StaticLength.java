@@ -5,29 +5,33 @@ import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.Length;
 import reform.identity.Identifier;
 
-public class StaticLength implements Length {
+public class StaticLength implements Length
+{
 
 	private final Identifier<? extends Form> _formId;
 	private final int _offset;
 
-	public StaticLength(final Identifier<? extends Form> formId,
-			final int offset) {
+	public StaticLength(final Identifier<? extends Form> formId, final int offset)
+	{
 		_formId = formId;
 		_offset = offset;
 	}
 
 	@Override
-	public double getValueForRuntime(final Runtime runtime) {
+	public double getValueForRuntime(final Runtime runtime)
+	{
 		return Double.longBitsToDouble(runtime.get(_formId, _offset));
 	}
 
-	public void setForRuntime(final Runtime runtime, final double length) {
+	public void setForRuntime(final Runtime runtime, final double length)
+	{
 		runtime.set(_formId, _offset, Double.doubleToRawLongBits(length));
 	}
 
 
 	@Override
-	public boolean isValidFor(final Runtime runtime) {
+	public boolean isValidFor(final Runtime runtime)
+	{
 		return runtime.get(_formId) != null;
 	}
 

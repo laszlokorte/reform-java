@@ -1,5 +1,6 @@
 package reform.core.graphics;
 
-public enum DrawingType {
+public enum DrawingType
+{
 	None, Draw, Guide, Mask
 }

@@ -1,14 +1,16 @@
 package reform.core.analyzer;
 
-import java.util.ArrayList;
-
 import reform.core.forms.Form;
 import reform.identity.IdentifiableList;
 import reform.identity.Identifier;
 
-public class ProjectAnalyzer implements Analyzer {
+import java.util.ArrayList;
 
-	public interface Listener {
+public class ProjectAnalyzer implements Analyzer
+{
+
+	public interface Listener
+	{
 		void onFinishAnalysis(ProjectAnalyzer analyzer);
 	}
 
@@ -18,7 +20,8 @@ public class ProjectAnalyzer implements Analyzer {
 	private final IdentifiableList<Form> _forms = new IdentifiableList<>();
 
 	@Override
-	public void begin() {
+	public void begin()
+	{
 		_depth = -1;
 		_nodes.clear();
 		_forms.clear();
@@ -26,69 +29,86 @@ public class ProjectAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public void finish() {
-		if (_depth != -1) {
+	public void finish()
+	{
+		if (_depth != -1)
+		{
 			throw new RuntimeException("Depth must be 0");
 		}
 
-		synchronized (_listeners) {
-			for (int i = 0; i < _listeners.size(); i++) {
+		synchronized (_listeners)
+		{
+			for (int i = 0; i < _listeners.size(); i++)
+			{
 				_listeners.get(i).onFinishAnalysis(this);
 			}
 		}
 	}
 
 	@Override
-	public void publish(final Analyzable source, final String label) {
+	public void publish(final Analyzable source, final String label)
+	{
 		_nodes.add(new FlatNode(_depth, label, source, false));
 
 	}
 
 	@Override
-	public void publishGroup(final Analyzable source, final String label) {
+	public void publishGroup(final Analyzable source, final String label)
+	{
 		_nodes.add(new FlatNode(_depth, label, source, true));
 
 	}
 
 	@Override
-	public void pushScope() {
+	public void pushScope()
+	{
 		_depth += 1;
 	}
 
 	@Override
-	public void popScope() {
+	public void popScope()
+	{
 		_depth -= 1;
 	}
 
 	@Override
-	public void announceForm(final Form form) {
+	public void announceForm(final Form form)
+	{
 		_forms.add(form);
 	}
 
 	@Override
-	public Form getForm(final Identifier<? extends Form> formId) {
+	public Form getForm(final Identifier<? extends Form> formId)
+	{
 		return _forms.getById(formId);
 	}
 
-	public void addListener(final Listener listener) {
+	public void addListener(final Listener listener)
+	{
 		_listeners.add(listener);
 	}
 
-	public void removeListener(final Listener listener) {
+	public void removeListener(final Listener listener)
+	{
 		_listeners.remove(listener);
 	}
 
-	public FlatNode getNode(final int index) {
+	public FlatNode getNode(final int index)
+	{
 		return _nodes.get(index);
 	}
 
-	public int getNodeCount() {
+	public int getNodeCount()
+	{
 		return _nodes.size();
 	}
 
-	public int indexOf(final Analyzable source) {
-		for (int i = 0; i < _nodes.size(); i++) {
-			if (_nodes.get(i).getSource() == source) {
+	public int indexOf(final Analyzable source)
+	{
+		for (int i = 0; i < _nodes.size(); i++)
+		{
+			if (_nodes.get(i).getSource() == source)
+			{
 				return i;
 			}
 		}

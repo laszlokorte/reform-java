@@ -6,82 +6,98 @@ import reform.core.runtime.relations.Direction;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.core.runtime.relations.TranslationDistance;
 
-public class RelativeDistance implements TranslationDistance {
+public class RelativeDistance implements TranslationDistance
+{
 
 	private final ReferencePoint _refA;
 	private ReferencePoint _refB;
 	private Direction _direction = FreeDirection.Free;
 
-	public RelativeDistance(final ReferencePoint refA, final ReferencePoint refB) {
+	public RelativeDistance(final ReferencePoint refA, final ReferencePoint refB)
+	{
 		_refA = refA;
 		_refB = refB;
 	}
 
 	@Override
-	public double getXValueForRuntime(final Runtime runtime) {
-		final double deltaX = _refB.getXValueForRuntime(runtime)
-				- _refA.getXValueForRuntime(runtime);
-		final double deltaY = _refB.getYValueForRuntime(runtime)
-				- _refA.getYValueForRuntime(runtime);
+	public double getXValueForRuntime(final Runtime runtime)
+	{
+		final double deltaX = _refB.getXValueForRuntime(runtime) - _refA.getXValueForRuntime(runtime);
+		final double deltaY = _refB.getYValueForRuntime(runtime) - _refA.getYValueForRuntime(runtime);
 
 		return _direction.getAdjustedXForRuntime(runtime, 0, 0, deltaX, deltaY);
 	}
 
 	@Override
-	public double getYValueForRuntime(final Runtime runtime) {
-		final double deltaX = _refB.getXValueForRuntime(runtime)
-				- _refA.getXValueForRuntime(runtime);
-		final double deltaY = _refB.getYValueForRuntime(runtime)
-				- _refA.getYValueForRuntime(runtime);
+	public double getYValueForRuntime(final Runtime runtime)
+	{
+		final double deltaX = _refB.getXValueForRuntime(runtime) - _refA.getXValueForRuntime(runtime);
+		final double deltaY = _refB.getYValueForRuntime(runtime) - _refA.getYValueForRuntime(runtime);
 
 		return _direction.getAdjustedYForRuntime(runtime, 0, 0, deltaX, deltaY);
 	}
 
 	@Override
-	public String getDescription(final Analyzer analyzer) {
-		return getDirectionString() + " so " + _refA.getDescription(analyzer)
-				+ " matches " + _refB.getDescription(analyzer);
+	public String getDescription(final Analyzer analyzer)
+	{
+		return getDirectionString() + " so " + _refA.getDescription(analyzer) + " matches " + _refB.getDescription
+				(analyzer);
 	}
 
-	private String getDirectionString() {
-		if (_direction == Direction.CartesianDirection.Horizontal) {
+	private String getDirectionString()
+	{
+		if (_direction == Direction.CartesianDirection.Horizontal)
+		{
 			return "horizontally ";
-		} else if (_direction == Direction.CartesianDirection.Vertical) {
+		}
+		else if (_direction == Direction.CartesianDirection.Vertical)
+		{
 			return "vertically ";
-		} else if (_direction instanceof ProportionalDirection) {
+		}
+		else if (_direction instanceof ProportionalDirection)
+		{
 			return "proportionally ";
-		} else {
+		}
+		else
+		{
 			return "";
 		}
 	}
 
 	@Override
-	public boolean isValidFor(final Runtime runtime) {
+	public boolean isValidFor(final Runtime runtime)
+	{
 		return _refA.isValidFor(runtime) && _refB.isValidFor(runtime);
 	}
 
-	public Direction getDirection() {
+	public Direction getDirection()
+	{
 		return _direction;
 	}
 
-	public ReferencePoint getReferenceA() {
+	public ReferencePoint getReferenceA()
+	{
 		return _refA;
 	}
 
-	public ReferencePoint getReferenceB() {
+	public ReferencePoint getReferenceB()
+	{
 		return _refB;
 	}
 
 	@Override
-	public boolean isDegenerated() {
+	public boolean isDegenerated()
+	{
 		return _refA.equals(_refB);
 	}
 
-	public void setDirection(final Direction direction) {
+	public void setDirection(final Direction direction)
+	{
 		_direction = direction;
 	}
 
-	public void setReferenceB(final ReferencePoint refB) {
+	public void setReferenceB(final ReferencePoint refB)
+	{
 		_refB = refB;
 	}
 

@@ -1,7 +1,8 @@
 package reform.rendering.canvas;
 
 
-public interface CanvasAdapter {
+public interface CanvasAdapter
+{
 	int getWidth();
 
 	int getHeight();

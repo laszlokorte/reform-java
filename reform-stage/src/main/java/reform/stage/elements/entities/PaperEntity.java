@@ -1,10 +1,5 @@
 package reform.stage.elements.entities;
 
-import java.awt.Shape;
-import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
-import java.util.List;
-
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.procedure.Paper;
@@ -16,7 +11,13 @@ import reform.stage.elements.EntityPoint;
 import reform.stage.elements.Handle;
 import reform.stage.elements.outline.EntityOutline;
 
-public class PaperEntity implements Entity {
+import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PaperEntity implements Entity
+{
 	private final Identifier<? extends Paper> _formId;
 
 	private final EntityPoint _topLeft;
@@ -38,9 +39,10 @@ public class PaperEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-    private String _label = "Paper";
+	private String _label = "Paper";
 
-    public PaperEntity(final Identifier<? extends Paper> formId) {
+	public PaperEntity(final Identifier<? extends Paper> formId)
+	{
 		_formId = formId;
 		_topLeft = new EntityPoint(formId, Paper.Point.TopLeft);
 		_bottomLeft = new EntityPoint(formId, Paper.Point.BottomLeft);
@@ -68,7 +70,8 @@ public class PaperEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+	public void updateForRuntime(final Runtime runtime, final Analyzer analyzer)
+	{
 		_topLeft.updateForRuntime(runtime, analyzer);
 		_bottomLeft.updateForRuntime(runtime, analyzer);
 		_topRight.updateForRuntime(runtime, analyzer);
@@ -88,53 +91,60 @@ public class PaperEntity implements Entity {
 		_shape.lineTo(_bottomLeft.getX(), _bottomLeft.getY());
 		_shape.closePath();
 
-        Form form = runtime.get(_formId);
+		final Form form = runtime.get(_formId);
 
-        _label = form.getName().getValue();
+		_label = form.getName().getValue();
 	}
 
 	@Override
-	public List<EntityPoint> getSnapPoints() {
+	public List<EntityPoint> getSnapPoints()
+	{
 		return _points;
 	}
 
 	@Override
-	public List<Handle> getHandles() {
+	public List<Handle> getHandles()
+	{
 		return _handles;
 	}
 
 	@Override
-	public boolean contains(final Vec2 position) {
-		return _topLeft.getX() < position.x && _topLeft.getY() < position.y
-				&& _bottomRight.getX() > position.x
-				&& _bottomRight.getY() > position.y;
+	public boolean contains(final Vec2 position)
+	{
+		return _topLeft.getX() < position.x && _topLeft.getY() < position.y && _bottomRight.getX() > position.x &&
+				_bottomRight.getY() > position.y;
 	}
 
 	@Override
-	public Identifier<? extends Paper> getId() {
+	public Identifier<? extends Paper> getId()
+	{
 		return _formId;
 	}
 
 	@Override
-	public EntityOutline getOutline() {
+	public EntityOutline getOutline()
+	{
 		return _outline;
 	}
 
 	@Override
-	public Shape getShape() {
+	public Shape getShape()
+	{
 		return _shape;
 	}
 
 	@Override
-	public boolean isGuide() {
+	public boolean isGuide()
+	{
 		return false;
 	}
 
 
-    @Override
-    public String getLabel() {
-        return _label;
-    }
+	@Override
+	public String getLabel()
+	{
+		return _label;
+	}
 
 
 }

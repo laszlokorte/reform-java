@@ -5,11 +5,12 @@ import reform.core.forms.Form;
 import reform.core.runtime.Evaluable;
 import reform.identity.Identifier;
 
-public interface Instruction extends Evaluable, Analyzable {
+public interface Instruction extends Evaluable, Analyzable
+{
 
 	void setParent(InstructionGroup parent);
 
 	InstructionGroup getParent();
 
-    Identifier<? extends Form> getTarget();
+	Identifier<? extends Form> getTarget();
 }

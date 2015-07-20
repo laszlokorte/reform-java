@@ -1,17 +1,18 @@
 package reform.rendering.icons;
 
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 
-public class ToolMorphIcon implements Icon {
+public class ToolMorphIcon implements Icon
+{
 
 	private final Shape _shape;
 
-	public ToolMorphIcon() {
+	public ToolMorphIcon()
+	{
 		final GeneralPath cursor = new GeneralPath();
 		final Area shape = new Area();
 		cursor.moveTo(-230.0, -460);
@@ -23,7 +24,7 @@ public class ToolMorphIcon implements Icon {
 		cursor.lineTo(-230.0, 300.0);
 		cursor.closePath();
 
-        shape.add(new Area(cursor));
+		shape.add(new Area(cursor));
 
 		final Area dot = new Area(new Ellipse2D.Double(-430, -650, 400, 400));
 		dot.subtract(new Area(new Ellipse2D.Double(-350, -570, 240, 240)));
@@ -31,18 +32,15 @@ public class ToolMorphIcon implements Icon {
 		shape.add(dot);
 		shape.subtract(new Area(new Ellipse2D.Double(-270, -490, 80, 80)));
 
-		_shape = AffineTransform.getTranslateInstance(100, 100)
-				.createTransformedShape(
-						AffineTransform.getScaleInstance(0.85, 0.85)
-						.createTransformedShape(shape));
+		_shape = AffineTransform.getTranslateInstance(100, 100).createTransformedShape(AffineTransform
+				.getScaleInstance(0.85, 0.85).createTransformedShape(shape));
 
 	}
 
 	@Override
-	public void draw(final Graphics2D g, final int x, final int y,
-			final int width) {
-		final AffineTransform t = AffineTransform.getScaleInstance(
-				width / 1000.0, width / 1000.0);
+	public void draw(final Graphics2D g, final int x, final int y, final int width)
+	{
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

@@ -1,8 +1,9 @@
 package reform.rendering.canvas;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
-public interface CanvasRenderer {
+public interface CanvasRenderer
+{
 	void render(Graphics2D g2, int width, int height);
 
 }

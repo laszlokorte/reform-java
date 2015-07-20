@@ -2,7 +2,8 @@ package reform.data;
 
 import reform.identity.Identifier;
 
-public interface ExpressionContext {
+public interface ExpressionContext
+{
 	Expression lookUp(Identifier<?> definitionId);
 
 	ExpressionContext getScope(Identifier<?> objectId);

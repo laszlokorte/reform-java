@@ -3,7 +3,8 @@ package reform.core.analyzer;
 import reform.core.forms.Form;
 import reform.identity.Identifier;
 
-public interface Analyzer {
+public interface Analyzer
+{
 	void begin();
 
 	void finish();

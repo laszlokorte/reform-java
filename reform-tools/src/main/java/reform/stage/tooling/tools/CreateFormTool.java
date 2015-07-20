@@ -25,9 +25,11 @@ import reform.stage.tooling.ToolState;
 import reform.stage.tooling.cursor.Cursor;
 import reform.stage.tooling.factory.FormFactory;
 
-public class CreateFormTool implements Tool {
+public class CreateFormTool implements Tool
+{
 
-	private enum State {
+	private enum State
+	{
 		Idle, Snapped, Pressed, PressedSnapped
 
 	}
@@ -51,11 +53,10 @@ public class CreateFormTool implements Tool {
 	private InitialDestination _currentDestination;
 	private ReferencePoint _currentStart;
 
-    public CreateFormTool(final SelectionTool selectionTool,
-			final FormFactory<? extends Form> formFactory,
-			final ToolState toolState, final Cursor cursor,
-			final HitTester hitTester, final InstructionFocus focus,
-			final EventedProcedure eProcedure) {
+	public CreateFormTool(final SelectionTool selectionTool, final FormFactory<? extends Form> formFactory, final
+	ToolState toolState, final Cursor cursor, final HitTester hitTester, final InstructionFocus focus, final
+	EventedProcedure eProcedure)
+	{
 		_selectionTool = selectionTool;
 		_formFactory = formFactory;
 		_toolState = toolState;
@@ -66,176 +67,205 @@ public class CreateFormTool implements Tool {
 	}
 
 	@Override
-	public void setUp() {
-        _toolState.setViewState(ToolState.ViewState.Snap);
-        _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
-        _toolState.setSnapPoints(
-				_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+	public void setUp()
+	{
+		_toolState.setViewState(ToolState.ViewState.Snap);
+		_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
+		_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 	}
 
 	@Override
-	public void tearDown() {
+	public void tearDown()
+	{
 
 	}
 
 	@Override
-	public void cancel() {
-		if (_state == State.Pressed || _state == State.PressedSnapped) {
+	public void cancel()
+	{
+		if (_state == State.Pressed || _state == State.PressedSnapped)
+		{
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 
-            _toolState.setViewState(ToolState.ViewState.Snap);
-			_toolState.setSnapPoints(
-					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+			_toolState.setViewState(ToolState.ViewState.Snap);
+			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 			_toolState.setActiveSnapPoint(null);
 			_toolState.clearEntityPoints();
 			_swapDirection = false;
 			_state = State.Idle;
-		} else {
+		}
+		else
+		{
 			_selectionTool.cancel();
-        }
+		}
 	}
 
 	@Override
-	public void press() {
-		if (_state == State.Snapped) {
+	public void press()
+	{
+		if (_state == State.Snapped)
+		{
 			_state = State.Pressed;
 			_startPoint = IntersectionSnapPointPool.copyIfNeeded(_currentPoint);
 			_currentStart = _startPoint.createReference();
-			_currentDestination = new RelativeFixSizeDestination(_currentStart,
-					new Vec2());
-            final Form currentForm = _formFactory.build();
-			_currentInstruction = new CreateFormInstruction(currentForm,
-					_currentDestination);
-			_eProcedure.addInstruction(_currentInstruction, Position.After,
-					_focus.getFocused());
-			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
-                    _cursor.getPosition().y - _startPoint.getY());
+			_currentDestination = new RelativeFixSizeDestination(_currentStart, new Vec2());
+			final Form currentForm = _formFactory.build();
+			_currentInstruction = new CreateFormInstruction(currentForm, _currentDestination);
+			_eProcedure.addInstruction(_currentInstruction, Position.After, _focus.getFocused());
+			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(), _cursor.getPosition().y - _startPoint
+					.getY());
 			_focus.setFocus(_currentInstruction);
-            _toolState.setViewState(ToolState.ViewState.SnapEntity);
-			_toolState.setEntityPoints(
-					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
-		} else {
+			_toolState.setViewState(ToolState.ViewState.SnapEntity);
+			_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+		}
+		else
+		{
 			_selectionTool.press();
 		}
 	}
 
 	@Override
-	public void release() {
-		if (_state == State.Pressed || _state == State.PressedSnapped) {
-			if (_currentDestination.isDegenerated()) {
+	public void release()
+	{
+		if (_state == State.Pressed || _state == State.PressedSnapped)
+		{
+			if (_currentDestination.isDegenerated())
+			{
 				cancel();
-			} else {
+			}
+			else
+			{
 				_state = State.Idle;
-                _toolState.setViewState(ToolState.ViewState.Snap);
-				_toolState.setSnapPoints(_hitTester
-						.getAllSnapPoints(HitTester.EntityFilter.Any));
+				_toolState.setViewState(ToolState.ViewState.Snap);
+				_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 				_currentInstruction = null;
 				_toolState.setActiveSnapPoint(null);
 				_toolState.clearEntityPoints();
 			}
-		} else {
+		}
+		else
+		{
 			_selectionTool.release();
 		}
 
-        _toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
-        _swapDirection = false;
+		_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
+		_swapDirection = false;
 	}
 
 	@Override
-	public void refresh() {
-		if (_state == State.Pressed || _state == State.PressedSnapped) {
-			_toolState.setSnapPoints(_hitTester
-					.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
-		} else {
-			_toolState.setSnapPoints(
-					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+	public void refresh()
+	{
+		if (_state == State.Pressed || _state == State.PressedSnapped)
+		{
+			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
+		}
+		else
+		{
+			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 		}
 
 		_selectionTool.refresh();
 	}
 
 	@Override
-	public void toggleOption() {
+	public void toggleOption()
+	{
 		_swapDirection = !_swapDirection;
 	}
 
 	@Override
-	public void cycle() {
+	public void cycle()
+	{
 		_cursor.cycleNextSnap();
 		_selectionTool.cycle();
 	}
 
 	@Override
-	public void input(final Input input) {
-		switch (_state) {
-		case Idle:
-		case Snapped: {
-			_currentPoint = _cursor.getSnapPoint(HitTester.EntityFilter.Any);
-			if (_currentPoint != null) {
-				_state = State.Snapped;
-			} else {
-				_state = State.Idle;
+	public void input(final Input input)
+	{
+		switch (_state)
+		{
+			case Idle:
+			case Snapped:
+			{
+				_currentPoint = _cursor.getSnapPoint(HitTester.EntityFilter.Any);
+				if (_currentPoint != null)
+				{
+					_state = State.Snapped;
+				}
+				else
+				{
+					_state = State.Idle;
+				}
+				break;
 			}
-			break;
-		}
-		case Pressed:
-		case PressedSnapped: {
-			_currentPoint = _cursor
-					.getSnapPoint(HitTester.EntityFilter.ExcludeSelected);
+			case Pressed:
+			case PressedSnapped:
+			{
+				_currentPoint = _cursor.getSnapPoint(HitTester.EntityFilter.ExcludeSelected);
 
-			if (_currentPoint == null) {
-				final RelativeFixSizeDestination d;
-				final Vec2 delta = new Vec2(
-						_cursor.getPosition().x - _startPoint.getX()
-								- _currentOffset.x,
-						_cursor.getPosition().y - _startPoint.getY()
-								- _currentOffset.y);
-				if (input.getShiftModifier().isActive()) {
-					adjustVector(delta);
+				if (_currentPoint == null)
+				{
+					final RelativeFixSizeDestination d;
+					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPoint.getX() - _currentOffset.x,
+							_cursor.getPosition().y - _startPoint.getY() - _currentOffset.y);
+					if (input.getShiftModifier().isActive())
+					{
+						adjustVector(delta);
+					}
+					if (_currentDestination instanceof RelativeFixSizeDestination)
+					{
+						d = (RelativeFixSizeDestination) _currentDestination;
+						d.setDelta(delta);
+					}
+					else
+					{
+						d = new RelativeFixSizeDestination(_currentStart, delta);
+					}
+					_state = State.Pressed;
+					_currentDestination = d;
 				}
-				if (_currentDestination instanceof RelativeFixSizeDestination) {
-					d = (RelativeFixSizeDestination) _currentDestination;
-					d.setDelta(delta);
-				} else {
-					d = new RelativeFixSizeDestination(_currentStart, delta);
+				else
+				{
+					final RelativeDynamicSizeDestination d;
+					if (_currentDestination instanceof RelativeDynamicSizeDestination)
+					{
+						d = (RelativeDynamicSizeDestination) _currentDestination;
+						d.setReferenceB(_currentPoint.createReference());
+					}
+					else
+					{
+						d = new RelativeDynamicSizeDestination(_currentStart, _currentPoint.createReference());
+					}
+					if (input.getShiftModifier().isActive())
+					{
+						d.setDirection(getDirectionFor(_currentPoint.getX() - _startPoint.getX(), _currentPoint.getY()
+								- _startPoint.getY()));
+					}
+					else
+					{
+						d.setDirection(FreeDirection.Free);
+					}
+					_state = State.PressedSnapped;
+					_currentDestination = d;
 				}
-				_state = State.Pressed;
-				_currentDestination = d;
-			} else {
-				final RelativeDynamicSizeDestination d;
-				if (_currentDestination instanceof RelativeDynamicSizeDestination) {
-					d = (RelativeDynamicSizeDestination) _currentDestination;
-					d.setReferenceB(_currentPoint.createReference());
-				} else {
-					d = new RelativeDynamicSizeDestination(_currentStart,
-							_currentPoint.createReference());
-				}
-				if (input.getShiftModifier().isActive()) {
-					d.setDirection(getDirectionFor(
-							_currentPoint.getX() - _startPoint.getX(),
-							_currentPoint.getY() - _startPoint.getY()));
-				} else {
-					d.setDirection(FreeDirection.Free);
-				}
-				_state = State.PressedSnapped;
-				_currentDestination = d;
+				_currentDestination.setAlignment(input.getAltModifier().isActive() != _autoCenter ? Alignment.Center :
+						Alignment.Leading);
+				_currentInstruction.setDestination(_currentDestination);
+				_eProcedure.publishInstructionChange(_currentInstruction);
+				break;
 			}
-			_currentDestination.setAlignment(
-					input.getAltModifier().isActive() != _autoCenter
-							? Alignment.Center : Alignment.Leading);
-			_currentInstruction.setDestination(_currentDestination);
-			_eProcedure.publishInstructionChange(_currentInstruction);
-			break;
-		}
 		}
 
 		_selectionTool.input(input);
 		_toolState.setActiveSnapPoint(_currentPoint);
 	}
 
-	private Direction getDirectionFor(final double x, final double y) {
-		if (_diagonalDirection) {
+	private Direction getDirectionFor(final double x, final double y)
+	{
+		if (_diagonalDirection)
+		{
 			return new ProportionalDirection(1);
 		}
 
@@ -244,19 +274,26 @@ public class CreateFormTool implements Tool {
 
 		final double rel = absX == 0 ? absY : absY / absX;
 
-		if (rel > 2 != _swapDirection) {
+		if (rel > 2 != _swapDirection)
+		{
 			return Direction.CartesianDirection.Vertical;
-		} else {
+		}
+		else
+		{
 			return Direction.CartesianDirection.Horizontal;
 		}
 	}
 
-	private void adjustVector(final Vec2 vector) {
-		if (_diagonalDirection) {
+	private void adjustVector(final Vec2 vector)
+	{
+		if (_diagonalDirection)
+		{
 			final double min = Math.min(Math.abs(vector.x), Math.abs(vector.y));
 			vector.x = Math.signum(vector.x) * min;
 			vector.y = Math.signum(vector.y) * min;
-		} else {
+		}
+		else
+		{
 			final double oldX = vector.x;
 			final double oldY = vector.y;
 			final double absX = oldX < 0 ? -oldX : oldX;
@@ -264,11 +301,16 @@ public class CreateFormTool implements Tool {
 
 			final double rel = absX == 0 ? absY : absY / absX;
 
-			if (rel > 4) {
+			if (rel > 4)
+			{
 				vector.x = 0;
-			} else if (rel < 0.25) {
+			}
+			else if (rel < 0.25)
+			{
 				vector.y = 0;
-			} else {
+			}
+			else
+			{
 				final double signX = Math.signum(vector.x);
 				final double signY = Math.signum(vector.y);
 				vector.x = Vector.projectionX(oldX, oldY, signX, signY);
@@ -277,11 +319,13 @@ public class CreateFormTool implements Tool {
 		}
 	}
 
-	public void setAutoCenter(final boolean autocenter) {
+	public void setAutoCenter(final boolean autocenter)
+	{
 		_autoCenter = autocenter;
 	}
 
-	public void setDiagonalDirection(final boolean diagonal) {
+	public void setDiagonalDirection(final boolean diagonal)
+	{
 		_diagonalDirection = diagonal;
 	}
 }

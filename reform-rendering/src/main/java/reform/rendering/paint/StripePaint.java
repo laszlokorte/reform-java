@@ -1,21 +1,17 @@
 package reform.rendering.paint;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.TexturePaint;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public interface StripePaint {
+public interface StripePaint
+{
 
-	static Paint getPaint() {
+	static Paint getPaint()
+	{
 		final Color lightBackground = new Color(0xdddddd);
 
-		final BufferedImage stripes = new BufferedImage(10, 10,
-				BufferedImage.TYPE_3BYTE_BGR);
-		final TexturePaint paint = new TexturePaint(stripes, new Rectangle(0,
-				0, 10, 10));
+		final BufferedImage stripes = new BufferedImage(10, 10, BufferedImage.TYPE_3BYTE_BGR);
+		final TexturePaint paint = new TexturePaint(stripes, new Rectangle(0, 0, 10, 10));
 
 		{
 			final Graphics g = stripes.getGraphics();

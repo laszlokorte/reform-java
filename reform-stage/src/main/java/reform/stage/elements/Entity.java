@@ -1,8 +1,5 @@
 package reform.stage.elements;
 
-import java.awt.Shape;
-import java.util.List;
-
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.runtime.Runtime;
@@ -10,7 +7,11 @@ import reform.identity.Identifier;
 import reform.math.Vec2;
 import reform.stage.elements.outline.EntityOutline;
 
-public interface Entity {
+import java.awt.*;
+import java.util.List;
+
+public interface Entity
+{
 
 	void updateForRuntime(Runtime runtime, Analyzer analyzer);
 
@@ -28,6 +29,6 @@ public interface Entity {
 
 	boolean isGuide();
 
-    String getLabel();
+	String getLabel();
 
 }

@@ -1,35 +1,36 @@
 package reform.data.expressions;
 
-import reform.data.CycleException;
-import reform.data.Expression;
-import reform.data.ExpressionContext;
-import reform.data.SemanticException;
-import reform.data.Value;
+import reform.data.*;
 import reform.identity.Identifier;
 
-public class PropertyExpression implements Expression {
+public class PropertyExpression implements Expression
+{
 
 	private final Identifier<?> _objectId;
 	private final Identifier<?> _propertyId;
 
-	public PropertyExpression(final Identifier<?> objectId,
-			final Identifier<?> propertyId) {
+	public PropertyExpression(final Identifier<?> objectId, final Identifier<?> propertyId)
+	{
 		_objectId = objectId;
 		_propertyId = propertyId;
 	}
 
 	@Override
-	public Value evaluate(final ExpressionContext context)
-			throws CycleException, SemanticException {
-		if (!context.pushExpression(this)) {
+	public Value evaluate(final ExpressionContext context) throws CycleException, SemanticException
+	{
+		if (!context.pushExpression(this))
+		{
 			throw new CycleException();
 		}
-		try {
+		try
+		{
 			final ExpressionContext subContext = context.getScope(_objectId);
 			return subContext.lookUp(_propertyId).evaluate(context);
-		} catch (final CycleException e) {
+		} catch (final CycleException e)
+		{
 			return new Value();
-		} finally {
+		} finally
+		{
 			context.popExpression(this);
 		}
 	}

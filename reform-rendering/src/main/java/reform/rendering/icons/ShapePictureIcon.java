@@ -1,19 +1,15 @@
 package reform.rendering.icons;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.geom.*;
 
-public class ShapePictureIcon implements Icon {
+public class ShapePictureIcon implements Icon
+{
 
 	private final Area _shape = new Area();
 
-	public ShapePictureIcon() {
+	public ShapePictureIcon()
+	{
 		final Stroke s = new BasicStroke(60);
 		final GeneralPath p = new GeneralPath();
 
@@ -31,10 +27,9 @@ public class ShapePictureIcon implements Icon {
 	}
 
 	@Override
-	public void draw(final Graphics2D g, final int x, final int y,
-			final int width) {
-		final AffineTransform t = AffineTransform.getScaleInstance(
-				width / 1000.0, width / 1000.0);
+	public void draw(final Graphics2D g, final int x, final int y, final int width)
+	{
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

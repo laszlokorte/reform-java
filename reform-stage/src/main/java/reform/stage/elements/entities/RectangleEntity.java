@@ -1,11 +1,5 @@
 package reform.stage.elements.entities;
 
-import java.awt.Shape;
-import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
-import java.util.List;
-
-import reform.core.analyzer.Analyzable;
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.forms.RectangleForm;
@@ -19,7 +13,13 @@ import reform.stage.elements.Handle;
 import reform.stage.elements.PivotPair;
 import reform.stage.elements.outline.EntityOutline;
 
-public class RectangleEntity implements Entity {
+import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RectangleEntity implements Entity
+{
 	private final Identifier<? extends RectangleForm> _formId;
 
 	private final EntityPoint _topLeft;
@@ -51,11 +51,12 @@ public class RectangleEntity implements Entity {
 	private final ArrayList<EntityPoint> _points = new ArrayList<>();
 	private final ArrayList<Handle> _handles = new ArrayList<>();
 
-    private String _label = "Ractangle";
+	private String _label = "Rectangle";
 
-    private boolean _isGuide = false;
+	private boolean _isGuide = false;
 
-	public RectangleEntity(final Identifier<? extends RectangleForm> formId) {
+	public RectangleEntity(final Identifier<? extends RectangleForm> formId)
+	{
 		_formId = formId;
 		_topLeft = new EntityPoint(formId, RectangleForm.Point.TopLeft);
 		_bottomLeft = new EntityPoint(formId, RectangleForm.Point.BottomLeft);
@@ -79,33 +80,29 @@ public class RectangleEntity implements Entity {
 		_points.add(_bottom);
 		_points.add(_center);
 
-		_topLeftHandle = new Handle(formId, RectangleForm.Point.TopLeft,
-				RectangleForm.Anchor.TopLeft,
-				new PivotPair(_bottomRight, _center));
+		_topLeftHandle = new Handle(formId, RectangleForm.Point.TopLeft, RectangleForm.Anchor.TopLeft, new PivotPair
+				(_bottomRight, _center));
 
-		_topRightHandle = new Handle(formId, RectangleForm.Point.TopRight,
-				RectangleForm.Anchor.TopRight,
-				new PivotPair(_bottomLeft, _center));
+		_topRightHandle = new Handle(formId, RectangleForm.Point.TopRight, RectangleForm.Anchor.TopRight, new
+				PivotPair(_bottomLeft, _center));
 
-		_bottomLeftHandle = new Handle(formId, RectangleForm.Point.BottomLeft,
-				RectangleForm.Anchor.BottomLeft,
-				new PivotPair(_topRight, _center));
+		_bottomLeftHandle = new Handle(formId, RectangleForm.Point.BottomLeft, RectangleForm.Anchor.BottomLeft, new
+				PivotPair(_topRight, _center));
 
-		_bottomRightHandle = new Handle(formId, RectangleForm.Point.BottomRight,
-				RectangleForm.Anchor.BottomRight,
-				new PivotPair(_topLeft, _center));
+		_bottomRightHandle = new Handle(formId, RectangleForm.Point.BottomRight, RectangleForm.Anchor.BottomRight, new
+				PivotPair(_topLeft, _center));
 
-		_leftHandle = new Handle(formId, RectangleForm.Point.Left,
-				RectangleForm.Anchor.Left, new PivotPair(_right, _center));
+		_leftHandle = new Handle(formId, RectangleForm.Point.Left, RectangleForm.Anchor.Left, new PivotPair(_right,
+				_center));
 
-		_rightHandle = new Handle(formId, RectangleForm.Point.Right,
-				RectangleForm.Anchor.Right, new PivotPair(_left, _center));
+		_rightHandle = new Handle(formId, RectangleForm.Point.Right, RectangleForm.Anchor.Right, new PivotPair(_left,
+				_center));
 
-		_topHandle = new Handle(formId, RectangleForm.Point.Top,
-				RectangleForm.Anchor.Top, new PivotPair(_bottom, _center));
+		_topHandle = new Handle(formId, RectangleForm.Point.Top, RectangleForm.Anchor.Top, new PivotPair(_bottom,
+				_center));
 
-		_bottomHandle = new Handle(formId, RectangleForm.Point.Bottom,
-				RectangleForm.Anchor.Bottom, new PivotPair(_topLeft, _center));
+		_bottomHandle = new Handle(formId, RectangleForm.Point.Bottom, RectangleForm.Anchor.Bottom, new PivotPair
+				(_topLeft, _center));
 
 		_handles.add(_topHandle);
 		_handles.add(_bottomHandle);
@@ -120,7 +117,8 @@ public class RectangleEntity implements Entity {
 	}
 
 	@Override
-	public void updateForRuntime(final Runtime runtime, Analyzer analyzer) {
+	public void updateForRuntime(final Runtime runtime, final Analyzer analyzer)
+	{
 		_topLeft.updateForRuntime(runtime, analyzer);
 		_bottomLeft.updateForRuntime(runtime, analyzer);
 		_topRight.updateForRuntime(runtime, analyzer);
@@ -143,55 +141,63 @@ public class RectangleEntity implements Entity {
 		_bottomHandle.updateForRuntime(runtime, analyzer);
 		_leftHandle.updateForRuntime(runtime, analyzer);
 
-        _shape.reset();
-        Form form = runtime.get(_formId);
-        form.appendToPathForRuntime(runtime, _shape);
+		_shape.reset();
+		final Form form = runtime.get(_formId);
+		form.appendToPathForRuntime(runtime, _shape);
 
-        _label = form.getName().getValue();
+		_label = form.getName().getValue();
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
 
 	}
 
 	@Override
-	public List<EntityPoint> getSnapPoints() {
+	public List<EntityPoint> getSnapPoints()
+	{
 		return _points;
 	}
 
 	@Override
-	public List<Handle> getHandles() {
+	public List<Handle> getHandles()
+	{
 		return _handles;
 	}
 
 	@Override
-	public boolean contains(final Vec2 position) {
+	public boolean contains(final Vec2 position)
+	{
 		return _shape.contains(position.x, position.y);
 	}
 
 	@Override
-	public Identifier<? extends RectangleForm> getId() {
+	public Identifier<? extends RectangleForm> getId()
+	{
 		return _formId;
 	}
 
 	@Override
-	public EntityOutline getOutline() {
+	public EntityOutline getOutline()
+	{
 		return _outline;
 	}
 
 	@Override
-	public Shape getShape() {
+	public Shape getShape()
+	{
 		return _shape;
 	}
 
 	@Override
-	public boolean isGuide() {
+	public boolean isGuide()
+	{
 		return _isGuide;
 	}
 
 
-    @Override
-    public String getLabel() {
-        return _label;
-    }
+	@Override
+	public String getLabel()
+	{
+		return _label;
+	}
 
 }

@@ -1,12 +1,15 @@
 package reform.core.procedure.instructions;
 
-public interface InstructionGroup extends Instruction, Iterable<Instruction> {
-	enum Position {
+public interface InstructionGroup extends Instruction, Iterable<Instruction>
+{
+	enum Position
+	{
 		Before(0), After(1);
 
 		public final int offset;
 
-		Position(final int offset) {
+		Position(final int offset)
+		{
 			this.offset = offset;
 		}
 	}
@@ -17,8 +20,7 @@ public interface InstructionGroup extends Instruction, Iterable<Instruction> {
 
 	int indexOf(Instruction instruction);
 
-	void insertInstruction(Instruction instruction, Position pos,
-                           Instruction base);
+	void insertInstruction(Instruction instruction, Position pos, Instruction base);
 
 	void removeInstruction(Instruction instruction);
 

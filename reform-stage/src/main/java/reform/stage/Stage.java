@@ -1,11 +1,5 @@
 package reform.stage;
 
-import java.awt.Shape;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import reform.core.forms.Form;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
@@ -13,8 +7,16 @@ import reform.stage.elements.CropPoint;
 import reform.stage.elements.Entity;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
-public class Stage {
-	public interface Listener {
+import java.awt.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class Stage
+{
+	public interface Listener
+	{
 		void onStageComplete(Stage stage);
 	}
 
@@ -29,7 +31,8 @@ public class Stage {
 	private final HashMap<Shape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
 	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new HashMap<>();
 
-	public Stage() {
+	public Stage()
+	{
 
 		_cropPoints.add(new CropPoint(-1, 0));
 		_cropPoints.add(new CropPoint(1, 0));
@@ -43,39 +46,48 @@ public class Stage {
 
 	}
 
-	public void addListener(final Listener listener) {
+	public void addListener(final Listener listener)
+	{
 		_listeners.add(listener);
 	}
 
-	public void removeListener(final Listener listener) {
+	public void removeListener(final Listener listener)
+	{
 		_listeners.remove(listener);
 	}
 
-	public List<Entity> getEntities() {
+	public List<Entity> getEntities()
+	{
 		return _entities;
 	}
 
-	public List<IntersectionSnapPoint> getIntersectionPoints() {
+	public List<IntersectionSnapPoint> getIntersectionPoints()
+	{
 		return _intersectionPoints;
 	}
 
-	public Vec2i getSize() {
+	public Vec2i getSize()
+	{
 		return _size;
 	}
 
-	public List<Shape> getCurrentShapes() {
+	public List<Shape> getCurrentShapes()
+	{
 		return _currentShapes;
 	}
 
-	public List<Shape> getFinalShapes() {
+	public List<Shape> getFinalShapes()
+	{
 		return _finalShapes;
 	}
 
-	public Identifier<? extends Form> getIdFor(final Shape s) {
+	public Identifier<? extends Form> getIdFor(final Shape s)
+	{
 		return _shapeMap.get(s);
 	}
 
-	void wipe() {
+	void wipe()
+	{
 		_finalShapes.clear();
 		_currentShapes.clear();
 		_entities.clear();
@@ -85,48 +97,55 @@ public class Stage {
 		_size.set(0, 0);
 	}
 
-	void setSize(final Vec2i size) {
+	void setSize(final Vec2i size)
+	{
 		_size.set(size);
 
-		for (int i = 0; i < _cropPoints.size(); i++) {
+		for (int i = 0; i < _cropPoints.size(); i++)
+		{
 			_cropPoints.get(i).updatePosition(size.x, size.y);
 		}
 	}
 
-	void complete() {
+	void complete()
+	{
 		Collections.reverse(_entities);
-		for (int i = 0; i < _listeners.size(); i++) {
+		for (int i = 0; i < _listeners.size(); i++)
+		{
 			_listeners.get(i).onStageComplete(this);
 		}
 	}
 
-	void addShape(final Shape shape,
-                  final Identifier<? extends Form> id) {
+	void addShape(final Shape shape, final Identifier<? extends Form> id)
+	{
 		_currentShapes.add(shape);
 		_shapeMap.put(shape, id);
 	}
 
-	void addFinalShape(final Shape shape,
-                       final Identifier<? extends Form> id) {
+	void addFinalShape(final Shape shape, final Identifier<? extends Form> id)
+	{
 		_finalShapes.add(shape);
 		_shapeMap.put(shape, id);
 	}
 
-	void addEntity(final Entity entity) {
+	void addEntity(final Entity entity)
+	{
 		_entities.add(entity);
 		_entityMap.put(entity.getId(), entity);
 	}
 
-	void addIntersectionPoint(
-            final IntersectionSnapPoint intersectionPoint) {
+	void addIntersectionPoint(final IntersectionSnapPoint intersectionPoint)
+	{
 		_intersectionPoints.add(intersectionPoint);
 	}
 
-	public Entity getEntityForId(final Identifier<? extends Form> formId) {
+	public Entity getEntityForId(final Identifier<? extends Form> formId)
+	{
 		return _entityMap.get(formId);
 	}
 
-	public List<CropPoint> getCropPoints() {
+	public List<CropPoint> getCropPoints()
+	{
 		return _cropPoints;
 	}
 }

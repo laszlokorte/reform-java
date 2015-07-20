@@ -4,32 +4,41 @@ import reform.core.analyzer.Analyzer;
 import reform.core.procedure.instructions.BaseInstructionGroup;
 import reform.core.runtime.Runtime;
 
-public class IfConditionInstruction extends BaseInstructionGroup {
+public class IfConditionInstruction extends BaseInstructionGroup
+{
 
 	private boolean _condition = true;
 
 	@Override
-	public void evaluate(final Runtime runtime) {
-		if (_condition) {
+	public void evaluate(final Runtime runtime)
+	{
+		if (_condition)
+		{
 			_evaluateChildren(runtime);
 		}
 	}
 
 	@Override
-	public void analyze(final Analyzer analyzer) {
-		if (_condition) {
+	public void analyze(final Analyzer analyzer)
+	{
+		if (_condition)
+		{
 			analyzer.publishGroup(this, "If true:");
-		} else {
+		}
+		else
+		{
 			analyzer.publishGroup(this, "If false:");
 		}
 		_analyzeChildren(analyzer);
 	}
 
-	public boolean getCondition() {
+	public boolean getCondition()
+	{
 		return _condition;
 	}
 
-	public void setCondition(final boolean condition) {
+	public void setCondition(final boolean condition)
+	{
 		_condition = condition;
 	}
 

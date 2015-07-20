@@ -2,16 +2,17 @@ package reform.stage.elements;
 
 import reform.core.runtime.relations.ReferencePoint;
 
-public interface SnapPoint {
-    public static final double SNAP_RADIUS = 10;
+public interface SnapPoint
+{
+	double SNAP_RADIUS = 10;
 
-    double getX();
+	double getX();
 
 	double getY();
 
 	ReferencePoint createReference();
 
-    String getLabel();
+	String getLabel();
 
-    boolean isInSnapRadius(double x, double y);
+	boolean isInSnapRadius(double x, double y);
 }

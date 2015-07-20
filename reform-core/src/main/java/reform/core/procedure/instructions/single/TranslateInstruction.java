@@ -7,26 +7,32 @@ import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.TranslationDistance;
 import reform.identity.Identifier;
 
-public class TranslateInstruction extends BaseInstruction {
+public class TranslateInstruction extends BaseInstruction
+{
 	private final Identifier<? extends Form> _target;
 	private TranslationDistance _distance;
 
-	public TranslateInstruction(final Identifier<? extends Form> target,
-			final TranslationDistance distance) {
+	public TranslateInstruction(final Identifier<? extends Form> target, final TranslationDistance distance)
+	{
 
 		_target = target;
 		_distance = distance;
 	}
 
 	@Override
-	public void evaluate(final Runtime runtime) {
+	public void evaluate(final Runtime runtime)
+	{
 		final Form form = runtime.get(_target);
-		if (form == null) {
-			runtime.reportError(this,
-					new Error("Form has not been initialized"));
-		} else if (!_distance.isValidFor(runtime)) {
+		if (form == null)
+		{
+			runtime.reportError(this, new Error("Form has not been initialized"));
+		}
+		else if (!_distance.isValidFor(runtime))
+		{
 			runtime.reportError(this, new Error("Distance is not defined"));
-		} else {
+		}
+		else
+		{
 			final double deltaX = _distance.getXValueForRuntime(runtime);
 			final double deltaY = _distance.getYValueForRuntime(runtime);
 
@@ -35,33 +41,40 @@ public class TranslateInstruction extends BaseInstruction {
 	}
 
 	@Override
-	public void analyze(final Analyzer analyzer) {
+	public void analyze(final Analyzer analyzer)
+	{
 		final Form form = analyzer.getForm(_target);
 		final String formName;
-		if (form != null) {
+		if (form != null)
+		{
 			formName = form.getName().getValue();
-		} else {
+		}
+		else
+		{
 			formName = "???";
 		}
 
-		analyzer.publish(this,
-				"Move " + formName + " " + _distance.getDescription(analyzer));
+		analyzer.publish(this, "Move " + formName + " " + _distance.getDescription(analyzer));
 	}
 
 	@Override
-	public Identifier<? extends Form> getTarget() {
+	public Identifier<? extends Form> getTarget()
+	{
 		return _target;
 	}
 
-	public Identifier<? extends Form> getFormId() {
+	public Identifier<? extends Form> getFormId()
+	{
 		return _target;
 	}
 
-	public TranslationDistance getDistance() {
+	public TranslationDistance getDistance()
+	{
 		return _distance;
 	}
 
-	public void setDistance(final TranslationDistance distance) {
+	public void setDistance(final TranslationDistance distance)
+	{
 		_distance = distance;
 	}
 

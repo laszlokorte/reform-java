@@ -4,7 +4,8 @@ import reform.core.analyzer.Analyzer;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.Validatable;
 
-public interface TranslationDistance extends Validatable {
+public interface TranslationDistance extends Validatable
+{
 
 	double getXValueForRuntime(final Runtime runtime);
 

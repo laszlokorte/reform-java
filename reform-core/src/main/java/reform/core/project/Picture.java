@@ -6,9 +6,10 @@ import reform.identity.Identifier;
 import reform.math.Vec2i;
 import reform.naming.Name;
 
-public final class Picture implements Identifiable<Picture> {
+public final class Picture implements Identifiable<Picture>
+{
 
-	private final  Identifier<? extends Picture> _id;
+	private final Identifier<? extends Picture> _id;
 
 	private Name _name;
 	private final Vec2i _size = new Vec2i(400, 400);
@@ -16,8 +17,9 @@ public final class Picture implements Identifiable<Picture> {
 	private final DataSet _dataSet;
 	private final Procedure _procedure;
 
-	public Picture(final  Identifier<? extends Picture> id, final Name name,
-			final Vec2i size, final DataSet dataSet, final Procedure procedure) {
+	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final DataSet dataSet,
+	               final Procedure procedure)
+	{
 		_id = id;
 		_name = name;
 		_size.set(size);
@@ -25,32 +27,39 @@ public final class Picture implements Identifiable<Picture> {
 		_procedure = procedure;
 	}
 
-	public void setName(final Name name) {
+	public void setName(final Name name)
+	{
 		_name = name;
 	}
 
-	public Name getName() {
+	public Name getName()
+	{
 		return _name;
 	}
 
-	public void setSize(final Vec2i size) {
+	public void setSize(final Vec2i size)
+	{
 		_size.set(size);
 	}
 
-	public Vec2i getSize() {
+	public Vec2i getSize()
+	{
 		return _size;
 	}
 
-	public DataSet getDataSet() {
+	public DataSet getDataSet()
+	{
 		return _dataSet;
 	}
 
-	public Procedure getProcedure() {
+	public Procedure getProcedure()
+	{
 		return _procedure;
 	}
 
 	@Override
-	public  Identifier<? extends Picture> getId() {
+	public Identifier<? extends Picture> getId()
+	{
 		return _id;
 	}
 

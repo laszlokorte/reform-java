@@ -1,23 +1,17 @@
 package reform.playground.presenter;
 
-import java.awt.AWTEvent;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.JComponent;
-
-class ThumbnailView extends JComponent {
-	public interface Adapter {
+class ThumbnailView extends JComponent
+{
+	public interface Adapter
+	{
 
 		int getCount();
 
@@ -47,13 +41,12 @@ class ThumbnailView extends JComponent {
 
 	private final Color _selectionColor = new Color(0x23A9E5);
 
-	public ThumbnailView(final Adapter adapter) {
+	public ThumbnailView(final Adapter adapter)
+	{
 		_adapter = adapter;
 
-		_renderOptions.put(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL,
-				RenderingHints.VALUE_STROKE_NORMALIZE);
+		_renderOptions.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 
 		setPreferredSize(new Dimension(100, 100));
 		setOpaque(false);
@@ -62,7 +55,8 @@ class ThumbnailView extends JComponent {
 	}
 
 	@Override
-	protected void paintComponent(final Graphics g) {
+	protected void paintComponent(final Graphics g)
+	{
 		super.paintComponent(g);
 		_rowOffsets.clear();
 		final Graphics2D g2 = (Graphics2D) g.create();
@@ -80,17 +74,18 @@ class ThumbnailView extends JComponent {
 
 		g2.setColor(Color.WHITE);
 
-		for (int i = 0; i < _adapter.getCount(); i++) {
+		for (int i = 0; i < _adapter.getCount(); i++)
+		{
 			_rowOffsets.add(x);
 
 			final int picWidth = _adapter.getWidth(i);
 			final int picHeight = _adapter.getHeight(i);
-			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0
-					* maxHeight / picHeight);
+			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
 			final int w = (int) Math.round(scale * picWidth);
 			final int h = (int) Math.round(scale * picHeight);
 
-			if (_adapter.isSelected(i)) {
+			if (_adapter.isSelected(i))
+			{
 				g2.setColor(_selectionColor);
 				g2.fillRect(x - 5, (height - h) / 2 - 5, w + 10, h + 10);
 			}
@@ -123,7 +118,8 @@ class ThumbnailView extends JComponent {
 		g2.dispose();
 	}
 
-	public void update() {
+	public void update()
+	{
 
 		doLayout();
 		revalidate();
@@ -131,17 +127,18 @@ class ThumbnailView extends JComponent {
 	}
 
 	@Override
-	public Dimension getPreferredSize() {
+	public Dimension getPreferredSize()
+	{
 		final int height = Math.max(getHeight(), 120);
 		final int maxWidth = 200;
 		final int maxHeight = height - 20;
 		int totalWidth = 10;
 
-		for (int i = 0; i < _adapter.getCount(); i++) {
+		for (int i = 0; i < _adapter.getCount(); i++)
+		{
 			final int picWidth = _adapter.getWidth(i);
 			final int picHeight = _adapter.getHeight(i);
-			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0
-					* maxHeight / picHeight);
+			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
 			final int w = (int) Math.round(scale * picWidth);
 
 			totalWidth += 10 + w;
@@ -151,59 +148,75 @@ class ThumbnailView extends JComponent {
 	}
 
 	@Override
-	protected void processMouseEvent(final MouseEvent e) {
+	protected void processMouseEvent(final MouseEvent e)
+	{
 		super.processMouseEvent(e);
 
-		if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+		if (e.getID() == MouseEvent.MOUSE_PRESSED)
+		{
 			final int clicked = indexAt(e.getX());
 
-			if (e.isAltDown()) {
-				if (clicked > -1) {
+			if (e.isAltDown())
+			{
+				if (clicked > -1)
+				{
 					_adapter.onDoubleClickAtIndex(clicked);
 				}
-			} else {
-				if (clicked > -1) {
+			}
+			else
+			{
+				if (clicked > -1)
+				{
 					final int height = Math.max(getHeight(), 120);
 					final int maxWidth = 200;
 					final int maxHeight = height - 20;
 
 					final int picWidth = _adapter.getWidth(clicked);
 					final int picHeight = _adapter.getHeight(clicked);
-					final double scale = Math.min(1.0 * maxWidth / picWidth,
-							1.0 * maxHeight / picHeight);
+					final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
 					final int width = (int) Math.round(scale * picWidth);
 
-					scrollRectToVisible(new Rectangle(
-							_rowOffsets.get(clicked) - 10, 0, width + 20,
-							getHeight()));
+					scrollRectToVisible(new Rectangle(_rowOffsets.get(clicked) - 10, 0, width + 20, getHeight()));
 					_adapter.onClickAtIndex(clicked);
-				} else if (clicked > -2) {
+				}
+				else if (clicked > -2)
+				{
 					_adapter.onDoubleClick();
 
 					doLayout();
-					scrollRectToVisible(new Rectangle(getWidth() + 100, 0, 120,
-							getHeight()));
+					scrollRectToVisible(new Rectangle(getWidth() + 100, 0, 120, getHeight()));
 				}
 			}
 			repaint();
 		}
 	}
 
-	private int indexAt(final int x) {
+	private int indexAt(final int x)
+	{
 		int result = -2;
-		if (_rowOffsets.isEmpty() && x <= 110) {
+		if (_rowOffsets.isEmpty() && x <= 110)
+		{
 			return -1;
-		} else if (!_rowOffsets.isEmpty()) {
+		}
+		else if (!_rowOffsets.isEmpty())
+		{
 			final int last = _rowOffsets.get(_rowOffsets.size() - 1);
-			if (x > last && x < last + 100) {
+			if (x > last && x < last + 100)
+			{
 				return -1;
-			} else if (x > last + 100) {
+			}
+			else if (x > last + 100)
+			{
 				return -2;
 			}
-			for (int i = 0; i < _rowOffsets.size() - 1; i++) {
-				if (x > _rowOffsets.get(i)) {
+			for (int i = 0; i < _rowOffsets.size() - 1; i++)
+			{
+				if (x > _rowOffsets.get(i))
+				{
 					result = i;
-				} else {
+				}
+				else
+				{
 					break;
 				}
 			}

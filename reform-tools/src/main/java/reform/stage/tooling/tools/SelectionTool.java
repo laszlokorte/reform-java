@@ -8,9 +8,11 @@ import reform.stage.tooling.Tool;
 import reform.stage.tooling.ToolState;
 import reform.stage.tooling.cursor.Cursor;
 
-public class SelectionTool implements Tool {
+public class SelectionTool implements Tool
+{
 
-	private enum State {
+	private enum State
+	{
 		Idle, Pressed
 
 	}
@@ -22,9 +24,9 @@ public class SelectionTool implements Tool {
 
 	private State _state = State.Idle;
 
-	public SelectionTool(final ToolState toolState,
-			final FormSelection formSelection, final Cursor cursor,
-			final Stage stage) {
+	public SelectionTool(final ToolState toolState, final FormSelection formSelection, final Cursor cursor, final
+	Stage stage)
+	{
 		_toolState = toolState;
 		_formSelection = formSelection;
 		_cursor = cursor;
@@ -32,79 +34,94 @@ public class SelectionTool implements Tool {
 	}
 
 	@Override
-	public void setUp() {
-        _toolState.setViewState(ToolState.ViewState.Selection);
-        _toolState.setSelectionState(ToolState.SelectionState.None);
+	public void setUp()
+	{
+		_toolState.setViewState(ToolState.ViewState.Selection);
+		_toolState.setSelectionState(ToolState.SelectionState.None);
 	}
 
 	@Override
-	public void tearDown() {
+	public void tearDown()
+	{
 	}
 
 	@Override
-	public void cancel() {
+	public void cancel()
+	{
 		_formSelection.setSelection(null);
 	}
 
 	@Override
-	public void press() {
+	public void press()
+	{
 		_state = State.Pressed;
 
-		if (_formSelection.isSet()
-				&& _stage.getEntityForId(_formSelection.getSelected())
-				.contains(_cursor.getPosition())) {
-            _toolState.setSelectionState(ToolState.SelectionState.Form);
+		if (_formSelection.isSet() && _stage.getEntityForId(_formSelection.getSelected()).contains(_cursor.getPosition
+				()))
+		{
+			_toolState.setSelectionState(ToolState.SelectionState.Form);
 
-            return;
+			return;
 		}
 
 		final Entity e = _cursor.getEntity();
 
-		if (e != null) {
+		if (e != null)
+		{
 			_formSelection.setSelection(e.getId());
-            _toolState.setSelectionState(ToolState.SelectionState.Form);
-        } else {
+			_toolState.setSelectionState(ToolState.SelectionState.Form);
+		}
+		else
+		{
 			_formSelection.reset();
 		}
 	}
 
 	@Override
-	public void release() {
-        _state = State.Idle;
-        _toolState.setSelectionState(ToolState.SelectionState.None);
-    }
+	public void release()
+	{
+		_state = State.Idle;
+		_toolState.setSelectionState(ToolState.SelectionState.None);
+	}
 
 	@Override
-	public void refresh() {
+	public void refresh()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void toggleOption() {
+	public void toggleOption()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void cycle() {
+	public void cycle()
+	{
 
-        if (_state == State.Pressed) {
+		if (_state == State.Pressed)
+		{
 			_cursor.cycleNextEntity();
 
-        }
+		}
 	}
 
 	@Override
-	public void input(final Input input) {
-		if (_state == State.Pressed) {
+	public void input(final Input input)
+	{
+		if (_state == State.Pressed)
+		{
 			final Entity e = _cursor.getEntity();
 
-			if (e != null) {
+			if (e != null)
+			{
 				_formSelection.setSelection(e.getId());
 			}
 
-            _toolState.notifyChange();
+			_toolState.notifyChange();
 		}
 	}
 

@@ -2,20 +2,20 @@ package reform.commands;
 
 /**
  * A command is one atomic set of changes to be made.
- *
  */
-public interface Command {
+public interface Command
+{
 	/**
 	 * Run the command to apply the changes it represents.
 	 */
-    void execute();
+	void execute();
 
 	/**
 	 * Check if the command can be executed.
 	 *
 	 * @return if the command can be executed.
 	 */
-    boolean canExecute();
+	boolean canExecute();
 
 	/**
 	 * Get the command representing a set of changes which inverse the changes
@@ -23,6 +23,6 @@ public interface Command {
 	 *
 	 * @return the inverse command.
 	 */
-    Command getInverse();
+	Command getInverse();
 
 }

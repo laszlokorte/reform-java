@@ -7,15 +7,16 @@ import reform.identity.IdentityToken;
 import reform.math.Vector;
 import reform.naming.Name;
 
-public class OrthogonalLengthAnchor extends BaseAnchor {
+public class OrthogonalLengthAnchor extends BaseAnchor
+{
 
 	private final StaticLength _offset;
 	private final ReferencePoint _pointA;
 	private final ReferencePoint _pointB;
 
-	public OrthogonalLengthAnchor(final IdentityToken token, final Name name,
-			final StaticLength offset, final ReferencePoint pointA,
-			final ReferencePoint pointB) {
+	public OrthogonalLengthAnchor(final IdentityToken token, final Name name, final StaticLength offset, final
+	ReferencePoint pointA, final ReferencePoint pointB)
+	{
 		super(token, name);
 		_offset = offset;
 		_pointA = pointA;
@@ -23,8 +24,8 @@ public class OrthogonalLengthAnchor extends BaseAnchor {
 	}
 
 	@Override
-	public void translate(final Runtime runtime, final double x,
-			final double y) {
+	public void translate(final Runtime runtime, final double x, final double y)
+	{
 		final double aX = _pointA.getXValueForRuntime(runtime);
 		final double aY = _pointA.getYValueForRuntime(runtime);
 		final double bX = _pointB.getXValueForRuntime(runtime);

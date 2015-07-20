@@ -1,10 +1,5 @@
 package reform.playground.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
 import reform.core.forms.Form;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
@@ -13,15 +8,19 @@ import reform.core.procedure.instructions.blocks.ForLoopInstruction;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public final class WrapInLoopAction extends AbstractAction
-		implements InstructionFocus.Listener, EventedProcedure.Listener {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+public final class WrapInLoopAction extends AbstractAction implements InstructionFocus.Listener, EventedProcedure
+		.Listener
+{
 	private static final long serialVersionUID = 1L;
 
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public WrapInLoopAction(final InstructionFocus focus,
-			final EventedProcedure eProcedure) {
+	public WrapInLoopAction(final InstructionFocus focus, final EventedProcedure eProcedure)
+	{
 		_focus = focus;
 		_eProcedure = eProcedure;
 
@@ -34,57 +33,53 @@ public final class WrapInLoopAction extends AbstractAction
 	}
 
 	@Override
-	public void actionPerformed(final ActionEvent e) {
-		_eProcedure.wrapInstruction(_focus.getFocused(),
-				new ForLoopInstruction(10));
+	public void actionPerformed(final ActionEvent e)
+	{
+		_eProcedure.wrapInstruction(_focus.getFocused(), new ForLoopInstruction(10));
 	}
 
 	@Override
-	public void onFocusChanged(final InstructionFocus focus) {
-		setEnabled(focus.isSet()
-				&& !(focus.getFocused() instanceof ForLoopInstruction)
-				&& !(focus.getFocused()
-						.getParent() instanceof ForLoopInstruction)
-				&& !(focus.getFocused() instanceof NullInstruction));
+	public void onFocusChanged(final InstructionFocus focus)
+	{
+		setEnabled(focus.isSet() && !(focus.getFocused() instanceof ForLoopInstruction) && !(focus.getFocused()
+				.getParent() instanceof ForLoopInstruction) && !(focus.getFocused() instanceof NullInstruction));
 	}
 
 	@Override
-	public void onInstructionAdded(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
-		setEnabled(_focus.isSet()
-				&& !(_focus.getFocused() instanceof ForLoopInstruction)
-				&& !(_focus.getFocused()
-						.getParent() instanceof ForLoopInstruction)
-				&& !(_focus.getFocused() instanceof NullInstruction));
+	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
+	InstructionGroup parent)
+	{
+		setEnabled(_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
+				.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof NullInstruction));
 	}
 
 	@Override
-	public void onInstructionRemoved(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
-		setEnabled(_focus.isSet()
-				&& !(_focus.getFocused() instanceof ForLoopInstruction)
-				&& !(_focus.getFocused()
-						.getParent() instanceof ForLoopInstruction)
-				&& !(_focus.getFocused() instanceof NullInstruction));
+	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
+	InstructionGroup parent)
+	{
+		setEnabled(_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
+				.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof NullInstruction));
 	}
 
-    @Override
-	public void onInstructionWillBeRemoved(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
+	@Override
+	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final Instruction instruction, final
+	InstructionGroup parent)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionChanged(final EventedProcedure procedure,
-			final Instruction instruction, final InstructionGroup parent) {
+	public void onInstructionChanged(final EventedProcedure procedure, final Instruction instruction, final
+	InstructionGroup parent)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onFormChanged(final EventedProcedure procedure,
-			final Form form) {
+	public void onFormChanged(final EventedProcedure procedure, final Form form)
+	{
 		// TODO Auto-generated method stub
 
 	}

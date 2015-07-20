@@ -1,6 +1,7 @@
 package reform.core.analyzer;
 
-public interface Analyzable {
+public interface Analyzable
+{
 	void analyze(Analyzer analyzer);
 
 }

@@ -1,24 +1,22 @@
 package reform.playground.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
 import reform.core.procedure.instructions.NullInstruction;
 import reform.core.procedure.instructions.blocks.IfConditionInstruction;
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public final class WrapInIfAction extends AbstractAction implements
-InstructionFocus.Listener {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+public final class WrapInIfAction extends AbstractAction implements InstructionFocus.Listener
+{
 
 	private static final long serialVersionUID = 1L;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public WrapInIfAction(final InstructionFocus focus,
-			final EventedProcedure eProcedure) {
+	public WrapInIfAction(final InstructionFocus focus, final EventedProcedure eProcedure)
+	{
 		_focus = focus;
 		_eProcedure = eProcedure;
 
@@ -30,15 +28,15 @@ InstructionFocus.Listener {
 	}
 
 	@Override
-	public void actionPerformed(final ActionEvent e) {
-		_eProcedure.wrapInstruction(_focus.getFocused(),
-				new IfConditionInstruction());
+	public void actionPerformed(final ActionEvent e)
+	{
+		_eProcedure.wrapInstruction(_focus.getFocused(), new IfConditionInstruction());
 	}
 
 	@Override
-	public void onFocusChanged(final InstructionFocus focus) {
-		setEnabled(focus.isSet()
-				&& !(focus.getFocused() instanceof NullInstruction));
+	public void onFocusChanged(final InstructionFocus focus)
+	{
+		setEnabled(focus.isSet() && !(focus.getFocused() instanceof NullInstruction));
 	}
 
 }

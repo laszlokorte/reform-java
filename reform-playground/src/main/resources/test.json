@@ -1,573 +1,573 @@
 {
-   "version":1,
-   "project":{
-      "pictures":[
-         {
-            "id":1054652738,
-            "name":"Foo Picture",
-            "size":{
-               "x":700,
-               "y":400
+  "version": 1,
+  "project": {
+    "pictures": [
+      {
+        "id": 1054652738,
+        "name": "Foo Picture",
+        "size": {
+          "x": 700,
+          "y": 400
+        },
+        "procedure": {
+          "instructions": [
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 523429237,
+                "form": "LineForm",
+                "name": "Line 1",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 0,
+                  "pointId": 3
+                },
+                "delta": {
+                  "x": 150,
+                  "y": 100
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
             },
-            "procedure":{
-               "instructions":[
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":523429237,
-                        "form":"LineForm",
-                        "name":"Line 1",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":0,
-                           "pointId":3
-                        },
-                        "delta":{
-                           "x":150,
-                           "y":100
-                        },
-                        "alignment": {
-                           "type":"Leading"
-                        }
-                     }
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 664740647,
+                "form": "LineForm",
+                "name": "Line 2",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 0,
+                  "pointId": 2
+                },
+                "delta": {
+                  "x": -270,
+                  "y": -70
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 804564176,
+                "form": "LineForm",
+                "name": "Line 3",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 523429237,
+                  "pointId": 0
+                },
+                "delta": {
+                  "x": 170,
+                  "y": -70
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 1421795058,
+                "form": "ArcForm",
+                "name": "Arc 1",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 523429237,
+                  "pointId": 0
+                },
+                "delta": {
+                  "x": 30,
+                  "y": 100
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 2,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 100,
+                  "y": -150
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -50,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -10,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1421795058,
+              "anchor": 0,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -200,
+                  "y": -30
+                }
+              }
+            },
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 1555009629,
+                "form": "RectangleForm",
+                "name": "Rectangle 1",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 523429237,
+                  "pointId": 2
+                },
+                "delta": {
+                  "x": 100,
+                  "y": 60
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 41359092,
+                "form": "CircleForm",
+                "name": "Circle 1",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 523429237,
+                  "pointId": 2
+                },
+                "delta": {
+                  "x": 100,
+                  "y": 60
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "CreateFormInstruction",
+              "form": {
+                "id": 149928006,
+                "form": "PieForm",
+                "name": "Pie 1",
+                "type": "Draw"
+              },
+              "destination": {
+                "type": "RelativeFixSizeDestination",
+                "ref": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 0,
+                  "pointId": 7
+                },
+                "delta": {
+                  "x": 100,
+                  "y": 60
+                },
+                "alignment": {
+                  "type": "Leading"
+                }
+              }
+            },
+            {
+              "type": "TranslateInstruction",
+              "form": 149928006,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 140,
+                  "y": -170
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 149928006,
+              "anchor": 1,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 0,
+                  "y": -100
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 149928006,
+              "anchor": 2,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 0,
+                  "y": -100
+                }
+              }
+            },
+            {
+              "type": "TranslateInstruction",
+              "form": 41359092,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 120,
+                  "y": 70
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 41359092,
+              "anchor": 2,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 30,
+                  "y": -50
+                }
+              }
+            },
+            {
+              "type": "TranslateInstruction",
+              "form": 523429237,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 40,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "TranslateInstruction",
+              "form": 523429237,
+              "distance": {
+                "type": "RelativeDistance",
+                "refA": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 523429237,
+                  "pointId": 1
+                },
+                "refB": {
+                  "type": "ForeignFormsPoint",
+                  "formId": 1555009629,
+                  "pointId": 0
+                },
+                "direction": {
+                  "type": "Free"
+                }
+              }
+            },
+            {
+              "type": "ScaleInstruction",
+              "form": 1555009629,
+              "factor": {
+                "type": "ConstantScaleFactor",
+                "value": 0.9
+              },
+              "fixpoint": {
+                "type": "ForeignFormsPoint",
+                "formId": 1555009629,
+                "pointId": 0
+              }
+            },
+            {
+              "type": "RotateInstruction",
+              "form": 1555009629,
+              "angle": {
+                "type": "ConstantAngle",
+                "value": 0.3141592653589793
+              },
+              "fixpoint": {
+                "type": "ConstantPoint",
+                "value": {
+                  "x": 0,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 6,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 40,
+                  "y": -20
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 8,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -30,
+                  "y": 20
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 5,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -30,
+                  "y": -20
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 7,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 30,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 2,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 50,
+                  "y": 50
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 1,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": -20,
+                  "y": -50
+                }
+              }
+            },
+            {
+              "type": "MorphInstruction",
+              "form": 1555009629,
+              "anchor": 6,
+              "distance": {
+                "type": "ConstantDistance",
+                "delta": {
+                  "x": 0,
+                  "y": -750
+                }
+              }
+            },
+            {
+              "type": "ForLoopInstruction",
+              "times": 10,
+              "children": [
+                {
+                  "type": "RotateInstruction",
+                  "form": 1555009629,
+                  "angle": {
+                    "type": "ConstantAngle",
+                    "value": 0.10471975511965977
                   },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":664740647,
-                        "form":"LineForm",
-                        "name":"Line 2",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":0,
-                           "pointId":2
-                        },
-                        "delta":{
-                           "x":-270,
-                           "y":-70
-                        },
-                        "alignment": {
-                            "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":804564176,
-                        "form":"LineForm",
-                        "name":"Line 3",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":523429237,
-                           "pointId":0
-                        },
-                        "delta":{
-                           "x":170,
-                           "y":-70
-                        },
-                        "alignment": {
-                            "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":1421795058,
-                        "form":"ArcForm",
-                        "name":"Arc 1",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":523429237,
-                           "pointId":0
-                        },
-                        "delta":{
-                           "x":30,
-                           "y":100
-                        },
-                        "alignment": {
-                            "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":2,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":100,
-                           "y":-150
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-50,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-10,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1421795058,
-                     "anchor":0,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-200,
-                           "y":-30
-                        }
-                     }
-                  },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":1555009629,
-                        "form":"RectangleForm",
-                        "name":"Rectangle 1",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":523429237,
-                           "pointId":2
-                        },
-                        "delta":{
-                           "x":100,
-                           "y":60
-                        },
-                        "alignment": {
-                           "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":41359092,
-                        "form":"CircleForm",
-                        "name":"Circle 1",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":523429237,
-                           "pointId":2
-                        },
-                        "delta":{
-                           "x":100,
-                           "y":60
-                        },
-                        "alignment": {
-                           "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"CreateFormInstruction",
-                     "form":{
-                        "id":149928006,
-                        "form":"PieForm",
-                        "name":"Pie 1",
-                        "type":"Draw"
-                     },
-                     "destination":{
-                        "type":"RelativeFixSizeDestination",
-                        "ref":{
-                           "type":"ForeignFormsPoint",
-                           "formId":0,
-                           "pointId":7
-                        },
-                        "delta":{
-                           "x":100,
-                           "y":60
-                        },
-                        "alignment": {
-                           "type":"Leading"
-                        }
-                     }
-                  },
-                  {
-                     "type":"TranslateInstruction",
-                     "form":149928006,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":140,
-                           "y":-170
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":149928006,
-                     "anchor":1,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":0,
-                           "y":-100
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":149928006,
-                     "anchor":2,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":0,
-                           "y":-100
-                        }
-                     }
-                  },
-                  {
-                     "type":"TranslateInstruction",
-                     "form":41359092,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":120,
-                           "y":70
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":41359092,
-                     "anchor":2,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":30,
-                           "y":-50
-                        }
-                     }
-                  },
-                  {
-                     "type":"TranslateInstruction",
-                     "form":523429237,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":40,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"TranslateInstruction",
-                     "form":523429237,
-                     "distance":{
-                        "type":"RelativeDistance",
-                        "refA":{
-                           "type":"ForeignFormsPoint",
-                           "formId":523429237,
-                           "pointId":1
-                        },
-                        "refB":{
-                           "type":"ForeignFormsPoint",
-                           "formId":1555009629,
-                           "pointId":0
-                        },
-                        "direction" : {
-                            "type" : "Free"
-                        }
-                     }
-                  },
-                  {
-                     "type":"ScaleInstruction",
-                     "form":1555009629,
-                     "factor":{
-                        "type":"ConstantScaleFactor",
-                        "value":0.9
-                     },
-                     "fixpoint":{
-                        "type":"ForeignFormsPoint",
-                        "formId":1555009629,
-                        "pointId":0
-                     }
-                  },
-                  {
-                     "type":"RotateInstruction",
-                     "form":1555009629,
-                     "angle":{
-                        "type":"ConstantAngle",
-                        "value":0.3141592653589793
-                     },
-                     "fixpoint":{
-                        "type":"ConstantPoint",
-                        "value":{
-                           "x":0,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":6,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":40,
-                           "y":-20
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":8,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-30,
-                           "y":20
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":5,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-30,
-                           "y":-20
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":7,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":30,
-                           "y":0
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":2,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":50,
-                           "y":50
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":1,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":-20,
-                           "y":-50
-                        }
-                     }
-                  },
-                  {
-                     "type":"MorphInstruction",
-                     "form":1555009629,
-                     "anchor":6,
-                     "distance":{
-                        "type":"ConstantDistance",
-                        "delta":{
-                           "x":0,
-                           "y":-750
-                        }
-                     }
-                  },
-                  {
-                     "type":"ForLoopInstruction",
-                     "times":10,
-                     "children":[
-                        {
-                           "type":"RotateInstruction",
-                           "form":1555009629,
-                           "angle":{
-                              "type":"ConstantAngle",
-                              "value":0.10471975511965977
-                           },
-                           "fixpoint":{
-                              "type":"ConstantPoint",
-                              "value":{
-                                 "x":0,
-                                 "y":0
-                              }
-                           }
-                        },
-                        {
-                           "type":"CreateFormInstruction",
-                           "form":{
-                              "id":713338599,
-                              "form":"LineForm",
-                              "name":"Line X",
-                              "type":"Draw"
-                           },
-                           "destination":{
-                              "type":"RelativeDynamicSizeDestination",
-                              "refA":{
-                                 "type":"ForeignFormsPoint",
-                                 "formId":1555009629,
-                                 "pointId":0
-                              },
-                              "refB":{
-                                 "type":"ForeignFormsPoint",
-                                 "formId":523429237,
-                                 "pointId":2
-                              },
-                              "alignment": {
-                                 "type":"Leading"
-                              },
-                              "direction" : {
-                                  "type" : "Free"
-                              } 
-                           }
-                        },
-                        {
-                           "type":"ErrorInstruction"
-                        },
-                        {
-                           "type":"ScaleInstruction",
-                           "form":1555009629,
-                           "factor":{
-                              "type":"ConstantScaleFactor",
-                              "value":0.9
-                           },
-                           "fixpoint":{
-                              "type":"ForeignFormsPoint",
-                              "formId":0,
-                              "pointId":3
-                           }
-                        }
-                     ]
+                  "fixpoint": {
+                    "type": "ConstantPoint",
+                    "value": {
+                      "x": 0,
+                      "y": 0
+                    }
                   }
-               ]
+                },
+                {
+                  "type": "CreateFormInstruction",
+                  "form": {
+                    "id": 713338599,
+                    "form": "LineForm",
+                    "name": "Line X",
+                    "type": "Draw"
+                  },
+                  "destination": {
+                    "type": "RelativeDynamicSizeDestination",
+                    "refA": {
+                      "type": "ForeignFormsPoint",
+                      "formId": 1555009629,
+                      "pointId": 0
+                    },
+                    "refB": {
+                      "type": "ForeignFormsPoint",
+                      "formId": 523429237,
+                      "pointId": 2
+                    },
+                    "alignment": {
+                      "type": "Leading"
+                    },
+                    "direction": {
+                      "type": "Free"
+                    }
+                  }
+                },
+                {
+                  "type": "ErrorInstruction"
+                },
+                {
+                  "type": "ScaleInstruction",
+                  "form": 1555009629,
+                  "factor": {
+                    "type": "ConstantScaleFactor",
+                    "value": 0.9
+                  },
+                  "fixpoint": {
+                    "type": "ForeignFormsPoint",
+                    "formId": 0,
+                    "pointId": 3
+                  }
+                }
+              ]
             }
-         }
-      ]
-   }
+          ]
+        }
+      }
+    ]
+  }
 }

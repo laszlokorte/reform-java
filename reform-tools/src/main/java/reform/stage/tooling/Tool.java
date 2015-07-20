@@ -1,6 +1,7 @@
 package reform.stage.tooling;
 
-public interface Tool {
+public interface Tool
+{
 	void setUp();
 
 	void tearDown();

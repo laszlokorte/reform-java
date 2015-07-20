@@ -1,5 +1,6 @@
 package reform.stage.tooling;
 
-public interface ToolStateListener {
+public interface ToolStateListener
+{
 	void onToolStateChange(ToolState state);
 }

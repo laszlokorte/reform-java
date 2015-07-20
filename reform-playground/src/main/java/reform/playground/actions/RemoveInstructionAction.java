@@ -1,21 +1,20 @@
 package reform.playground.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-
 import reform.evented.core.EventedProcedure;
 import reform.stage.tooling.InstructionFocus;
 
-public final class RemoveInstructionAction extends AbstractAction implements
-		InstructionFocus.Listener {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+public final class RemoveInstructionAction extends AbstractAction implements InstructionFocus.Listener
+{
 	private static final long serialVersionUID = 1L;
 
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public RemoveInstructionAction(final InstructionFocus focus,
-			final EventedProcedure eProcedure) {
+	public RemoveInstructionAction(final InstructionFocus focus, final EventedProcedure eProcedure)
+	{
 		_focus = focus;
 		_eProcedure = eProcedure;
 
@@ -26,14 +25,15 @@ public final class RemoveInstructionAction extends AbstractAction implements
 	}
 
 	@Override
-	public void actionPerformed(final ActionEvent e) {
+	public void actionPerformed(final ActionEvent e)
+	{
 		_eProcedure.removeInstruction(_focus.getFocused());
 	}
 
 	@Override
-	public void onFocusChanged(final InstructionFocus focus) {
-		setEnabled(focus.isSet()
-				&& _eProcedure.canRemoveInstruction(focus.getFocused()));
+	public void onFocusChanged(final InstructionFocus focus)
+	{
+		setEnabled(focus.isSet() && _eProcedure.canRemoveInstruction(focus.getFocused()));
 	}
 
 }

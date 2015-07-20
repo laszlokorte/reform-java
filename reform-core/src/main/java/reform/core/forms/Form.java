@@ -1,7 +1,5 @@
 package reform.core.forms;
 
-import java.awt.geom.GeneralPath;
-
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.outline.Outline;
@@ -17,17 +15,18 @@ import reform.identity.Identifiable;
 import reform.identity.Identifier;
 import reform.naming.Named;
 
-public interface Form extends Identifiable<Form>, Named {
-    static final Color DEFAULT_FILL = new Color(0x99888888);
-    static final Color DEFAULT_STROKE = new Color(0xff333333);
+import java.awt.geom.GeneralPath;
+
+public interface Form extends Identifiable<Form>, Named
+{
+	Color DEFAULT_FILL = new Color(0x99888888);
+	Color DEFAULT_STROKE = new Color(0xff333333);
 
 	int getSizeOnStack();
 
-	void initialize(Runtime runtime, double minX, double minY,
-                    double maxX, double maxY);
+	void initialize(Runtime runtime, double minX, double minY, double maxX, double maxY);
 
-	void appendToPathForRuntime(Runtime runtime,
-                                GeneralPath.Double target);
+	void appendToPathForRuntime(Runtime runtime, GeneralPath.Double target);
 
 	Iterable<Identifier<? extends ExposedPoint>> getPoints();
 
@@ -49,5 +48,5 @@ public interface Form extends Identifiable<Form>, Named {
 
 	void setType(DrawingType draw);
 
-    AttributeSet getAttributes();
+	AttributeSet getAttributes();
 }

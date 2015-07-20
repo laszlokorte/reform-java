@@ -4,30 +4,38 @@ import reform.core.analyzer.Analyzer;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.Validatable;
 
-public interface InitialDestination extends Validatable {
-	enum Alignment {
-		Leading {
-			@Override
-			public double getAlignedMax(final double a, final double b) {
-				return b;
-			}
+public interface InitialDestination extends Validatable
+{
+	enum Alignment
+	{
+		Leading
+				{
+					@Override
+					public double getAlignedMax(final double a, final double b)
+					{
+						return b;
+					}
 
-			@Override
-			public double getAlignedMin(final double a, final double b) {
-				return a;
-			}
-		},
-		Center {
-			@Override
-			public double getAlignedMax(final double a, final double b) {
-				return b;
-			}
+					@Override
+					public double getAlignedMin(final double a, final double b)
+					{
+						return a;
+					}
+				},
+		Center
+				{
+					@Override
+					public double getAlignedMax(final double a, final double b)
+					{
+						return b;
+					}
 
-			@Override
-			public double getAlignedMin(final double a, final double b) {
-				return a - (b - a);
-			}
-		};
+					@Override
+					public double getAlignedMin(final double a, final double b)
+					{
+						return a - (b - a);
+					}
+				};
 
 		abstract public double getAlignedMin(double a, double b);
 

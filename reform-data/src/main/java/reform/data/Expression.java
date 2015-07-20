@@ -1,7 +1,7 @@
 package reform.data;
 
-public interface Expression {
+public interface Expression
+{
 
-	Value evaluate(ExpressionContext context) throws CycleException,
-			SemanticException;
+	Value evaluate(ExpressionContext context) throws CycleException, SemanticException;
 }

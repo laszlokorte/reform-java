@@ -1,22 +1,5 @@
 package reform.playground.presenter;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import reform.core.forms.Form;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
@@ -30,16 +13,24 @@ import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
 
-public class StepSnapshotCollector implements ProjectRuntime.Listener {
+import java.awt.*;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-	public interface Listener {
+public class StepSnapshotCollector implements ProjectRuntime.Listener
+{
+
+	public interface Listener
+	{
 		void onCollectionCompleted(StepSnapshotCollector collector);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 
-	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
-            Path2D.Double::new);
+	private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(Path2D.Double::new);
 
 	private final Vec2i _maxSize = new Vec2i();
 	private final HashMap<RenderingHints.Key, Object> _renderOptions = new HashMap<>();
@@ -61,35 +52,38 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
 	private boolean _redraw = true;
 
-	public StepSnapshotCollector(final Vec2i maxSize) {
+	public StepSnapshotCollector(final Vec2i maxSize)
+	{
 		_maxSize.set(maxSize);
-		_renderOptions.put(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL,
-				RenderingHints.VALUE_STROKE_NORMALIZE);
+		_renderOptions.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 	}
 
 	@Override
-	public void onEvalInstruction(final ProjectRuntime runtime,
-			final Evaluable evaluable) {
-		if (evaluable instanceof NullInstruction) {
+	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable evaluable)
+	{
+		if (evaluable instanceof NullInstruction)
+		{
 			return;
 		}
 
-		if (evaluable instanceof InstructionGroup) {
+		if (evaluable instanceof InstructionGroup)
+		{
 			return;
 		}
 
-		if (_failedInstructions.contains(evaluable)) {
+		if (_failedInstructions.contains(evaluable))
+		{
 			return;
 		}
 
-		if (!_recordedInstructions.add(evaluable)
-				|| _failedInstructions.contains(evaluable)) {
+		if (!_recordedInstructions.add(evaluable) || _failedInstructions.contains(evaluable))
+		{
 			return;
 		}
 
-		if (_instructionBitmaps.containsKey(evaluable) && !_redraw) {
+		if (_instructionBitmaps.containsKey(evaluable) && !_redraw)
+		{
 			return;
 		}
 
@@ -111,36 +105,43 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 
 		g2.setColor(_colorShape);
 		g2.setStroke(_stroke);
-		for (int i = 0, j = _collectedShapes.size(); i < j; i++) {
+		for (int i = 0, j = _collectedShapes.size(); i < j; i++)
+		{
 			final Shape shape = _collectedShapes.get(i);
 			g2.fill(shape);
 			g2.draw(shape);
 		}
 
-		final FastIterable<Identifier<? extends Form>> it = runtime
-				.getStackIterator();
-		for (int i = 0; i < it.size(); i++) {
+		final FastIterable<Identifier<? extends Form>> it = runtime.getStackIterator();
+		for (int i = 0; i < it.size(); i++)
+		{
 			final Identifier<? extends Form> id = it.get(i);
 			final Form form = runtime.get(id);
 			final boolean isCurrent = id.equals(instruction.getTarget());
 			final boolean isGuide = form.getType() != DrawingType.Draw;
-			if (isGuide && !isCurrent) {
+			if (isGuide && !isCurrent)
+			{
 				continue;
 			}
 			final GeneralPath.Double shape = _pathPool.take();
 			shape.reset();
 			form.appendToPathForRuntime(runtime, shape);
 
-			if (isCurrent && !isGuide) {
+			if (isCurrent && !isGuide)
+			{
 				g2.setColor(_colorActive);
 				g2.setStroke(_stroke);
 				g2.draw(shape);
 				g2.fill(shape);
-			} else if (isCurrent) {
+			}
+			else if (isCurrent)
+			{
 				g2.setColor(_colorGuide);
 				g2.setStroke(_guideStroke);
 				g2.draw(shape);
-			} else {
+			}
+			else
+			{
 				g2.setColor(_colorShape);
 				g2.setStroke(_stroke);
 				g2.fill(shape);
@@ -152,24 +153,25 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime,
-			final Evaluable instruction, final Error error) {
+	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+	{
 		_failedInstructions.add(instruction);
 		_errorMap.put(instruction, error);
 	}
 
 	@Override
-	public void onBeginEvaluation(final ProjectRuntime runtime) {
+	public void onBeginEvaluation(final ProjectRuntime runtime)
+	{
 		_recordedInstructions.clear();
 		_failedInstructions.clear();
 		_collectedShapes.clear();
 
 		final Vec2i size = runtime.getSize();
-		if (size.x != _currentSize.x || size.y != _currentSize.y) {
+		if (size.x != _currentSize.x || size.y != _currentSize.y)
+		{
 			_instructionBitmaps.clear();
 			_currentSize.set(size);
-			final double scale = Math.min(1.0 * _maxSize.x / _currentSize.x,
-					1.0 * _maxSize.y / _currentSize.y);
+			final double scale = Math.min(1.0 * _maxSize.x / _currentSize.x, 1.0 * _maxSize.y / _currentSize.y);
 			final int width = (int) Math.round(scale * _currentSize.x);
 			final int height = (int) Math.round(scale * _currentSize.y);
 			_currentScaledSize.set(width, height);
@@ -178,12 +180,14 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 	}
 
 	@Override
-	public void onFinishEvaluation(final ProjectRuntime runtime) {
-		final Iterator<Evaluable> iterator = _instructionBitmaps.keySet()
-				.iterator();
-		while (iterator.hasNext()) {
+	public void onFinishEvaluation(final ProjectRuntime runtime)
+	{
+		final Iterator<Evaluable> iterator = _instructionBitmaps.keySet().iterator();
+		while (iterator.hasNext())
+		{
 			final Evaluable e = iterator.next();
-			if (!_recordedInstructions.contains(e)) {
+			if (!_recordedInstructions.contains(e))
+			{
 				iterator.remove();
 			}
 		}
@@ -191,56 +195,66 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 		_pathPool.release();
 		_redraw = false;
 
-		for (int i = 0; i < _listeners.size(); i++) {
+		for (int i = 0; i < _listeners.size(); i++)
+		{
 			_listeners.get(i).onCollectionCompleted(this);
 		}
 	}
 
-	private BufferedImage getBufferedImage(final Evaluable instruction) {
-		if (!_instructionBitmaps.containsKey(instruction)) {
-			_instructionBitmaps.put(instruction,
-					new BufferedImage(_currentScaledSize.x,
-							_currentScaledSize.y,
-							BufferedImage.TYPE_4BYTE_ABGR));
+	private BufferedImage getBufferedImage(final Evaluable instruction)
+	{
+		if (!_instructionBitmaps.containsKey(instruction))
+		{
+			_instructionBitmaps.put(instruction, new BufferedImage(_currentScaledSize.x, _currentScaledSize.y,
+					BufferedImage.TYPE_4BYTE_ABGR));
 		}
 		return _instructionBitmaps.get(instruction);
 	}
 
-	public void requireRedraw() {
+	public void requireRedraw()
+	{
 		_redraw = true;
 	}
 
-	public BufferedImage getImageOf(final Instruction instruction) {
+	public BufferedImage getImageOf(final Instruction instruction)
+	{
 		return _instructionBitmaps.get(instruction);
 	}
 
-	public boolean hasFailed(final Instruction instruction) {
+	public boolean hasFailed(final Instruction instruction)
+	{
 		return _failedInstructions.contains(instruction);
 	}
 
-	public boolean hasBeenEvaluated(final Instruction instruction) {
+	public boolean hasBeenEvaluated(final Instruction instruction)
+	{
 		return _recordedInstructions.contains(instruction);
 	}
 
-	public int getWidth() {
+	public int getWidth()
+	{
 		return _currentScaledSize.x;
 	}
 
-	public int getHeight() {
+	public int getHeight()
+	{
 		return _currentScaledSize.y;
 	}
 
-	public Error getError(final Evaluable instruction) {
+	public Error getError(final Evaluable instruction)
+	{
 		return _errorMap.get(instruction);
 	}
 
 	@Override
-	public void onPopScope(final ProjectRuntime runtime,
-			final FastIterable<Identifier<? extends Form>> poppedIds) {
-		for (int i = 0, j = poppedIds.size(); i < j; i++) {
+	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<? extends Form>> poppedIds)
+	{
+		for (int i = 0, j = poppedIds.size(); i < j; i++)
+		{
 			final Identifier<? extends Form> id = poppedIds.get(i);
 			final Form form = runtime.get(id);
-			if (form.getType() == DrawingType.Draw) {
+			if (form.getType() == DrawingType.Draw)
+			{
 				final GeneralPath.Double shape = _pathPool.take();
 				shape.reset();
 				form.appendToPathForRuntime(runtime, shape);
@@ -249,11 +263,13 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener {
 		}
 	}
 
-	public void addListener(final Listener listener) {
+	public void addListener(final Listener listener)
+	{
 		_listeners.add(listener);
 	}
 
-	public void removeListener(final Listener listener) {
+	public void removeListener(final Listener listener)
+	{
 		_listeners.remove(listener);
 	}
 
