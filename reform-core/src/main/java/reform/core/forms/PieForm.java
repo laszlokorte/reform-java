@@ -39,8 +39,10 @@ public final class PieForm extends BaseForm<PieForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill", Color.class, Form.DEFAULT_FILL);
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke", Color.class, Form.DEFAULT_STROKE);
+	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill", Color.class,
+	                                                                     new Color(Form.DEFAULT_FILL));
+	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke", Color.class,
+	                                                                       new Color(Form.DEFAULT_STROKE));
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute);
 

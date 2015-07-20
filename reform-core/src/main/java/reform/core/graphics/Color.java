@@ -19,6 +19,11 @@ public class Color
 		_argb = argb;
 	}
 
+	public Color(final Color other)
+	{
+		_argb = other._argb;
+	}
+
 	public int getARGB()
 	{
 		return _argb;
