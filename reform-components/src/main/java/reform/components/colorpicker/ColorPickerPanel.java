@@ -68,6 +68,7 @@ public class ColorPickerPanel extends JPanel
 		final InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 		inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "cancel");
+		inputMap.put(KeyStroke.getKeyStroke("ENTER"), "confirm");
 	}
 
 	private boolean _ownChange = false;

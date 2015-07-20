@@ -33,12 +33,15 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill", Color.class,
+	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill Color", Color.class,
 	                                                                     new Color(Form.DEFAULT_FILL));
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke", Color.class,
+	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke Color", Color.class,
 	                                                                       new Color(Form.DEFAULT_STROKE));
 
-	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute);
+	private final Attribute<Integer> _strokeWidthAttribute = new Attribute<>("Stroke Width", Integer.class, 1);
+
+	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
+	                                                          _strokeWidthAttribute);
 
 	public enum Point implements ExposedPointToken<RectangleForm>
 	{
@@ -183,6 +186,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 	{
 		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
+
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 

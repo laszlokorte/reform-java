@@ -28,6 +28,59 @@ import java.util.ArrayList;
 public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ActionListener
 {
 
+	private static class NumberPanel
+	{
+		private Attribute<Integer> _attribute;
+		private final SpinnerModel _model = new SpinnerNumberModel(1, 0, 42, 1);
+		private final JSpinner _spinner = new JSpinner(_model);
+
+		private final FormOptionPanel _delegate;
+
+		NumberPanel(final FormOptionPanel delegate)
+		{
+			_delegate = delegate;
+			_spinner.addChangeListener(this::onModelChange);
+
+			JTextField tf = ((JSpinner.DefaultEditor) _spinner.getEditor()).getTextField();
+			tf.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "confirm");
+			tf.getActionMap().put("confirm", new AbstractAction()
+			{
+				@Override
+				public void actionPerformed(final ActionEvent e)
+				{
+					tf.transferFocus();
+				}
+			});
+		}
+
+		private void onModelChange(final ChangeEvent changeEvent)
+		{
+			if (_attribute != null)
+			{
+				_attribute.setValue((Integer) _spinner.getValue());
+
+				_delegate.onChange();
+			}
+		}
+
+		void setAttribute(final Attribute<Integer> attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+				final int currentColor = attr.getValue();
+
+				_spinner.setValue(currentColor);
+			}
+			_attribute = attr;
+		}
+
+		public Component getSpinner()
+		{
+			return _spinner;
+		}
+	}
+
 	private static class ColorPanel
 	{
 		private Attribute<reform.core.graphics.Color> _attribute;
@@ -88,10 +141,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	}
 
 	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 1));
-	private final JLabel _label = new JLabel("");
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
 	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
+
+	private final Pool<NumberPanel> _numberPanels = new SimplePool<>(() -> new NumberPanel(this));
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
@@ -105,7 +159,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_eProcedure = eProcedure;
 		_selection = selection;
 		_analyzer = analyzer;
-		_panel.add(_label);
 
 		_panel.add(_guideToggle);
 		_guideToggle.setBorder(null);
@@ -161,7 +214,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	@Override
 	public void onFormChanged(final EventedProcedure procedure, final Form form)
 	{
-		if(_ownChange) {
+		if (_ownChange)
+		{
 			return;
 		}
 		if (_selection.isSet() && _selection.isSelected(form.getId()))
@@ -174,12 +228,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	public void onSelectionChanged(final FormSelection selection)
 	{
 		releaseColorPanels();
+		releaseNumberPanels();
 
 		if (_selection.isSet())
 		{
 			final Form form = _analyzer.getForm(_selection.getSelected());
 			final DrawingType drawType = form.getType();
-			_label.setText(form.getName().getValue());
 			_panel.setVisible(true);
 
 			final AttributeSet attributes = form.getAttributes();
@@ -195,6 +249,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					panel.setEnabled(drawType == DrawingType.Draw);
 
 				}
+				else if (type == Integer.class)
+				{
+					NumberPanel panel = getNumberPanelFor((Attribute<Integer>) attr);
+					_panel.add(panel.getSpinner());
+				}
 			}
 
 			_guideToggle.setSelected(drawType == DrawingType.Guide);
@@ -207,6 +266,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_panel.revalidate();
 		_panel.repaint();
 		_colorPanels.clean(ColorPanel::dispose);
+	}
+
+	private NumberPanel getNumberPanelFor(final Attribute<Integer> attr)
+	{
+		final NumberPanel p = _numberPanels.take();
+		p.setAttribute(attr);
+
+		return p;
 	}
 
 	private ColorPanel getColorPanelFor(final Attribute<Color> attr)
@@ -226,6 +293,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		});
 
 		_currentColorPanels.clear();
+	}
+
+	private void releaseNumberPanels()
+	{
+		_numberPanels.release((NumberPanel p) -> {
+			p.setAttribute(null);
+			_panel.remove(p.getSpinner());
+		});
 	}
 
 	@Override

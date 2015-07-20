@@ -35,10 +35,12 @@ public final class LineForm extends BaseForm<LineForm>
 
 	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
 
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Color", Color.class,
+	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke Color", Color.class,
 	                                                                       new Color(Form.DEFAULT_STROKE));
 
-	private final AttributeSet _attributes = new AttributeSet(_strokeColorAttribute);
+	private final Attribute<Integer> _strokeWidthAttribute = new Attribute<>("Stroke Width", Integer.class, 1);
+
+	private final AttributeSet _attributes = new AttributeSet(_strokeColorAttribute, _strokeWidthAttribute);
 
 	public enum Point implements ExposedPointToken<LineForm>
 	{
@@ -116,6 +118,8 @@ public final class LineForm extends BaseForm<LineForm>
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
+
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 

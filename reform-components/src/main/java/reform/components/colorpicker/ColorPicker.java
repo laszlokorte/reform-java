@@ -30,6 +30,7 @@ public class ColorPicker
 		_model.addListener(this::onChange);
 
 		_actionMap.put("cancel", new CancelAction(this));
+		_actionMap.put("confirm", new CancelAction(this));
 	}
 
 	private void onChange(final ColorModel colorModel)

@@ -19,6 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 
 public final class InstructionsOptionPanel implements InstructionFocus.Listener, ChangeListener, EventedProcedure
@@ -53,6 +54,17 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		onFocusChanged(focus);
 
 		eProcedure.addListener(this);
+
+		JTextField tf = ((JSpinner.DefaultEditor) _spinner.getEditor()).getTextField();
+		tf.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "confirm");
+		tf.getActionMap().put("confirm", new AbstractAction()
+		{
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				tf.transferFocus();
+			}
+		});
 
 	}
 

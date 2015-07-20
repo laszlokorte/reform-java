@@ -37,12 +37,15 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius, _rotation);
 
-	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill", Color.class,
+	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill Color", Color.class,
 	                                                                     new Color(Form.DEFAULT_FILL));
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke", Color.class,
+	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke Color", Color.class,
 	                                                                       new Color(Form.DEFAULT_STROKE));
 
-	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute);
+	private final Attribute<Integer> _strokeWidthAttribute = new Attribute<>("Stroke Width", Integer.class, 1);
+
+	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
+	                                                          _strokeWidthAttribute);
 
 	public enum Point implements ExposedPointToken<CircleForm>
 	{
@@ -148,6 +151,8 @@ public final class CircleForm extends BaseForm<CircleForm>
 	{
 		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
+		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
+
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 

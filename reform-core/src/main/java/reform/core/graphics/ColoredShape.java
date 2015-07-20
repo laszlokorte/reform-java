@@ -10,7 +10,7 @@ public class ColoredShape
 	private Stroke _stroke = new BasicStroke(1);
 	private Color _backgroundColor;
 	private Color _strokeColor;
-	private GeneralPath.Double _path = new GeneralPath.Double();
+	private final GeneralPath.Double _path = new GeneralPath.Double();
 
 	public Stroke getStroke() {
 		return _stroke;
@@ -48,5 +48,10 @@ public class ColoredShape
 		g2.setColor(_strokeColor);
 		g2.setStroke(_stroke);
 		g2.draw(_path);
+	}
+
+	public void setStrokeWidth(final int strokeWidth)
+	{
+		_stroke = new BasicStroke(strokeWidth);
 	}
 }
