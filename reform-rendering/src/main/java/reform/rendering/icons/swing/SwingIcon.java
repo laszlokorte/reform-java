@@ -11,13 +11,21 @@ public class SwingIcon implements javax.swing.Icon
 	private final Icon _icon;
 	private final int _size;
 	private final boolean _smooth;
+	private final Color _selectedColor;
 
-	public SwingIcon(final Icon icon, final int size, final boolean smooth)
+	public SwingIcon(final Icon icon, final int size, final boolean smooth, Color selectedColor)
 	{
 		_icon = icon;
 		_size = size;
 		_smooth = smooth;
+		_selectedColor = selectedColor;
 	}
+
+	public SwingIcon(final Icon icon, final int size, final boolean smooth)
+	{
+		this(icon, size, smooth, new Color(0x23A9E5));
+	}
+
 
 	public SwingIcon(final Icon icon)
 	{
@@ -38,13 +46,15 @@ public class SwingIcon implements javax.swing.Icon
 		{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
+
+
 		if (!c.isEnabled())
 		{
 			g2.setColor(Color.LIGHT_GRAY);
 		}
-		else if (c instanceof JToggleButton && !((JToggleButton) c).isSelected())
+		else if (c instanceof JToggleButton && ((JToggleButton) c).isSelected())
 		{
-			g2.setColor(Color.LIGHT_GRAY);
+			g2.setColor(_selectedColor);
 		}
 		else
 		{
