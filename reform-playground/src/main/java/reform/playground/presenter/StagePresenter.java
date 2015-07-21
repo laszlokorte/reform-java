@@ -44,7 +44,7 @@ public class StagePresenter
 		_handleRenderer = new HandleRenderer(stage, toolState);
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
-		_instructionControlRenderer = new InstructionControlRenderer(stage);
+		_instructionControlRenderer = new InstructionControlRenderer(stage, toolState);
 		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer(stage, toolState, formSelection, analyzer,
 		                                                                 toolTipRenderer, cursor);
 

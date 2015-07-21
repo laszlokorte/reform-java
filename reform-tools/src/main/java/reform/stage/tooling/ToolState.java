@@ -13,12 +13,12 @@ public class ToolState
 
 	public enum ViewState
 	{
-		Preview, Selection, Snap, SnapEntity, Handle, EntityPoint, SnapHandle, Crop
+		Preview, Selection, Snap, SnapEntity, Handle, EntityPoint, SnapHandle, Crop, Control, SnapControl
 	}
 
 	public enum SelectionState
 	{
-		None, Form, Handle, EntityPoint, SnapPoint, CropPoint
+		None, Form, Handle, EntityPoint, SnapPoint, CropPoint, Control
 	}
 
 	private final List<ToolStateListener> _listeners = new ArrayList<>();
