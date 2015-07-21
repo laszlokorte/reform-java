@@ -5,6 +5,8 @@ import reform.core.forms.Form;
 import reform.core.forms.anchors.Anchor;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.UnknownAnchorError;
+import reform.core.runtime.errors.UnknownFormError;
 import reform.core.runtime.relations.TranslationDistance;
 import reform.identity.Identifier;
 
@@ -29,7 +31,7 @@ public class MorphInstruction extends BaseInstruction
 		final Form form = runtime.get(_formId);
 		if (form == null)
 		{
-			runtime.reportError(this, new Error("Form has not been initialized"));
+			runtime.reportError(this, new UnknownFormError(_formId));
 		}
 		else
 		{
@@ -37,7 +39,7 @@ public class MorphInstruction extends BaseInstruction
 
 			if (anchor == null)
 			{
-				runtime.reportError(this, new Error("Unknown anchor point"));
+				runtime.reportError(this, new UnknownAnchorError(_anchorId));
 			}
 			else
 			{

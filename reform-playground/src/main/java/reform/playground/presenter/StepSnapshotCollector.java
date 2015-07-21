@@ -9,6 +9,7 @@ import reform.core.procedure.instructions.InstructionGroup;
 import reform.core.procedure.instructions.NullInstruction;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
@@ -38,7 +39,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	private final Vec2i _currentSize = new Vec2i();
 	private final Vec2i _currentScaledSize = new Vec2i(_maxSize);
 	private final Map<Evaluable, BufferedImage> _instructionBitmaps = new HashMap<>();
-	private final Map<Evaluable, Error> _errorMap = new HashMap<>();
+	private final Map<Evaluable, RuntimeError> _errorMap = new HashMap<>();
 	private final Set<Evaluable> _recordedInstructions = new HashSet<>();
 	private final Set<Evaluable> _failedInstructions = new HashSet<>();
 	private final CopyOnWriteArrayList<Shape> _collectedShapes = new CopyOnWriteArrayList<>();
@@ -153,7 +154,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
 	{
 		_failedInstructions.add(instruction);
 		_errorMap.put(instruction, error);
@@ -241,7 +242,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 		return _currentScaledSize.y;
 	}
 
-	public Error getError(final Evaluable instruction)
+	public RuntimeError getError(final Evaluable instruction)
 	{
 		return _errorMap.get(instruction);
 	}

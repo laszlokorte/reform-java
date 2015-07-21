@@ -4,6 +4,8 @@ import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.InvalidDistanceError;
+import reform.core.runtime.errors.UnknownFormError;
 import reform.core.runtime.relations.TranslationDistance;
 import reform.identity.Identifier;
 
@@ -25,11 +27,11 @@ public class TranslateInstruction extends BaseInstruction
 		final Form form = runtime.get(_target);
 		if (form == null)
 		{
-			runtime.reportError(this, new Error("Form has not been initialized"));
+			runtime.reportError(this, new UnknownFormError(_target));
 		}
 		else if (!_distance.isValidFor(runtime))
 		{
-			runtime.reportError(this, new Error("Distance is not defined"));
+			runtime.reportError(this, new InvalidDistanceError(_distance));
 		}
 		else
 		{

@@ -4,6 +4,9 @@ import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.InvalidAngleError;
+import reform.core.runtime.errors.InvalidFixpointError;
+import reform.core.runtime.errors.UnknownFormError;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.core.runtime.relations.RotationAngle;
 import reform.identity.Identifier;
@@ -29,15 +32,15 @@ public class RotateInstruction extends BaseInstruction
 
 		if (form == null)
 		{
-			runtime.reportError(this, new Error("Form has not been initialized"));
+			runtime.reportError(this, new UnknownFormError(_target));
 		}
 		else if (!_fixPoint.isValidFor(runtime))
 		{
-			runtime.reportError(this, new Error("Fixpoint is not defined"));
+			runtime.reportError(this, new InvalidFixpointError(_fixPoint));
 		}
 		else if (!_angle.isValidFor(runtime))
 		{
-			runtime.reportError(this, new Error("Angle is not defined"));
+			runtime.reportError(this, new InvalidAngleError(_angle));
 		}
 		else
 		{

@@ -4,6 +4,7 @@ import reform.core.analyzer.Analyzable;
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.UnexpectedInternalError;
 import reform.identity.Identifier;
 
 import java.util.ArrayList;
@@ -81,9 +82,9 @@ abstract public class BaseInstructionGroup extends BaseInstruction implements In
 				try
 				{
 					instruction.evaluate(runtime);
-				} catch (final Exception e)
+				} catch (final RuntimeException e)
 				{
-					runtime.reportError(instruction, new Error(e));
+					runtime.reportError(instruction, new UnexpectedInternalError(e));
 				}
 				runtime.afterEval(instruction);
 			}

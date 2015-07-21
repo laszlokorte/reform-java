@@ -4,6 +4,7 @@ import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.InvalidDestinationError;
 import reform.core.runtime.relations.InitialDestination;
 import reform.identity.Identifier;
 
@@ -23,7 +24,7 @@ public class CreateFormInstruction extends BaseInstruction
 	{
 		if (!_destination.isValidFor(runtime))
 		{
-			runtime.reportError(this, new Error("Destination is not defined"));
+			runtime.reportError(this, new InvalidDestinationError(_destination));
 		}
 		else
 		{

@@ -8,6 +8,7 @@ import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.stage.elements.Entity;
@@ -120,7 +121,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
 	{
 		// TODO Auto-generated method stub
 

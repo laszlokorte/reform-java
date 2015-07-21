@@ -3,6 +3,7 @@ package reform.core.runtime;
 import reform.core.forms.Form;
 import reform.core.project.Picture;
 import reform.core.project.Project;
+import reform.core.runtime.errors.RuntimeError;
 import reform.core.runtime.stack.Stack;
 import reform.data.ExpressionContext;
 import reform.identity.FastIterable;
@@ -23,7 +24,7 @@ public class ProjectRuntime implements Runtime
 
 		void onPopScope(ProjectRuntime runtime, FastIterable<Identifier<? extends Form>> ids);
 
-		void onError(ProjectRuntime runtime, Evaluable instruction, Error error);
+		void onError(ProjectRuntime runtime, Evaluable instruction, RuntimeError error);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -141,11 +142,10 @@ public class ProjectRuntime implements Runtime
 	}
 
 	@Override
-	public void reportError(final Evaluable instruction, final Error error)
+	public void reportError(final Evaluable instruction, final RuntimeError error)
 	{
 		synchronized (_listeners)
 		{
-
 			for (int i = 0; i < _listeners.size(); i++)
 			{
 				_listeners.get(i).onError(this, instruction, error);

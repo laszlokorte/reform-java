@@ -2,6 +2,7 @@ package reform.core.runtime;
 
 import reform.core.forms.Form;
 import reform.core.project.Picture;
+import reform.core.runtime.errors.RuntimeError;
 import reform.data.ExpressionContext;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -31,7 +32,7 @@ public interface Runtime
 
 	FastIterable<Identifier<? extends Form>> getStackIterator();
 
-	void reportError(Evaluable instruction, Error error);
+	void reportError(Evaluable instruction, RuntimeError error);
 
 	boolean shouldStop();
 

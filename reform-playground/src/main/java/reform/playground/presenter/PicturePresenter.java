@@ -9,6 +9,7 @@ import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.errors.RuntimeError;
 import reform.evented.core.EventedPicture;
 import reform.evented.core.EventedProcedure;
 import reform.identity.FastIterable;
@@ -457,7 +458,7 @@ public class PicturePresenter
 			}
 
 			@Override
-			public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+			public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
 			{
 				// TODO Auto-generated method stub
 
@@ -753,7 +754,7 @@ public class PicturePresenter
 		}
 
 		@Override
-		public void onError(final ProjectRuntime runtime, final Evaluable instruction, final Error error)
+		public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
 		{
 
 		}
@@ -844,7 +845,7 @@ public class PicturePresenter
 		}
 
 		@Override
-		public Error getError(final int index)
+		public RuntimeError getError(final int index)
 		{
 			return _stepCollector.getError((Instruction) _analyzer.getNode(index).getSource());
 		}

@@ -3,6 +3,7 @@ package reform.playground.views.procedure;
 import reform.core.pool.Pool;
 import reform.core.pool.PoolFactory;
 import reform.core.pool.SimplePool;
+import reform.core.runtime.errors.RuntimeError;
 import reform.playground.presenter.StepSnapshotCollector;
 import reform.rendering.paint.StripePaint;
 import reform.stage.tooling.InstructionFocus;
@@ -36,7 +37,7 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 
 		boolean hasBeenEvaluated(int index);
 
-		Error getError(int index);
+		RuntimeError getError(int index);
 
 		String getDescription(int index);
 
