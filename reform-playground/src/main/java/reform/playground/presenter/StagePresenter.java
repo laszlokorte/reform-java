@@ -25,6 +25,7 @@ public class StagePresenter
 	private final HandleRenderer _handleRenderer;
 	private final PivotRenderer _pivotRenderer;
 	private final GuideRenderer _guideRenderer;
+	private final ErrorMarkerRenderer _errorMarkerRenderer;
 	private final ToolStateDescriptionRenderer _toolStateDescriptionRenderer;
 
 	public StagePresenter(final Stage stage, final FormSelection formSelection, final ToolState toolState, final
@@ -44,6 +45,7 @@ public class StagePresenter
 		_handleRenderer = new HandleRenderer(stage, toolState);
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
+		_errorMarkerRenderer = new ErrorMarkerRenderer(stage);
 		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer(stage, toolState, formSelection, analyzer,
 		                                                                 toolTipRenderer, cursor);
 
@@ -57,6 +59,7 @@ public class StagePresenter
 		_canvas.addRenderer(_entityPointRenderer);
 		_canvas.addRenderer(_handleRenderer);
 		_canvas.addRenderer(_pivotRenderer);
+		_canvas.addRenderer(_errorMarkerRenderer);
 		_canvas.addRenderer(_toolStateDescriptionRenderer);
 
 		toolState.addListener(new ToolStateListener(this));

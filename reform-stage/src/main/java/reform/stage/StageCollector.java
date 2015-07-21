@@ -8,10 +8,13 @@ import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.errors.InvalidDestinationError;
 import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
+import reform.math.Vec2;
 import reform.stage.elements.Entity;
+import reform.stage.elements.errors.DestinationMarker;
 import reform.stage.elements.factory.EntityCache;
 import reform.stage.elements.factory.EntityFactory;
 
@@ -123,8 +126,13 @@ public class StageCollector implements ProjectRuntime.Listener
 	@Override
 	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
 	{
-		// TODO Auto-generated method stub
-
+		if (_adapter.isInFocus(instruction) && !_collected)
+		{
+			if(error instanceof InvalidDestinationError) {
+				InvalidDestinationError e = (InvalidDestinationError) error;
+				_buffer.setErrorMarker(new DestinationMarker(e.getDestination(), new Vec2(runtime.getSize().x / 3, runtime.getSize().y / 3)));
+			}
+		}
 	}
 
 }

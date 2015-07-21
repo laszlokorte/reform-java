@@ -6,6 +6,8 @@ import reform.identity.Identifier;
 import reform.math.Vec2;
 import reform.math.Vec2i;
 import reform.stage.elements.Entity;
+import reform.stage.elements.errors.DestinationMarker;
+import reform.stage.elements.errors.Marker;
 import reform.stage.elements.outline.EntityOutline;
 import reform.stage.elements.outline.IntersectionSnapPointPool;
 
@@ -24,9 +26,11 @@ class StageBuffer
 	private final ArrayList<Identifier<? extends Form>> _finalShapeIds = new ArrayList<>();
 
 	private final IntersectionSnapPointPool _intersectionSnapPointPool = new IntersectionSnapPointPool();
+	private Marker _errorMarker;
 
 	public void clear()
 	{
+		_errorMarker = null;
 		_finalShapes.clear();
 		_currentShapes.clear();
 		_entities.clear();
@@ -69,6 +73,9 @@ class StageBuffer
 			final ColoredShape s = _finalShapes.get(i);
 			stage.addFinalShape(s, _finalShapeIds.get(i));
 		}
+		if (_errorMarker != null) {
+			stage.setErrorMarker(_errorMarker);
+		}
 		stage.complete();
 		//}
 	}
@@ -93,5 +100,10 @@ class StageBuffer
 	public void addEntity(final Entity entity)
 	{
 		_entities.add(entity);
+	}
+
+	public void setErrorMarker(final Marker errorMarker)
+	{
+		_errorMarker = errorMarker;
 	}
 }
