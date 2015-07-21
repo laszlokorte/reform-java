@@ -16,6 +16,12 @@
  - Snap point filter: option to show only snap points of selected form
  - Zoom
 
+ - Data Grid
+ - Shunting Yard
+ - Cycle resolving
+ - Measurements
+
+
  - serialize colors
 
  - improve scrolling when resizing canvas
