@@ -299,6 +299,36 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 			_form.refresh(runtime);
 		}
+
+		@Override
+		public double getXValueForRuntime(final Runtime runtime)
+		{
+			final double rotation = _rotation.getValueForRuntime(runtime);
+
+			final double halfWidth = _width.getValueForRuntime(runtime) / 2;
+			final double halfHeight = _height.getValueForRuntime(runtime) / 2;
+
+			final double centerX = _center.getXValueForRuntime(runtime);
+
+			final double deltaX = Vector.getRotatedX(_side.x * halfWidth, _side.y * halfHeight, rotation);
+
+			return centerX + deltaX;
+		}
+
+		@Override
+		public double getYValueForRuntime(final Runtime runtime)
+		{
+			final double rotation = _rotation.getValueForRuntime(runtime);
+
+			final double halfWidth = _width.getValueForRuntime(runtime) / 2;
+			final double halfHeight = _height.getValueForRuntime(runtime) / 2;
+
+			final double centerY = _center.getXValueForRuntime(runtime);
+
+			final double deltaY = Vector.getRotatedY(_side.x * halfWidth, _side.y * halfHeight, rotation);
+
+			return centerY + deltaY;
+		}
 	}
 
 	private void refresh(final Runtime runtime)

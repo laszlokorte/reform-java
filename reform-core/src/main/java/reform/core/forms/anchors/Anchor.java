@@ -7,4 +7,8 @@ import reform.naming.Named;
 public interface Anchor extends Identifiable<Anchor>, Named
 {
 	void translate(Runtime runtime, final double x, final double y);
+
+	double getXValueForRuntime(final Runtime runtime);
+
+	double getYValueForRuntime(final Runtime runtime);
 }

@@ -11,6 +11,7 @@ import reform.core.forms.transformation.*;
 import reform.core.graphics.Color;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.relations.ReferencePoint;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.math.Vector;
@@ -109,17 +110,17 @@ public final class CircleForm extends BaseForm<CircleForm>
 		                              new Name("Top"), Point.Top));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Top, new Name("Top"), CircleQuarterAnchor.Quarter.North, _radius,
-		                                  _rotation));
+		                                  _rotation, _centerPoint));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Right, new Name("Right"), CircleQuarterAnchor.Quarter.East, _radius,
-		                                  _rotation));
+		                                  _rotation, _centerPoint));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Bottom, new Name("Bottom"), CircleQuarterAnchor.Quarter.South,
 		                                  _radius,
-		                                  _rotation));
+		                                  _rotation, _centerPoint));
 
 		addAnchor(new CircleQuarterAnchor(Anchor.Left, new Name("Left"), CircleQuarterAnchor.Quarter.West, _radius,
-		                                  _rotation));
+		                                  _rotation, _centerPoint));
 
 	}
 
@@ -200,14 +201,16 @@ public final class CircleForm extends BaseForm<CircleForm>
 		private final Quarter _quarter;
 		private final StaticLength _radius;
 		private final StaticAngle _angle;
+		private final ReferencePoint _center;
 
 		public CircleQuarterAnchor(final IdentityToken token, final Name name, final Quarter quarter, final
-		StaticLength radius, final StaticAngle angle)
+		StaticLength radius, final StaticAngle angle, ReferencePoint center)
 		{
 			super(token, name);
 			_quarter = quarter;
 			_radius = radius;
 			_angle = angle;
+			_center = center;
 		}
 
 		@Override
@@ -228,6 +231,28 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 			_radius.setForRuntime(runtime, newRadius);
 			_angle.setForRuntime(runtime, newAngle);
+		}
+
+		@Override
+		public double getXValueForRuntime(final Runtime runtime)
+		{
+			final double angle = _angle.getValueForRuntime(runtime);
+			final double radius = _radius.getValueForRuntime(runtime);
+
+			final double deltaX = Vector.getRotatedX(radius, 0, angle + _quarter.angle);
+
+			return _center.getXValueForRuntime(runtime) + deltaX;
+		}
+
+		@Override
+		public double getYValueForRuntime(final Runtime runtime)
+		{
+			final double angle = _angle.getValueForRuntime(runtime);
+			final double radius = _radius.getValueForRuntime(runtime);
+
+			final double deltaY = Vector.getRotatedY(radius, 0, angle + _quarter.angle);
+
+			return _center.getYValueForRuntime(runtime) + deltaY;
 		}
 
 	}

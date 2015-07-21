@@ -8,25 +8,32 @@ import reform.naming.Name;
 public class StaticPointAnchor extends BaseAnchor
 {
 
-	private final StaticPoint[] _points;
+	private final StaticPoint _point;
 
-	public StaticPointAnchor(final IdentityToken id, final Name name, final StaticPoint... points)
+	public StaticPointAnchor(final IdentityToken id, final Name name, final StaticPoint point)
 	{
 		super(id, name);
-		_points = points;
+		_point = point;
 	}
 
 	@Override
 	public void translate(final Runtime runtime, final double x, final double y)
 	{
-		for (int i = 0; i < _points.length; i++)
-		{
-			final StaticPoint point = _points[i];
+		final double newX = _point.getXValueForRuntime(runtime) + x;
+		final double newY = _point.getYValueForRuntime(runtime) + y;
+		_point.setForRuntime(runtime, newX, newY);
+	}
 
-			final double newX = point.getXValueForRuntime(runtime) + x;
-			final double newY = point.getYValueForRuntime(runtime) + y;
-			point.setForRuntime(runtime, newX, newY);
-		}
+	@Override
+	public double getXValueForRuntime(final Runtime runtime)
+	{
+		return _point.getXValueForRuntime(runtime);
+	}
+
+	@Override
+	public double getYValueForRuntime(final Runtime runtime)
+	{
+		return _point.getYValueForRuntime(runtime);
 	}
 
 }

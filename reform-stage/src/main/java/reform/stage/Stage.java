@@ -6,7 +6,7 @@ import reform.identity.Identifier;
 import reform.math.Vec2i;
 import reform.stage.elements.CropPoint;
 import reform.stage.elements.Entity;
-import reform.stage.elements.errors.Marker;
+import reform.stage.elements.InstructionControl;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
 import java.awt.*;
@@ -34,7 +34,7 @@ public class Stage
 	private final HashMap<ColoredShape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
 	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new HashMap<>();
 
-	private final CopyOnWriteArrayList<Marker> _errorMarkers = new CopyOnWriteArrayList<>();
+	private InstructionControl _instructionControl = null;
 
 	public Stage()
 	{
@@ -93,7 +93,7 @@ public class Stage
 
 	void wipe()
 	{
-		_errorMarkers.clear();
+		_instructionControl = null;
 		_finalShapes.clear();
 		_currentShapes.clear();
 		_entities.clear();
@@ -156,14 +156,14 @@ public class Stage
 	}
 
 
-	public void addErrorMarker(final Marker errorMarker)
+	public void setInstructionControl(final InstructionControl control)
 	{
-		_errorMarkers.add(errorMarker);
+		_instructionControl = control;
 	}
 
 
-	public List<Marker> getErrorMarkers()
+	public InstructionControl getInstructionControl()
 	{
-		return _errorMarkers;
+		return _instructionControl;
 	}
 }

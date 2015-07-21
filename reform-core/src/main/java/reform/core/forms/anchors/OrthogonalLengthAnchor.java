@@ -48,4 +48,40 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		_offset.setForRuntime(runtime, Vector.dot(newX, newY, orthogonalX, orthogonalY));
 	}
 
+	@Override
+	public double getXValueForRuntime(final Runtime runtime)
+	{
+		final double aX = _pointA.getXValueForRuntime(runtime);
+		final double aY = _pointA.getYValueForRuntime(runtime);
+		final double bX = _pointB.getXValueForRuntime(runtime);
+		final double bY = _pointB.getYValueForRuntime(runtime);
+		final double offset = _offset.getValueForRuntime(runtime);
+
+		final double deltaX = bX - aX;
+		final double deltaY = bY - aY;
+		final double distance = Vector.distance(aX, aY, bX, bY);
+
+		final double orthogonalX = -Vector.orthogonalX(deltaX, deltaY) / distance;
+
+		return aX + deltaX + orthogonalX * offset;
+	}
+
+	@Override
+	public double getYValueForRuntime(final Runtime runtime)
+	{
+		final double aX = _pointA.getXValueForRuntime(runtime);
+		final double aY = _pointA.getYValueForRuntime(runtime);
+		final double bX = _pointB.getXValueForRuntime(runtime);
+		final double bY = _pointB.getYValueForRuntime(runtime);
+		final double offset = _offset.getValueForRuntime(runtime);
+
+		final double deltaX = bX - aX;
+		final double deltaY = bY - aY;
+		final double distance = Vector.distance(aX, aY, bX, bY);
+
+		final double orthogonalY = -Vector.orthogonalY(deltaX, deltaY) / distance;
+
+		return aY + deltaY + orthogonalY * offset;
+	}
+
 }
