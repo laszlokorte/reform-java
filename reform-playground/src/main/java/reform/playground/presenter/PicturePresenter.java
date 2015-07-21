@@ -94,6 +94,7 @@ public class PicturePresenter
 	private final SwingIcon _cropIcon = new SwingIcon(new ToolCropIcon(), false);
 	private final SwingIcon _previewIcon = new SwingIcon(new EyeIcon());
 	private final SwingIcon _exportIcon = new SwingIcon(new ActionExportIcon());
+	private final SwingIcon _repairIcon = new SwingIcon(new ToolRepairIcon());
 	private final SwingIcon _lineIcon = new SwingIcon(new ShapeLineIcon());
 	private final SwingIcon _rectIcon = new SwingIcon(new ShapeRectangleIcon(), false);
 	private final SwingIcon _circleIcon = new SwingIcon(new ShapeCircleIcon());
@@ -224,6 +225,7 @@ public class PicturePresenter
 		                                                  eProcedure);
 		final CropTool cropTool = new CropTool(_toolState, _cursor, _picture);
 		final PreviewTool previewTool = new PreviewTool(_toolState);
+		final RepairInstructionTool repairInstructionTool = new RepairInstructionTool(_toolState);
 		{
 			final CreateFormTool createLineTool = new CreateFormTool(selectionTool,
 			                                               new FormFactory<>("Line", idEmitter, Builders.Line),
@@ -390,6 +392,18 @@ public class PicturePresenter
 			final JButton button = new JButton(new ExportImageAction(_stage, _toolController, previewTool));
 
 			button.setIcon(_exportIcon);
+			button.setHideActionText(true);
+			button.setFocusable(false);
+
+			toolBarRight.add(button);
+		}
+
+		toolBarRight.addSeparator();
+
+		{
+			final JButton button = new JButton(new SelectToolAction(_toolController, repairInstructionTool, "Repair Insruction"));
+
+			button.setIcon(_repairIcon);
 			button.setHideActionText(true);
 			button.setFocusable(false);
 
