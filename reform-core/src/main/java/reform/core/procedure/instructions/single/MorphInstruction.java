@@ -42,6 +42,10 @@ public class MorphInstruction extends BaseInstruction
 			{
 				runtime.reportError(this, new UnknownAnchorError(_anchorId));
 			}
+			else if (!_distance.isValidFor(runtime))
+			{
+				runtime.reportError(this, new InvalidDistanceError(_distance));
+			}
 			else
 			{
 
