@@ -5,6 +5,7 @@ import reform.stage.Stage;
 import reform.stage.elements.*;
 import reform.stage.elements.entities.PaperEntity;
 import reform.stage.elements.outline.IntersectionSnapPoint;
+import reform.stage.elements.outline.IntersectionSnapPointPool;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,7 +98,7 @@ public class HitTester
 						continue;
 					}
 
-					_resultSnapPoint.add(p);
+					_resultSnapPoint.add(IntersectionSnapPointPool.copyIfNeeded(p));
 					if (++i >= max)
 					{
 						break outer;
