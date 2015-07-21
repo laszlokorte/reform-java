@@ -8,6 +8,7 @@ import reform.stage.Stage;
 import reform.stage.elements.errors.Marker;
 import reform.stage.tooling.ToolState;
 
+import java.util.List;
 import java.awt.*;
 
 public class ErrorMarkerRenderer implements CanvasRenderer
@@ -35,9 +36,10 @@ public class ErrorMarkerRenderer implements CanvasRenderer
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 		}
 
-		final Marker marker = _stage.getErrorMarker();
-		if (marker != null)
+		final List<Marker> markers = _stage.getErrorMarkers();
+		for (int i=0,j=markers.size();i<j;i++)
 		{
+			Marker marker = markers.get(i);
 			_errorDot.drawAt(g2, marker.getPosition().x, marker.getPosition().y);
 		}
 

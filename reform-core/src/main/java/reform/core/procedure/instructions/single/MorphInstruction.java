@@ -5,6 +5,7 @@ import reform.core.forms.Form;
 import reform.core.forms.anchors.Anchor;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.InvalidDistanceError;
 import reform.core.runtime.errors.UnknownAnchorError;
 import reform.core.runtime.errors.UnknownFormError;
 import reform.core.runtime.relations.TranslationDistance;

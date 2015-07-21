@@ -4,15 +4,15 @@ package reform.core.runtime.errors;
 public class UnexpectedInternalError implements RuntimeError
 {
 
-	private final Throwable _throwable;
+	private final RuntimeException _exception;
 
-	public UnexpectedInternalError(final Throwable throwable) {
-		_throwable = throwable;
+	public UnexpectedInternalError(final RuntimeException exception) {
+		_exception = exception;
 	}
 
 	@Override
 	public String getMessage()
 	{
-		return _throwable.getMessage();
+		return _exception.getClass().getSimpleName();
 	}
 }

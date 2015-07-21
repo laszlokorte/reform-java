@@ -34,7 +34,7 @@ public class Stage
 	private final HashMap<ColoredShape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
 	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new HashMap<>();
 
-	private Marker _errorMarker;
+	private final CopyOnWriteArrayList<Marker> _errorMarkers = new CopyOnWriteArrayList<>();
 
 	public Stage()
 	{
@@ -93,7 +93,7 @@ public class Stage
 
 	void wipe()
 	{
-		_errorMarker = null;
+		_errorMarkers.clear();
 		_finalShapes.clear();
 		_currentShapes.clear();
 		_entities.clear();
@@ -156,14 +156,14 @@ public class Stage
 	}
 
 
-	public void setErrorMarker(final Marker errorMarker)
+	public void addErrorMarker(final Marker errorMarker)
 	{
-		_errorMarker = errorMarker;
+		_errorMarkers.add(errorMarker);
 	}
 
 
-	public Marker getErrorMarker()
+	public List<Marker> getErrorMarkers()
 	{
-		return _errorMarker;
+		return _errorMarkers;
 	}
 }
