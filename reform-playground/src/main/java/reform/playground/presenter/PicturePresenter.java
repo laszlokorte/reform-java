@@ -20,6 +20,7 @@ import reform.playground.actions.*;
 import reform.playground.listener.FocusAdjustmentProcedureListener;
 import reform.playground.listener.SelectionAdjustmentProcedureListener;
 import reform.playground.views.procedure.ProcedureView;
+import reform.playground.views.sheet.SheetPresenter;
 import reform.rendering.icons.*;
 import reform.rendering.icons.swing.SwingIcon;
 import reform.stage.Stage;
@@ -139,12 +140,11 @@ public class PicturePresenter
 		final JPanel measureBox = new JPanel(new BorderLayout());
 
 		{
-			final JTable table = new JTable(3, 2);
-			table.setFocusable(false);
-			table.setSelectionBackground(Color.LIGHT_GRAY);
-			table.setSelectionForeground(Color.BLACK);
-			dataBox.add(new JLabel("Data"), BorderLayout.PAGE_START);
-			dataBox.add(table, BorderLayout.CENTER);
+			SheetPresenter sheetPresenter = new SheetPresenter();
+			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
+			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
+			dataScroller.setPreferredSize(new Dimension(300, 100));
+			dataBox.add(dataScroller, BorderLayout.CENTER);
 		}
 		{
 			final JTable table = new JTable(3, 2);
