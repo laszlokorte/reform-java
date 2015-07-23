@@ -5,7 +5,7 @@ import reform.core.project.Picture;
 import reform.core.project.Project;
 import reform.core.runtime.errors.RuntimeError;
 import reform.core.runtime.stack.Stack;
-import reform.data.ExpressionContext;
+import reform.data.sheet.DataSet;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
@@ -166,7 +166,7 @@ public class ProjectRuntime implements Runtime
 	}
 
 	@Override
-	public ExpressionContext getExpressionContext()
+	public DataSet getExpressionContext()
 	{
 		// TODO Auto-generated method stub
 		return null;

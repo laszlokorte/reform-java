@@ -1,9 +1,9 @@
 package reform.playground.main;
 
 import reform.core.procedure.Procedure;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
 import reform.core.project.Project;
+import reform.data.sheet.Sheet;
 import reform.evented.core.EventedProject;
 import reform.identity.IdentifierEmitter;
 import reform.math.Vec2i;
@@ -22,7 +22,7 @@ public final class Main
 			final IdentifierEmitter idEmitter = new IdentifierEmitter(100);
 
 			final Picture pic = new Picture(idEmitter.emit(), new Name("Foo Picture"), new Vec2i(700, 400),
-			                                new DataSet(), new Procedure());
+			                                new Sheet(), new Procedure());
 			eProject.addPicture(pic);
 
 			final WindowBuilder windowBuilder = new WindowBuilder();

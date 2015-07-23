@@ -10,8 +10,12 @@ import reform.core.procedure.instructions.NullInstruction;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.errors.RuntimeError;
+import reform.data.sheet.Definition;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
 import reform.evented.core.EventedPicture;
 import reform.evented.core.EventedProcedure;
+import reform.evented.core.EventedSheet;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentifierEmitter;
@@ -140,11 +144,17 @@ public class PicturePresenter
 		final JPanel measureBox = new JPanel(new BorderLayout());
 
 		{
-			SheetPresenter sheetPresenter = new SheetPresenter();
+			EventedSheet eSheet = picture.getEventedSheet();
+			SheetPresenter sheetPresenter = new SheetPresenter(eSheet);
 			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
 			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
 			dataScroller.setPreferredSize(new Dimension(300, 100));
 			dataBox.add(dataScroller, BorderLayout.CENTER);
+
+			SwingUtilities.invokeLater(() -> {
+				eSheet.addDefinition(new Definition(idEmitter.emit(), "param", new ConstantExpression(new Value(0))));
+				eSheet.addDefinition(new Definition(idEmitter.emit(), "param2", new ConstantExpression(new Value(0))));
+			});
 		}
 		{
 			final JTable table = new JTable(3, 2);

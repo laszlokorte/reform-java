@@ -14,12 +14,12 @@ import reform.core.procedure.instructions.NullInstruction;
 import reform.core.procedure.instructions.blocks.ForLoopInstruction;
 import reform.core.procedure.instructions.blocks.IfConditionInstruction;
 import reform.core.procedure.instructions.single.*;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
 import reform.core.project.Project;
 import reform.core.runtime.relations.*;
 import reform.core.runtime.relations.Direction.CartesianDirection;
 import reform.core.runtime.relations.InitialDestination.Alignment;
+import reform.data.sheet.Sheet;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentifierEmitter;
@@ -93,7 +93,7 @@ public class ProjectSerializer
 
 		registerPictureId(id);
 
-		return new Picture(id, name, size, new DataSet(), procedure);
+		return new Picture(id, name, size, new Sheet(), procedure);
 
 	}
 

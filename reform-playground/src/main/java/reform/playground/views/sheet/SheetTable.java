@@ -1,5 +1,7 @@
 package reform.playground.views.sheet;
 
+import reform.data.sheet.DataSet;
+import reform.data.sheet.Solver;
 import reform.identity.Identifier;
 
 import javax.swing.*;
@@ -13,14 +15,16 @@ import javax.swing.table.TableModel;
  */
 public class SheetTable extends JTable
 {
-	private final ExpressionCellRenderer _expressionCellRenderer = new ExpressionCellRenderer();
-	private final ExpressionCellEditor _expressionCellEditor = new ExpressionCellEditor();
+	private final ExpressionCellRenderer _expressionCellRenderer;
+	private final ExpressionCellEditor _expressionCellEditor;
 	private final IdentifierCellRenderer _identifierCellRenderer = new IdentifierCellRenderer();
 	private final IdentifierCellEditor _identifierCellEditor = new IdentifierCellEditor();
 
-	public SheetTable(final TableModel dataModel)
+	public SheetTable(final TableModel dataModel, DataSet dataSet)
 	{
 		super(dataModel);
+		_expressionCellEditor = new ExpressionCellEditor(dataSet);
+		_expressionCellRenderer = new ExpressionCellRenderer(dataSet);
 	}
 
 	@Override

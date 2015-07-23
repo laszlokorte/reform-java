@@ -1,9 +1,9 @@
 package reform.evented.core;
 
 import reform.core.procedure.Procedure;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
 import reform.core.project.Project;
+import reform.data.sheet.Sheet;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
 import reform.naming.Name;
@@ -76,14 +76,14 @@ public class EventedPicture
 		return _evtProject.getPicture(_pictureId).getProcedure();
 	}
 
-	public EventedDataSet getEventedDataSet()
+	public EventedSheet getEventedSheet()
 	{
-		return new EventedDataSet(this);
+		return new EventedSheet(this);
 	}
 
-	DataSet getDataSet()
+	Sheet getSheet()
 	{
-		return _evtProject.getPicture(_pictureId).getDataSet();
+		return _evtProject.getPicture(_pictureId).getSheet();
 	}
 
 	public void addListener(final Listener listener)

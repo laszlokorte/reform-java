@@ -1,9 +1,9 @@
 package reform.playground.actions;
 
 import reform.core.procedure.Procedure;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
 import reform.core.project.Project;
+import reform.data.sheet.Sheet;
 import reform.identity.IdentifierEmitter;
 import reform.math.Vec2i;
 import reform.naming.Name;
@@ -37,7 +37,7 @@ public class NewProjectAction extends AbstractAction
 	{
 		final Project project = new Project();
 
-		project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350), new DataSet(),
+		project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350), new Sheet(),
 		                               new Procedure()));
 
 		_windowBuilder.open(null, project, _idEmitter, false);

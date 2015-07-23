@@ -1,6 +1,7 @@
 package reform.core.project;
 
 import reform.core.procedure.Procedure;
+import reform.data.sheet.Sheet;
 import reform.identity.Identifiable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
@@ -14,16 +15,16 @@ public final class Picture implements Identifiable<Picture>
 	private Name _name;
 	private final Vec2i _size = new Vec2i(400, 400);
 
-	private final DataSet _dataSet;
+	private final Sheet _dataSheet;
 	private final Procedure _procedure;
 
-	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final DataSet dataSet,
+	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final Sheet dataSheet,
 	               final Procedure procedure)
 	{
 		_id = id;
 		_name = name;
 		_size.set(size);
-		_dataSet = dataSet;
+		_dataSheet = dataSheet;
 		_procedure = procedure;
 	}
 
@@ -47,9 +48,9 @@ public final class Picture implements Identifiable<Picture>
 		return _size;
 	}
 
-	public DataSet getDataSet()
+	public Sheet getSheet()
 	{
-		return _dataSet;
+		return _dataSheet;
 	}
 
 	public Procedure getProcedure()

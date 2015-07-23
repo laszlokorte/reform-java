@@ -3,7 +3,7 @@ package reform.core.runtime;
 import reform.core.forms.Form;
 import reform.core.project.Picture;
 import reform.core.runtime.errors.RuntimeError;
-import reform.data.ExpressionContext;
+import reform.data.sheet.DataSet;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
@@ -38,7 +38,7 @@ public interface Runtime
 
 	Runtime getSubroutine(Identifier<? extends Picture> pictureId);
 
-	ExpressionContext getExpressionContext();
+	DataSet getExpressionContext();
 
 	Vec2i getSize();
 }

@@ -1,8 +1,8 @@
 package reform.playground.presenter;
 
 import reform.core.procedure.Procedure;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
+import reform.data.sheet.Sheet;
 import reform.evented.core.EventedProject;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -193,7 +193,7 @@ public class ProjectPresenter implements Listener
 		public void onDoubleClick()
 		{
 			final Picture newPicture = new Picture(_presenter._idEmitter.emit(), new Name("New Picture"),
-			                                       new Vec2i(400, 400), new DataSet(), new Procedure());
+			                                       new Vec2i(400, 400), new Sheet(), new Procedure());
 			_presenter._project.addPicture(newPicture);
 			_presenter.selectPicture(newPicture.getId());
 		}

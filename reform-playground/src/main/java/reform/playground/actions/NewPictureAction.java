@@ -1,8 +1,8 @@
 package reform.playground.actions;
 
 import reform.core.procedure.Procedure;
-import reform.core.project.DataSet;
 import reform.core.project.Picture;
+import reform.data.sheet.Sheet;
 import reform.evented.core.EventedProject;
 import reform.identity.IdentifierEmitter;
 import reform.math.Vec2i;
@@ -32,7 +32,7 @@ public class NewPictureAction extends AbstractAction
 	@Override
 	public void actionPerformed(final ActionEvent e)
 	{
-		_project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(400, 400), new DataSet(),
+		_project.addPicture(new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(400, 400), new Sheet(),
 		                                new Procedure()));
 	}
 
