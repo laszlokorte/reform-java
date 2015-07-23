@@ -1,6 +1,6 @@
 package reform.stage.tooling.tools;
 
-import reform.core.forms.relations.ConstantAngle;
+import reform.core.forms.relations.ConstantRotationAngle;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup.Position;
 import reform.core.procedure.instructions.single.RotateInstruction;
@@ -45,7 +45,7 @@ public class RotateFormTool implements Tool
 	private final Vec2 _startPosition = new Vec2();
 	private Handle _currentHandle;
 	private RotateInstruction _currentInstruction;
-	private ConstantAngle _currentAngle;
+	private ConstantRotationAngle _currentAngle;
 	private Instruction _baseInstruction;
 
 	public RotateFormTool(final SelectionTool selectionTool, final ToolState toolState, final Cursor cursor, final
@@ -108,7 +108,7 @@ public class RotateFormTool implements Tool
 			_state = State.Pressed;
 			_startPosition.set(_currentHandle.getX(), _currentHandle.getY());
 			_baseInstruction = _focus.getFocused();
-			_currentAngle = new ConstantAngle(0);
+			_currentAngle = new ConstantRotationAngle(0);
 			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary;
 
 			_currentInstruction = new RotateInstruction(_currentHandle.getFormId(), _currentAngle, pivotPoint);

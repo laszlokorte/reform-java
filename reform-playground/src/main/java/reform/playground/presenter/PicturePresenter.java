@@ -25,6 +25,7 @@ import reform.playground.actions.*;
 import reform.playground.listener.FocusAdjustmentProcedureListener;
 import reform.playground.listener.SelectionAdjustmentProcedureListener;
 import reform.playground.views.procedure.ProcedureView;
+import reform.playground.views.sheet.ExpressionParser;
 import reform.playground.views.sheet.SheetPresenter;
 import reform.rendering.icons.*;
 import reform.rendering.icons.swing.SwingIcon;
@@ -78,6 +79,8 @@ public class PicturePresenter
 	private final SelectionAdjustmentProcedureListener _selectionAdjustment = new SelectionAdjustmentProcedureListener(
 			_selection);
 	// private final Commander _commander = new Commander();
+
+	private final ExpressionParser _parser;
 	private final Stage _stage = new Stage();
 	private final HitTester _hitTester = new HitTester(_stage, new HitTesterAdapter(_selection));
 	private final Cursor _cursor = new Cursor(_hitTester);
@@ -127,9 +130,13 @@ public class PicturePresenter
 		_picture = picture;
 		_runtime = new ProjectRuntime(_picture.getProject(), _picture.getSize(), _dataSet);
 
+		EventedSheet eDataSheet = picture.getEventedDataSheet();
 		final EventedProcedure eProcedure = picture.getEventedProcedure();
 		eProcedure.addListener(_focusAdjustment);
 		eProcedure.addListener(_selectionAdjustment);
+
+		_parser = new ExpressionParser(eDataSheet);
+
 		_procedureView = new ProcedureView(new ProcedureViewAdapter(_analyzer, _focus, _stepCollector, eProcedure));
 		_stagePresenter = new StagePresenter(_stage, _selection, _toolState, _analyzer, _cursor);
 
@@ -153,23 +160,22 @@ public class PicturePresenter
 
 		{
 
-			EventedSheet eSheet = picture.getEventedDataSheet();
-			SheetPresenter sheetPresenter = new SheetPresenter(eSheet, _dataSet);
+			SheetPresenter sheetPresenter = new SheetPresenter(eDataSheet, _dataSet, _parser);
 			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
 			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
 			dataScroller.setPreferredSize(new Dimension(300, 100));
 			dataBox.add(dataScroller, BorderLayout.CENTER);
 
 			SwingUtilities.invokeLater(() -> {
-				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null),
+				eDataSheet.addDefinition(new Definition(idEmitter.emit(), eDataSheet.getUniqueNameFor("param", null),
 				                                    new ConstantExpression(new Value(0))));
-				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null),
+				eDataSheet.addDefinition(new Definition(idEmitter.emit(), eDataSheet.getUniqueNameFor("param", null),
 				                                    new ConstantExpression(new Value(0))));
 			});
 
 
 			{
-				JButton button = new JButton(new CreateDefinitionAction(eSheet, idEmitter));
+				JButton button = new JButton(new CreateDefinitionAction(eDataSheet, idEmitter));
 
 				button.setIcon(_createDefinitionIcon);
 				button.setFocusable(false);
@@ -180,7 +186,7 @@ public class PicturePresenter
 			}
 
 			{
-				JButton button = new JButton(new RemoveDefinitionAction(sheetPresenter.getSelectionModel(), eSheet));
+				JButton button = new JButton(new RemoveDefinitionAction(sheetPresenter.getSelectionModel(), eDataSheet));
 
 				button.setIcon(_deleteDefinitionIcon);
 				button.setFocusable(false);
@@ -195,7 +201,7 @@ public class PicturePresenter
 		{
 
 			EventedSheet eSheet = picture.getEventedMeasurementSheet();
-			SheetPresenter sheetPresenter = new SheetPresenter(eSheet, _dataSet);
+			SheetPresenter sheetPresenter = new SheetPresenter(eSheet, _dataSet, _parser);
 			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
 			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
 			dataScroller.setPreferredSize(new Dimension(300, 100));
@@ -213,7 +219,7 @@ public class PicturePresenter
 		headBarLeft.add(procedureToolbar, BorderLayout.EAST);
 		{
 
-			final InstructionsOptionPanel instructionOptionPanel = new InstructionsOptionPanel(eProcedure, _focus);
+			final InstructionsOptionPanel instructionOptionPanel = new InstructionsOptionPanel(eProcedure, _focus, _parser);
 
 			procedureToolbar.add(instructionOptionPanel.getComponent());
 

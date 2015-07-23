@@ -11,4 +11,6 @@ public interface RotationAngle extends Validatable
 
 	String getDescription(Analyzer analyzer);
 
+	boolean isDegenerated();
+
 }

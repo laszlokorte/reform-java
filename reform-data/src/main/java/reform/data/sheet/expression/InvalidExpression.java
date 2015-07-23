@@ -12,9 +12,9 @@ import java.util.Collection;
 public final class InvalidExpression implements Expression {
 	private final static Value NULL = new Value(0);
 
-	private final String _expressionString;
+	private final CharSequence _expressionString;
 
-	public InvalidExpression(String string) {
+	public InvalidExpression(CharSequence string) {
 		_expressionString = string;
 	}
 
@@ -23,7 +23,7 @@ public final class InvalidExpression implements Expression {
 		if(parens) {
 			return "("+_expressionString+")";
 		} else {
-			return _expressionString;
+			return _expressionString.toString();
 		}
 	}
 

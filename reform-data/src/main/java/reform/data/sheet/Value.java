@@ -7,22 +7,6 @@ import java.util.Locale;
  */
 public final class Value
 {
-	public String asString() {
-		switch (type) {
-			case String:
-				return "\""+_stringValue+"\"";
-			case Integer:
-				return _stringValue;
-			case Double:
-				return _stringValue;
-			default:
-				return "null";
-		}
-	}
-
-	public String toString() {
-		return asString();
-	}
 
 	public enum Type
 	{
@@ -74,4 +58,20 @@ public final class Value
 		return _stringValue;
 	}
 
+	public String asString() {
+		switch (type) {
+			case String:
+				return "\""+_stringValue+"\"";
+			case Integer:
+				return _stringValue;
+			case Double:
+				return _stringValue;
+			default:
+				return "null";
+		}
+	}
+
+	public String toString() {
+		return asString();
+	}
 }

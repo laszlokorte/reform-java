@@ -42,4 +42,10 @@ public class StaticAngle implements RotationAngle
 		return null;
 	}
 
+	@Override
+	public boolean isDegenerated()
+	{
+		return false;
+	}
+
 }

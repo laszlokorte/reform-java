@@ -72,7 +72,6 @@ public class TranslateInstructionControl implements InstructionControl
 				} else {
 					double baseX = runtime.getSize().x / 2.2;
 					double baseY = runtime.getSize().y / 2.3;
-					System.err.println(String.format("[OUT] %s", source));
 
 					_sourcePoint.setError(true);
 					_sourcePoint.updatePosition(baseX, baseY);

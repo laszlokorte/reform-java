@@ -499,7 +499,7 @@ public class ProjectSerializer
 
 	private RotationAngle readConstantRotationAngle(final JSONObject jsonObject)
 	{
-		return new ConstantAngle(jsonObject.getDouble("value"));
+		return new ConstantRotationAngle(jsonObject.getDouble("value"));
 	}
 
 	private RotateInstruction readRotateInstruction(final JSONObject object)
@@ -512,7 +512,7 @@ public class ProjectSerializer
 	{
 		final String type = jsonObject.getString("type");
 
-		if (type.equals(ConstantAngle.class.getSimpleName()))
+		if (type.equals(ConstantRotationAngle.class.getSimpleName()))
 		{
 			return readConstantRotationAngle(jsonObject);
 		}
@@ -757,9 +757,9 @@ public class ProjectSerializer
 		writer.object();
 		writer.key("type");
 		writer.value(cls.getSimpleName());
-		if (cls == ConstantAngle.class)
+		if (cls == ConstantRotationAngle.class)
 		{
-			writeConstantAngle(writer, (ConstantAngle) angle);
+			writeConstantAngle(writer, (ConstantRotationAngle) angle);
 		}
 		else
 		{
@@ -768,7 +768,7 @@ public class ProjectSerializer
 		writer.endObject();
 	}
 
-	private void writeConstantAngle(final JSONWriter writer, final ConstantAngle angle)
+	private void writeConstantAngle(final JSONWriter writer, final ConstantRotationAngle angle)
 	{
 		writer.key("value");
 		writer.value(angle.getValue());

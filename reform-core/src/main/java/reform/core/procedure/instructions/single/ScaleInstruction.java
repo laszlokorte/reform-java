@@ -14,7 +14,7 @@ import reform.identity.Identifier;
 public class ScaleInstruction extends BaseInstruction
 {
 	private final Identifier<? extends Form> _target;
-	private final ScaleFactor _factor;
+	private ScaleFactor _factor;
 	private ReferencePoint _fixPoint;
 
 	public ScaleInstruction(final Identifier<? extends Form> target, final ScaleFactor factor, final ReferencePoint
@@ -94,6 +94,11 @@ public class ScaleInstruction extends BaseInstruction
 	public void setFixPoint(final ReferencePoint fixPoint)
 	{
 		_fixPoint = fixPoint;
+	}
+
+	public void setFactor(ScaleFactor factor)
+	{
+		_factor = factor;
 	}
 
 }

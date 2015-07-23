@@ -4,12 +4,12 @@ import reform.core.analyzer.Analyzer;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.RotationAngle;
 
-public class ConstantAngle implements RotationAngle
+public class ConstantRotationAngle implements RotationAngle
 {
 
 	private double _angle;
 
-	public ConstantAngle(final double angle)
+	public ConstantRotationAngle(final double angle)
 	{
 		_angle = angle;
 	}
@@ -37,6 +37,7 @@ public class ConstantAngle implements RotationAngle
 		return _angle;
 	}
 
+	@Override
 	public boolean isDegenerated()
 	{
 		return _angle == 0;

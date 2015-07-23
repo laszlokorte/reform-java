@@ -34,7 +34,7 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint),
 	                                                             new BasicPointScaler(_endPoint), new AbsoluteScaler(
-			new BasicLengthScaler(_offset, new ConstantAngle(0), 0)));
+			new BasicLengthScaler(_offset, new ConstantRotationAngle(0), 0)));
 
 	private final Outline _outline = new NullOutline();
 

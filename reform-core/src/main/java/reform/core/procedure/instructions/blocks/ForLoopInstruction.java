@@ -25,6 +25,7 @@ public class ForLoopInstruction extends BaseInstructionGroup
 
 		if(iterations.type != Value.Type.Integer) {
 			runtime.reportError(this, new InvalidExpressionError(_times));
+			return;
 		}
 
 		int count = iterations.getInteger();
@@ -43,7 +44,7 @@ public class ForLoopInstruction extends BaseInstructionGroup
 	@Override
 	public void analyze(final Analyzer analyzer)
 	{
-		analyzer.publishGroup(this, "Repeat " + _times + " times:");
+		analyzer.publishGroup(this, "Repeat " + _times.asString(false) + " times:");
 		_analyzeChildren(analyzer);
 	}
 
@@ -57,4 +58,13 @@ public class ForLoopInstruction extends BaseInstructionGroup
 		_times = new ConstantExpression(new Value(times));
 	}
 
+	public Expression getExpression()
+	{
+		return _times;
+	}
+
+	public void setExpression(final Expression expression)
+	{
+		_times = expression;
+	}
 }

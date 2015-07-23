@@ -20,15 +20,13 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 {
 	private final EventedSheet _eSheet;
 	private final Solver _solver;
-	private final Lexer _lexer;
-	private final Parser<Expression> _parser;
+	private final ExpressionParser _parser;
 	private static  final String[] COLUMNS = {"Key", "Value"};
 	private static  final Class<?>[] COLUMN_TYPES = {Definition.class, Definition.class};
 
-	SheetTableModel(EventedSheet eSheet, Solver solver, Lexer lexer, Parser parser) {
+	SheetTableModel(EventedSheet eSheet, Solver solver, ExpressionParser parser) {
 		_eSheet = eSheet;
 		_solver = solver;
-		_lexer = lexer;
 		_parser = parser;
 
 		eSheet.addListener(this);
@@ -79,15 +77,7 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 				_eSheet.setName(rowIndex, _eSheet.getUniqueNameFor(string, _eSheet.getDefinition(rowIndex)));
 				break;
 			case 1:
-				Expression expr;
-				try {
-					expr = _parser.parse(_lexer.tokenize(string));
-				} catch(Lexer.LexingException e) {
-					expr = new InvalidExpression(string);
-				} catch(Parser.ParsingException e) {
-					expr = new InvalidExpression(string);
-				}
-				_eSheet.setExpression(rowIndex, expr);
+				_eSheet.setExpression(rowIndex, _parser.parse(string));
 				break;
 			default: throw new RuntimeException("invalid column");
 		}

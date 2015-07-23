@@ -2,6 +2,7 @@ package reform.core.procedure.instructions.single;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
+import reform.core.forms.relations.ExpressionRotationAngle;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.InvalidAngleError;
@@ -14,7 +15,7 @@ import reform.identity.Identifier;
 public class RotateInstruction extends BaseInstruction
 {
 	private final Identifier<? extends Form> _target;
-	private final RotationAngle _angle;
+	private RotationAngle _angle;
 	private ReferencePoint _fixPoint;
 
 	public RotateInstruction(final Identifier<? extends Form> target, final RotationAngle angle, final ReferencePoint
@@ -93,5 +94,10 @@ public class RotateInstruction extends BaseInstruction
 	public void setFixPoint(final ReferencePoint fixPoint)
 	{
 		_fixPoint = fixPoint;
+	}
+
+	public void setAngle(final RotationAngle angle)
+	{
+		_angle = angle;
 	}
 }

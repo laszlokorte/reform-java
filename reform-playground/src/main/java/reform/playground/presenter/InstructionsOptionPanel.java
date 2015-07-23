@@ -2,8 +2,10 @@ package reform.playground.presenter;
 
 import reform.components.expression.ExpressionEditor;
 import reform.core.forms.Form;
-import reform.core.forms.relations.ConstantAngle;
+import reform.core.forms.relations.ConstantRotationAngle;
 import reform.core.forms.relations.ConstantScaleFactor;
+import reform.core.forms.relations.ExpressionRotationAngle;
+import reform.core.forms.relations.ExpressionScaleFactor;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.core.procedure.instructions.blocks.ForLoopInstruction;
@@ -12,7 +14,11 @@ import reform.core.procedure.instructions.single.RotateInstruction;
 import reform.core.procedure.instructions.single.ScaleInstruction;
 import reform.core.runtime.relations.RotationAngle;
 import reform.core.runtime.relations.ScaleFactor;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 import reform.evented.core.EventedProcedure;
+import reform.playground.views.sheet.ExpressionParser;
 import reform.stage.tooling.InstructionFocus;
 
 import javax.swing.*;
@@ -29,46 +35,32 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 	private final JLabel _label = new JLabel("T:");
 
-	private final ExpressionEditor _expressionEditor = new ExpressionEditor();
-	private final SpinnerModel _intModel = new SpinnerNumberModel(1, 0, 100, 1);
-	private final SpinnerModel _percentModel = new SpinnerNumberModel(1.0, -100.0, 100.0, 1.0);
-	private final SpinnerModel _freeModel = new SpinnerNumberModel(1.0, -1000, 1000.0, 1.0);
-	private final JSpinner _spinner = new JSpinner(_intModel);
+	private final ExpressionEditor _expressionEditor;
 	private final JCheckBox _checkbox = new JCheckBox();
 
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus)
+	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus, ExpressionParser expressionParser)
 	{
+		_expressionEditor = new ExpressionEditor(expressionParser);
 		_eProcedure = eProcedure;
 		_focus = focus;
 		_panel.add(_label);
-		_panel.add(_spinner);
 		_panel.add(_checkbox);
 		_panel.add(_expressionEditor);
 
+		_expressionEditor.setColumns(5);
+
 		_checkbox.setFocusable(false);
 
-		_spinner.addChangeListener(this);
+		_expressionEditor.addChangeListener(this);
 		_checkbox.addChangeListener(this);
 
 		focus.addListener(this);
 		onFocusChanged(focus);
 
 		eProcedure.addListener(this);
-
-		JTextField tf = ((JSpinner.DefaultEditor) _spinner.getEditor()).getTextField();
-		tf.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "confirm");
-		tf.getActionMap().put("confirm", new AbstractAction()
-		{
-			@Override
-			public void actionPerformed(final ActionEvent e)
-			{
-				tf.transferFocus();
-			}
-		});
-
 	}
 
 	public Component getComponent()
@@ -79,7 +71,6 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	@Override
 	public void onFocusChanged(final InstructionFocus focus)
 	{
-		boolean showSpinner = false;
 		boolean showCheckbox = false;
 		boolean showExpression = false;
 
@@ -88,9 +79,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			if (focus.getFocused() instanceof ForLoopInstruction)
 			{
 				final ForLoopInstruction loop = (ForLoopInstruction) focus.getFocused();
-				setSpinnerModel(_intModel, 0);
 				_label.setText("T:");
-				_expressionEditor.setText("" + loop.getTimes());
+				_expressionEditor.setExpression(loop.getExpression());
 				showExpression = true;
 			}
 			else if (focus.getFocused() instanceof ScaleInstruction)
@@ -100,25 +90,31 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 				if (factor instanceof ConstantScaleFactor)
 				{
 					final ConstantScaleFactor f = (ConstantScaleFactor) factor;
-					setSpinnerModel(_freeModel, 1);
 					_label.setText("S:");
-					_spinner.setValue(f.getValue() * 100);
-					showSpinner = true;
-
+					_expressionEditor.setValue(f.getValue());
+					showExpression = true;
+				}else if(factor instanceof ExpressionScaleFactor) {
+					ExpressionScaleFactor f = (ExpressionScaleFactor) factor;
+					_label.setText("S:");
+					_expressionEditor.setExpression(f.getExpression());
+					showExpression = true;
 				}
 			}
 			else if (focus.getFocused() instanceof RotateInstruction)
 			{
 				final RotateInstruction instruction = (RotateInstruction) focus.getFocused();
 				final RotationAngle angle = instruction.getAngle();
-				if (angle instanceof ConstantAngle)
+				if (angle instanceof ConstantRotationAngle)
 				{
-					final ConstantAngle a = (ConstantAngle) angle;
-					setSpinnerModel(_percentModel, 1);
+					final ConstantRotationAngle a = (ConstantRotationAngle) angle;
 					_label.setText("R:");
-					_spinner.setValue(a.getValue() * 50 / Math.PI);
-					showSpinner = true;
-
+					_expressionEditor.setValue(a.getValue());
+					showExpression = true;
+				} else if(angle instanceof ExpressionRotationAngle) {
+					ExpressionRotationAngle a = (ExpressionRotationAngle) angle;
+					_label.setText("R:");
+					_expressionEditor.setExpression(a.getExpression());
+					showExpression = true;
 				}
 			}
 			else if (focus.getFocused() instanceof IfConditionInstruction)
@@ -132,21 +128,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		}
 
 		_checkbox.setVisible(showCheckbox);
-		_spinner.setVisible(showSpinner);
 		_expressionEditor.setVisible(showExpression);
-		_label.setVisible(showCheckbox || showSpinner);
-	}
-
-	private void setSpinnerModel(final SpinnerModel model, final int digits)
-	{
-		_spinner.setModel(model);
-		final JSpinner.NumberEditor editor = (JSpinner.NumberEditor) _spinner.getEditor();
-		final DecimalFormat format = editor.getFormat();
-		format.setMaximumFractionDigits(digits);
-		format.setMinimumFractionDigits(digits);
-
-		final JFormattedTextField txt = editor.getTextField();
-		((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
+		_label.setVisible(showCheckbox || showExpression);
 	}
 
 	@Override
@@ -158,19 +141,39 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			if (_focus.getFocused() instanceof ForLoopInstruction)
 			{
 				final ForLoopInstruction loop = (ForLoopInstruction) _focus.getFocused();
-				loop.setTimes((Integer) _spinner.getValue());
+				loop.setExpression(_expressionEditor.getExpression());
 				_eProcedure.publishInstructionChange(loop);
 			}
 			else if (_focus.getFocused() instanceof ScaleInstruction)
 			{
 				final ScaleInstruction instruction = (ScaleInstruction) _focus.getFocused();
 				final ScaleFactor factor = instruction.getFactor();
+
 				if (factor instanceof ConstantScaleFactor)
 				{
-					final ConstantScaleFactor f = (ConstantScaleFactor) factor;
-					f.setFactor((Double) _spinner.getValue() / 100.0);
-					_eProcedure.publishInstructionChange(instruction);
 
+					SetFactor:
+					{
+						Expression expression = _expressionEditor.getExpression();
+
+						if (expression instanceof ConstantExpression)
+						{
+							Value v = ((ConstantExpression) expression).getValue();
+							if (v.type == Value.Type.Integer || v.type == Value.Type.Double)
+							{
+								((ConstantScaleFactor) factor).setFactor(v.getDouble());
+								break SetFactor;
+							}
+						}
+
+						instruction.setFactor(new ExpressionScaleFactor(_expressionEditor.getExpression()));
+					}
+
+					_eProcedure.publishInstructionChange(instruction);
+				} else if(factor instanceof ExpressionScaleFactor) {
+					final ExpressionScaleFactor f = (ExpressionScaleFactor) factor;
+					f.setFactorExpression(_expressionEditor.getExpression());
+					_eProcedure.publishInstructionChange(instruction);
 				}
 
 			}
@@ -178,12 +181,32 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			{
 				final RotateInstruction instruction = (RotateInstruction) _focus.getFocused();
 				final RotationAngle angle = instruction.getAngle();
-				if (angle instanceof ConstantAngle)
-				{
-					final ConstantAngle a = (ConstantAngle) angle;
-					a.setAngle((Double) _spinner.getValue() * Math.PI * 2 / 100);
-					_eProcedure.publishInstructionChange(instruction);
 
+				if (angle instanceof ConstantRotationAngle)
+				{
+
+					SetAngle:
+					{
+						Expression expression = _expressionEditor.getExpression();
+
+						if (expression instanceof ConstantExpression)
+						{
+							Value v = ((ConstantExpression) expression).getValue();
+							if (v.type == Value.Type.Integer || v.type == Value.Type.Double)
+							{
+								((ConstantRotationAngle) angle).setAngle(v.getDouble());
+								break SetAngle;
+							}
+						}
+
+						instruction.setAngle(new ExpressionRotationAngle(_expressionEditor.getExpression()));
+					}
+
+					_eProcedure.publishInstructionChange(instruction);
+				} else if(angle instanceof ExpressionRotationAngle) {
+					final ExpressionRotationAngle f = (ExpressionRotationAngle) angle;
+					f.setAngleExpression(_expressionEditor.getExpression());
+					_eProcedure.publishInstructionChange(instruction);
 				}
 			}
 			else if (_focus.getFocused() instanceof IfConditionInstruction)
