@@ -98,14 +98,14 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 		// needed to update reference labels
 		// TODO: extract label updating into separat method.
 		_solver.evaluate(_eSheet.getRaw());
-		fireTableDataChanged();
+		fireTableRowsUpdated(index, index);
 	}
 
 	@Override
 	public void onDefinitionChanged(final EventedSheet picture, final Identifier<? extends Definition> dataDefinition, int index)
 	{
 		_solver.evaluate(_eSheet.getRaw());
-		fireTableDataChanged();
+		fireTableRowsUpdated(index, index);
 	}
 
 	@Override
@@ -114,5 +114,12 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 		_solver.evaluate(_eSheet.getRaw());
 
 		fireTableRowsInserted(index, index);
+	}
+
+	@Override
+	public void onDefinitionRemoved(final EventedSheet eventedSheet, final Definition definition, final int index)
+	{
+		System.out.println(String.format("[OUT] %s", index));
+		fireTableRowsDeleted(index, index);
 	}
 }

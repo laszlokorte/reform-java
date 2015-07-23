@@ -17,6 +17,8 @@ public class EventedSheet
 		void onDefinitionChanged(EventedSheet picture, Identifier<? extends Definition> dataDefinition, int index);
 
 		void onDefinitionAdded(EventedSheet eventedSheet, Definition definition, int index);
+
+		void onDefinitionRemoved(EventedSheet eventedSheet, Definition definition, int index);
 	}
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -77,6 +79,8 @@ public class EventedSheet
 		for(int i=0,j=_listeners.size();i<j;i++) {
 			_listeners.get(i).onNameChanged(this, def.getId(), index);
 		}
+
+		_evtPicture.propagateProcedureChange();
 	}
 
 	public Expression getExpression(final int index)
@@ -99,6 +103,8 @@ public class EventedSheet
 		for(int i=0,j=_listeners.size();i<j;i++) {
 			_listeners.get(i).onDefinitionChanged(this, def.getId(), index);
 		}
+		_evtPicture.propagateProcedureChange();
+
 	}
 
 
@@ -110,7 +116,22 @@ public class EventedSheet
 		for(int i=0,j=_listeners.size();i<j;i++) {
 			_listeners.get(i).onDefinitionAdded(this, definition, sheet.size() - 1);
 		}
+		_evtPicture.propagateProcedureChange();
+
 	}
+
+
+	public void removeDefinition(final int index)
+	{
+		Sheet sheet = _evtPicture.getSheet();
+		Definition def = sheet.get(index);
+		sheet.remove(index);
+
+		for(int i=0,j=_listeners.size();i<j;i++) {
+			_listeners.get(i).onDefinitionRemoved(this, def, index);
+		}
+	}
+
 
 	public Sheet getRaw()
 	{

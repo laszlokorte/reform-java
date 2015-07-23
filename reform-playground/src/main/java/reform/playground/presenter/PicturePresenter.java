@@ -117,6 +117,9 @@ public class PicturePresenter
 	private final SwingIcon _loopIcon = new SwingIcon(new ActionLoopIcon(), true);
 	private final SwingIcon _branchIcon = new SwingIcon(new ActionBranchIcon(), true);
 
+	private final SwingIcon _createDefinitionIcon = new SwingIcon(new ActionCreateRowIcon(), true);
+	private final SwingIcon _deleteDefinitionIcon = new SwingIcon(new ActionDeleteRowIcon(), true);
+
 	public PicturePresenter(final EventedPicture picture, final IdentifierEmitter idEmitter)
 	{
 		_picture = picture;
@@ -143,7 +146,8 @@ public class PicturePresenter
 		final JPanel procedureBox = new JPanel(new BorderLayout());
 		final JPanel measureBox = new JPanel(new BorderLayout());
 
-		final JPanel sheetButtons = new JPanel(new FlowLayout(FlowLayout.LEADING,0,0));
+		final JToolBar sheetButtons = new JToolBar();
+		sheetButtons.setFloatable(false);
 
 		{
 
@@ -163,7 +167,21 @@ public class PicturePresenter
 			{
 				JButton button = new JButton(new CreateDefinitionAction(eSheet, idEmitter));
 
+				button.setIcon(_createDefinitionIcon);
 				button.setFocusable(false);
+				button.setHideActionText(true);
+
+
+				sheetButtons.add(button);
+			}
+
+			{
+				JButton button = new JButton(new RemoveDefinitionAction(sheetPresenter.getSelectionModel(), eSheet));
+
+				button.setIcon(_deleteDefinitionIcon);
+				button.setFocusable(false);
+				button.setHideActionText(true);
+
 
 				sheetButtons.add(button);
 			}

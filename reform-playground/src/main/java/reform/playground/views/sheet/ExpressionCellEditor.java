@@ -50,11 +50,36 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 			public void mouseClicked(final MouseEvent e)
 			{
 				super.mouseClicked(e);
-				if(e.getClickCount() == 2) {
+				if (e.getClickCount() == 2)
+				{
 					_labelField.setVisible(false);
 					_textField.setVisible(true);
 					_textField.requestFocus();
 				}
+			}
+		});
+
+		ActionMap am = _panel.getActionMap();
+		InputMap im = _panel.getInputMap();
+
+		im.put(KeyStroke.getKeyStroke("alt UP"), "increment");
+		im.put(KeyStroke.getKeyStroke("alt DOWN"), "decrement");
+
+		am.put("increment", new AbstractAction()
+		{
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				System.out.println(String.format("[OUT] %s", "increment"));
+			}
+		});
+
+		am.put("decrement", new AbstractAction()
+		{
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				System.out.println(String.format("[OUT] %s", "decrement"));
 			}
 		});
 	}

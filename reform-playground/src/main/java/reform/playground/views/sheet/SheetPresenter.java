@@ -50,6 +50,19 @@ public class SheetPresenter
 
 			@Override
 			public void tableChanged(TableModelEvent e) {
+				if(e.getType() == TableModelEvent.DELETE) {
+					if(_table.isEditing()) {
+						_table.getCellEditor().cancelCellEditing();
+					}
+					int index = e.getFirstRow();
+					if(index > 0) {
+						_table.getSelectionModel().setSelectionInterval(index-1, index-1);
+					} else if(index < _dataModel.getRowCount()) {
+						_table.getSelectionModel().setSelectionInterval(index+1, index+1);
+					} else {
+						_table.getSelectionModel().clearSelection();
+					}
+				}
 				if (e.getType() == TableModelEvent.INSERT) {
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
@@ -60,6 +73,8 @@ public class SheetPresenter
 						}
 					});
 				}
+
+				_table.repaint();
 			}
 		};
 		_table.getModel().addTableModelListener(l);
@@ -67,6 +82,10 @@ public class SheetPresenter
 
 	public JComponent getComponent() {
 		return _table;
+	}
+
+	public ListSelectionModel getSelectionModel() {
+		return _table.getSelectionModel();
 	}
 
 
