@@ -49,25 +49,30 @@ public class EventedSheet
 		return _evtPicture.getSheet().get(index).getName();
 	}
 
-	public void setUniqueName(final int index, String name)
+	public String getUniqueNameFor(String wantedName, Definition def) {
+		Sheet sheet = _evtPicture.getSheet();
+
+		String testName = wantedName;
+		int postfix=0;
+		Definition otherDef = sheet.findDefinitionWithName(testName);
+		while(otherDef != null && otherDef != def) {
+			testName = wantedName + ++postfix;
+			otherDef = sheet.findDefinitionWithName(testName);
+		}
+
+		if(postfix > 0) {
+			return testName;
+		} else {
+			return wantedName;
+		}
+	}
+
+	public void setName(final int index, String name)
 	{
 		Sheet sheet = _evtPicture.getSheet();
 		Definition def = sheet.get(index);
 
-		String wantedName = name;
-		String testName = name;
-		int postfix=0;
-		Definition otherDef = sheet.findDefinitionWithName(testName);
-		while(otherDef != null && otherDef != def) {
-			otherDef = sheet.findDefinitionWithName(testName);
-			testName = wantedName + ++postfix;
-		}
-
-		if(postfix > 0) {
-			def.setName(testName);
-		} else {
-			def.setName(wantedName);
-		}
+		def.setName(name);
 
 		for(int i=0,j=_listeners.size();i<j;i++) {
 			_listeners.get(i).onNameChanged(this, def.getId(), index);

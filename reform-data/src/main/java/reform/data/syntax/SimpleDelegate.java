@@ -27,8 +27,11 @@ public class SimpleDelegate implements Parser.ParserDelegate<Expression> {
 
 	@Override
 	public Expression variableTokenToNode(Token token) {
-		String name = token.value.toString();
-		Definition def = _sheet.findDefinitionWithName(name.substring(1));
+		String name = token.value.toString().substring(1);
+		Definition def = _sheet.findDefinitionWithName(name);
+		if(def == null) {
+			return new ReferenceExpression(new Identifier(-1), name);
+		}
 		return new ReferenceExpression(def.getId(), name);
 	}
 

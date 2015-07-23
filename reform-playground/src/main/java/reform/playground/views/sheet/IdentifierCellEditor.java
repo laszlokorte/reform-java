@@ -21,11 +21,12 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 
 	private final JLabel _label = new JLabel();
 	private final JPanel _labelField = new JPanel();
-	private final JTextField _textField = new JTextField("X");
+	private final JTextField _textField = new SheetIdTextField(10);
 	private final JPanel _panel = new JPanel();
 	private String _currentValue = null;
 
 	IdentifierCellEditor() {
+		_textField.setColumns(10);
 		_textField.addActionListener(this);
 		_textField.setVisible(false);
 		_labelField.setLayout(new FlowLayout(FlowLayout.LEADING));

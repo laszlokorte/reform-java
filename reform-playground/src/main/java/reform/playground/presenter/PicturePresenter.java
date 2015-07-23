@@ -143,7 +143,10 @@ public class PicturePresenter
 		final JPanel procedureBox = new JPanel(new BorderLayout());
 		final JPanel measureBox = new JPanel(new BorderLayout());
 
+		final JPanel sheetButtons = new JPanel(new FlowLayout(FlowLayout.LEADING,0,0));
+
 		{
+
 			EventedSheet eSheet = picture.getEventedSheet();
 			SheetPresenter sheetPresenter = new SheetPresenter(eSheet);
 			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
@@ -152,9 +155,18 @@ public class PicturePresenter
 			dataBox.add(dataScroller, BorderLayout.CENTER);
 
 			SwingUtilities.invokeLater(() -> {
-				eSheet.addDefinition(new Definition(idEmitter.emit(), "param", new ConstantExpression(new Value(0))));
-				eSheet.addDefinition(new Definition(idEmitter.emit(), "param2", new ConstantExpression(new Value(0))));
+				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
+				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
 			});
+
+
+			{
+				JButton button = new JButton(new CreateDefinitionAction(eSheet, idEmitter));
+
+				button.setFocusable(false);
+
+				sheetButtons.add(button);
+			}
 		}
 		{
 			final JTable table = new JTable(3, 2);
@@ -166,8 +178,7 @@ public class PicturePresenter
 		}
 		final JPanel headBarLeft = new JPanel();
 		headBarLeft.setLayout(new BorderLayout());
-		final JLabel label = new JLabel("Procedure");
-		headBarLeft.add(label, BorderLayout.WEST);
+		headBarLeft.add(sheetButtons, BorderLayout.WEST);
 		final JToolBar procedureToolbar = new JToolBar();
 		procedureToolbar.setFloatable(false);
 		procedureToolbar.setRollover(false);

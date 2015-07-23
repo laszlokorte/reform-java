@@ -10,8 +10,11 @@ import reform.data.syntax.SimpleDelegate;
 import reform.data.syntax.Token;
 import reform.evented.core.EventedSheet;
 import reform.identity.Identifier;
+import sun.jvm.hotspot.ui.treetable.TreeTableModelAdapter;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
 
@@ -41,6 +44,25 @@ public class SheetPresenter
 		_table.getColumnModel().getColumn(0).setMaxWidth(150);
 		_table.setRowHeight(25);
 		_table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		_table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		TableModelListener l = new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.INSERT) {
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							int viewRow = _table.convertRowIndexToView(e.getFirstRow());
+							_table.scrollRectToVisible(_table.getCellRect(viewRow, 0, true));
+							_table.editCellAt(e.getLastRow(), 1);
+							_table.getSelectionModel().setSelectionInterval(e.getFirstRow(), e.getLastRow());
+						}
+					});
+				}
+			}
+		};
+		_table.getModel().addTableModelListener(l);
 	}
 
 	public JComponent getComponent() {
