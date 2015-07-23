@@ -1,5 +1,6 @@
 package reform.playground.presenter;
 
+import reform.components.expression.ExpressionEditor;
 import reform.core.forms.Form;
 import reform.core.forms.relations.ConstantAngle;
 import reform.core.forms.relations.ConstantScaleFactor;
@@ -28,6 +29,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 	private final JLabel _label = new JLabel("T:");
 
+	private final ExpressionEditor _expressionEditor = new ExpressionEditor();
 	private final SpinnerModel _intModel = new SpinnerNumberModel(1, 0, 100, 1);
 	private final SpinnerModel _percentModel = new SpinnerNumberModel(1.0, -100.0, 100.0, 1.0);
 	private final SpinnerModel _freeModel = new SpinnerNumberModel(1.0, -1000, 1000.0, 1.0);
@@ -44,6 +46,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		_panel.add(_label);
 		_panel.add(_spinner);
 		_panel.add(_checkbox);
+		_panel.add(_expressionEditor);
 
 		_checkbox.setFocusable(false);
 
@@ -78,6 +81,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	{
 		boolean showSpinner = false;
 		boolean showCheckbox = false;
+		boolean showExpression = false;
 
 		if (focus.isSet())
 		{
@@ -86,8 +90,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 				final ForLoopInstruction loop = (ForLoopInstruction) focus.getFocused();
 				setSpinnerModel(_intModel, 0);
 				_label.setText("T:");
-				_spinner.setValue(loop.getTimes());
-				showSpinner = true;
+				_expressionEditor.setText("" + loop.getTimes());
+				showExpression = true;
 			}
 			else if (focus.getFocused() instanceof ScaleInstruction)
 			{
@@ -129,6 +133,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 
 		_checkbox.setVisible(showCheckbox);
 		_spinner.setVisible(showSpinner);
+		_expressionEditor.setVisible(showExpression);
 		_label.setVisible(showCheckbox || showSpinner);
 	}
 

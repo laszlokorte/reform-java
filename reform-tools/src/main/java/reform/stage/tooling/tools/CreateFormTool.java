@@ -85,6 +85,8 @@ public class CreateFormTool implements Tool
 	{
 		if (_state == State.Pressed || _state == State.PressedSnapped)
 		{
+			_state = State.Idle;
+
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 
@@ -93,7 +95,6 @@ public class CreateFormTool implements Tool
 			_toolState.setActiveSnapPoint(null);
 			_toolState.clearEntityPoints();
 			_swapDirection = false;
-			_state = State.Idle;
 		}
 		else
 		{
@@ -260,6 +261,16 @@ public class CreateFormTool implements Tool
 
 		_selectionTool.input(input);
 		_toolState.setActiveSnapPoint(_currentPoint);
+	}
+
+	@Override
+	public void focusChanged()
+	{
+		if(_focus.getFocused() != _currentInstruction) {
+			cancel();
+		}
+
+		_selectionTool.focusChanged();
 	}
 
 	private Direction getDirectionFor(final double x, final double y)

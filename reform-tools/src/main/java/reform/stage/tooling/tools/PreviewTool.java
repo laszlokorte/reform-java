@@ -68,4 +68,10 @@ public class PreviewTool implements Tool
 
 	}
 
+	@Override
+	public void focusChanged()
+	{
+
+	}
+
 }

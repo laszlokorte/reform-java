@@ -152,6 +152,12 @@ public class CropTool implements Tool
 		_toolState.setActiveCropPoint(_currentPoint);
 	}
 
+	@Override
+	public void focusChanged()
+	{
+
+	}
+
 	private Vec2i calcSize(final boolean keepRatio)
 	{
 		final Vec2 pos = _cursor.getPosition();

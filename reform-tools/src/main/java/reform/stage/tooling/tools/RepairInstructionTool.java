@@ -74,4 +74,10 @@ public class RepairInstructionTool implements Tool
 	{
 	}
 
+	@Override
+	public void focusChanged()
+	{
+
+	}
+
 }

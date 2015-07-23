@@ -144,4 +144,10 @@ public class ToolController
 		return _tool;
 	}
 
+	public void onFocusChanged()
+	{
+		if(_tool!=null) {
+			_tool.focusChanged();
+		}
+	}
 }

@@ -260,6 +260,19 @@ public class MoveFormTool implements Tool
 		_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
 
+
+
+	@Override
+	public void focusChanged()
+	{
+		if(_focus.getFocused() != _currentInstruction) {
+			cancel();
+		}
+		_selectionTool.focusChanged();
+
+	}
+
+
 	private Direction getDirectionFor(final double x, final double y)
 	{
 		final double absX = x < 0 ? -x : x;

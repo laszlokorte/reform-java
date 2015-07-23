@@ -236,6 +236,16 @@ public class ScaleFormTool implements Tool
 		refreshHandles();
 	}
 
+	@Override
+	public void focusChanged()
+	{
+		if(_focus.getFocused() != _currentInstruction) {
+			cancel();
+		}
+		_selectionTool.focusChanged();
+
+	}
+
 	private double calcFactor(final boolean stepped)
 	{
 		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos;

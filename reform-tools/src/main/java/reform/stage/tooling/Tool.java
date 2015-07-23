@@ -19,4 +19,6 @@ public interface Tool
 	void cycle();
 
 	void input(Input input);
+
+	void focusChanged();
 }

@@ -60,8 +60,8 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 			}
 		});
 
-		ActionMap am = _panel.getActionMap();
-		InputMap im = _panel.getInputMap();
+		ActionMap am = _textField.getActionMap();
+		InputMap im = _textField.getInputMap();
 
 		im.put(KeyStroke.getKeyStroke("alt UP"), "increment");
 		im.put(KeyStroke.getKeyStroke("alt DOWN"), "decrement");

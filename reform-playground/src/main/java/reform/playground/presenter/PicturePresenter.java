@@ -579,6 +579,7 @@ public class PicturePresenter
 			@Override
 			public void onFocusChanged(final InstructionFocus focus)
 			{
+				_toolController.onFocusChanged();
 				if (focus.isSet())
 				{
 					final int index = _analyzer.indexOf(focus.getFocused());

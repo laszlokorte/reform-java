@@ -28,6 +28,12 @@ public class NullTool implements Tool
 	}
 
 	@Override
+	public void focusChanged()
+	{
+
+	}
+
+	@Override
 	public void press()
 	{
 		// TODO Auto-generated method stub

@@ -268,6 +268,18 @@ public class MorphFormTool implements Tool
 		refreshHandles();
 	}
 
+
+	@Override
+	public void focusChanged()
+	{
+		if(_focus.getFocused() != _currentInstruction) {
+			cancel();
+		}
+		_selectionTool.focusChanged();
+
+	}
+
+
 	private void adjustVector(final Vec2 vector)
 	{
 
