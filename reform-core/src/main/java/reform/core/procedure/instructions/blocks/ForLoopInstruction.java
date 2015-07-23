@@ -3,21 +3,33 @@ package reform.core.procedure.instructions.blocks;
 import reform.core.analyzer.Analyzer;
 import reform.core.procedure.instructions.BaseInstructionGroup;
 import reform.core.runtime.Runtime;
+import reform.core.runtime.errors.InvalidExpressionError;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 
 public class ForLoopInstruction extends BaseInstructionGroup
 {
 
-	private int _times;
+	private Expression _times;
 
 	public ForLoopInstruction(final int times)
 	{
-		_times = times;
+		_times = new ConstantExpression(new Value(times));
 	}
 
 	@Override
 	public void evaluate(final Runtime runtime)
 	{
-		for (int i = 0; i < _times; i++)
+		Value iterations = _times.getValueFor(runtime.getDataSet());
+
+		if(iterations.type != Value.Type.Integer) {
+			runtime.reportError(this, new InvalidExpressionError(_times));
+		}
+
+		int count = iterations.getInteger();
+
+		for (int i = 0; i < count; i++)
 		{
 			if (runtime.shouldStop())
 			{
@@ -37,12 +49,12 @@ public class ForLoopInstruction extends BaseInstructionGroup
 
 	public int getTimes()
 	{
-		return _times;
+		return ((ConstantExpression)_times).getValue().getInteger();
 	}
 
 	public void setTimes(final int times)
 	{
-		_times = times;
+		_times = new ConstantExpression(new Value(times));
 	}
 
 }

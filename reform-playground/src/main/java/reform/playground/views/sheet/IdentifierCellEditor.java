@@ -24,6 +24,7 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	private final JTextField _textField = new SheetIdTextField(10);
 	private final JPanel _panel = new JPanel();
 	private String _currentValue = null;
+	private String _initialValue = null;
 
 	IdentifierCellEditor() {
 		_textField.setColumns(10);
@@ -58,6 +59,7 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	                                             final int row, final int column)
 	{
 		_currentValue = ((Definition)value).getName();
+		_initialValue = _currentValue;
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
 
@@ -78,5 +80,16 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	{
 		_currentValue = _textField.getText();
 		fireEditingStopped();
+	}
+
+	@Override
+	public boolean stopCellEditing()
+	{
+		if(_initialValue != _currentValue) {
+			return super.stopCellEditing();
+		} else {
+			cancelCellEditing();
+			return true;
+		}
 	}
 }

@@ -6,6 +6,7 @@ import reform.data.sheet.expression.Expression;
 import reform.data.sheet.expression.InvalidExpression;
 import reform.data.syntax.Lexer;
 import reform.data.syntax.Parser;
+import reform.evented.core.EventedDataSheet;
 import reform.evented.core.EventedSheet;
 import reform.identity.Identifier;
 
@@ -119,7 +120,6 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 	@Override
 	public void onDefinitionRemoved(final EventedSheet eventedSheet, final Definition definition, final int index)
 	{
-		System.out.println(String.format("[OUT] %s", index));
 		fireTableRowsDeleted(index, index);
 	}
 }

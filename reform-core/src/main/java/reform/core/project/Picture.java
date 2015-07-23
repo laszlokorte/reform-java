@@ -17,15 +17,17 @@ public final class Picture implements Identifiable<Picture>
 
 	private final Sheet _dataSheet;
 	private final Procedure _procedure;
+	private final Sheet _measurements;
 
 	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final Sheet dataSheet,
-	               final Procedure procedure)
+	               final Procedure procedure, Sheet measurements)
 	{
 		_id = id;
 		_name = name;
 		_size.set(size);
 		_dataSheet = dataSheet;
 		_procedure = procedure;
+		_measurements = measurements;
 	}
 
 	public void setName(final Name name)
@@ -48,7 +50,7 @@ public final class Picture implements Identifiable<Picture>
 		return _size;
 	}
 
-	public Sheet getSheet()
+	public Sheet getDataSheet()
 	{
 		return _dataSheet;
 	}
@@ -56,6 +58,11 @@ public final class Picture implements Identifiable<Picture>
 	public Procedure getProcedure()
 	{
 		return _procedure;
+	}
+
+	public Sheet getMeasurementSheet()
+	{
+		return _measurements;
 	}
 
 	@Override

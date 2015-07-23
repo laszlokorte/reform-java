@@ -1,7 +1,6 @@
 package reform.playground.views.sheet;
 
 import reform.data.sheet.DataSet;
-import reform.data.sheet.Definition;
 import reform.data.sheet.Solver;
 import reform.data.sheet.expression.Expression;
 import reform.data.syntax.Lexer;
@@ -9,8 +8,6 @@ import reform.data.syntax.Parser;
 import reform.data.syntax.SimpleDelegate;
 import reform.data.syntax.Token;
 import reform.evented.core.EventedSheet;
-import reform.identity.Identifier;
-import sun.jvm.hotspot.ui.treetable.TreeTableModelAdapter;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -25,17 +22,17 @@ public class SheetPresenter
 {
 	private final TableModel _dataModel;
 	private final JTable _table;
-	private final DataSet _dataSet = new DataSet();
-	private final Solver _solver = new Solver(_dataSet);
+	private final Solver _solver;
 	private final Lexer _lexer = getLexer();
 	private final Parser.ParserDelegate _delegate;
 	private final Parser<Expression> _parser;
 
-	public SheetPresenter(EventedSheet sheet) {
+	public SheetPresenter(EventedSheet sheet, DataSet dataSet) {
+		_solver = new Solver(dataSet);
 		_delegate = new SimpleDelegate(sheet.getRaw());
 		_parser = new Parser(_delegate);
 		_dataModel = new SheetTableModel(sheet, _solver, _lexer, _parser);
-		_table = new SheetTable(_dataModel, _dataSet);
+		_table = new SheetTable(_dataModel, dataSet);
 		_table.setFocusable(false);
 		_table.setSelectionBackground(Color.LIGHT_GRAY);
 		_table.setSelectionForeground(Color.BLACK);

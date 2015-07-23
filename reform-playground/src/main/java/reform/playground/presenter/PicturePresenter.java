@@ -10,6 +10,7 @@ import reform.core.procedure.instructions.NullInstruction;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.errors.RuntimeError;
+import reform.data.sheet.DataSet;
 import reform.data.sheet.Definition;
 import reform.data.sheet.Value;
 import reform.data.sheet.expression.ConstantExpression;
@@ -70,6 +71,7 @@ public class PicturePresenter
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 
 	private final EventedPicture _picture;
+	private final DataSet _dataSet = new DataSet();
 	private final InstructionFocus _focus = new InstructionFocus();
 	private final FocusAdjustmentProcedureListener _focusAdjustment = new FocusAdjustmentProcedureListener(_focus);
 	private final FormSelection _selection = new FormSelection();
@@ -123,7 +125,7 @@ public class PicturePresenter
 	public PicturePresenter(final EventedPicture picture, final IdentifierEmitter idEmitter)
 	{
 		_picture = picture;
-		_runtime = new ProjectRuntime(_picture.getProject(), _picture.getSize());
+		_runtime = new ProjectRuntime(_picture.getProject(), _picture.getSize(), _dataSet);
 
 		final EventedProcedure eProcedure = picture.getEventedProcedure();
 		eProcedure.addListener(_focusAdjustment);
@@ -151,16 +153,18 @@ public class PicturePresenter
 
 		{
 
-			EventedSheet eSheet = picture.getEventedSheet();
-			SheetPresenter sheetPresenter = new SheetPresenter(eSheet);
+			EventedSheet eSheet = picture.getEventedDataSheet();
+			SheetPresenter sheetPresenter = new SheetPresenter(eSheet, _dataSet);
 			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
 			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
 			dataScroller.setPreferredSize(new Dimension(300, 100));
 			dataBox.add(dataScroller, BorderLayout.CENTER);
 
 			SwingUtilities.invokeLater(() -> {
-				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
-				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
+				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null),
+				                                    new ConstantExpression(new Value(0))));
+				eSheet.addDefinition(new Definition(idEmitter.emit(), eSheet.getUniqueNameFor("param", null),
+				                                    new ConstantExpression(new Value(0))));
 			});
 
 
@@ -186,14 +190,20 @@ public class PicturePresenter
 				sheetButtons.add(button);
 			}
 		}
+
+
 		{
-			final JTable table = new JTable(3, 2);
-			table.setFocusable(false);
-			table.setSelectionBackground(Color.LIGHT_GRAY);
-			table.setSelectionForeground(Color.BLACK);
-			measureBox.add(new JLabel("Measurements"), BorderLayout.PAGE_START);
-			measureBox.add(table, BorderLayout.CENTER);
+
+			EventedSheet eSheet = picture.getEventedMeasurementSheet();
+			SheetPresenter sheetPresenter = new SheetPresenter(eSheet, _dataSet);
+			JScrollPane dataScroller = new JScrollPane(sheetPresenter.getComponent());
+			dataScroller.getVerticalScrollBar().setUnitIncrement(5);
+			dataScroller.setPreferredSize(new Dimension(300, 100));
+			measureBox.add(dataScroller, BorderLayout.CENTER);
+
 		}
+
+
 		final JPanel headBarLeft = new JPanel();
 		headBarLeft.setLayout(new BorderLayout());
 		headBarLeft.add(sheetButtons, BorderLayout.WEST);

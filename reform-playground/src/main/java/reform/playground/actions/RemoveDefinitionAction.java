@@ -1,11 +1,7 @@
 package reform.playground.actions;
 
-import javafx.scene.control.TableSelectionModel;
-import reform.data.sheet.Definition;
-import reform.data.sheet.Value;
-import reform.data.sheet.expression.ConstantExpression;
+import reform.evented.core.EventedDataSheet;
 import reform.evented.core.EventedSheet;
-import reform.identity.IdentifierEmitter;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

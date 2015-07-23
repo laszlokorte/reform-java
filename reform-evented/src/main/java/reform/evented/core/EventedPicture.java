@@ -76,14 +76,23 @@ public class EventedPicture
 		return _evtProject.getPicture(_pictureId).getProcedure();
 	}
 
-	public EventedSheet getEventedSheet()
+	public EventedSheet getEventedDataSheet()
 	{
-		return new EventedSheet(this);
+		return new EventedDataSheet(this);
+	}
+	public EventedSheet getEventedMeasurementSheet()
+	{
+		return new EventedMeasurementSheet(this);
 	}
 
-	Sheet getSheet()
+	Sheet getDataSheet()
 	{
-		return _evtProject.getPicture(_pictureId).getSheet();
+		return _evtProject.getPicture(_pictureId).getDataSheet();
+	}
+
+	Sheet getMeasurementSheet()
+	{
+		return _evtProject.getPicture(_pictureId).getMeasurementSheet();
 	}
 
 	public void addListener(final Listener listener)

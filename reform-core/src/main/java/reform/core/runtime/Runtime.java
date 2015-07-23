@@ -38,7 +38,7 @@ public interface Runtime
 
 	Runtime getSubroutine(Identifier<? extends Picture> pictureId);
 
-	DataSet getExpressionContext();
+	DataSet getDataSet();
 
 	Vec2i getSize();
 }

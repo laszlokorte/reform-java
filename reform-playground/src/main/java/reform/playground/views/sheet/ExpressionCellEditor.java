@@ -30,6 +30,7 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	private final JTextField _textField = new JTextField("X");
 	private final JPanel _panel = new JPanel();
 	private String _currentValue = null;
+	private String _initialValue = null;
 
 	ExpressionCellEditor(DataSet dataSet) {
 		_dataSet = dataSet;
@@ -91,6 +92,7 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 		Definition def = ((Definition)value);
 		Expression expr = def.getExpression();
 		_currentValue = expr.asString(false);
+		_initialValue = _currentValue;
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
 
@@ -119,4 +121,14 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 		fireEditingStopped();
 	}
 
+	@Override
+	public boolean stopCellEditing()
+	{
+		if(_initialValue != _currentValue) {
+			return super.stopCellEditing();
+		} else {
+			cancelCellEditing();
+			return true;
+		}
+	}
 }

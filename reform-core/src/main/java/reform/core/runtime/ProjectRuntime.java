@@ -30,13 +30,15 @@ public class ProjectRuntime implements Runtime
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private final Project _project;
 	private final Vec2i _size = new Vec2i();
+	private final DataSet _dataSet;
 	private final Stack _stack = new Stack();
 	private boolean _stopped = false;
 
-	public ProjectRuntime(final Project project, final Vec2i size)
+	public ProjectRuntime(final Project project, final Vec2i size, DataSet dataSet)
 	{
 		_project = project;
 		_size.set(size);
+		_dataSet = dataSet;
 	}
 
 	@Override
@@ -162,14 +164,13 @@ public class ProjectRuntime implements Runtime
 	@Override
 	public Runtime getSubroutine(final Identifier<? extends Picture> id)
 	{
-		return new ProjectRuntime(_project, _project.getPicture(id).getSize());
+		return new ProjectRuntime(_project, _project.getPicture(id).getSize(), new DataSet());
 	}
 
 	@Override
-	public DataSet getExpressionContext()
+	public DataSet getDataSet()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return _dataSet;
 	}
 
 	public void addListener(final Listener listener)

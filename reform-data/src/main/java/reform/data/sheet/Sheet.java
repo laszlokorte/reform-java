@@ -12,10 +12,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Sheet
 {
 	private final ArrayList<Definition> _definitions = new ArrayList<>();
-	private final ArrayList<Definition> _sortedDefinitions = new ArrayList<>();
-	private final Set<Definition> _unresolved = new HashSet<>();
-	private boolean _fresh = false;
-	private Set<Definition> _duplicates = new HashSet<>();
+	transient private final ArrayList<Definition> _sortedDefinitions = new ArrayList<>();
+	transient private final Set<Definition> _unresolved = new HashSet<>();
+	transient private boolean _fresh = false;
+	transient private Set<Definition> _duplicates = new HashSet<>();
 
 	public int size() {
 		return _definitions.size();

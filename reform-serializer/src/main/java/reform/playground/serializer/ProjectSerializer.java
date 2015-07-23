@@ -93,7 +93,7 @@ public class ProjectSerializer
 
 		registerPictureId(id);
 
-		return new Picture(id, name, size, new Sheet(), procedure);
+		return new Picture(id, name, size, new Sheet(), procedure, new Sheet());
 
 	}
 

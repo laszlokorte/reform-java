@@ -193,7 +193,7 @@ public class ProjectPresenter implements Listener
 		public void onDoubleClick()
 		{
 			final Picture newPicture = new Picture(_presenter._idEmitter.emit(), new Name("New Picture"),
-			                                       new Vec2i(400, 400), new Sheet(), new Procedure());
+			                                       new Vec2i(400, 400), new Sheet(), new Procedure(), new Sheet());
 			_presenter._project.addPicture(newPicture);
 			_presenter.selectPicture(newPicture.getId());
 		}
