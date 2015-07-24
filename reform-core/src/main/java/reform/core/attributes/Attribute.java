@@ -7,7 +7,7 @@ import reform.data.sheet.expression.Expression;
 public class Attribute
 {
 	public enum Type {
-		Number, Color
+		Number, Color, String
 	}
 
 	private final String _name;

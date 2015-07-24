@@ -32,14 +32,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private final ExpressionEditor.Parser _parser;
 
-	private static class NumberPanel
+	private static class ExpressionPanel
 	{
 		private Attribute _attribute;
 		private final ExpressionEditor _expressionEditor;
 
 		private final FormOptionPanel _delegate;
 
-		NumberPanel(final FormOptionPanel delegate)
+		ExpressionPanel(final FormOptionPanel delegate)
 		{
 			_delegate = delegate;
 			_expressionEditor = new ExpressionEditor(_delegate._parser);
@@ -179,8 +179,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
 	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
 
-	private final Pool<NumberPanel> _numberPanels = new SimplePool<>(() -> new NumberPanel(this));
-	private final ArrayList<NumberPanel> _currentNumberPanels = new ArrayList<>();
+	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(() -> new ExpressionPanel(this));
+	private final ArrayList<ExpressionPanel> _currentExpressionPanels = new ArrayList<>();
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
@@ -266,7 +266,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	public void onSelectionChanged(final FormSelection selection)
 	{
 		releaseColorPanels();
-		releaseNumberPanels();
+		releaseExpressionPanels();
 		_panel.remove(_guideToggle);
 		_panel.removeAll();
 
@@ -289,9 +289,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					panel.setEnabled(drawType == DrawingType.Draw);
 
 				}
-				else if (type == Attribute.Type.Number)
+				else if (type == Attribute.Type.Number || type == Attribute.Type.String)
 				{
-					NumberPanel panel = getNumberPanelFor(attr);
+					ExpressionPanel panel = getExpressionPanel(attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
@@ -314,11 +314,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_colorPanels.clean(ColorPanel::dispose);
 	}
 
-	private NumberPanel getNumberPanelFor(final Attribute attr)
+	private ExpressionPanel getExpressionPanel(final Attribute attr)
 	{
-		final NumberPanel p = _numberPanels.take();
+		final ExpressionPanel p = _expressionPanels.take();
 		p.setAttribute(attr);
-		_currentNumberPanels.add(p);
+		_currentExpressionPanels.add(p);
 
 		return p;
 	}
@@ -342,14 +342,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_currentColorPanels.clear();
 	}
 
-	private void releaseNumberPanels()
+	private void releaseExpressionPanels()
 	{
-		_numberPanels.release((NumberPanel p) -> {
+		_expressionPanels.release((ExpressionPanel p) -> {
 			p.setAttribute(null);
 			_panel.remove(p.getComponent());
 		});
 
-		_currentNumberPanels.clear();
+		_currentExpressionPanels.clear();
 	}
 
 	@Override
@@ -363,7 +363,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			{
 				form.setType(_guideToggle.isSelected() ? DrawingType.Guide : DrawingType.Draw);
 				_currentColorPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
-				_currentNumberPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_currentExpressionPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
 			_ownChange = true;

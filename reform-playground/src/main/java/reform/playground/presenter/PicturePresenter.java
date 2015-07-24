@@ -1,7 +1,7 @@
 package reform.playground.presenter;
 
 import reform.core.analyzer.ProjectAnalyzer;
-import reform.core.forms.Form;
+import reform.core.forms.*;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
@@ -38,7 +38,6 @@ import reform.stage.elements.outline.IntersectionSnapPoint;
 import reform.stage.hittest.HitTester;
 import reform.stage.tooling.*;
 import reform.stage.tooling.cursor.Cursor;
-import reform.stage.tooling.factory.Builders;
 import reform.stage.tooling.factory.FormFactory;
 import reform.stage.tooling.tools.*;
 
@@ -283,7 +282,7 @@ public class PicturePresenter
 		final RepairInstructionTool repairInstructionTool = new RepairInstructionTool(_toolState);
 		{
 			final CreateFormTool createLineTool = new CreateFormTool(selectionTool,
-			                                               new FormFactory<>("Line", idEmitter, Builders.Line),
+			                                               new FormFactory<>("Line", idEmitter, LineForm::construct),
 			                                               _toolState, _cursor, _hitTester, _focus, eProcedure);
 
 			final JButton button = new JButton(new SelectToolAction(_toolController, createLineTool, "Create Line"));
@@ -297,7 +296,7 @@ public class PicturePresenter
 		{
 			final CreateFormTool createRectTool = new CreateFormTool(selectionTool,
 			                                                         new FormFactory<>("Rectangle", idEmitter,
-			                                                                           Builders.Rectangle), _toolState,
+			                                                                           RectangleForm::construct), _toolState,
 			                                                         _cursor, _hitTester, _focus, eProcedure);
 			createRectTool.setDiagonalDirection(true);
 
@@ -313,7 +312,7 @@ public class PicturePresenter
 		{
 			final CreateFormTool createCircleTool = new CreateFormTool(selectionTool,
 			                                                           new FormFactory<>("Circle", idEmitter,
-			                                                                             Builders.Circle), _toolState,
+			                                                                             CircleForm::construct), _toolState,
 			                                                           _cursor, _hitTester, _focus, eProcedure);
 			createCircleTool.setAutoCenter(true);
 
@@ -328,7 +327,7 @@ public class PicturePresenter
 
 		{
 			final CreateFormTool createPieTool = new CreateFormTool(selectionTool,
-			                                                        new FormFactory<>("Pie", idEmitter, Builders.Pie),
+			                                                        new FormFactory<>("Pie", idEmitter, PieForm::construct),
 			                                                        _toolState, _cursor, _hitTester, _focus,
 			                                                        eProcedure);
 			createPieTool.setAutoCenter(true);
@@ -344,7 +343,7 @@ public class PicturePresenter
 
 		{
 			final Tool createArcTool = new CreateFormTool(selectionTool,
-			                                              new FormFactory<>("Arc", idEmitter, Builders.Arc),
+			                                              new FormFactory<>("Arc", idEmitter, ArcForm::construct),
 			                                              _toolState,
 			                                              _cursor, _hitTester, _focus, eProcedure);
 
@@ -357,7 +356,12 @@ public class PicturePresenter
 		}
 
 		{
-			final JButton button = new JButton();
+			final Tool createArcTool = new CreateFormTool(selectionTool,
+			                                              new FormFactory<>("Text", idEmitter, TextForm::construct),
+			                                              _toolState,
+			                                              _cursor, _hitTester, _focus, eProcedure);
+
+			final JButton button = new JButton(new SelectToolAction(_toolController, createArcTool, "Create Arc"));
 			button.setFocusable(false);
 
 			button.setIcon(_textIcon);

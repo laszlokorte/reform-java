@@ -33,6 +33,9 @@ public class EntityFactory
 		else if (form.getClass() == RectangleForm.class)
 		{
 			return new RectangleEntity(((RectangleForm) form).getId());
+		}else if (form.getClass() == TextForm.class)
+		{
+			return new TextEntity(((TextForm) form).getId());
 		}
 
 		return new UnknownEntity(form.getId());
