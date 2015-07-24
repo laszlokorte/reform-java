@@ -21,6 +21,8 @@
  - Cycle resolving
  - Measurements
 
+ - Rewrite tokenizer
+ - Fix loop-nesting-protection
 
  - serialize colors
 

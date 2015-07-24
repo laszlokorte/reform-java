@@ -10,7 +10,7 @@ public final class Value
 
 	public enum Type
 	{
-		String, Integer, Double, Boolean
+		String, Integer, Double, Boolean, Color
 	}
 
 	public final Type type;
@@ -18,6 +18,7 @@ public final class Value
 	private final String _stringValue;
 	private final int _integerValue;
 	private final boolean _booleanValue;
+	private final int _color;
 
 	public Value()
 	{
@@ -26,15 +27,34 @@ public final class Value
 		_doubleValue = Double.NaN;
 		_stringValue = "null";
 		_booleanValue = false;
+		_color = 0xff000000;
 	}
 
 	public Value(final int integer)
 	{
-		type = Type.Integer;
-		_integerValue = integer;
-		_doubleValue = integer;
-		_stringValue = integer + "";
-		_booleanValue = false;
+		this(integer, false);
+	}
+
+	public Value(final int integer, boolean isColor)
+	{
+		if (isColor)
+		{
+			type = Type.Color;
+			_integerValue = 0;
+			_doubleValue = 0;
+			_stringValue = String.format("#%08X", integer);
+			_booleanValue = false;
+			_color = integer;
+		}
+		else
+		{
+			type = Type.Integer;
+			_integerValue = integer;
+			_doubleValue = integer;
+			_stringValue = integer + "";
+			_booleanValue = false;
+			_color = 0xff000000;
+		}
 	}
 
 	public Value(final double dbl)
@@ -44,6 +64,7 @@ public final class Value
 		_doubleValue = dbl;
 		_stringValue = String.format(Locale.ENGLISH, "%.2f", dbl);
 		_booleanValue = false;
+		_color = 0xff000000;
 
 	}
 
@@ -54,6 +75,7 @@ public final class Value
 		_doubleValue = 0;
 		_stringValue = string;
 		_booleanValue = false;
+		_color = 0xff000000;
 	}
 
 	public Value(final boolean bool)
@@ -63,6 +85,18 @@ public final class Value
 		_doubleValue = 0;
 		_stringValue = bool ? "true" : "false";
 		_booleanValue = bool;
+		_color = 0xff000000;
+	}
+
+	public Value( final double a, final double r, final double g, final double b)
+	{
+		type = Type.Color;
+		_integerValue = 0;
+		_doubleValue = 0;
+		_booleanValue = false;
+		_color = ((int) (255 * a) << 24) | ((int) (255 * r) << 16) | ((int) (255 * g) << 8) | ((int) (255 * b));
+		_stringValue = String.format("#%08X", _color);
+
 	}
 
 
@@ -86,20 +120,29 @@ public final class Value
 		return _booleanValue;
 	}
 
-	public String asString() {
-		switch (type) {
+	public int getColor()
+	{
+		return _color;
+	}
+
+	public String asString()
+	{
+		switch (type)
+		{
 			case String:
-				return "\""+_stringValue+"\"";
+				return "\"" + _stringValue + "\"";
 			case Integer:
 			case Double:
 			case Boolean:
+			case Color:
 				return _stringValue;
 			default:
 				return "null";
 		}
 	}
 
-	public String toString() {
+	public String toString()
+	{
 		return asString();
 	}
 }

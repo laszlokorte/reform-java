@@ -46,6 +46,22 @@ public final class Calculator
 					}
 				},
 
+		Rgb(3)
+				{
+					Value apply(Value r, Value g, Value b)
+					{
+						return new Value(r.getDouble(), g.getDouble(), b.getDouble(), 1);
+					}
+				},
+
+		Argb(4)
+				{
+					Value apply(Value a, Value r, Value g, Value b)
+					{
+						return new Value(r.getDouble(), g.getDouble(), b.getDouble(), a.getDouble());
+					}
+				},
+
 		Sin(1)
 				{
 					Value apply(Value val)
@@ -232,22 +248,28 @@ public final class Calculator
 
 		Value apply(Value... val)
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
 
 		Value apply(Value val)
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
 
-		Value apply(Value a, Value b)
+		Value apply(Value a, Value b, Value c)
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
+
+		Value apply(Value a, Value b, Value c, Value d)
+		{
+			throw new SemanticException();
+		}
+
 
 		Value apply()
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
 
 	}
@@ -261,6 +283,10 @@ public final class Calculator
 			throw new SemanticException();
 		}
 		else if (lhs.type == Value.Type.Boolean || rhs.type == Value.Type.Boolean)
+		{
+			throw new SemanticException();
+		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
 		{
 			throw new SemanticException();
 		}
@@ -284,6 +310,10 @@ public final class Calculator
 		{
 			throw new SemanticException();
 		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
 		else if (lhs.type == Value.Type.Double || rhs.type == Value.Type.Double)
 		{
 			return new Value(lhs.getDouble() + rhs.getDouble());
@@ -304,6 +334,10 @@ public final class Calculator
 		{
 			throw new SemanticException();
 		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
 		else if (lhs.type == Value.Type.Double || rhs.type == Value.Type.Double)
 		{
 			return new Value(lhs.getDouble() - rhs.getDouble());
@@ -321,6 +355,10 @@ public final class Calculator
 			throw new SemanticException();
 		}
 		else if (lhs.type == Value.Type.Boolean || rhs.type == Value.Type.Boolean)
+		{
+			throw new SemanticException();
+		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
 		{
 			throw new SemanticException();
 		}
@@ -363,6 +401,10 @@ public final class Calculator
 		{
 			throw new SemanticException();
 		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
 		else if (lhs.type == Value.Type.Double || rhs.type == Value.Type.Double)
 		{
 			return new Value(lhs.getDouble() * rhs.getDouble());
@@ -380,6 +422,10 @@ public final class Calculator
 			throw new SemanticException();
 		}
 		else if (lhs.type == Value.Type.Boolean || rhs.type == Value.Type.Boolean)
+		{
+			throw new SemanticException();
+		}
+		else if (lhs.type == Value.Type.Color || rhs.type == Value.Type.Color)
 		{
 			throw new SemanticException();
 		}
@@ -402,6 +448,14 @@ public final class Calculator
 		else if (op.type == Value.Type.Double)
 		{
 			return new Value(-op.getDouble());
+		}
+		else if (op.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
+		else if (op.type == Value.Type.Boolean)
+		{
+			throw new SemanticException();
 		}
 		else
 		{
@@ -432,6 +486,10 @@ public final class Calculator
 		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
 			throw new SemanticException();
 		}
+		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
 
 		return new Value(a.getDouble() > b.getDouble());
 	}
@@ -442,6 +500,10 @@ public final class Calculator
 			throw new SemanticException();
 		}
 		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
+			throw new SemanticException();
+		}
+		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		{
 			throw new SemanticException();
 		}
 
@@ -456,6 +518,10 @@ public final class Calculator
 		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
 			throw new SemanticException();
 		}
+		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		{
+			throw new SemanticException();
+		}
 
 		return new Value(a.getDouble() >= b.getDouble());
 	}
@@ -466,6 +532,10 @@ public final class Calculator
 			throw new SemanticException();
 		}
 		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
+			throw new SemanticException();
+		}
+		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		{
 			throw new SemanticException();
 		}
 
@@ -483,6 +553,7 @@ public final class Calculator
 			case Integer:  return new Value(a.getInteger() == b.getInteger());
 			case Double:  return new Value(a.getDouble() == b.getDouble());
 			case Boolean:  return new Value(a.getBoolean() == b.getBoolean());
+			case Color:  return new Value(a.getColor() == b.getColor());
 			default: return new Value(false);
 		}
 	}
@@ -491,13 +562,13 @@ public final class Calculator
 	{
 		if (!func.variadic && params.length != func.arity)
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
 		if (func.variadic)
 		{
 			if (params.length < 1)
 			{
-				throw new RuntimeException("");
+				throw new SemanticException();
 			}
 			return func.apply(params);
 		}
@@ -509,13 +580,21 @@ public final class Calculator
 		{
 			return func.apply(params[0], params[1]);
 		}
+		else if (func.arity == 3)
+		{
+			return func.apply(params[0], params[1], params[2]);
+		}
+		else if (func.arity == 4)
+		{
+			return func.apply(params[0], params[1], params[2], params[3]);
+		}
 		else if (func.arity == 0)
 		{
 			return func.apply();
 		}
 		else
 		{
-			throw new RuntimeException("");
+			throw new SemanticException();
 		}
 	}
 }

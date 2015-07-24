@@ -240,6 +240,7 @@ public class SimpleDelegate implements Parser.ParserDelegate<Expression>
 	private static Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
 	private static Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
 	private static Pattern doublePattern = Pattern.compile("^(0|[1-9][0-9]*)?\\.[0-9]*$");
+	private static Pattern colorPattern = Pattern.compile("^#[1-9a-fA-F]{6}$");
 
 	@Override
 	public Expression literalTokenToNode(Token token)
@@ -263,6 +264,8 @@ public class SimpleDelegate implements Parser.ParserDelegate<Expression>
 		else if (stringPattern.matcher(token.value).find())
 		{
 			return new ConstantExpression(new Value(token.value.subSequence(1, token.value.length() - 1).toString()));
+		} else if(colorPattern.matcher(token.value).find()) {
+			return new ConstantExpression(new Value(Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16), true));
 		}
 		else
 		{
