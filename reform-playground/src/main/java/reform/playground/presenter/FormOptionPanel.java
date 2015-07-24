@@ -25,7 +25,6 @@ import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ActionListener
 {
@@ -44,6 +43,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			_delegate = delegate;
 			_expressionEditor = new ExpressionEditor(_delegate._parser);
 			_expressionEditor.addChangeListener(this::onModelChange);
+			_expressionEditor.setColumns(10);
 		}
 
 		private void onModelChange(final ChangeEvent changeEvent)
@@ -180,7 +180,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		}
 	}
 
-	private final JPanel _panel = new JPanel();
+	private final JComponent _panel = Box.createHorizontalBox();
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
 
@@ -196,6 +196,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final EventedProcedure _eProcedure;
 	private final Analyzer _analyzer;
 
+	private final Component _glue = Box.createGlue();
+
 	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection, ExpressionEditor.Parser parser)
 	{
 		_eProcedure = eProcedure;
@@ -203,10 +205,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_analyzer = analyzer;
 		_parser = parser;
 
-		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS));
-
 		_panel.add(_guideToggle);
 		_guideToggle.setBorder(null);
+		_guideToggle.setBackground(Color.LIGHT_GRAY);
 
 		_guideToggle.setFocusable(false);
 		_guideToggle.addActionListener(this);
@@ -307,8 +308,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 			}
 
-			_panel.add(Box.createHorizontalGlue());
-
+			_panel.add(_glue);
 			_guideToggle.setSelected(drawType == DrawingType.Guide);
 			_panel.add(_guideToggle);
 		}

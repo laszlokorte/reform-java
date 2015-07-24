@@ -36,8 +36,8 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		final double orthogonalX = -Vector.orthogonalX(deltaX, deltaY) / distance;
-		final double orthogonalY = -Vector.orthogonalY(deltaX, deltaY) / distance;
+		final double orthogonalX = distance == 0 ? 0 : -Vector.orthogonalX(deltaX, deltaY) / distance;
+		final double orthogonalY = distance == 0 ? -1 : -Vector.orthogonalY(deltaX, deltaY) / distance;
 
 		final double oldX = orthogonalX * oldOffset;
 		final double oldY = orthogonalY * oldOffset;
@@ -61,9 +61,13 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		final double orthogonalX = -Vector.orthogonalX(deltaX, deltaY) / distance;
+		if(distance == 0) {
+			return aX;
+		}
 
-		return aX + deltaX + orthogonalX * offset;
+		final double orthogonalX = Vector.orthogonalX(deltaX, deltaY) / distance;
+
+		return aX + deltaX - orthogonalX * offset;
 	}
 
 	@Override
@@ -79,9 +83,14 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		final double orthogonalY = -Vector.orthogonalY(deltaX, deltaY) / distance;
 
-		return aY + deltaY + orthogonalY * offset;
+		if(distance == 0) {
+			return aX - offset;
+		}
+
+		final double orthogonalY = Vector.orthogonalY(deltaX, deltaY) / distance;
+
+		return aY + deltaY - orthogonalY * offset;
 	}
 
 }

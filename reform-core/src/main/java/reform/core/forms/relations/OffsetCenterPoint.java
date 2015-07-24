@@ -60,7 +60,7 @@ public class OffsetCenterPoint implements ReferencePoint
 
 		if (length == 0)
 		{
-			return aY;
+			return aY - offset;
 		}
 
 		final double orthogonalY = Vector.orthogonalY(deltaX, deltaY) / length;

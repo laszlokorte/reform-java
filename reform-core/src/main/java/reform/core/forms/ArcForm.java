@@ -132,16 +132,16 @@ public final class ArcForm extends BaseForm<ArcForm>
 		final double deltaY = (endY - startY) / 2;
 		final double deltaLength = Math.sqrt(distance2) / 2;
 
-		final double orthogonalDxNorm = Vector.orthogonalX(deltaX, deltaY) / deltaLength;
-		final double orthogonalDyNorm = Vector.orthogonalY(deltaX, deltaY) / deltaLength;
+		final double orthogonalDxNorm = distance2 == 0 ? 0 : Vector.orthogonalX(deltaX, deltaY) / deltaLength;
+		final double orthogonalDyNorm = distance2 == 0 ? 1 : Vector.orthogonalY(deltaX, deltaY) / deltaLength;
 
 		final double centerX = midX - orthogonalDxNorm * offset;
 		final double centerY = midY - orthogonalDyNorm * offset;
-
+		
 		double angleB = Vector.angle(startX, startY, centerX, centerY);
 		double angleA = Vector.angle(endX, endY, centerX, centerY);
 
-		if (angleB < angleA)
+		if (angleB <= angleA)
 		{
 			final double tmp = angleA;
 			angleA = angleB;
