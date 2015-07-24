@@ -32,7 +32,7 @@ import java.text.DecimalFormat;
 public final class InstructionsOptionPanel implements InstructionFocus.Listener, ChangeListener, EventedProcedure
 		.Listener
 {
-	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+	private final JPanel _panel = new JPanel();
 	private final JLabel _label = new JLabel("T:");
 
 	private final ExpressionEditor _expressionEditor;
@@ -42,6 +42,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 
 	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus, ExpressionParser expressionParser)
 	{
+		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS));
 		_expressionEditor = new ExpressionEditor(expressionParser);
 		_eProcedure = eProcedure;
 		_focus = focus;

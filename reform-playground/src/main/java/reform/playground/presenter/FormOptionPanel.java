@@ -147,7 +147,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		}
 	}
 
-	private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 1));
+	private final JPanel _panel = new JPanel();
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
 	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
@@ -167,6 +167,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_eProcedure = eProcedure;
 		_selection = selection;
 		_analyzer = analyzer;
+
+		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS ));
 
 		_panel.add(_guideToggle);
 		_guideToggle.setBorder(null);
@@ -238,6 +240,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		releaseColorPanels();
 		releaseNumberPanels();
 		_panel.remove(_guideToggle);
+		_panel.removeAll();
 
 		if (_selection.isSet())
 		{
@@ -263,10 +266,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					NumberPanel panel = getNumberPanelFor((Attribute<Integer>) attr);
 					_panel.add(panel.getSpinner());
 					panel.setEnabled(drawType == DrawingType.Draw);
-
 				}
+				_panel.add(Box.createHorizontalStrut(5));
+
 			}
 
+			_panel.add(Box.createHorizontalGlue());
 
 			_guideToggle.setSelected(drawType == DrawingType.Guide);
 			_panel.add(_guideToggle);
