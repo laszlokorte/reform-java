@@ -73,7 +73,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 
 		generator.add(Token.Type.ArgumentSeparator, ",");
 		generator.add(Token.Type.LiteralValue, "(0|([1-9][0-9]*))(\\.[0-9]*)?");
-		generator.add(Token.Type.LiteralValue, "#[0-9a-fA-F]{6}");
+		generator.add(Token.Type.LiteralValue, "#[0-9a-fA-F]{6,8}");
 		generator.add(Token.Type.LiteralValue, "\"[^\"]+\"");
 		generator.add(Token.Type.LiteralValue, "(true|false)");
 		generator.add(Token.Type.Identifier, "[a-zA-Z_][_a-zA-Z0-9]*");
@@ -319,7 +319,8 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		private static Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
 		private static Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
 		private static Pattern doublePattern = Pattern.compile("^(0|[1-9][0-9]*)?\\.[0-9]*$");
-		private static Pattern colorPattern = Pattern.compile("^#[1-9a-fA-F]{6}$");
+		private static Pattern colorPattern = Pattern.compile("^#[0-9a-fA-F]{6}$");
+		private static Pattern colorPatternAlpha = Pattern.compile("^#[0-9a-fA-F]{8}$");
 
 		@Override
 		public Expression literalTokenToNode(Token token)
@@ -346,7 +347,12 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			}
 			else if (colorPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16),
+				return new ConstantExpression(new Value(0xff000000 | Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16),
+				                                        true));
+			}
+			else if (colorPatternAlpha.matcher(token.value).find())
+			{
+				return new ConstantExpression(new Value((int)Long.parseLong(token.value.subSequence(1, token.value.length()).toString(), 16),
 				                                        true));
 			}
 			else

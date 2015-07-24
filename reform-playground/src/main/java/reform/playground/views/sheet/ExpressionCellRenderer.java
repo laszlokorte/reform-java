@@ -5,6 +5,7 @@ import reform.data.sheet.Definition;
 import reform.data.sheet.Solver;
 import reform.data.sheet.expression.Expression;
 import reform.data.sheet.expression.InvalidExpression;
+import reform.identity.Identifier;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -34,21 +35,24 @@ public class ExpressionCellRenderer extends JPanel implements TableCellRenderer
 	                                               final boolean hasFocus, final int row, final int column)
 	{
 		Definition definition = (Definition) value;
+		Identifier<?extends Definition> id = definition.getId();
+
 		if (isSelected) {
 			_content.setText(definition.getExpression().asString(false));
 			setBackground(_selectionBackground);
-			if(_dataSet.hasError(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
+
+			if(!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || definition.getExpression() instanceof InvalidExpression) {
 				_content.setForeground(Color.RED.darker());
 			} else {
 				_content.setForeground(_selectionForegroud);
 			}
 		} else {
 			setBackground(Color.WHITE);
-			if(_dataSet.hasError(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
+			if(!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || definition.getExpression() instanceof InvalidExpression) {
 				_content.setText(definition.getExpression().asString(false));
 				_content.setForeground(Color.RED.darker());
 			} else {
-				_content.setText(_dataSet.lookUp(definition.getId()).asString());
+				_content.setText(_dataSet.lookUp(id).asString());
 				_content.setForeground(Color.BLACK);
 			}
 		}

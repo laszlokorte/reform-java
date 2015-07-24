@@ -4,6 +4,7 @@ import reform.data.sheet.DataSet;
 import reform.data.sheet.Definition;
 import reform.data.sheet.expression.Expression;
 import reform.data.sheet.expression.InvalidExpression;
+import reform.identity.Identifier;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -96,7 +97,8 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
 
-		if(_dataSet.hasError(def.getId()) || expr instanceof InvalidExpression) {
+		Identifier<?extends Definition> id = def.getId();
+		if(!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || expr instanceof InvalidExpression) {
 			_label.setForeground(Color.RED.darker());
 		} else {
 			_label.setForeground(Color.WHITE);
