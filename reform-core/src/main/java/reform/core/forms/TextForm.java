@@ -2,13 +2,13 @@ package reform.core.forms;
 
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
+import reform.core.forms.anchors.OrthogonalLengthAnchor;
 import reform.core.forms.anchors.StaticPointAnchor;
 import reform.core.forms.outline.LineOutline;
+import reform.core.forms.outline.NullOutline;
 import reform.core.forms.outline.Outline;
-import reform.core.forms.relations.CenterPoint;
-import reform.core.forms.relations.ExposedPoint;
+import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
-import reform.core.forms.relations.StaticPoint;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
@@ -29,24 +29,27 @@ public final class TextForm extends BaseForm<TextForm>
 {
 
 	private final static Value DEFAULT_TEXT = new Value("Lorem ipsum");
+	private final static Value DEFAULT_SCALE = new Value(1);
 
-	static private final int SIZE = 4;
+	static private final int SIZE = 5;
 
 	private final transient StaticPoint _startPoint = new StaticPoint(getId(), 0);
 	private final transient StaticPoint _endPoint = new StaticPoint(getId(), 2);
+	private final transient StaticLength _height = new StaticLength(getId(), 4);
 
 	private final transient Translator _translator = new BasicTranslator(_startPoint, _endPoint);
 
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint, _endPoint);
 
-	private final transient Scaler _scaler = new BasicPointScaler(_startPoint, _endPoint);
+	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint, _endPoint),new AbsoluteScaler(
+			new BasicLengthScaler(_height, new ConstantRotationAngle(0), 0)));
 
-	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
+	private final Outline _outline = new NullOutline();
 
 	private final Attribute _textColorAttribute = new Attribute("Text Color", Attribute.Type.Color,
 	                                                            DEFAULT_STROKE_COLOR);
-	private final Attribute _fontSizeAttribute = new Attribute("Font Size", Attribute.Type.Number,
-	                                                           DEFAULT_STROKE_WIDTH);
+	private final Attribute _fontSizeAttribute = new Attribute("Relative Font Size", Attribute.Type.Number,
+	                                                           DEFAULT_SCALE);
 
 	private final Attribute _textAttribute = new Attribute("Text", Attribute.Type.String, DEFAULT_TEXT);
 
@@ -54,7 +57,7 @@ public final class TextForm extends BaseForm<TextForm>
 
 	public enum Point implements ExposedPointToken<TextForm>
 	{
-		Center(0), Start(1), End(2);
+		Top(1), Start(2), End(3), Bottom(4);
 
 		private final int _v;
 
@@ -72,7 +75,7 @@ public final class TextForm extends BaseForm<TextForm>
 
 	public enum Anchor implements IdentityToken
 	{
-		Start(1), End(2);
+		Top(1), Start(2), End(3);
 
 		private final int _v;
 
@@ -102,10 +105,16 @@ public final class TextForm extends BaseForm<TextForm>
 		super(id, SIZE, name);
 		addSnapPoint(new ExposedPoint(_startPoint, new Name("Start"), Point.Start));
 		addSnapPoint(new ExposedPoint(_endPoint, new Name("End"), Point.End));
-		addSnapPoint(new ExposedPoint(new CenterPoint(_startPoint, _endPoint), new Name("Center"), Point.Center));
+		addSnapPoint(new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _height), new Name("Top"),
+		                              Point.Top));
+		addSnapPoint(new ExposedPoint(new CenterPoint(_startPoint, _endPoint), new Name("Bottom"), Point.Bottom));
+
 
 		addAnchor(new StaticPointAnchor(Anchor.Start, new Name("Start"), _startPoint));
 		addAnchor(new StaticPointAnchor(Anchor.End, new Name("End"), _endPoint));
+
+		addAnchor(new OrthogonalLengthAnchor(Anchor.Top, new Name("ControlPoint"), _height, _startPoint,
+		                                     _endPoint));
 	}
 
 	@Override
@@ -114,6 +123,7 @@ public final class TextForm extends BaseForm<TextForm>
 	{
 		_startPoint.setForRuntime(runtime, minX, minY);
 		_endPoint.setForRuntime(runtime, maxX, maxY);
+		_height.setForRuntime(runtime, 16);
 	}
 
 	private final static AffineTransform _trans = new AffineTransform();
@@ -130,12 +140,16 @@ public final class TextForm extends BaseForm<TextForm>
 		double endY = _endPoint.getYValueForRuntime(runtime);
 		double startX = _startPoint.getXValueForRuntime(runtime);
 		double startY = _startPoint.getYValueForRuntime(runtime);
+		double scale = _fontSizeAttribute.getValue().getValueFor(dataSet).getDouble();
+		double height = _height.getValueForRuntime(runtime) / 16;
+
 
 		Shape s = v.getOutline();
 		_trans.setToIdentity();
 		_trans.translate((startX + endX) / 2, (startY + endY) / 2);
 		_trans.rotate(-Vector.angle(endX, endY, startX, startY));
-		_trans.translate( - s.getBounds().getWidth()/2, 0);
+		_trans.scale(height * scale, height * scale);
+		_trans.translate(-s.getBounds().getWidth() / 2, 0);
 
 		target.append(_trans.createTransformedShape(s), false);
 	}
