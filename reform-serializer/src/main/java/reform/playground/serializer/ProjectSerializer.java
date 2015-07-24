@@ -20,6 +20,8 @@ import reform.core.runtime.relations.*;
 import reform.core.runtime.relations.Direction.CartesianDirection;
 import reform.core.runtime.relations.InitialDestination.Alignment;
 import reform.data.sheet.Sheet;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentifierEmitter;
@@ -535,7 +537,7 @@ public class ProjectSerializer
 	{
 		final IfConditionInstruction condition = new IfConditionInstruction();
 
-		condition.setCondition(object.getBoolean("condition"));
+		condition.setCondition(new ConstantExpression(new Value(object.getBoolean("condition"))));
 		readInstructionsInto(procedure, condition, object.getJSONArray("children"));
 
 		return condition;

@@ -120,6 +120,7 @@ public abstract class EventedSheetBase implements EventedSheet
 		for(int i=0,j=_listeners.size();i<j;i++) {
 			_listeners.get(i).onDefinitionRemoved(this, def, index);
 		}
+		_evtPicture.propagateProcedureChange();
 	}
 
 

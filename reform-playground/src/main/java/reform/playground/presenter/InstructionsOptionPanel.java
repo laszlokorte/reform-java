@@ -36,7 +36,6 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	private final JLabel _label = new JLabel("T:");
 
 	private final ExpressionEditor _expressionEditor;
-	private final JCheckBox _checkbox = new JCheckBox();
 
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
@@ -47,15 +46,11 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		_eProcedure = eProcedure;
 		_focus = focus;
 		_panel.add(_label);
-		_panel.add(_checkbox);
 		_panel.add(_expressionEditor);
 
 		_expressionEditor.setColumns(5);
 
-		_checkbox.setFocusable(false);
-
 		_expressionEditor.addChangeListener(this);
-		_checkbox.addChangeListener(this);
 
 		focus.addListener(this);
 		onFocusChanged(focus);
@@ -71,7 +66,6 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	@Override
 	public void onFocusChanged(final InstructionFocus focus)
 	{
-		boolean showCheckbox = false;
 		boolean showExpression = false;
 
 		if (focus.isSet())
@@ -120,16 +114,14 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			else if (focus.getFocused() instanceof IfConditionInstruction)
 			{
 				final IfConditionInstruction instruction = (IfConditionInstruction) focus.getFocused();
-				final boolean condition = instruction.getCondition();
 				_label.setText("C:");
-				_checkbox.setSelected(condition);
-				showCheckbox = true;
+				_expressionEditor.setExpression(instruction.getCondition());
+				showExpression = true;
 			}
 		}
 
-		_checkbox.setVisible(showCheckbox);
 		_expressionEditor.setVisible(showExpression);
-		_label.setVisible(showCheckbox || showExpression);
+		_label.setVisible(showExpression);
 	}
 
 	@Override
@@ -212,7 +204,7 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			else if (_focus.getFocused() instanceof IfConditionInstruction)
 			{
 				final IfConditionInstruction instruction = (IfConditionInstruction) _focus.getFocused();
-				instruction.setCondition(_checkbox.isSelected());
+				instruction.setCondition(_expressionEditor.getExpression());
 				_eProcedure.publishInstructionChange(instruction);
 			}
 		}

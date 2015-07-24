@@ -3,16 +3,19 @@ package reform.core.procedure.instructions.blocks;
 import reform.core.analyzer.Analyzer;
 import reform.core.procedure.instructions.BaseInstructionGroup;
 import reform.core.runtime.Runtime;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 
 public class IfConditionInstruction extends BaseInstructionGroup
 {
 
-	private boolean _condition = true;
+	private Expression _condition = new ConstantExpression(new Value(true));
 
 	@Override
 	public void evaluate(final Runtime runtime)
 	{
-		if (_condition)
+		if (_condition.getValueFor(runtime.getDataSet()).getBoolean())
 		{
 			_evaluateChildren(runtime);
 		}
@@ -21,23 +24,16 @@ public class IfConditionInstruction extends BaseInstructionGroup
 	@Override
 	public void analyze(final Analyzer analyzer)
 	{
-		if (_condition)
-		{
-			analyzer.publishGroup(this, "If true:");
-		}
-		else
-		{
-			analyzer.publishGroup(this, "If false:");
-		}
+		analyzer.publishGroup(this, "If " + _condition.asString(true) + ":");
 		_analyzeChildren(analyzer);
 	}
 
-	public boolean getCondition()
+	public Expression getCondition()
 	{
 		return _condition;
 	}
 
-	public void setCondition(final boolean condition)
+	public void setCondition(final Expression condition)
 	{
 		_condition = condition;
 	}

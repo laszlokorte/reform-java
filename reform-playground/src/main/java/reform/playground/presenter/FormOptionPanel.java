@@ -48,7 +48,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				@Override
 				public void actionPerformed(final ActionEvent e)
 				{
-					tf.transferFocus();
+					tf.transferFocusUpCycle();
 				}
 			});
 
