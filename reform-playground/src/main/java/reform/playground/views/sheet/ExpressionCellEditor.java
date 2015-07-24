@@ -96,7 +96,7 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
 
-		if(!_dataSet.hasValueFor(def.getId()) || expr instanceof InvalidExpression) {
+		if(_dataSet.hasError(def.getId()) || expr instanceof InvalidExpression) {
 			_label.setForeground(Color.RED.darker());
 		} else {
 			_label.setForeground(Color.WHITE);

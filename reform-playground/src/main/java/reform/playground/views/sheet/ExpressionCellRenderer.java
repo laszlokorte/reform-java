@@ -37,14 +37,14 @@ public class ExpressionCellRenderer extends JPanel implements TableCellRenderer
 		if (isSelected) {
 			_content.setText(definition.getExpression().asString(false));
 			setBackground(_selectionBackground);
-			if(!_dataSet.hasValueFor(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
+			if(_dataSet.hasError(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
 				_content.setForeground(Color.RED.darker());
 			} else {
 				_content.setForeground(_selectionForegroud);
 			}
 		} else {
 			setBackground(Color.WHITE);
-			if(!_dataSet.hasValueFor(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
+			if(_dataSet.hasError(definition.getId()) || definition.getExpression() instanceof InvalidExpression) {
 				_content.setText(definition.getExpression().asString(false));
 				_content.setForeground(Color.RED.darker());
 			} else {

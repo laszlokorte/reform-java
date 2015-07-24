@@ -30,6 +30,7 @@ public class Solver
 				_dataSet.put(id, value);
 			} catch(Calculator.SemanticException e) {
 				_dataSet.put(id, new Value(0));
+				_dataSet.markError(id);
 			}
 		}
 

@@ -55,9 +55,23 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		generator.add(Token.Type.Operator, "\\%");
 		generator.add(Token.Type.Operator, "\\^");
 
+
+		generator.add(Token.Type.Operator, "~");
+		generator.add(Token.Type.Operator, "\\&\\&");
+		generator.add(Token.Type.Operator, "\\|\\|");
+
+
+		generator.add(Token.Type.Operator, "<");
+		generator.add(Token.Type.Operator, "<=");
+		generator.add(Token.Type.Operator, ">");
+		generator.add(Token.Type.Operator, ">=");
+
+		generator.add(Token.Type.Operator, "==");
+
 		generator.add(Token.Type.ArgumentSeparator, ",");
 		generator.add(Token.Type.LiteralValue, "(0|([1-9][0-9]*))(\\.[0-9]*)?");
 		generator.add(Token.Type.LiteralValue, "\"[^\"]+\"");
+		generator.add(Token.Type.LiteralValue, "(true|false)");
 		generator.add(Token.Type.Identifier, "\\$[a-zA-Z_][_a-zA-Z0-9]*");
 		generator.add(Token.Type.FunctionName, "[a-z]+");
 		generator.add(Token.Type.LiteralValue, "\"[^\"]*\"");
