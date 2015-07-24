@@ -24,12 +24,12 @@ public class ColoredShape
 		return _path;
 	}
 
-	public void setBackgroundColor(final reform.core.graphics.Color color) {
-		_backgroundColor = color != null ? new Color(color.getARGB(), true) : null;
+	public void setBackgroundColor(final int color) {
+		_backgroundColor = color != 0 ? new Color(color, true) : null;
 	}
 
-	public void setStrokeColor(final reform.core.graphics.Color color) {
-		_strokeColor = color != null ? new Color(color.getARGB(), true) : null;
+	public void setStrokeColor(final int color) {
+		_strokeColor = color != 0 ? new Color(color, true) : null;
 	}
 
 	public void reset() {

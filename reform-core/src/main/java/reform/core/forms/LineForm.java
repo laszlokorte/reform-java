@@ -10,9 +10,9 @@ import reform.core.forms.relations.ExposedPoint;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.relations.StaticPoint;
 import reform.core.forms.transformation.*;
-import reform.core.graphics.Color;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
+import reform.data.sheet.DataSet;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.naming.Name;
@@ -35,10 +35,10 @@ public final class LineForm extends BaseForm<LineForm>
 
 	private final Outline _outline = new LineOutline(_startPoint, _endPoint);
 
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke Color", Color.class,
-	                                                                       new Color(Form.DEFAULT_STROKE));
+	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
+	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute<Integer> _strokeWidthAttribute = new Attribute<>("Stroke Width", Integer.class, 1);
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number, DEFAULT_STROKE_WIDTH);
 
 	private final AttributeSet _attributes = new AttributeSet(_strokeColorAttribute, _strokeWidthAttribute);
 
@@ -117,9 +117,11 @@ public final class LineForm extends BaseForm<LineForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		coloredShape.setBackgroundColor(null);
-		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
-		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
+		DataSet dataSet = runtime.getDataSet();
+
+		coloredShape.setBackgroundColor(0);
+		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
+		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
 
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}

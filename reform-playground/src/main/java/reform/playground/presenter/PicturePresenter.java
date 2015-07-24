@@ -469,7 +469,7 @@ public class PicturePresenter
 
 
 		{
-			final FormOptionPanel formOptionPanelPanel = new FormOptionPanel(eProcedure, _analyzer, _selection);
+			final FormOptionPanel formOptionPanelPanel = new FormOptionPanel(eProcedure, _analyzer, _selection, _parser);
 
 			toolBarRight.add(formOptionPanelPanel.getComponent());
 

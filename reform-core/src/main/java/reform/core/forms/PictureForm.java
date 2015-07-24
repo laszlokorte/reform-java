@@ -10,7 +10,6 @@ import reform.core.forms.outline.Outline;
 import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.transformation.*;
-import reform.core.graphics.Color;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
@@ -33,15 +32,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute<Color> _fillColorAttribute = new Attribute<>("Fill Color", Color.class,
-	                                                                     new Color(Form.DEFAULT_FILL));
-	private final Attribute<Color> _strokeColorAttribute = new Attribute<>("Stroke Color", Color.class,
-	                                                                       new Color(Form.DEFAULT_STROKE));
 
-	private final Attribute<Integer> _strokeWidthAttribute = new Attribute<>("Stroke Width", Integer.class, 1);
-
-	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
-	                                                          _strokeWidthAttribute);
+	private final AttributeSet _attributes = new AttributeSet();
 
 	public enum Point implements ExposedPointToken<RectangleForm>
 	{
@@ -184,10 +176,6 @@ public final class PictureForm extends BaseForm<PictureForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		coloredShape.setBackgroundColor(_fillColorAttribute.getValue());
-		coloredShape.setStrokeColor(_strokeColorAttribute.getValue());
-		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue());
-
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 

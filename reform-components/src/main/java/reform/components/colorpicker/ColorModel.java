@@ -5,6 +5,16 @@ import java.util.ArrayList;
 public class ColorModel
 {
 
+	public void setHexARGB(final int hexARGB)
+	{
+		int alpha = (hexARGB >>> 24) & 0xff;
+		int red = (hexARGB >>> 16) & 0xff;
+		int green = (hexARGB >>> 8) & 0xff;
+		int blue = hexARGB & 0xff;
+
+		setRGBA(red/255.0,green/255.0,blue/255.0,alpha/255.0);
+	}
+
 	public interface Listener
 	{
 		void onColorChange(ColorModel model);

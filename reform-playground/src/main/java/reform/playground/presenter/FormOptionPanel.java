@@ -1,17 +1,22 @@
 package reform.playground.presenter;
 
+import com.sun.tools.internal.jxc.ap.Const;
 import reform.components.colorpicker.ColorModel;
 import reform.components.colorpicker.ColorPicker;
+import reform.components.expression.ExpressionEditor;
 import reform.core.analyzer.Analyzer;
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
-import reform.core.graphics.Color;
+import reform.core.forms.relations.ConstantRotationAngle;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 import reform.evented.core.EventedProcedure;
 import reform.rendering.icons.RulerIcon;
 import reform.rendering.icons.swing.SwingIcon;
@@ -19,7 +24,6 @@ import reform.stage.tooling.FormSelection;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,69 +32,57 @@ import java.util.ArrayList;
 public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ActionListener
 {
 
+	private final ExpressionEditor.Parser _parser;
+
 	private static class NumberPanel
 	{
-		private Attribute<Integer> _attribute;
-		private final SpinnerModel _model = new SpinnerNumberModel(1, 0, 42, 1);
-		private final JSpinner _spinner = new JSpinner(_model);
+		private Attribute _attribute;
+		private final ExpressionEditor _expressionEditor;
 
 		private final FormOptionPanel _delegate;
 
 		NumberPanel(final FormOptionPanel delegate)
 		{
 			_delegate = delegate;
-			_spinner.addChangeListener(this::onModelChange);
-
-			JTextField tf = ((JSpinner.DefaultEditor) _spinner.getEditor()).getTextField();
-			tf.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "confirm");
-			tf.getActionMap().put("confirm", new AbstractAction()
-			{
-				@Override
-				public void actionPerformed(final ActionEvent e)
-				{
-					tf.transferFocusUpCycle();
-				}
-			});
-
-			_spinner.setBorder(null);
+			_expressionEditor = new ExpressionEditor(_delegate._parser);
+			_expressionEditor.addChangeListener(this::onModelChange);
 		}
 
 		private void onModelChange(final ChangeEvent changeEvent)
 		{
 			if (_attribute != null)
 			{
-				_attribute.setValue((Integer) _spinner.getValue());
+				_attribute.setValue(_expressionEditor.getExpression());
 
 				_delegate.onChange();
 			}
 		}
 
-		void setAttribute(final Attribute<Integer> attr)
+		void setAttribute(final Attribute attr)
 		{
 			if (attr != null)
 			{
 				_attribute = null; // prevent cycle
-				final int currentColor = attr.getValue();
 
-				_spinner.setValue(currentColor);
+				_expressionEditor.setExpression(attr.getValue());
 			}
 			_attribute = attr;
 		}
 
-		public Component getSpinner()
+		public Component getComponent()
 		{
-			return _spinner;
+			return _expressionEditor;
 		}
 
 		public void setEnabled(final boolean enabled)
 		{
-			_spinner.setVisible(enabled);
+			_expressionEditor.setVisible(enabled);
 		}
 	}
 
 	private static class ColorPanel
 	{
-		private Attribute<reform.core.graphics.Color> _attribute;
+		private Attribute _attribute;
 		private final ColorPicker _colorPicker = new ColorPicker();
 		private final FormOptionPanel _delegate;
 
@@ -104,25 +96,26 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		{
 			if (_attribute != null && _colorPicker.getButton().isEnabled())
 			{
-				final Color c = _attribute.getValue();
-				c.setRed(colorModel.getRed());
-				c.setGreen(colorModel.getGreen());
-				c.setBlue(colorModel.getBlue());
-				c.setAlpha(colorModel.getAlpha());
+				_attribute.setValue(new ConstantExpression(
+						new Value(colorModel.getAlpha(), colorModel.getRed(), colorModel.getGreen(),
+						          colorModel.getBlue())));
 
 				_delegate.onChange();
 			}
 		}
 
-		void setAttribute(final Attribute<Color> attr)
+		void setAttribute(final Attribute attr)
 		{
 			if (attr != null)
 			{
 				_attribute = null; // prevent cycle
-				final Color currentColor = attr.getValue();
+				final Expression currentExpression = attr.getValue();
+				if(currentExpression instanceof ConstantExpression) {
+					ConstantExpression c = (ConstantExpression) currentExpression;
 
-				_colorPicker.getModel().setRGBA(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(),
-				                                currentColor.getAlpha());
+					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+				}
+
 			}
 			_attribute = attr;
 		}
@@ -162,13 +155,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final EventedProcedure _eProcedure;
 	private final Analyzer _analyzer;
 
-	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection)
+	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection, ExpressionEditor.Parser parser)
 	{
 		_eProcedure = eProcedure;
 		_selection = selection;
 		_analyzer = analyzer;
+		_parser = parser;
 
-		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS ));
+		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS));
 
 		_panel.add(_guideToggle);
 		_guideToggle.setBorder(null);
@@ -251,20 +245,20 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			final AttributeSet attributes = form.getAttributes();
 			for (int i = 0, j = attributes.size(); i < j; i++)
 			{
-				final Attribute<?> attr = attributes.get(i);
-				final Class<?> type = attr.getType();
+				final Attribute attr = attributes.get(i);
+				final Attribute.Type type = attr.getType();
 
-				if (type == Color.class)
+				if (type == Attribute.Type.Color)
 				{
-					@SuppressWarnings("unchecked") final ColorPanel panel = getColorPanelFor((Attribute<Color>) attr);
+					final ColorPanel panel = getColorPanelFor(attr);
 					_panel.add(panel.getButton());
 					panel.setEnabled(drawType == DrawingType.Draw);
 
 				}
-				else if (type == Integer.class)
+				else if (type == Attribute.Type.Number)
 				{
-					NumberPanel panel = getNumberPanelFor((Attribute<Integer>) attr);
-					_panel.add(panel.getSpinner());
+					NumberPanel panel = getNumberPanelFor(attr);
+					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
 				_panel.add(Box.createHorizontalStrut(5));
@@ -286,7 +280,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_colorPanels.clean(ColorPanel::dispose);
 	}
 
-	private NumberPanel getNumberPanelFor(final Attribute<Integer> attr)
+	private NumberPanel getNumberPanelFor(final Attribute attr)
 	{
 		final NumberPanel p = _numberPanels.take();
 		p.setAttribute(attr);
@@ -295,7 +289,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		return p;
 	}
 
-	private ColorPanel getColorPanelFor(final Attribute<Color> attr)
+	private ColorPanel getColorPanelFor(final Attribute attr)
 	{
 		final ColorPanel p = _colorPanels.take();
 		p.setAttribute(attr);
@@ -318,7 +312,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		_numberPanels.release((NumberPanel p) -> {
 			p.setAttribute(null);
-			_panel.remove(p.getSpinner());
+			_panel.remove(p.getComponent());
 		});
 
 		_currentNumberPanels.clear();

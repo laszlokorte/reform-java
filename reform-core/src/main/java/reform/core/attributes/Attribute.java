@@ -1,16 +1,24 @@
 package reform.core.attributes;
 
-public class Attribute<E>
-{
-	private final String _name;
-	private final Class<E> _type;
-	private E _value;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 
-	public Attribute(final String name, final Class<E> type, final E initialValue)
+public class Attribute
+{
+	public enum Type {
+		Number, Color
+	}
+
+	private final String _name;
+	private final Type _type;
+	private Expression _value;
+
+	public Attribute(final String name, final Type type, final Value initialValue)
 	{
 		_name = name;
 		_type = type;
-		_value = initialValue;
+		_value = new ConstantExpression(initialValue);
 	}
 
 	public String getName()
@@ -18,17 +26,17 @@ public class Attribute<E>
 		return _name;
 	}
 
-	public Class<E> getType()
+	public Type getType()
 	{
 		return _type;
 	}
 
-	public E getValue()
+	public Expression getValue()
 	{
 		return _value;
 	}
 
-	public void setValue(final E newValue)
+	public void setValue(final Expression newValue)
 	{
 		_value = newValue;
 	}

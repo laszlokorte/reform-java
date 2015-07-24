@@ -2,11 +2,6 @@ package reform.playground.views.sheet;
 
 import reform.data.sheet.DataSet;
 import reform.data.sheet.Solver;
-import reform.data.sheet.expression.Expression;
-import reform.data.syntax.Lexer;
-import reform.data.syntax.Parser;
-import reform.data.syntax.SimpleDelegate;
-import reform.data.syntax.Token;
 import reform.evented.core.EventedSheet;
 
 import javax.swing.*;

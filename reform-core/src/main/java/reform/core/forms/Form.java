@@ -7,11 +7,11 @@ import reform.core.forms.relations.ExposedPoint;
 import reform.core.forms.transformation.Rotator;
 import reform.core.forms.transformation.Scaler;
 import reform.core.forms.transformation.Translator;
-import reform.core.graphics.Color;
 import reform.core.graphics.DrawingType;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.ReferencePoint;
+import reform.data.sheet.Value;
 import reform.identity.Identifiable;
 import reform.identity.Identifier;
 import reform.naming.Named;
@@ -20,8 +20,9 @@ import java.awt.geom.GeneralPath;
 
 public interface Form extends Identifiable<Form>, Named
 {
-	Color DEFAULT_FILL = new Color(0x99888888);
-	Color DEFAULT_STROKE = new Color(0xff333333);
+	Value DEFAULT_FILL_COLOR = new Value(0x99888888, true);
+	Value DEFAULT_STROKE_COLOR = new Value(0xff333333, true);
+	Value DEFAULT_STROKE_WIDTH = new Value(1);
 
 	int getSizeOnStack();
 

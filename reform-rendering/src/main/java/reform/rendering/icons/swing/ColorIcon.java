@@ -47,8 +47,14 @@ public class ColorIcon implements javax.swing.Icon
 				}
 			}
 
-			g2.setColor(_color);
-			g2.fillRect(x, y, _size, _size);
+			if(_color != null)
+			{
+				g2.setColor(_color);
+				g2.fillRect(x, y, _size, _size);
+			} else {
+				g2.setColor(Color.BLACK);
+				g2.drawString("?", _size/2 - 5 , _size/2 + 5);
+			}
 
 			g2.setColor(Color.GRAY);
 			g2.drawRect(0, 0, _size - 1, _size - 1);
