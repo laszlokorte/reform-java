@@ -1,5 +1,8 @@
 package reform.components.colorpicker;
 
+import reform.components.expression.ExpressionEditor;
+import reform.data.sheet.expression.ConstantExpression;
+import reform.data.sheet.expression.Expression;
 import reform.rendering.icons.swing.ColorIcon;
 
 import javax.swing.*;
@@ -14,12 +17,14 @@ public class ColorPicker
 	private final JButton _button = new JButton(_icon);
 	private static final JFrame _frame = new JFrame("Color Picker");
 	private static ColorPicker _current = null;
-	private final ColorPickerPanel _panel = new ColorPickerPanel(_model);
+	private final ColorPickerPanel _panel;
 	private int _ARGB;
 	private final ActionMap _actionMap = new ActionMap();
 
-	public ColorPicker()
+	public ColorPicker(JTextField textfield)
 	{
+		_panel = new ColorPickerPanel(_model, textfield);
+
 		_button.setBorder(null);
 		_button.addActionListener(this::buttonClick);
 		_button.setFocusable(false);
@@ -74,5 +79,11 @@ public class ColorPicker
 	{
 		_frame.setVisible(false);
 		_current = null;
+	}
+
+
+	public void setMixed()
+	{
+		_icon.setColor(null);
 	}
 }

@@ -29,7 +29,7 @@
  - improve scrolling when resizing canvas
  - simplify arc calculation
 
-
+ - color picker Hue slider singularity
 Done
 ====
  - Shape Styles

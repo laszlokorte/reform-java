@@ -1,6 +1,5 @@
 package reform.playground.presenter;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import reform.components.colorpicker.ColorModel;
 import reform.components.colorpicker.ColorPicker;
 import reform.components.expression.ExpressionEditor;
@@ -8,7 +7,6 @@ import reform.core.analyzer.Analyzer;
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
-import reform.core.forms.relations.ConstantRotationAngle;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
@@ -83,24 +81,55 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private static class ColorPanel
 	{
 		private Attribute _attribute;
-		private final ColorPicker _colorPicker = new ColorPicker();
+		private final ExpressionEditor _expressionEditor;
+		private final ColorPicker _colorPicker;
 		private final FormOptionPanel _delegate;
 
 		ColorPanel(final FormOptionPanel delegate)
 		{
+			_expressionEditor = new ExpressionEditor(delegate._parser);
+			_colorPicker = new ColorPicker(_expressionEditor);
 			_colorPicker.getModel().addListener(this::onModelChange);
+			_expressionEditor.addChangeListener(this::onExpressionChange);
 			_delegate = delegate;
+		}
+
+		private boolean _ownChange = false;
+		private void onExpressionChange(final ChangeEvent changeEvent)
+		{
+			if(_ownChange) return;
+			_ownChange = true;
+			Expression expression = _expressionEditor.getExpression();
+
+			if(expression instanceof ConstantExpression) {
+				ConstantExpression c = (ConstantExpression) expression;
+				if(c.getValue().type == Value.Type.Color)
+				{
+					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+				} else {
+					_colorPicker.getModel().setHexARGB(0xff000000);
+					_colorPicker.setMixed();
+				}
+			} else {
+				_colorPicker.getModel().setHexARGB(0xff000000);
+				_colorPicker.setMixed();
+			}
+			_attribute.setValue(expression);
+			_delegate.onChange();
+			_ownChange = false;
 		}
 
 		private void onModelChange(final ColorModel colorModel)
 		{
+			if(_ownChange) return;
 			if (_attribute != null && _colorPicker.getButton().isEnabled())
 			{
-				_attribute.setValue(new ConstantExpression(
+				Expression expression = new ConstantExpression(
 						new Value(colorModel.getAlpha(), colorModel.getRed(), colorModel.getGreen(),
-						          colorModel.getBlue())));
+						          colorModel.getBlue()));
 
-				_delegate.onChange();
+				_expressionEditor.setExpression(expression);
+				onExpressionChange(null);
 			}
 		}
 
@@ -110,10 +139,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			{
 				_attribute = null; // prevent cycle
 				final Expression currentExpression = attr.getValue();
+
+				_expressionEditor.setExpression(currentExpression);
 				if(currentExpression instanceof ConstantExpression) {
 					ConstantExpression c = (ConstantExpression) currentExpression;
 
 					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+				} else {
+					_colorPicker.getModel().setHexARGB(0);
+					_colorPicker.setMixed();
 				}
 
 			}
