@@ -246,12 +246,17 @@ public final class Calculator
 			this.variadic = true;
 		}
 
-		Value apply(Value... val)
+		Value apply(Value[] val)
 		{
 			throw new SemanticException();
 		}
 
 		Value apply(Value val)
+		{
+			throw new SemanticException();
+		}
+
+		Value apply(Value a, Value b)
 		{
 			throw new SemanticException();
 		}
