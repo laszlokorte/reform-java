@@ -30,6 +30,7 @@ public class ColorIcon implements javax.swing.Icon
 			final int cellSize = _size / rows;
 			final int cols = _size / cellSize;
 
+			g2.setClip(0,0,_size,_size);
 			for (int j = 0; j <= cols; j++)
 			{
 				for (int i = 0; i <= rows; i++)
