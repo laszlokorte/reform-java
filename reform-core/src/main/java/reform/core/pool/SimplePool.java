@@ -44,6 +44,18 @@ public class SimplePool<E> implements Pool<E>
 	}
 
 	@Override
+	public void eachActive(final PoolModifier<E> modifier)
+	{
+		int i = _inUse.size();
+		while (i-- > 0)
+		{
+			final E e = _inUse.poll();
+			modifier.modify(e);
+			_inUse.add(e);
+		}
+	}
+
+	@Override
 	public E take()
 	{
 		E element;

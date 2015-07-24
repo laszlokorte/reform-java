@@ -94,18 +94,22 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			_delegate = delegate;
 		}
 
-		private boolean _ownChange = false;
+		private boolean _expressionChanged = false;
+		private boolean _colorChanged = false;
 		private void onExpressionChange(final ChangeEvent changeEvent)
 		{
-			if(_ownChange) return;
-			_ownChange = true;
+			if(_expressionChanged) return;
+			_expressionChanged = true;
 			Expression expression = _expressionEditor.getExpression();
 
 			if(expression instanceof ConstantExpression) {
 				ConstantExpression c = (ConstantExpression) expression;
 				if(c.getValue().type == Value.Type.Color)
 				{
-					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+					if(!_colorChanged)
+					{
+						_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+					}
 				} else {
 					_colorPicker.getModel().setHexARGB(0xff000000);
 					_colorPicker.setMixed();
@@ -116,20 +120,22 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			}
 			_attribute.setValue(expression);
 			_delegate.onChange();
-			_ownChange = false;
+			_expressionChanged = false;
 		}
 
 		private void onModelChange(final ColorModel colorModel)
 		{
-			if(_ownChange) return;
+			if(_expressionChanged) return;
 			if (_attribute != null && _colorPicker.getButton().isEnabled())
 			{
+				_colorChanged = true;
 				Expression expression = new ConstantExpression(
 						new Value(colorModel.getAlpha(), colorModel.getRed(), colorModel.getGreen(),
 						          colorModel.getBlue()));
 
 				_expressionEditor.setExpression(expression);
 				onExpressionChange(null);
+				_colorChanged = false;
 			}
 		}
 
@@ -177,10 +183,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final JPanel _panel = new JPanel();
 
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
-	private final ArrayList<ColorPanel> _currentColorPanels = new ArrayList<>();
 
 	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(() -> new ExpressionPanel(this));
-	private final ArrayList<ExpressionPanel> _currentExpressionPanels = new ArrayList<>();
+
+	private final Pool<Component> _struts = new SimplePool<>(()-> Box.createHorizontalStrut(5));
+
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
@@ -267,6 +274,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		releaseColorPanels();
 		releaseExpressionPanels();
+		_struts.release();
 		_panel.remove(_guideToggle);
 		_panel.removeAll();
 
@@ -295,7 +303,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
-				_panel.add(Box.createHorizontalStrut(5));
+				_panel.add(_struts.take());
 
 			}
 
@@ -318,7 +326,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		final ExpressionPanel p = _expressionPanels.take();
 		p.setAttribute(attr);
-		_currentExpressionPanels.add(p);
 
 		return p;
 	}
@@ -327,7 +334,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		final ColorPanel p = _colorPanels.take();
 		p.setAttribute(attr);
-		_currentColorPanels.add(p);
 
 		return p;
 	}
@@ -338,8 +344,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			p.setAttribute(null);
 			_panel.remove(p.getButton());
 		});
-
-		_currentColorPanels.clear();
 	}
 
 	private void releaseExpressionPanels()
@@ -348,8 +352,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			p.setAttribute(null);
 			_panel.remove(p.getComponent());
 		});
-
-		_currentExpressionPanels.clear();
 	}
 
 	@Override
@@ -362,8 +364,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			if (e.getSource() == _guideToggle)
 			{
 				form.setType(_guideToggle.isSelected() ? DrawingType.Guide : DrawingType.Draw);
-				_currentColorPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
-				_currentExpressionPanels.forEach((p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_colorPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_expressionPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
 			_ownChange = true;

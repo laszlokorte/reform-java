@@ -10,5 +10,7 @@ public interface Pool<E>
 
 	void clean(PoolModifier<E> cleaner);
 
+	void eachActive(PoolModifier<E> modifier);
+
 	int size();
 }
