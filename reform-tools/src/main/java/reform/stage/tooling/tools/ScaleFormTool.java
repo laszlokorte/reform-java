@@ -84,12 +84,12 @@ public class ScaleFormTool implements Tool
 	{
 		if (_state == State.Pressed)
 		{
+			_state = State.Idle;
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 			_toolState.setActiveHandle(null);
 			_toolState.setPivot(null);
 			_baseInstruction = null;
-			_state = State.Idle;
 		}
 		else
 		{

@@ -73,12 +73,12 @@ public class MoveFormTool implements Tool
 	{
 		if (_state == State.Pressed || _state == State.PressedSnapped)
 		{
+			_state = State.Idle;
 			_eProcedure.removeInstruction(_currentInstruction);
 			_currentInstruction = null;
 			_toolState.setViewState(ToolState.ViewState.EntityPoint);
 			_toolState.setActiveEntityPoint(null);
 			_toolState.setActiveSnapPoint(null);
-			_state = State.Idle;
 			_swapDirection = false;
 		}
 		else
