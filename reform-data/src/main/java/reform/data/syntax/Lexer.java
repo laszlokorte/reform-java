@@ -22,9 +22,9 @@ public class Lexer {
 
 	public static class Generator {
 
-		private final ArrayList<Rule> _rules = new ArrayList<Rule>();
+		private final ArrayList<Rule> _rules = new ArrayList<>();
 
-		private final ArrayList<Rule> _ignores = new ArrayList<Rule>();
+		private final ArrayList<Rule> _ignores = new ArrayList<>();
 
 		/**
 		 * Add a new token pattern to this configuration.
@@ -35,7 +35,7 @@ public class Lexer {
 		 *     lexerGen.add('number', '-?[0-9]+')
 		 */
 		public void add(Token.Type type, String pattern) {
-			_rules.add(new Rule(type, pattern));
+			_rules.add(new Rule(type, pattern, _rules.size()));
 		}
 
 		/**
@@ -102,9 +102,11 @@ public class Lexer {
 		@Override
 		public Token next() {
 			Rule currentRule = null;
+			int currentPrio = 0;
 			int currentColumn = _column;
 			int currentLine = _line;
 
+			outer:
 			while (true) {
 				if (_inputQueue.isEmpty()) {
 					if (_currentPos < _input.length()) {
@@ -112,14 +114,7 @@ public class Lexer {
 					} else {
 						break;
 					}
-				} else if (currentRule != null) {
-					if (currentRule.matches(this._accumulator.toString() + this._inputQueue.peek())) {
-						_consume();
-					} else {
-						break;
-					}
 				} else {
-					_consume();
 					for (int i = 0, j = this._lexer._ignoreRules.size(); i < j; i++) {
 						Rule rule = this._lexer._ignoreRules.get(i);
 						if (rule.matches(this._accumulator.toString())) {
@@ -127,18 +122,29 @@ public class Lexer {
 							currentLine = _line;
 							this._index += this._accumulator.length();
 							this._accumulator.setLength(0);
-							break;
+							continue outer;
 						}
 					}
 
+					boolean any = false;
 					for (int i = 0, j = this._lexer._rules.size(); i < j; i++) {
 						Rule rule = this._lexer._rules.get(i);
+						int prio = j - rule._inversePriority;
 
-						if (rule.matches(this._accumulator.toString())) {
+						if (prio >= currentPrio && rule.matches(this._accumulator.toString() + this._inputQueue.peek())) {
 							currentRule = rule;
-							break;
+							currentPrio = prio;
+							any = true;
 						}
 					}
+					if(!any) {
+						if(currentRule != null) {
+							break;
+						}
+						currentRule = null;
+						currentPrio = 0;
+					}
+					_consume();
 				}
 
 			}
@@ -185,9 +191,16 @@ public class Lexer {
 
 		private final Pattern _pattern;
 
-		Rule(Token.Type type, String pattern) {
+		private final int _inversePriority;
+
+		Rule(Token.Type type, String pattern, int invPrio) {
 			this.type = type;
 			_pattern = Pattern.compile("^(" + pattern + ")$");
+			_inversePriority =invPrio;
+		}
+
+		Rule(Token.Type type, String pattern) {
+			this(type, pattern, 0);
 		}
 
 		public boolean matches(CharSequence input) {
