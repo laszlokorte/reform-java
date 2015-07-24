@@ -14,6 +14,7 @@ package reform.identity;
 public final class Identifier<T>
 {
 	private final int _value;
+	private final byte _subscript;
 
 	/**
 	 * Create a new identifier from the given token.
@@ -21,6 +22,7 @@ public final class Identifier<T>
 	public Identifier(final IdentityToken token)
 	{
 		_value = token.getValue();
+		_subscript = 0;
 	}
 
 	/**
@@ -32,6 +34,13 @@ public final class Identifier<T>
 	public Identifier(final int value)
 	{
 		_value = value;
+		_subscript = 0;
+	}
+
+	public Identifier(final int value, byte subscript)
+	{
+		_value = value;
+		_subscript = subscript;
 	}
 
 	/**
@@ -42,36 +51,50 @@ public final class Identifier<T>
 	public Identifier(final Identifier<? extends T> id)
 	{
 		_value = id._value;
+		_subscript = id._subscript;
+	}
+
+
+	public Identifier(final Identifier<? extends T> id, byte subscript)
+	{
+		_value = id._value;
+		_subscript = subscript;
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return _value;
+		return (_value << 8) | _subscript;
 	}
 
 	@Override
 	public boolean equals(final Object obj)
 	{
-		if (obj instanceof Identifier)
-		{
-			@SuppressWarnings("unchecked") final Identifier<? extends T> other = (Identifier<? extends T>) obj;
-			return other._value == _value;
+		if(obj == this) {
+			return true;
+		} else if(obj == null) {
+			return false;
+		} else if(obj.getClass() != getClass()) {
+			return false;
 		}
-		else
-		{
-			return super.equals(obj);
-		}
+
+		@SuppressWarnings("unchecked") final Identifier<? extends T> other = (Identifier<? extends T>) obj;
+		return other._value == _value && other._subscript == _subscript;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "" + _value;
+		return "" + _value + ":" + _subscript;
 	}
 
 	public static int getValue(final Identifier<?> id)
 	{
 		return id._value;
+	}
+
+	public static byte getSubscript(final Identifier<?> id)
+	{
+		return id._subscript;
 	}
 }
