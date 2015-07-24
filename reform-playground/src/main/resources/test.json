@@ -405,7 +405,7 @@
               "type": "RotateInstruction",
               "form": 1555009629,
               "angle": {
-                "type": "ConstantAngle",
+                "type": "ConstantRotationAngle",
                 "value": 0.3141592653589793
               },
               "fixpoint": {
@@ -508,7 +508,7 @@
                   "type": "RotateInstruction",
                   "form": 1555009629,
                   "angle": {
-                    "type": "ConstantAngle",
+                    "type": "ConstantRotationAngle",
                     "value": 0.10471975511965977
                   },
                   "fixpoint": {
