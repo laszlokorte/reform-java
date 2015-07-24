@@ -23,7 +23,7 @@ public class ReferenceExpression implements Expression {
 
 	@Override
 	public String asString(boolean paren) {
-		return "$"+_label;
+		return  _label;
 	}
 
 	@Override

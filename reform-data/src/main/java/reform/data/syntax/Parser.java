@@ -12,7 +12,7 @@ public class Parser<E> {
 		Unary, Binary
 	}
 
-	static class Context<E> {
+	public static class Context<E> {
 
 		final Stack<Token> stack = new Stack<>();
 		final Stack<E> output = new Stack<>();
@@ -24,10 +24,6 @@ public class Parser<E> {
 		Token prevToken = null;
 
 		boolean lastTokenAtom = false;
-
-		Context() {
-
-		}
 	}
 
 	public interface ParserDelegate<E> {
@@ -42,6 +38,10 @@ public class Parser<E> {
 
 		default boolean isMatchingPair(Token left, Token right) {
 			return left.type == Token.Type.ParenthesisLeft && right.type == Token.Type.ParenthesisRight;
+		}
+
+		default boolean hasFunctionOfName(Token left) {
+			return false;
 		}
 
 		E variableTokenToNode(Token token);
@@ -79,7 +79,7 @@ public class Parser<E> {
 		E literalTokenToNode(Token token);
 	}
 
-	static interface Finalizer<E> {
+	interface Finalizer<E> {
 		E finalizy(Context<E> context);
 	}
 
@@ -89,7 +89,7 @@ public class Parser<E> {
 	public static class ParsingException extends RuntimeException {
 		private final Token _token;
 
-		ParsingException(String message, Token token) {
+		public ParsingException(String message, Token token) {
 			super(message);
 			_token = token;
 		}
@@ -102,13 +102,13 @@ public class Parser<E> {
 	/**
 	 * Exception thrown when the parser reads an token it did not expect.
 	 */
-	static class UnexpectedTokenException extends ParsingException {
+	public static class UnexpectedTokenException extends ParsingException {
 
-		UnexpectedTokenException(Token t) {
+		public UnexpectedTokenException(Token t) {
 			super(String.format("Unexpected token %s (%s).", t.value, t.type), t);
 		}
 
-		UnexpectedTokenException(Token t, String explain) {
+		public UnexpectedTokenException(Token t, String explain) {
 			super(String.format("Unexpected token %s (%s). %s", t.value, t.type, explain), t);
 		}
 
@@ -117,7 +117,7 @@ public class Parser<E> {
 	/**
 	 * Exception thrown when two tokens which must occure in pairs do not match.
 	 */
-	static class MismatchedTokenException extends ParsingException {
+	public static class MismatchedTokenException extends ParsingException {
 		final boolean open;
 
 		public MismatchedTokenException(Token t, boolean open) {
@@ -131,11 +131,11 @@ public class Parser<E> {
 	/**
 	 * Exception thrown when the parser reads an operator token but can not find matching operands.
 	 */
-	static class MissingOperandException extends ParsingException {
+	public static class MissingOperandException extends ParsingException {
 		final Arity arity;
 		final int missing;
 
-		MissingOperandException(Token t, Arity arity, int missing) {
+		public MissingOperandException(Token t, Arity arity, int missing) {
 			super(String.format("Missing %d operand for %s operator '%s'.", missing, arity.name(), t.value), t);
 			this.arity = arity;
 			this.missing = missing;
@@ -145,10 +145,10 @@ public class Parser<E> {
 	/**
 	 * Exception thrown when the parser does not know the operand.
 	 */
-	static class UnknownOperatorException extends ParsingException {
+	public static class UnknownOperatorException extends ParsingException {
 		final Arity arity;
 
-		UnknownOperatorException(Token t, Arity arity) {
+		public UnknownOperatorException(Token t, Arity arity) {
 			super(String.format("Unknown %s operator '%s'.", arity.name(), t.value), t);
 			this.arity = arity;
 		}
@@ -182,15 +182,30 @@ public class Parser<E> {
 					if (context.lastTokenAtom) {
 						throw new UnexpectedTokenException(token);
 					}
-					context.lastTokenAtom = true;
+					if(_delegate.hasFunctionOfName(token))
+					{
+						context.stack.push(token);
+						context.argCount.push(0);
 
-					context.output.push(_delegate.variableTokenToNode(token));
+						if (!context.wereValues.isEmpty())
+						{
+							context.wereValues.pop();
+							context.wereValues.push(true);
+						}
+						context.wereValues.push(false);
+						needOpen = true;
+					} else
+					{
+						context.lastTokenAtom = true;
 
-					if (!context.wereValues.isEmpty()) {
-						context.wereValues.pop();
-						context.wereValues.push(true);
+						context.output.push(_delegate.variableTokenToNode(token));
+
+						if (!context.wereValues.isEmpty())
+						{
+							context.wereValues.pop();
+							context.wereValues.push(true);
+						}
 					}
-
 					break;
 
 				case LiteralValue:
@@ -205,23 +220,6 @@ public class Parser<E> {
 						context.wereValues.pop();
 						context.wereValues.push(true);
 					}
-
-					break;
-
-				case FunctionName:
-					if (context.lastTokenAtom) {
-						throw new UnexpectedTokenException(token);
-					}
-
-					context.stack.push(token);
-					context.argCount.push(0);
-
-					if (!context.wereValues.isEmpty()) {
-						context.wereValues.pop();
-						context.wereValues.push(true);
-					}
-					context.wereValues.push(false);
-					needOpen = true;
 
 					break;
 
@@ -249,7 +247,7 @@ public class Parser<E> {
 						context.stack.push(token);
 					} else {
 
-						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.FunctionName) {
+						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.Identifier) {
 							context.output.push(_pipe(context.stack.pop(), context));
 						}
 
@@ -295,7 +293,7 @@ public class Parser<E> {
 							throw new MismatchedTokenException(token, false);
 						}
 
-						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.FunctionName) {
+						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.Identifier) {
 							///if(forceParentheses && (context.wereValues.isEmpty() || !context.wereValues.peek())) {
 							///	throw new RedundancyParsingException(stackScopeBottom);
 							///}
@@ -342,7 +340,7 @@ public class Parser<E> {
 
 	E _pipe(Token op, Context<E> context) {
 		switch (op.type) {
-			case FunctionName:
+			case Identifier:
 				final boolean w = context.wereValues.pop();
 				final int argCount = context.argCount.pop();
 				int a = argCount;
