@@ -1,6 +1,7 @@
 package reform.components.expression;
 
 import com.sun.java.swing.action.StateChangeAction;
+import reform.data.sheet.Definition;
 import reform.data.sheet.expression.Expression;
 
 import javax.swing.*;
@@ -25,6 +26,8 @@ public class ExpressionEditor extends JTextField
 
 	public interface Parser {
 		Expression parse(CharSequence charSeq);
+
+		String getUniqueNameFor(String string, Definition definition);
 	}
 
 	private final Parser _parser;

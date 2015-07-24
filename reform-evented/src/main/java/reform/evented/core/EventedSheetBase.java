@@ -41,24 +41,6 @@ public abstract class EventedSheetBase implements EventedSheet
 		return getSheet().get(index).getName();
 	}
 
-	public String getUniqueNameFor(String wantedName, Definition def) {
-		Sheet sheet = getSheet();
-
-		String testName = wantedName;
-		int postfix=0;
-		Definition otherDef = sheet.findDefinitionWithName(testName);
-		while(otherDef != null && otherDef != def) {
-			testName = wantedName + ++postfix;
-			otherDef = sheet.findDefinitionWithName(testName);
-		}
-
-		if(postfix > 0) {
-			return testName;
-		} else {
-			return wantedName;
-		}
-	}
-
 	public void setName(final int index, String name)
 	{
 		Sheet sheet = getSheet();

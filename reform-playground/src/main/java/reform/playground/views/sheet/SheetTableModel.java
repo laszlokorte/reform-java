@@ -74,7 +74,7 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 		String string =  (String) aValue;
 		switch (columnIndex) {
 			case 0:
-				_eSheet.setName(rowIndex, _eSheet.getUniqueNameFor(string, _eSheet.getDefinition(rowIndex)));
+				_eSheet.setName(rowIndex, _parser.getUniqueNameFor(string, _eSheet.getDefinition(rowIndex)));
 				break;
 			case 1:
 				_eSheet.setExpression(rowIndex, _parser.parse(string));

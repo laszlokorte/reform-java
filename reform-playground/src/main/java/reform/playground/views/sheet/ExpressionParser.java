@@ -19,13 +19,23 @@ import java.util.regex.Pattern;
  */
 public class ExpressionParser implements ExpressionEditor.Parser
 {
+	private final Sheet _sheet;
 	private final Lexer _lexer = getLexer();
 	private final Parser.ParserDelegate _delegate;
 	private final Parser<Expression> _parser;
+	private final HashSet<String> _functionNames = new HashSet<>();
+
 
 	public ExpressionParser(EventedSheet sheet)
 	{
-		_delegate = new Delegate(sheet.getRaw());
+
+		Calculator.Function[] functions = Calculator.Function.values();
+
+		for(int i=0;i<functions.length;i++) {
+			_functionNames.add(functions[i].name().toLowerCase());
+		}
+		_sheet = sheet.getRaw();
+		_delegate = new Delegate(sheet.getRaw(), _functionNames);
 		_parser = new Parser(_delegate);
 	}
 
@@ -37,6 +47,24 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			return new InvalidExpression(charSeq);
 		} catch (Lexer.LexingException e) {
 			return new InvalidExpression(charSeq);
+		}
+	}
+
+
+
+	public String getUniqueNameFor(String wantedName, Definition def) {
+		String testName = wantedName;
+		int postfix=0;
+		Definition otherDef = _sheet.findDefinitionWithName(testName);
+		while(otherDef != null && otherDef != def || _functionNames.contains(testName)) {
+			testName = wantedName + ++postfix;
+			otherDef = _sheet.findDefinitionWithName(testName);
+		}
+
+		if(postfix > 0) {
+			return testName;
+		} else {
+			return wantedName;
 		}
 	}
 
@@ -89,15 +117,12 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		private static char[] BINARY_OPERATORS = new char[]{'+', '-', '*', '/', '%'};
 
 		private final Sheet _sheet;
-		private final HashSet<String> _functionNames = new HashSet<>();
+		private final HashSet<String> _functionNames;
 
-		public Delegate(Sheet sheet)
+		public Delegate(Sheet sheet, HashSet<String> functionNames)
 		{
 			_sheet = sheet;
-			Calculator.Function[] functions = Calculator.Function.values();
-			for(int i=0;i<functions.length;i++) {
-				_functionNames.add(functions[i].name().toLowerCase());
-			}
+			_functionNames = functionNames;
 		}
 
 		@Override

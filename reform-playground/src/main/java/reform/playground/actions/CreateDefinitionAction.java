@@ -1,5 +1,6 @@
 package reform.playground.actions;
 
+import reform.components.expression.ExpressionEditor;
 import reform.data.sheet.Definition;
 import reform.data.sheet.Value;
 import reform.data.sheet.expression.ConstantExpression;
@@ -15,10 +16,12 @@ import java.awt.event.ActionEvent;
  */
 public class CreateDefinitionAction extends AbstractAction
 {
+	private final ExpressionEditor.Parser _parser;
 	private final EventedSheet _eSheet;
 	private final IdentifierEmitter _idEmitter;
 
-	public CreateDefinitionAction(EventedSheet eSheet, IdentifierEmitter idEmitter) {
+	public CreateDefinitionAction(ExpressionEditor.Parser parser, EventedSheet eSheet, IdentifierEmitter idEmitter) {
+		_parser = parser;
 		_eSheet = eSheet;
 		_idEmitter = idEmitter;
 	}
@@ -26,6 +29,6 @@ public class CreateDefinitionAction extends AbstractAction
 	@Override
 	public void actionPerformed(final ActionEvent e)
 	{
-		_eSheet.addDefinition(new Definition(_idEmitter.emit(), _eSheet.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
+		_eSheet.addDefinition(new Definition(_idEmitter.emit(), _parser.getUniqueNameFor("param", null), new ConstantExpression(new Value(0))));
 	}
 }

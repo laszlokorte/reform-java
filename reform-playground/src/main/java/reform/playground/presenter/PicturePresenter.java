@@ -167,15 +167,15 @@ public class PicturePresenter
 			dataBox.add(dataScroller, BorderLayout.CENTER);
 
 			SwingUtilities.invokeLater(() -> {
-				eDataSheet.addDefinition(new Definition(idEmitter.emit(), eDataSheet.getUniqueNameFor("param", null),
+				eDataSheet.addDefinition(new Definition(idEmitter.emit(), _parser.getUniqueNameFor("param", null),
 				                                    new ConstantExpression(new Value(0))));
-				eDataSheet.addDefinition(new Definition(idEmitter.emit(), eDataSheet.getUniqueNameFor("param", null),
+				eDataSheet.addDefinition(new Definition(idEmitter.emit(), _parser.getUniqueNameFor("param", null),
 				                                    new ConstantExpression(new Value(0))));
 			});
 
 
 			{
-				JButton button = new JButton(new CreateDefinitionAction(eDataSheet, idEmitter));
+				JButton button = new JButton(new CreateDefinitionAction(_parser, eDataSheet, idEmitter));
 
 				button.setIcon(_createDefinitionIcon);
 				button.setFocusable(false);

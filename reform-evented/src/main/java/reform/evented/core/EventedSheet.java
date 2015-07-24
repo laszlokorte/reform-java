@@ -29,8 +29,6 @@ public interface EventedSheet
 
 	public String getName(final int index);
 
-	public String getUniqueNameFor(String wantedName, Definition def);
-
 	public void setName(final int index, String name);
 
 	public Expression getExpression(final int index);
