@@ -33,6 +33,10 @@
 
  - expression field tabbing
 
+ - sort shapes correctly
+
+ - improve export
+
 Done
 ====
  - Shape Styles

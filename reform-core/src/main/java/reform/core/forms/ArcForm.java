@@ -137,7 +137,7 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 		final double centerX = midX - orthogonalDxNorm * offset;
 		final double centerY = midY - orthogonalDyNorm * offset;
-		
+
 		double angleB = Vector.angle(startX, startY, centerX, centerY);
 		double angleA = Vector.angle(endX, endY, centerX, centerY);
 

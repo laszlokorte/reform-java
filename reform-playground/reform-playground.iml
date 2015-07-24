@@ -21,5 +21,8 @@
     <orderEntry type="module" module-name="reform-stage" />
     <orderEntry type="module" module-name="reform-tools" />
     <orderEntry type="module" module-name="reform-components" />
+    <orderEntry type="library" name="batik:batik-svggen:1.7" level="project" />
+    <orderEntry type="library" name="batik:batik-dom:1.6-1" level="project" />
+    <orderEntry type="library" name="batik:batik-awt-util:1.6-1" level="project" />
   </component>
 </module>
