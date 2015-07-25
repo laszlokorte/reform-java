@@ -18,17 +18,16 @@ public class NullControl implements InstructionControl
 		return _controlPoints;
 	}
 
+	@Override
+	public RubberBand getRubberBand()
+	{
+		return null;
+	}
 
 	@Override
 	public void updateForRuntime(final reform.core.runtime.Runtime runtime)
 	{
 
-	}
-
-	@Override
-	public RubberBand getRubberBand()
-	{
-		return null;
 	}
 
 	public boolean canEdit()

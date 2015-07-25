@@ -11,15 +11,16 @@ import reform.stage.tooling.InstructionFocus;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public final class WrapInLoopAction extends AbstractAction implements InstructionFocus.Listener, EventedProcedure
-		.Listener
+public final class WrapInLoopAction extends AbstractAction implements InstructionFocus
+		.Listener, EventedProcedure.Listener
 {
 	private static final long serialVersionUID = 1L;
 
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public WrapInLoopAction(final InstructionFocus focus, final EventedProcedure eProcedure)
+	public WrapInLoopAction(final InstructionFocus focus, final EventedProcedure
+			eProcedure)
 	{
 		_focus = focus;
 		_eProcedure = eProcedure;
@@ -42,41 +43,44 @@ public final class WrapInLoopAction extends AbstractAction implements Instructio
 	public void onFocusChanged(final InstructionFocus focus)
 	{
 		setEnabled(
-				focus.isSet() && !(focus.getFocused() instanceof ForLoopInstruction) && !(focus.getFocused().getParent
-						() instanceof ForLoopInstruction) && !(focus.getFocused() instanceof NullInstruction));
+				focus.isSet() && !(focus.getFocused() instanceof ForLoopInstruction) &&
+						!(focus.getFocused().getParent() instanceof ForLoopInstruction)
+						&& !(focus.getFocused() instanceof NullInstruction));
 	}
 
 	@Override
-	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionAdded(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		setEnabled(
-				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
-						.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof
+				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction)
+						&& !(_focus.getFocused().getParent() instanceof
+						ForLoopInstruction) && !(_focus.getFocused() instanceof
 						NullInstruction));
 	}
 
 	@Override
-	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		setEnabled(
-				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction) && !(_focus.getFocused()
-						.getParent() instanceof ForLoopInstruction) && !(_focus.getFocused() instanceof
+				_focus.isSet() && !(_focus.getFocused() instanceof ForLoopInstruction)
+						&& !(_focus.getFocused().getParent() instanceof
+						ForLoopInstruction) && !(_focus.getFocused() instanceof
 						NullInstruction));
 	}
 
 	@Override
-	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final
+	Instruction instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionChanged(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionChanged(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 

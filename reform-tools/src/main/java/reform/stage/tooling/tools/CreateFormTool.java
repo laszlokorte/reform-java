@@ -28,12 +28,6 @@ import reform.stage.tooling.factory.FormFactory;
 public class CreateFormTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Snapped, Pressed, PressedSnapped
-
-	}
-
 	private final SelectionTool _selectionTool;
 	private final FormFactory<? extends Form> _formFactory;
 	private final ToolState _toolState;
@@ -41,21 +35,19 @@ public class CreateFormTool implements Tool
 	private final HitTester _hitTester;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
-
+	private final Vec2 _currentOffset = new Vec2();
 	private boolean _autoCenter = false;
 	private boolean _diagonalDirection = false;
 	private boolean _swapDirection = false;
 	private State _state = State.Idle;
-	private final Vec2 _currentOffset = new Vec2();
 	private SnapPoint _startPoint;
 	private SnapPoint _currentPoint;
 	private CreateFormInstruction _currentInstruction;
 	private InitialDestination _currentDestination;
 	private ReferencePoint _currentStart;
-
-	public CreateFormTool(final SelectionTool selectionTool, final FormFactory<? extends Form> formFactory, final
-	ToolState toolState, final Cursor cursor, final HitTester hitTester, final InstructionFocus focus, final
-	EventedProcedure eProcedure)
+	public CreateFormTool(final SelectionTool selectionTool, final FormFactory<? extends
+			Form> formFactory, final ToolState toolState, final Cursor cursor, final
+	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
 	{
 		_selectionTool = selectionTool;
 		_formFactory = formFactory;
@@ -71,7 +63,8 @@ public class CreateFormTool implements Tool
 	{
 		_toolState.setViewState(ToolState.ViewState.Snap);
 		_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
-		_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+		_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter
+				                                                     .Any));
 	}
 
 	@Override
@@ -91,7 +84,8 @@ public class CreateFormTool implements Tool
 			_currentInstruction = null;
 
 			_toolState.setViewState(ToolState.ViewState.Snap);
-			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+			_toolState.setSnapPoints(
+					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 			_toolState.setActiveSnapPoint(null);
 			_toolState.clearEntityPoints();
 			_swapDirection = false;
@@ -110,15 +104,19 @@ public class CreateFormTool implements Tool
 			_state = State.Pressed;
 			_startPoint = IntersectionSnapPointPool.copyIfNeeded(_currentPoint);
 			_currentStart = _startPoint.createReference();
-			_currentDestination = new RelativeFixSizeDestination(_currentStart, new Vec2());
+			_currentDestination = new RelativeFixSizeDestination(_currentStart,
+			                                                     new Vec2());
 			final Form currentForm = _formFactory.build();
-			_currentInstruction = new CreateFormInstruction(currentForm, _currentDestination);
-			_eProcedure.addInstruction(_currentInstruction, Position.After, _focus.getFocused());
+			_currentInstruction = new CreateFormInstruction(currentForm,
+			                                                _currentDestination);
+			_eProcedure.addInstruction(_currentInstruction, Position.After,
+			                           _focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
 			                   _cursor.getPosition().y - _startPoint.getY());
 			_focus.setFocus(_currentInstruction);
 			_toolState.setViewState(ToolState.ViewState.SnapEntity);
-			_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+			_toolState.setEntityPoints(
+					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 		}
 		else
 		{
@@ -139,7 +137,8 @@ public class CreateFormTool implements Tool
 			{
 				_state = State.Idle;
 				_toolState.setViewState(ToolState.ViewState.Snap);
-				_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+				_toolState.setSnapPoints(
+						_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 				_currentInstruction = null;
 				_toolState.setActiveSnapPoint(null);
 				_toolState.clearEntityPoints();
@@ -159,11 +158,13 @@ public class CreateFormTool implements Tool
 	{
 		if (_state == State.Pressed || _state == State.PressedSnapped)
 		{
-			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
+			_toolState.setSnapPoints(
+					_hitTester.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
 		}
 		else
 		{
-			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
+			_toolState.setSnapPoints(
+					_hitTester.getAllSnapPoints(HitTester.EntityFilter.Any));
 		}
 
 		_selectionTool.refresh();
@@ -204,13 +205,17 @@ public class CreateFormTool implements Tool
 			case Pressed:
 			case PressedSnapped:
 			{
-				_currentPoint = _cursor.getSnapPoint(HitTester.EntityFilter.ExcludeSelected);
+				_currentPoint = _cursor.getSnapPoint(
+						HitTester.EntityFilter.ExcludeSelected);
 
 				if (_currentPoint == null)
 				{
 					final RelativeFixSizeDestination d;
-					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPoint.getX() - _currentOffset.x,
-					                            _cursor.getPosition().y - _startPoint.getY() - _currentOffset.y);
+					final Vec2 delta = new Vec2(
+							_cursor.getPosition().x - _startPoint.getX() -
+									_currentOffset.x,
+							_cursor.getPosition().y - _startPoint.getY() -
+									_currentOffset.y);
 					if (input.getShiftModifier().isActive())
 					{
 						adjustVector(delta);
@@ -237,12 +242,16 @@ public class CreateFormTool implements Tool
 					}
 					else
 					{
-						d = new RelativeDynamicSizeDestination(_currentStart, _currentPoint.createReference());
+						d = new RelativeDynamicSizeDestination(_currentStart,
+						                                       _currentPoint
+								                                       .createReference());
 					}
 					if (input.getShiftModifier().isActive())
 					{
-						d.setDirection(getDirectionFor(_currentPoint.getX() - _startPoint.getX(),
-						                               _currentPoint.getY() - _startPoint.getY()));
+						d.setDirection(
+								getDirectionFor(_currentPoint.getX() - _startPoint
+										                .getX(), _currentPoint.getY() - _startPoint.getY
+										                ()));
 					}
 					else
 					{
@@ -252,7 +261,8 @@ public class CreateFormTool implements Tool
 					_currentDestination = d;
 				}
 				_currentDestination.setAlignment(
-						input.getAltModifier().isActive() != _autoCenter ? Alignment.Center : Alignment.Leading);
+						input.getAltModifier().isActive() != _autoCenter ? Alignment
+								.Center : Alignment.Leading);
 				_currentInstruction.setDestination(_currentDestination);
 				_eProcedure.publishInstructionChange(_currentInstruction);
 				break;
@@ -339,5 +349,11 @@ public class CreateFormTool implements Tool
 	public void setDiagonalDirection(final boolean diagonal)
 	{
 		_diagonalDirection = diagonal;
+	}
+
+	private enum State
+	{
+		Idle, Snapped, Pressed, PressedSnapped
+
 	}
 }

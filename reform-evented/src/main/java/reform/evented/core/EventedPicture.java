@@ -12,24 +12,19 @@ import java.util.ArrayList;
 
 public class EventedPicture
 {
-	public interface Listener
-	{
-		void onNameChanged(EventedPicture picture);
-
-		void onSizeChanged(EventedPicture picture);
-
-		void onProcedureChanged(EventedPicture picture);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
-
 	private final EventedProject _evtProject;
 	private final Identifier<? extends Picture> _pictureId;
-
-	public EventedPicture(final EventedProject evtProject, final Identifier<? extends Picture> pictureId)
+	public EventedPicture(final EventedProject evtProject, final Identifier<? extends
+			Picture> pictureId)
 	{
 		_evtProject = evtProject;
 		_pictureId = pictureId;
+	}
+
+	public Name getName()
+	{
+		return _evtProject.getPicture(_pictureId).getName();
 	}
 
 	public void setName(final Name name)
@@ -42,9 +37,9 @@ public class EventedPicture
 		_evtProject.propagatePictureChange(_pictureId);
 	}
 
-	public Name getName()
+	public Vec2i getSize()
 	{
-		return _evtProject.getPicture(_pictureId).getName();
+		return _evtProject.getPicture(_pictureId).getSize();
 	}
 
 	public void setSize(final Vec2i size)
@@ -59,11 +54,6 @@ public class EventedPicture
 			_listeners.get(i).onSizeChanged(this);
 		}
 		_evtProject.propagatePictureChange(_pictureId);
-	}
-
-	public Vec2i getSize()
-	{
-		return _evtProject.getPicture(_pictureId).getSize();
 	}
 
 	public EventedProcedure getEventedProcedure()
@@ -123,5 +113,14 @@ public class EventedPicture
 	public boolean exists()
 	{
 		return _evtProject.containsPicture(_pictureId);
+	}
+
+	public interface Listener
+	{
+		void onNameChanged(EventedPicture picture);
+
+		void onSizeChanged(EventedPicture picture);
+
+		void onProcedureChanged(EventedPicture picture);
 	}
 }

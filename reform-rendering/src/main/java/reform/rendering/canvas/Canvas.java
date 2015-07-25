@@ -15,7 +15,8 @@ public class Canvas extends JComponent
 
 	public Canvas()
 	{
-		_renderingHits.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		_renderingHits.put(RenderingHints.KEY_ANTIALIASING,
+		                   RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
 	@Override

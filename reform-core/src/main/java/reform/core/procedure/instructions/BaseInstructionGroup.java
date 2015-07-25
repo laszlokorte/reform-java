@@ -10,7 +10,8 @@ import reform.identity.Identifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-abstract public class BaseInstructionGroup extends BaseInstruction implements InstructionGroup
+abstract public class BaseInstructionGroup extends BaseInstruction implements
+		InstructionGroup
 {
 
 	private final ArrayList<Instruction> _children = new ArrayList<>();
@@ -45,17 +46,11 @@ abstract public class BaseInstructionGroup extends BaseInstruction implements In
 	}
 
 	@Override
-	public void insertInstruction(final Instruction instruction, final Position pos, final Instruction base)
+	public void insertInstruction(final Instruction instruction, final Position pos,
+	                              final Instruction base)
 	{
 		final int index = _children.indexOf(base) + pos.offset;
 		_children.add(index, instruction);
-		instruction.setParent(this);
-	}
-
-	@Override
-	public void append(final Instruction instruction)
-	{
-		_children.add(instruction);
 		instruction.setParent(this);
 	}
 
@@ -64,6 +59,13 @@ abstract public class BaseInstructionGroup extends BaseInstruction implements In
 	{
 		_children.remove(instruction);
 		instruction.setParent(null);
+	}
+
+	@Override
+	public void append(final Instruction instruction)
+	{
+		_children.add(instruction);
+		instruction.setParent(this);
 	}
 
 	protected void _evaluateChildren(final Runtime runtime)

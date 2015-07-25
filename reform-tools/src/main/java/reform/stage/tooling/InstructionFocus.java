@@ -6,14 +6,8 @@ import java.util.ArrayList;
 
 public class InstructionFocus
 {
-	public interface Listener
-	{
-		void onFocusChanged(InstructionFocus focus);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private Instruction _instruction;
-
 	public InstructionFocus()
 	{
 		// TODO Auto-generated constructor stub
@@ -54,5 +48,10 @@ public class InstructionFocus
 	public boolean isSet()
 	{
 		return _instruction != null;
+	}
+
+	public interface Listener
+	{
+		void onFocusChanged(InstructionFocus focus);
 	}
 }

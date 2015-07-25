@@ -33,14 +33,16 @@ public class ToolMorphIcon implements Icon
 		shape.subtract(new Area(new Ellipse2D.Double(-270, -490, 80, 80)));
 
 		_shape = AffineTransform.getTranslateInstance(100, 100).createTransformedShape(
-				AffineTransform.getScaleInstance(0.85, 0.85).createTransformedShape(shape));
+				AffineTransform.getScaleInstance(0.85, 0.85).createTransformedShape(
+						shape));
 
 	}
 
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0,
+		                                                           width / 1000.0);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

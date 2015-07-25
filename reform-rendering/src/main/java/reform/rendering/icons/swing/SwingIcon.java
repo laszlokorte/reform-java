@@ -13,7 +13,8 @@ public class SwingIcon implements javax.swing.Icon
 	private final boolean _smooth;
 	private final Color _selectedColor;
 
-	public SwingIcon(final Icon icon, final int size, final boolean smooth, final Color selectedColor)
+	public SwingIcon(final Icon icon, final int size, final boolean smooth, final Color
+			selectedColor)
 	{
 		_icon = icon;
 		_size = size;
@@ -44,7 +45,8 @@ public class SwingIcon implements javax.swing.Icon
 		final Graphics2D g2 = (Graphics2D) g.create();
 		if (_smooth)
 		{
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+			                    RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 
 

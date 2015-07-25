@@ -11,16 +11,15 @@ public final class Picture implements Identifiable<Picture>
 {
 
 	private final Identifier<? extends Picture> _id;
-
-	private Name _name;
 	private final Vec2i _size = new Vec2i(400, 400);
-
 	private final Sheet _dataSheet;
 	private final Procedure _procedure;
 	private final Sheet _measurements;
+	private Name _name;
 
-	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final Sheet dataSheet,
-	               final Procedure procedure, final Sheet measurements)
+	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i
+			size, final Sheet dataSheet, final Procedure procedure, final Sheet
+			measurements)
 	{
 		_id = id;
 		_name = name;
@@ -30,24 +29,24 @@ public final class Picture implements Identifiable<Picture>
 		_measurements = measurements;
 	}
 
-	public void setName(final Name name)
-	{
-		_name = name;
-	}
-
 	public Name getName()
 	{
 		return _name;
 	}
 
-	public void setSize(final Vec2i size)
+	public void setName(final Name name)
 	{
-		_size.set(size);
+		_name = name;
 	}
 
 	public Vec2i getSize()
 	{
 		return _size;
+	}
+
+	public void setSize(final Vec2i size)
+	{
+		_size.set(size);
 	}
 
 	public Sheet getDataSheet()

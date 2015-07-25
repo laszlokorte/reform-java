@@ -18,14 +18,16 @@ public class SelectionRenderer implements CanvasRenderer
 	private final FormSelection _formSelection;
 	private final ToolState _toolState;
 
-	private final Stroke _stroke = new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	private final Stroke _stroke = new BasicStroke(3, BasicStroke.CAP_ROUND,
+	                                               BasicStroke.JOIN_ROUND);
 	private final Color _glowColorCurrent = new Color(0x6600aaff, true);
 	private final Color _backgroundColorCurrent = new Color(0x1100aaff, true);
 	private final Color _glowColorAssoc = new Color(0x6600ddaa, true);
 
 	private boolean _preview;
 
-	public SelectionRenderer(final Stage stage, final FormSelection formSelection, final ToolState toolState)
+	public SelectionRenderer(final Stage stage, final FormSelection formSelection, final
+	ToolState toolState)
 	{
 		_stage = stage;
 		_formSelection = formSelection;
@@ -46,8 +48,8 @@ public class SelectionRenderer implements CanvasRenderer
 	private void renderElements(final Graphics2D g2)
 	{
 		ToolState.ViewState viewState = _toolState.getViewState();
-		if (viewState != ToolState.ViewState.Preview && viewState != ToolState.ViewState.Crop && viewState !=
-				ToolState.ViewState.Control)
+		if (viewState != ToolState.ViewState.Preview && viewState != ToolState.ViewState
+				.Crop && viewState != ToolState.ViewState.Control)
 		{
 			g2.setStroke(_stroke);
 			if (_preview)

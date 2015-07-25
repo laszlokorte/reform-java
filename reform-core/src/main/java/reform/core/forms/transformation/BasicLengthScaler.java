@@ -12,7 +12,8 @@ public class BasicLengthScaler implements Scaler
 	private final RotationAngle _angle;
 	private final double _angleOffset;
 
-	public BasicLengthScaler(final StaticLength length, final RotationAngle angle, final double angleOffset)
+	public BasicLengthScaler(final StaticLength length, final RotationAngle angle, final
+	double angleOffset)
 	{
 		_length = length;
 		_angle = angle;
@@ -20,8 +21,9 @@ public class BasicLengthScaler implements Scaler
 	}
 
 	@Override
-	public void scale(final Runtime runtime, final double factor, final double fixX, final double fixY, final double
-			directionX, final double directionY)
+	public void scale(final Runtime runtime, final double factor, final double fixX,
+	                  final double fixY, final double directionX, final double
+			                      directionY)
 	{
 
 		if (directionX == 0 && directionY == 0)
@@ -43,13 +45,16 @@ public class BasicLengthScaler implements Scaler
 			final double deltaX = x - fixX;
 			final double deltaY = y - fixY;
 
-			final double projectedX = Vector.projectionX(deltaX, deltaY, directionX, directionY);
-			final double projectedY = Vector.projectionY(deltaX, deltaY, directionX, directionY);
+			final double projectedX = Vector.projectionX(deltaX, deltaY, directionX,
+			                                             directionY);
+			final double projectedY = Vector.projectionY(deltaX, deltaY, directionX,
+			                                             directionY);
 
 			final double scaledX = deltaX + projectedX * (factor - 1);
 			final double scaledY = deltaY + projectedY * (factor - 1);
 
-			final double scaledLength = Math.sqrt(scaledX * scaledX + scaledY * scaledY) / l;
+			final double scaledLength = Math.sqrt(
+					scaledX * scaledX + scaledY * scaledY) / l;
 
 			_length.setForRuntime(runtime, scaledLength);
 		}

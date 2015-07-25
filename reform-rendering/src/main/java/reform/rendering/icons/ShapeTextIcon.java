@@ -19,13 +19,15 @@ public class ShapeTextIcon implements Icon
 		final Rectangle bounds = s.getBounds();
 		_size = Math.max(bounds.width, bounds.height) + 10;
 		_shape = AffineTransform.getTranslateInstance(-bounds.x - bounds.width / 2,
-		                                              -bounds.y - bounds.height / 2).createTransformedShape(s);
+		                                              -bounds.y - bounds.height / 2)
+				.createTransformedShape(s);
 	}
 
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / _size, width / _size);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / _size,
+		                                                           width / _size);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

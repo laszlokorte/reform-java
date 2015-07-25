@@ -21,12 +21,11 @@ public class SaveAsAction extends AbstractAction
 
 	private final WindowBuilder _windowBuilder;
 	private final Project _project;
+	private final IdentifierEmitter _idEmitter;
 	private File _file;
 
-	private final IdentifierEmitter _idEmitter;
-
-	public SaveAsAction(final WindowBuilder windowBuilder, final Project project, final File file, final
-	IdentifierEmitter idEmitter)
+	public SaveAsAction(final WindowBuilder windowBuilder, final Project project, final
+	File file, final IdentifierEmitter idEmitter)
 	{
 		_windowBuilder = windowBuilder;
 		_project = project;
@@ -67,8 +66,8 @@ public class SaveAsAction extends AbstractAction
 					JOptionPane.showMessageDialog(null, "Error: File not found");
 				} catch (final SerializationError e)
 				{
-					JOptionPane.showMessageDialog(null, String.format("Error while serializing Project. (%s)",
-					                                                  e.getMessage()));
+					JOptionPane.showMessageDialog(null, String.format(
+							"Error while serializing Project. (%s)", e.getMessage()));
 					e.printStackTrace();
 				} catch (final Exception e)
 				{

@@ -28,8 +28,9 @@ public class OpenAction extends AbstractAction
 		_windowBuilder = windowBuilder;
 
 		putValue(NAME, "Open...");
-		putValue(Action.ACCELERATOR_KEY,
-		         KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('O',
+		                                                        Toolkit
+				                                                        .getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 	@Override
@@ -48,8 +49,8 @@ public class OpenAction extends AbstractAction
 				try
 				{
 					final File file = fc.getSelectedFile();
-					final Project project = serializer.read(
-							new JSONObject(readFile(file.getPath(), Charset.defaultCharset())));
+					final Project project = serializer.read(new JSONObject(
+							readFile(file.getPath(), Charset.defaultCharset())));
 
 					_windowBuilder.open(file, project, idEmitter, false);
 				} catch (final JSONException e)
@@ -67,7 +68,8 @@ public class OpenAction extends AbstractAction
 		});
 	}
 
-	private static String readFile(final String path, final Charset encoding) throws IOException
+	private static String readFile(final String path, final Charset encoding) throws
+			IOException
 	{
 		final byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);

@@ -17,7 +17,8 @@ public final class LogicNegateExpression extends UnaryExpressionBase implements 
 	public String asString(final boolean parens)
 	{
 		final String s = "-" + _inner.asString(
-				!(_inner instanceof ConstantExpression || _inner instanceof ReferenceExpression ||
+				!(_inner instanceof ConstantExpression || _inner instanceof
+						ReferenceExpression ||
 						_inner instanceof ExponentialExpression));
 		if (parens)
 		{

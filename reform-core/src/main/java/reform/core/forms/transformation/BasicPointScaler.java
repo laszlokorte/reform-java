@@ -15,8 +15,9 @@ public class BasicPointScaler implements Scaler
 	}
 
 	@Override
-	public void scale(final Runtime runtime, final double factor, final double fixX, final double fixY, final double
-			directionX, final double directionY)
+	public void scale(final Runtime runtime, final double factor, final double fixX,
+	                  final double fixY, final double directionX, final double
+			                      directionY)
 	{
 
 		for (int i = 0; i < _points.length; i++)
@@ -27,8 +28,10 @@ public class BasicPointScaler implements Scaler
 			final double deltaX = x - fixX;
 			final double deltaY = y - fixY;
 
-			final double projectedX = Vector.projectionX(deltaX, deltaY, directionX, directionY);
-			final double projectedY = Vector.projectionY(deltaX, deltaY, directionX, directionY);
+			final double projectedX = Vector.projectionX(deltaX, deltaY, directionX,
+			                                             directionY);
+			final double projectedY = Vector.projectionY(deltaX, deltaY, directionX,
+			                                             directionY);
 
 			final double scaledX = deltaX + projectedX * (factor - 1);
 			final double scaledY = deltaY + projectedY * (factor - 1);

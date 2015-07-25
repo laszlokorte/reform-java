@@ -17,34 +17,18 @@ public class GlassLayerUI extends LayerUI<JComponent>
 	private static final long serialVersionUID = 1L;
 	private final Vec2i _start = new Vec2i();
 	private final Vec2i _current = new Vec2i();
-	private boolean _down = false;
-
 	private final HashMap<RenderingHints.Key, Object> _renderOptions = new HashMap<>();
-
 	private final Color _lineColor = new Color(0xff5b29);
-	private final Stroke _stroke = new BasicStroke(4, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	private final Stroke _stroke = new BasicStroke(4, BasicStroke.CAP_ROUND,
+	                                               BasicStroke.JOIN_ROUND);
+	private boolean _down = false;
 
 	public GlassLayerUI()
 	{
-		_renderOptions.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-	}
-
-	@Override
-	public void installUI(final JComponent c)
-	{
-		super.installUI(c);
-
-		final JLayer<?> jLayer = (JLayer<?>) c;
-		jLayer.setLayerEventMask(AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
-	}
-
-	@Override
-	public void uninstallUI(final JComponent c)
-	{
-		final JLayer<?> jLayer = (JLayer<?>) c;
-		jLayer.setLayerEventMask(0);
-		super.uninstallUI(c);
+		_renderOptions.put(RenderingHints.KEY_ANTIALIASING,
+		                   RenderingHints.VALUE_ANTIALIAS_ON);
+		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL,
+		                   RenderingHints.VALUE_STROKE_NORMALIZE);
 	}
 
 	@Override
@@ -69,10 +53,13 @@ public class GlassLayerUI extends LayerUI<JComponent>
 	}
 
 	@Override
-	protected void processMouseEvent(final MouseEvent e, final JLayer<? extends JComponent> l)
+	protected void processMouseEvent(final MouseEvent e, final JLayer<? extends
+			JComponent> l)
 	{
-		final boolean newDown = e.getID() == MouseEvent.MOUSE_PRESSED && e.isControlDown();
-		if (e.getID() == MouseEvent.MOUSE_EXITED || e.getID() == MouseEvent.MOUSE_ENTERED)
+		final boolean newDown = e.getID() == MouseEvent.MOUSE_PRESSED && e
+				.isControlDown();
+		if (e.getID() == MouseEvent.MOUSE_EXITED || e.getID() == MouseEvent
+				.MOUSE_ENTERED)
 		{
 			return;
 		}
@@ -81,7 +68,8 @@ public class GlassLayerUI extends LayerUI<JComponent>
 			_down = newDown;
 			if (_down)
 			{
-				final Point p = SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(), l);
+				final Point p = SwingUtilities.convertPoint(e.getComponent(), e.getX(),
+				                                            e.getY(), l);
 				_current.set(p.x, p.y);
 				_start.set(p.x, p.y);
 				e.consume();
@@ -91,15 +79,35 @@ public class GlassLayerUI extends LayerUI<JComponent>
 	}
 
 	@Override
-	protected void processMouseMotionEvent(final MouseEvent e, final JLayer<? extends JComponent> l)
+	protected void processMouseMotionEvent(final MouseEvent e, final JLayer<? extends
+			JComponent> l)
 	{
-		final Point p = SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(), l);
+		final Point p = SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(),
+		                                            l);
 		if (_down)
 		{
 			_current.set(p.x, p.y);
 			e.consume();
 		}
 		l.repaint();
+	}
+
+	@Override
+	public void installUI(final JComponent c)
+	{
+		super.installUI(c);
+
+		final JLayer<?> jLayer = (JLayer<?>) c;
+		jLayer.setLayerEventMask(
+				AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK);
+	}
+
+	@Override
+	public void uninstallUI(final JComponent c)
+	{
+		final JLayer<?> jLayer = (JLayer<?>) c;
+		jLayer.setLayerEventMask(0);
+		super.uninstallUI(c);
 	}
 
 }

@@ -80,28 +80,35 @@ public class RectangleEntity implements Entity
 		_points.add(_bottom);
 		_points.add(_center);
 
-		_topLeftHandle = new Handle(formId, RectangleForm.Point.TopLeft, RectangleForm.Anchor.TopLeft,
+		_topLeftHandle = new Handle(formId, RectangleForm.Point.TopLeft,
+		                            RectangleForm.Anchor.TopLeft,
 		                            new PivotPair(_bottomRight, _center));
 
-		_topRightHandle = new Handle(formId, RectangleForm.Point.TopRight, RectangleForm.Anchor.TopRight,
+		_topRightHandle = new Handle(formId, RectangleForm.Point.TopRight,
+		                             RectangleForm.Anchor.TopRight,
 		                             new PivotPair(_bottomLeft, _center));
 
-		_bottomLeftHandle = new Handle(formId, RectangleForm.Point.BottomLeft, RectangleForm.Anchor.BottomLeft,
+		_bottomLeftHandle = new Handle(formId, RectangleForm.Point.BottomLeft,
+		                               RectangleForm.Anchor.BottomLeft,
 		                               new PivotPair(_topRight, _center));
 
-		_bottomRightHandle = new Handle(formId, RectangleForm.Point.BottomRight, RectangleForm.Anchor.BottomRight,
+		_bottomRightHandle = new Handle(formId, RectangleForm.Point.BottomRight,
+		                                RectangleForm.Anchor.BottomRight,
 		                                new PivotPair(_topLeft, _center));
 
-		_leftHandle = new Handle(formId, RectangleForm.Point.Left, RectangleForm.Anchor.Left,
+		_leftHandle = new Handle(formId, RectangleForm.Point.Left,
+		                         RectangleForm.Anchor.Left,
 		                         new PivotPair(_right, _center));
 
-		_rightHandle = new Handle(formId, RectangleForm.Point.Right, RectangleForm.Anchor.Right,
+		_rightHandle = new Handle(formId, RectangleForm.Point.Right,
+		                          RectangleForm.Anchor.Right,
 		                          new PivotPair(_left, _center));
 
-		_topHandle = new Handle(formId, RectangleForm.Point.Top, RectangleForm.Anchor.Top,
-		                        new PivotPair(_bottom, _center));
+		_topHandle = new Handle(formId, RectangleForm.Point.Top, RectangleForm.Anchor
+				.Top, new PivotPair(_bottom, _center));
 
-		_bottomHandle = new Handle(formId, RectangleForm.Point.Bottom, RectangleForm.Anchor.Bottom,
+		_bottomHandle = new Handle(formId, RectangleForm.Point.Bottom,
+		                           RectangleForm.Anchor.Bottom,
 		                           new PivotPair(_topLeft, _center));
 
 		_handles.add(_topHandle);

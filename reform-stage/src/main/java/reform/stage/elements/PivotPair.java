@@ -4,6 +4,29 @@ import reform.core.runtime.relations.ReferencePoint;
 
 public class PivotPair
 {
+	private final SnapPoint _b;
+	private final SnapPoint _a;
+	public PivotPair(final SnapPoint a, final SnapPoint b)
+	{
+		_a = a;
+		_b = b;
+	}
+
+	public ReferencePoint createReference(final Choice choice)
+	{
+		return choice.createReference(this);
+	}
+
+	public double getX(final Choice choice)
+	{
+		return choice.getX(this);
+	}
+
+	public double getY(final Choice choice)
+	{
+		return choice.getY(this);
+	}
+
 	public enum Choice
 	{
 		Primary
@@ -52,29 +75,5 @@ public class PivotPair
 		abstract double getY(PivotPair p);
 
 		abstract ReferencePoint createReference(PivotPair p);
-	}
-
-	private final SnapPoint _b;
-	private final SnapPoint _a;
-
-	public PivotPair(final SnapPoint a, final SnapPoint b)
-	{
-		_a = a;
-		_b = b;
-	}
-
-	public ReferencePoint createReference(final Choice choice)
-	{
-		return choice.createReference(this);
-	}
-
-	public double getX(final Choice choice)
-	{
-		return choice.getX(this);
-	}
-
-	public double getY(final Choice choice)
-	{
-		return choice.getY(this);
 	}
 }

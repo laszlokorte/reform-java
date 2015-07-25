@@ -31,26 +31,148 @@ public final class PieForm extends BaseForm<PieForm>
 
 	private final transient Translator _translator = new BasicTranslator(_centerPoint);
 
-	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint),
-	                                                                new BasicAngleRotator(_angleUpperBound),
-	                                                                new BasicAngleRotator(_angleLowerBound));
+	private final transient Rotator _rotator = new CompositeRotator(
+			new BasicPointRotator(_centerPoint), new BasicAngleRotator(_angleUpperBound),
+			new BasicAngleRotator(_angleLowerBound));
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint), new
-			AbsoluteScaler(
-			new BasicLengthScaler(_radius, _angleUpperBound, 0)));
+	private final transient Scaler _scaler = new CompositeScaler(
+			new BasicPointScaler(_centerPoint),
+			new AbsoluteScaler(new BasicLengthScaler(_radius, _angleUpperBound, 0)));
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color,
+	private final Attribute _fillColorAttribute = new Attribute("Fill Color",
+	                                                            Attribute.Type.Color,
 	                                                            DEFAULT_FILL_COLOR);
-	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
+	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color",
+	                                                              Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width",
+	                                                              Attribute.Type.Number,
 	                                                              DEFAULT_STROKE_WIDTH);
 
-	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
+	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute,
+	                                                          _strokeColorAttribute,
 	                                                          _strokeWidthAttribute);
+	private final Arc2D.Double _arc = new Arc2D.Double();
+
+	private PieForm(final Identifier<PieForm> id, final Name name)
+	{
+		super(id, SIZE, name);
+		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)),
+				_angleLowerBound)), new Name("Start"), Point.Start));
+
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)),
+				_angleUpperBound)), new Name("End"), Point.End));
+
+		addAnchor(new PieCornerAnchor(Anchor.Start, new Name("Start"), _radius,
+		                              _angleLowerBound, _centerPoint));
+		addAnchor(new PieCornerAnchor(Anchor.End, new Name("End"), _radius,
+		                              _angleUpperBound, _centerPoint));
+	}
+
+	@Override
+	public void initialize(final Runtime runtime, final double minX, final double minY,
+	                       final double maxX, final double maxY)
+	{
+		final double dx = maxX - minX;
+		final double dy = maxY - minY;
+
+		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
+		_radius.setForRuntime(runtime, Math.sqrt(dx * dx + dy * dy) / 2);
+		_angleUpperBound.setForRuntime(runtime, Vector.angleOf(dx, dy));
+
+		_angleLowerBound.setForRuntime(runtime, Vector.angleOf(dx, dy) - Math.PI);
+	}
+
+	@Override
+	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double
+			target)
+	{
+		final double radius = _radius.getValueForRuntime(runtime);
+		final double cx = _centerPoint.getXValueForRuntime(runtime);
+		final double cy = _centerPoint.getYValueForRuntime(runtime);
+		final double angleUpper = _angleUpperBound.getValueForRuntime(runtime);
+		double angleLower = _angleLowerBound.getValueForRuntime(runtime);
+
+		if (angleUpper < angleLower)
+		{
+			angleLower -= Math.PI * 2;
+		}
+
+		final double start = Math.toDegrees(angleLower);
+		double extend = Math.toDegrees(angleUpper - angleLower);
+
+		if (extend > 360)
+		{
+			extend -= 360;
+		}
+		else if (extend < -360)
+		{
+			extend += 360;
+		}
+
+		_arc.setArc(cx - radius, cy - radius, 2 * radius, 2 * radius, -start, -extend,
+		            Arc2D.PIE);
+
+		target.append(_arc, false);
+
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape
+			coloredShape)
+	{
+		final DataSet dataSet = runtime.getDataSet();
+
+		coloredShape.setBackgroundColor(
+				_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
+		coloredShape.setStrokeColor(
+				_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
+		coloredShape.setStrokeWidth(
+				_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
+
+		appendToPathForRuntime(runtime, coloredShape.getPath());
+	}
+
+	@Override
+	public Rotator getRotator()
+	{
+		return _rotator;
+	}
+
+	@Override
+	public Scaler getScaler()
+	{
+		return _scaler;
+	}
+
+	@Override
+	public Translator getTranslator()
+	{
+		return _translator;
+	}
+
+	@Override
+	public Outline getOutline()
+	{
+		return _outline;
+	}
+
+	@Override
+	public AttributeSet getAttributes()
+	{
+		return _attributes;
+	}
+
+	public static PieForm construct(final Identifier<PieForm> id, final Name name)
+	{
+		return new PieForm(id, name);
+	}
 
 	public enum Point implements ExposedPointToken<PieForm>
 	{
@@ -88,110 +210,6 @@ public final class PieForm extends BaseForm<PieForm>
 		}
 	}
 
-	public static PieForm construct(final Identifier<PieForm> id, final Name name)
-	{
-		return new PieForm(id, name);
-	}
-
-	private PieForm(final Identifier<PieForm> id, final Name name)
-	{
-		super(id, SIZE, name);
-		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _angleLowerBound)), new Name("Start"), Point.Start));
-
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _angleUpperBound)), new Name("End"),
-		                              Point.End));
-
-		addAnchor(new PieCornerAnchor(Anchor.Start, new Name("Start"), _radius, _angleLowerBound, _centerPoint));
-		addAnchor(new PieCornerAnchor(Anchor.End, new Name("End"), _radius, _angleUpperBound, _centerPoint));
-	}
-
-	@Override
-	public void initialize(final Runtime runtime, final double minX, final double minY, final double maxX, final
-	double maxY)
-	{
-		final double dx = maxX - minX;
-		final double dy = maxY - minY;
-
-		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
-		_radius.setForRuntime(runtime, Math.sqrt(dx * dx + dy * dy) / 2);
-		_angleUpperBound.setForRuntime(runtime, Vector.angleOf(dx, dy));
-
-		_angleLowerBound.setForRuntime(runtime, Vector.angleOf(dx, dy) - Math.PI);
-	}
-
-	@Override
-	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double target)
-	{
-		final double radius = _radius.getValueForRuntime(runtime);
-		final double cx = _centerPoint.getXValueForRuntime(runtime);
-		final double cy = _centerPoint.getYValueForRuntime(runtime);
-		final double angleUpper = _angleUpperBound.getValueForRuntime(runtime);
-		double angleLower = _angleLowerBound.getValueForRuntime(runtime);
-
-		if (angleUpper < angleLower)
-		{
-			angleLower -= Math.PI * 2;
-		}
-
-		final double start = Math.toDegrees(angleLower);
-		double extend = Math.toDegrees(angleUpper - angleLower);
-
-		if (extend > 360)
-		{
-			extend -= 360;
-		}
-		else if (extend < -360)
-		{
-			extend += 360;
-		}
-
-		_arc.setArc(cx - radius, cy - radius, 2 * radius, 2 * radius, -start, -extend, Arc2D.PIE);
-
-		target.append(_arc, false);
-
-	}
-
-	@Override
-	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
-	{
-		final DataSet dataSet = runtime.getDataSet();
-
-		coloredShape.setBackgroundColor(_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
-		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
-		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
-
-		appendToPathForRuntime(runtime, coloredShape.getPath());
-	}
-
-	private final Arc2D.Double _arc = new Arc2D.Double();
-
-	@Override
-	public Rotator getRotator()
-	{
-		return _rotator;
-	}
-
-	@Override
-	public Scaler getScaler()
-	{
-		return _scaler;
-	}
-
-	@Override
-	public Translator getTranslator()
-	{
-		return _translator;
-	}
-
-	@Override
-	public Outline getOutline()
-	{
-		return _outline;
-	}
-
 	static class PieCornerAnchor extends BaseAnchor
 	{
 
@@ -199,8 +217,8 @@ public final class PieForm extends BaseForm<PieForm>
 		private final StaticAngle _angle;
 		private final ReferencePoint _center;
 
-		public PieCornerAnchor(final IdentityToken token, final Name name, final StaticLength radius, final
-		StaticAngle angle, final ReferencePoint center)
+		public PieCornerAnchor(final IdentityToken token, final Name name, final
+		StaticLength radius, final StaticAngle angle, final ReferencePoint center)
 		{
 			super(token, name);
 			_radius = radius;
@@ -250,12 +268,6 @@ public final class PieForm extends BaseForm<PieForm>
 			return _center.getYValueForRuntime(runtime) + deltaY;
 		}
 
-	}
-
-	@Override
-	public AttributeSet getAttributes()
-	{
-		return _attributes;
 	}
 
 }

@@ -9,15 +9,10 @@ import java.util.ArrayList;
 public class ProjectAnalyzer implements Analyzer
 {
 
-	public interface Listener
-	{
-		void onFinishAnalysis(ProjectAnalyzer analyzer);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
-	private int _depth = -1;
 	private final ArrayList<FlatNode> _nodes = new ArrayList<>();
 	private final IdentifiableList<Form> _forms = new IdentifiableList<>();
+	private int _depth = -1;
 
 	@Override
 	public void begin()
@@ -113,6 +108,11 @@ public class ProjectAnalyzer implements Analyzer
 			}
 		}
 		return -1;
+	}
+
+	public interface Listener
+	{
+		void onFinishAnalysis(ProjectAnalyzer analyzer);
 	}
 
 }

@@ -21,26 +21,26 @@ public class ConstantScaleFactor implements ScaleFactor
 	}
 
 	@Override
-	public boolean isValidFor(final Runtime runtime)
-	{
-		return true;
-	}
-
-	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
 		return String.format("%.1f%%", _factor * 100);
-	}
-
-	public double getValue()
-	{
-		return _factor;
 	}
 
 	@Override
 	public boolean isDegenerated()
 	{
 		return _factor == 1;
+	}
+
+	@Override
+	public boolean isValidFor(final Runtime runtime)
+	{
+		return true;
+	}
+
+	public double getValue()
+	{
+		return _factor;
 	}
 
 	public void setFactor(final double factor)

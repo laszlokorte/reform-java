@@ -17,22 +17,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Stage
 {
 
-	public interface Listener
-	{
-		void onStageComplete(Stage stage);
-	}
-
 	private final Vec2i _size = new Vec2i();
-	private final CopyOnWriteArrayList<Listener> _listeners = new CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<Listener> _listeners = new
+			CopyOnWriteArrayList<>();
 	private final CopyOnWriteArrayList<Entity> _entities = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<ColoredShape> _currentShapes = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<ColoredShape> _finalShapes = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<CropPoint> _cropPoints = new CopyOnWriteArrayList<>();
-	private final CopyOnWriteArrayList<IntersectionSnapPoint> _intersectionPoints = new CopyOnWriteArrayList<>();
-
-	private final HashMap<ColoredShape, Identifier<? extends Form>> _shapeMap = new HashMap<>();
-	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new HashMap<>();
-
+	private final CopyOnWriteArrayList<ColoredShape> _currentShapes = new
+			CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<ColoredShape> _finalShapes = new
+			CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<CropPoint> _cropPoints = new
+			CopyOnWriteArrayList<>();
+	private final CopyOnWriteArrayList<IntersectionSnapPoint> _intersectionPoints = new
+			CopyOnWriteArrayList<>();
+	private final HashMap<ColoredShape, Identifier<? extends Form>> _shapeMap = new
+			HashMap<>();
+	private final HashMap<Identifier<? extends Form>, Entity> _entityMap = new
+			HashMap<>();
 	private InstructionControl _instructionControl = null;
 
 	public Stage()
@@ -75,6 +75,16 @@ public class Stage
 		return _size;
 	}
 
+	void setSize(final Vec2i size)
+	{
+		_size.set(size);
+
+		for (int i = 0, j = _cropPoints.size(); i < j; i++)
+		{
+			_cropPoints.get(i).updatePosition(size.x, size.y);
+		}
+	}
+
 	public List<ColoredShape> getCurrentShapes()
 	{
 		return _currentShapes;
@@ -100,16 +110,6 @@ public class Stage
 		_entityMap.clear();
 		_shapeMap.clear();
 		_size.set(0, 0);
-	}
-
-	void setSize(final Vec2i size)
-	{
-		_size.set(size);
-
-		for (int i = 0, j = _cropPoints.size(); i < j; i++)
-		{
-			_cropPoints.get(i).updatePosition(size.x, size.y);
-		}
 	}
 
 	void complete()
@@ -154,6 +154,10 @@ public class Stage
 		return _cropPoints;
 	}
 
+	public InstructionControl getInstructionControl()
+	{
+		return _instructionControl;
+	}
 
 	public void setInstructionControl(final InstructionControl control)
 	{
@@ -161,8 +165,8 @@ public class Stage
 	}
 
 
-	public InstructionControl getInstructionControl()
+	public interface Listener
 	{
-		return _instructionControl;
+		void onStageComplete(Stage stage);
 	}
 }

@@ -11,8 +11,8 @@ public class Sheet
 	private final ArrayList<Definition> _definitions = new ArrayList<>();
 	transient private final ArrayList<Definition> _sortedDefinitions = new ArrayList<>();
 	transient private final Set<Definition> _unresolved = new HashSet<>();
-	transient private boolean _fresh = false;
 	final transient private Set<Definition> _duplicates = new HashSet<>();
+	transient private boolean _fresh = false;
 
 	public int size()
 	{
@@ -65,7 +65,8 @@ public class Sheet
 	void prepareForSolving()
 	{
 		final Set<Identifier<? extends Definition>> referencedIds = new HashSet<>();
-		final Map<Identifier<? extends Definition>, Definition> definitionMap = new HashMap<>();
+		final Map<Identifier<? extends Definition>, Definition> definitionMap = new
+				HashMap<>();
 		_duplicates.clear();
 
 		boolean fresh = _fresh;

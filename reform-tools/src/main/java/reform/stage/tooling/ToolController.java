@@ -11,13 +11,12 @@ public class ToolController
 {
 	private final List<ToolControllerListener> _listeners = new ArrayList<>();
 	private final Cursor _cursor;
-	private Tool _tool = new NullTool();
-	private Tool _nextTool = null;
-	private boolean _pressed = false;
-
 	private final BasicModifier _shift = new BasicModifier();
 	private final BasicModifier _alt = new BasicModifier();
 	private final Input _input;
+	private Tool _tool = new NullTool();
+	private Tool _nextTool = null;
+	private boolean _pressed = false;
 
 	public ToolController(final Cursor cursor)
 	{
@@ -34,22 +33,6 @@ public class ToolController
 		else
 		{
 			_nextTool = tool;
-		}
-	}
-
-	private void setTool(final Tool tool)
-	{
-		if (tool != _tool)
-		{
-			if (_tool != null)
-			{
-				_tool.tearDown();
-			}
-			_cursor.resetCycle();
-			_tool = tool;
-			_tool.setUp();
-			_tool.refresh();
-			notifyChange();
 		}
 	}
 
@@ -142,6 +125,22 @@ public class ToolController
 	public Tool getTool()
 	{
 		return _tool;
+	}
+
+	private void setTool(final Tool tool)
+	{
+		if (tool != _tool)
+		{
+			if (_tool != null)
+			{
+				_tool.tearDown();
+			}
+			_cursor.resetCycle();
+			_tool = tool;
+			_tool.setUp();
+			_tool.refresh();
+			notifyChange();
+		}
 	}
 
 	public void onFocusChanged()

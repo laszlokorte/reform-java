@@ -60,13 +60,15 @@ public class CircleEntity implements Entity
 		_points.add(_left);
 		_points.add(_center);
 
-		_topHandle = new Handle(formId, CircleForm.Point.Top, CircleForm.Anchor.Top, new PivotPair(_center, _bottom));
-		_bottomHandle = new Handle(formId, CircleForm.Point.Bottom, CircleForm.Anchor.Bottom,
+		_topHandle = new Handle(formId, CircleForm.Point.Top, CircleForm.Anchor.Top,
+		                        new PivotPair(_center, _bottom));
+		_bottomHandle = new Handle(formId, CircleForm.Point.Bottom,
+		                           CircleForm.Anchor.Bottom,
 		                           new PivotPair(_center, _top));
-		_rightHandle = new Handle(formId, CircleForm.Point.Right, CircleForm.Anchor.Right,
-		                          new PivotPair(_center, _left));
-		_leftHandle = new Handle(formId, CircleForm.Point.Left, CircleForm.Anchor.Left, new PivotPair(_center,
-		                                                                                              _right));
+		_rightHandle = new Handle(formId, CircleForm.Point.Right, CircleForm.Anchor
+				.Right, new PivotPair(_center, _left));
+		_leftHandle = new Handle(formId, CircleForm.Point.Left, CircleForm.Anchor.Left,
+		                         new PivotPair(_center, _right));
 
 		_handles.add(_topHandle);
 		_handles.add(_bottomHandle);
@@ -91,7 +93,8 @@ public class CircleEntity implements Entity
 		_rightHandle.updateForRuntime(runtime, analyzer);
 
 		_outline.update(_center.getX(), _center.getY(),
-		                Vector.distance(_center.getX(), _center.getY(), _top.getX(), _top.getY()));
+		                Vector.distance(_center.getX(), _center.getY(), _top.getX(),
+		                                _top.getY()));
 
 		_shape.reset();
 		final Form form = runtime.get(_formId);

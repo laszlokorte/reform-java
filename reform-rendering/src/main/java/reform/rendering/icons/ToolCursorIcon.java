@@ -23,7 +23,8 @@ public class ToolCursorIcon implements Icon
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0,
+		                                                           width / 1000.0);
 		g.translate(x, y);
 		g.fill(_shape.createTransformedShape(t));
 		g.translate(-x, -y);

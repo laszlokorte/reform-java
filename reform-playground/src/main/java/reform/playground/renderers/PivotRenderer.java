@@ -16,7 +16,8 @@ public class PivotRenderer implements CanvasRenderer
 	private final Stage _stage;
 	private final ToolState _toolState;
 
-	private final Asset _cropDot = new Dot(6, 2, new Color(0xB14BEC), new Color(0xB14BEC));
+	private final Asset _cropDot = new Dot(6, 2, new Color(0xB14BEC),
+	                                       new Color(0xB14BEC));
 
 	private boolean _preview;
 

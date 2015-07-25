@@ -69,8 +69,9 @@ public class MorphInstructionControl implements InstructionControl
 				if (distance.isValidFor(runtime))
 				{
 					_targetPoint.setError(false);
-					_targetPoint.updatePosition(baseX + distance.getXValueForRuntime(runtime),
-					                            baseY + distance.getYValueForRuntime(runtime));
+					_targetPoint.updatePosition(
+							baseX + distance.getXValueForRuntime(runtime),
+							baseY + distance.getYValueForRuntime(runtime));
 				}
 				else
 				{

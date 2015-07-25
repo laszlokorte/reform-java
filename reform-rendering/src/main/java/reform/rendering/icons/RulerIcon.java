@@ -18,16 +18,19 @@ public class RulerIcon implements Icon
 
 		for (int i = 0; i < 4; i++)
 		{
-			shape.add(new Area(new Rectangle2D.Double(-360 + 225 * i, -250, 75, i % 2 == 0 ? 300 : 230)));
+			shape.add(new Area(new Rectangle2D.Double(-360 + 225 * i, -250, 75,
+			                                          i % 2 == 0 ? 300 : 230)));
 		}
 
-		_shape = AffineTransform.getRotateInstance(-Math.PI / 4).createTransformedShape(shape);
+		_shape = AffineTransform.getRotateInstance(-Math.PI / 4).createTransformedShape(
+				shape);
 	}
 
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0,
+		                                                           width / 1000.0);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

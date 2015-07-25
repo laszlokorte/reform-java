@@ -19,13 +19,15 @@ public class LineOutline implements Outline
 	@Override
 	public double getXForRuntime(final Runtime runtime, final double t)
 	{
-		return t * _to.getXValueForRuntime(runtime) + (1 - t) * _from.getXValueForRuntime(runtime);
+		return t * _to.getXValueForRuntime(runtime) + (1 - t) * _from
+				.getXValueForRuntime(runtime);
 	}
 
 	@Override
 	public double getYForRuntime(final Runtime runtime, final double t)
 	{
-		return t * _to.getYValueForRuntime(runtime) + (1 - t) * _from.getYValueForRuntime(runtime);
+		return t * _to.getYValueForRuntime(runtime) + (1 - t) * _from
+				.getYValueForRuntime(runtime);
 	}
 
 	@Override

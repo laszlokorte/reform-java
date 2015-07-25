@@ -17,8 +17,8 @@ public class ToggleGuideAction extends AbstractAction
 	private final Analyzer _analyzer;
 	private final FormSelection _formSelection;
 
-	public ToggleGuideAction(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection
-			formSelection)
+	public ToggleGuideAction(final EventedProcedure eProcedure, final Analyzer analyzer,
+	                         final FormSelection formSelection)
 	{
 		_eProcedure = eProcedure;
 		_analyzer = analyzer;

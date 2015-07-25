@@ -18,11 +18,14 @@ public class InstructionControlRenderer implements CanvasRenderer
 	private final Stage _stage;
 	private final ToolState _toolState;
 
-	private final Stroke _rubberStroke = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 4,
+	private final Stroke _rubberStroke = new BasicStroke(3, BasicStroke.CAP_BUTT,
+	                                                     BasicStroke.JOIN_BEVEL, 4,
 	                                                     new float[]{4, 4}, 4);
 	private final Color _rubberColor = new Color(0x7AC3D2);
-	private final Asset _errorDot = new Dot(11, 3, new Color(0xE56E6B), new Color(0xA60B07));
-	private final Asset _markerDot = new Dot(8, 3, new Color(0xBBE8EE), new Color(0xBBE8EE));
+	private final Asset _errorDot = new Dot(11, 3, new Color(0xE56E6B),
+	                                        new Color(0xA60B07));
+	private final Asset _markerDot = new Dot(8, 3, new Color(0xBBE8EE),
+	                                         new Color(0xBBE8EE));
 
 	private boolean _preview;
 
@@ -36,7 +39,8 @@ public class InstructionControlRenderer implements CanvasRenderer
 	public void render(final Graphics2D g2, final int width, final int height)
 	{
 		final ToolState.ViewState viewState = _toolState.getViewState();
-		if (viewState == ToolState.ViewState.Control || viewState == ToolState.ViewState.SnapControl)
+		if (viewState == ToolState.ViewState.Control || viewState == ToolState.ViewState
+				.SnapControl)
 		{
 			final Vec2i size = _stage.getSize();
 
@@ -44,7 +48,8 @@ public class InstructionControlRenderer implements CanvasRenderer
 
 			if (_preview)
 			{
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+				g2.setComposite(
+						AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			}
 
 			final InstructionControl control = _stage.getInstructionControl();
@@ -57,8 +62,8 @@ public class InstructionControlRenderer implements CanvasRenderer
 				{
 					g2.setStroke(_rubberStroke);
 					g2.setColor(_rubberColor);
-					g2.drawLine((int) rubber.getStartX(), (int) rubber.getStartY(), (int) rubber.getEndX(),
-					            (int) rubber.getEndY());
+					g2.drawLine((int) rubber.getStartX(), (int) rubber.getStartY(),
+					            (int) rubber.getEndX(), (int) rubber.getEndY());
 				}
 
 				for (int i = 0, j = controlPoints.size(); i < j; i++)

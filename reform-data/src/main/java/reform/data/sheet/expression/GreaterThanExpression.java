@@ -4,7 +4,8 @@ import reform.data.sheet.Calculator;
 import reform.data.sheet.DataSet;
 import reform.data.sheet.Value;
 
-public final class GreaterThanExpression extends BinaryExpressionBase implements Expression
+public final class GreaterThanExpression extends BinaryExpressionBase implements
+		Expression
 {
 	public GreaterThanExpression(final Expression lhs, final Expression rhs)
 	{

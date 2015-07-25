@@ -17,8 +17,8 @@ public class RotateInstruction extends BaseInstruction
 	private RotationAngle _angle;
 	private ReferencePoint _fixPoint;
 
-	public RotateInstruction(final Identifier<? extends Form> target, final RotationAngle angle, final ReferencePoint
-			fixPoint)
+	public RotateInstruction(final Identifier<? extends Form> target, final
+	RotationAngle angle, final ReferencePoint fixPoint)
 	{
 		_target = target;
 		_angle = angle;
@@ -65,7 +65,8 @@ public class RotateInstruction extends BaseInstruction
 			formName = "???";
 		}
 
-		analyzer.publish(this, "Rotate " + formName + " by " + _angle.getDescription(analyzer) + " around " +
+		analyzer.publish(this, "Rotate " + formName + " by " + _angle.getDescription(
+				analyzer) + " around " +
 				_fixPoint.getDescription(analyzer));
 	}
 
@@ -85,6 +86,11 @@ public class RotateInstruction extends BaseInstruction
 		return _angle;
 	}
 
+	public void setAngle(final RotationAngle angle)
+	{
+		_angle = angle;
+	}
+
 	public ReferencePoint getFixPoint()
 	{
 		return _fixPoint;
@@ -93,10 +99,5 @@ public class RotateInstruction extends BaseInstruction
 	public void setFixPoint(final ReferencePoint fixPoint)
 	{
 		_fixPoint = fixPoint;
-	}
-
-	public void setAngle(final RotationAngle angle)
-	{
-		_angle = angle;
 	}
 }

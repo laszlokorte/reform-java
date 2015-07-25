@@ -13,7 +13,8 @@ public class ReferenceExpression implements Expression
 	private final Identifier<? extends Definition> _id;
 	private String _label;
 
-	public ReferenceExpression(final Identifier<? extends Definition> id, final String label)
+	public ReferenceExpression(final Identifier<? extends Definition> id, final String
+			label)
 	{
 		_id = id;
 		_label = label;

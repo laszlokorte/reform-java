@@ -11,7 +11,8 @@ import reform.stage.elements.SnapPoint;
 
 public class IntersectionSnapPoint implements SnapPoint
 {
-	private static final double SNAP_RADIUS2 = SnapPoint.SNAP_RADIUS * SnapPoint.SNAP_RADIUS;
+	private static final double SNAP_RADIUS2 = SnapPoint.SNAP_RADIUS * SnapPoint
+			.SNAP_RADIUS;
 
 	Entity _entityA;
 	Entity _entityB;
@@ -23,7 +24,8 @@ public class IntersectionSnapPoint implements SnapPoint
 	{
 	}
 
-	void reset(final Entity entityA, final Entity entityB, final int index, final Vec2 pos)
+	void reset(final Entity entityA, final Entity entityB, final int index, final Vec2
+			pos)
 	{
 		_entityA = entityA;
 		_entityB = entityB;
@@ -43,6 +45,22 @@ public class IntersectionSnapPoint implements SnapPoint
 		return _position.y;
 	}
 
+	@Override
+	public ReferencePoint createReference()
+	{
+		return new IntersectionPoint(_index, _entityA.getId(), _entityB.getId());
+	}
+
+	public String getLabel()
+	{
+		return "Intersection of " + _entityA.getLabel() + " and " + _entityB.getLabel();
+	}
+
+	public boolean isInSnapRadius(final double x, final double y)
+	{
+		return Vector.distance2(x, y, _position.x, _position.y) < SNAP_RADIUS2;
+	}
+
 	public Identifier<? extends Form> getFormIdA()
 	{
 		return _entityA.getId();
@@ -51,12 +69,6 @@ public class IntersectionSnapPoint implements SnapPoint
 	public Identifier<? extends Form> getFormIdB()
 	{
 		return _entityB.getId();
-	}
-
-	@Override
-	public ReferencePoint createReference()
-	{
-		return new IntersectionPoint(_index, _entityA.getId(), _entityB.getId());
 	}
 
 	@Override
@@ -72,18 +84,9 @@ public class IntersectionSnapPoint implements SnapPoint
 		}
 		final IntersectionSnapPoint other = (IntersectionSnapPoint) obj;
 
-		return _entityA.getId().equals(other._entityA.getId()) && _entityB.getId().equals(other._entityB.getId()) &&
+		return _entityA.getId().equals(other._entityA.getId()) && _entityB.getId()
+				.equals(other._entityB.getId()) &&
 				_index == other._index;
-	}
-
-	public String getLabel()
-	{
-		return "Intersection of " + _entityA.getLabel() + " and " + _entityB.getLabel();
-	}
-
-	public boolean isInSnapRadius(final double x, final double y)
-	{
-		return Vector.distance2(x, y, _position.x, _position.y) < SNAP_RADIUS2;
 	}
 
 }

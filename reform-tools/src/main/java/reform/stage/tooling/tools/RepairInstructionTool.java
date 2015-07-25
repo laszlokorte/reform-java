@@ -7,13 +7,7 @@ import reform.stage.tooling.ToolState;
 public class RepairInstructionTool implements Tool
 {
 
-	private enum State
-	{
-		Idle
-	}
-
 	private final ToolState _toolState;
-
 	private final State _state = State.Idle;
 
 	public RepairInstructionTool(final ToolState toolState)
@@ -74,6 +68,11 @@ public class RepairInstructionTool implements Tool
 	public void focusChanged()
 	{
 
+	}
+
+	private enum State
+	{
+		Idle
 	}
 
 }

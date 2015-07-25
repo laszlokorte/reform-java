@@ -5,18 +5,12 @@ import java.util.Locale;
 public final class Value
 {
 
-	public enum Type
-	{
-		String, Integer, Double, Boolean, Color
-	}
-
 	public final Type type;
 	private final double _doubleValue;
 	private final String _stringValue;
 	private final int _integerValue;
 	private final boolean _booleanValue;
 	private final int _color;
-
 	public Value()
 	{
 		type = null;
@@ -91,11 +85,11 @@ public final class Value
 		_integerValue = 0;
 		_doubleValue = 0;
 		_booleanValue = false;
-		_color = ((int) (255 * a) << 24) | ((int) (255 * r) << 16) | ((int) (255 * g) << 8) | ((int) (255 * b));
+		_color = ((int) (255 * a) << 24) | ((int) (255 * r) << 16) | ((int) (255 * g) <<
+				8) | ((int) (255 * b));
 		_stringValue = String.format("#%08X", _color);
 
 	}
-
 
 	public int getInteger()
 	{
@@ -141,5 +135,10 @@ public final class Value
 	public String toString()
 	{
 		return asString();
+	}
+
+	public enum Type
+	{
+		String, Integer, Double, Boolean, Color
 	}
 }

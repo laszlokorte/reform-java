@@ -14,27 +14,13 @@ import java.util.Locale;
 public class ExpressionEditor extends JTextField
 {
 	private final ArrayList<ChangeListener> _listeners = new ArrayList<>();
-	private Expression _expression;
-
-	public interface Parser
-	{
-		Expression parse(CharSequence charSeq);
-
-		String getUniqueNameFor(String string, Definition definition);
-	}
-
 	private final Parser _parser;
+	private Expression _expression;
 
 	public ExpressionEditor(final Parser parser)
 	{
 		_parser = parser;
 		addActionListener(this::onAction);
-	}
-
-	public void setExpression(final Expression expression)
-	{
-		_expression = expression;
-		super.setText(expression.asString(false));
 	}
 
 	public Expression getExpression()
@@ -46,11 +32,16 @@ public class ExpressionEditor extends JTextField
 		return _expression;
 	}
 
+	public void setExpression(final Expression expression)
+	{
+		_expression = expression;
+		super.setText(expression.asString(false));
+	}
+
 	public void setValue(final double value)
 	{
 		setText(String.format(Locale.ENGLISH, "%.2f", value));
 	}
-
 
 	public void setText(final String text)
 	{
@@ -74,10 +65,18 @@ public class ExpressionEditor extends JTextField
 	}
 
 	@Override
-	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed)
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean
+			pressed)
 	{
 		super.processKeyBinding(ks, e, condition, pressed);
 
 		return true;
+	}
+
+	public interface Parser
+	{
+		Expression parse(CharSequence charSeq);
+
+		String getUniqueNameFor(String string, Definition definition);
 	}
 }

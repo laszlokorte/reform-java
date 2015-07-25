@@ -18,16 +18,16 @@ public class FocusAdjustmentProcedureListener implements EventedProcedure.Listen
 	}
 
 	@Override
-	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionAdded(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		if (_focus.isFocused(instruction))
 		{
@@ -37,15 +37,15 @@ public class FocusAdjustmentProcedureListener implements EventedProcedure.Listen
 	}
 
 	@Override
-	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final
+	Instruction instruction, final InstructionGroup parent)
 	{
 		_index = parent.indexOf(instruction);
 	}
 
 	@Override
-	public void onInstructionChanged(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionChanged(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 

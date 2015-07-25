@@ -10,19 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class IdentifierCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
+public class IdentifierCellEditor extends AbstractCellEditor implements
+		TableCellEditor, ActionListener
 {
 
 	private static final Color _selectionBackground = new Color(0x23AEEC);
 	private static final Color _selectionForegroud = new Color(0xffffff);
-
-	private final JLabel _label = new JLabel();
-	private final JPanel _labelField = new JPanel();
-	private final JTextField _textField = new SheetIdTextField(10);
-	private final JPanel _panel = new JPanel();
-	private String _currentValue = null;
-	private String _initialValue = null;
-
 	private final static Action NULL_ACTION = new AbstractAction()
 	{
 		@Override
@@ -31,6 +24,12 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 
 		}
 	};
+	private final JLabel _label = new JLabel();
+	private final JPanel _labelField = new JPanel();
+	private final JTextField _textField = new SheetIdTextField(10);
+	private final JPanel _panel = new JPanel();
+	private String _currentValue = null;
+	private String _initialValue = null;
 
 	IdentifierCellEditor()
 	{
@@ -65,8 +64,9 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	}
 
 	@Override
-	public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected,
-	                                             final int row, final int column)
+	public Component getTableCellEditorComponent(final JTable table, final Object value,
+	                                             final boolean isSelected, final int
+			                                                 row, final int column)
 	{
 		_currentValue = ((Definition) value).getName();
 		_initialValue = _currentValue;
@@ -86,13 +86,6 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	}
 
 	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		_currentValue = _textField.getText();
-		fireEditingStopped();
-	}
-
-	@Override
 	public boolean stopCellEditing()
 	{
 		if (!_initialValue.equals(_currentValue))
@@ -104,5 +97,12 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 			cancelCellEditing();
 			return true;
 		}
+	}	@Override
+	public void actionPerformed(final ActionEvent e)
+	{
+		_currentValue = _textField.getText();
+		fireEditingStopped();
 	}
+
+
 }

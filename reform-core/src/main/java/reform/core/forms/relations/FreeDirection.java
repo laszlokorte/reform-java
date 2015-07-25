@@ -9,15 +9,15 @@ public enum FreeDirection implements Direction
 	Free
 			{
 				@Override
-				public double getAdjustedXForRuntime(final Runtime runtime, final double anchorX, final double
-						anchorY, final double x, final double y)
+				public double getAdjustedXForRuntime(final Runtime runtime, final double
+						anchorX, final double anchorY, final double x, final double y)
 				{
 					return x;
 				}
 
 				@Override
-				public double getAdjustedYForRuntime(final Runtime runtime, final double anchorX, final double
-						anchorY, final double x, final double y)
+				public double getAdjustedYForRuntime(final Runtime runtime, final double
+						anchorX, final double anchorY, final double x, final double y)
 				{
 					return y;
 				}

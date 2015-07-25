@@ -30,24 +30,145 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 	private final transient Translator _translator = new BasicTranslator(_centerPoint);
 
-	private final transient Rotator _rotator = new CompositeRotator(new BasicPointRotator(_centerPoint),
-	                                                                new BasicAngleRotator(_rotation));
+	private final transient Rotator _rotator = new CompositeRotator(
+			new BasicPointRotator(_centerPoint), new BasicAngleRotator(_rotation));
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_centerPoint),
-	                                                             new BasicLengthScaler(_radius, _rotation, 0));
+	private final transient Scaler _scaler = new CompositeScaler(
+			new BasicPointScaler(_centerPoint),
+			new BasicLengthScaler(_radius, _rotation, 0));
 
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius, _rotation);
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color,
+	private final Attribute _fillColorAttribute = new Attribute("Fill Color",
+	                                                            Attribute.Type.Color,
 	                                                            DEFAULT_FILL_COLOR);
-	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
+	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color",
+	                                                              Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width",
+	                                                              Attribute.Type.Number,
 	                                                              DEFAULT_STROKE_WIDTH);
 
-	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
+	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute,
+	                                                          _strokeColorAttribute,
 	                                                          _strokeWidthAttribute);
+	private final Ellipse2D.Double _circle = new Ellipse2D.Double();
+
+	private CircleForm(final Identifier<CircleForm> id, final Name name)
+	{
+		super(id, SIZE, name);
+		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _rotation)),
+		                              new Name("Right"), Point.Right));
+
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), _radius), _rotation)),
+		                              new Name("Bottom"), Point.Bottom));
+
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ScaledLength(_radius, -1),
+				                           new ConstantLength(0)), _rotation)),
+		                              new Name("Left"), Point.Left));
+
+		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0),
+				                           new ScaledLength(_radius, -1)), _rotation)),
+		                              new Name("Top"), Point.Top));
+
+		addAnchor(new CircleQuarterAnchor(Anchor.Top, new Name("Top"),
+		                                  CircleQuarterAnchor.Quarter.North, _radius,
+		                                  _rotation, _centerPoint));
+
+		addAnchor(new CircleQuarterAnchor(Anchor.Right, new Name("Right"),
+		                                  CircleQuarterAnchor.Quarter.East, _radius,
+		                                  _rotation, _centerPoint));
+
+		addAnchor(new CircleQuarterAnchor(Anchor.Bottom, new Name("Bottom"),
+		                                  CircleQuarterAnchor.Quarter.South, _radius,
+		                                  _rotation, _centerPoint));
+
+		addAnchor(new CircleQuarterAnchor(Anchor.Left, new Name("Left"),
+		                                  CircleQuarterAnchor.Quarter.West, _radius,
+		                                  _rotation, _centerPoint));
+
+	}
+
+	@Override
+	public void initialize(final Runtime runtime, final double minX, final double minY,
+	                       final double maxX, final double maxY)
+	{
+		final double dx = maxX - minX;
+		final double dy = maxY - minY;
+
+		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
+		_radius.setForRuntime(runtime, Math.sqrt(dx * dx + dy * dy) / 2);
+		_rotation.setForRuntime(runtime, Math.atan2(-dy, -dx));
+	}
+
+	@Override
+	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double
+			target)
+	{
+		final double radius = _radius.getValueForRuntime(runtime);
+		final double cx = _centerPoint.getXValueForRuntime(runtime);
+		final double cy = _centerPoint.getYValueForRuntime(runtime);
+
+		_circle.setFrame(cx - radius, cy - radius, 2 * radius, 2 * radius);
+		target.append(_circle, false);
+	}
+
+	@Override
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape
+			coloredShape)
+	{
+		final DataSet dataSet = runtime.getDataSet();
+
+		coloredShape.setBackgroundColor(
+				_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
+		coloredShape.setStrokeColor(
+				_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
+		coloredShape.setStrokeWidth(
+				_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
+
+		appendToPathForRuntime(runtime, coloredShape.getPath());
+	}
+
+	@Override
+	public Rotator getRotator()
+	{
+		return _rotator;
+	}
+
+	@Override
+	public Scaler getScaler()
+	{
+		return _scaler;
+	}
+
+	@Override
+	public Translator getTranslator()
+	{
+		return _translator;
+	}
+
+	@Override
+	public Outline getOutline()
+	{
+		return _outline;
+	}
+
+	@Override
+	public AttributeSet getAttributes()
+	{
+		return _attributes;
+	}
+
+	public static CircleForm construct(final Identifier<CircleForm> id, final Name name)
+	{
+		return new CircleForm(id, name);
+	}
 
 	public enum Point implements ExposedPointToken<CircleForm>
 	{
@@ -85,129 +206,16 @@ public final class CircleForm extends BaseForm<CircleForm>
 		}
 	}
 
-	public static CircleForm construct(final Identifier<CircleForm> id, final Name name)
-	{
-		return new CircleForm(id, name);
-	}
-
-	private CircleForm(final Identifier<CircleForm> id, final Name name)
-	{
-		super(id, SIZE, name);
-		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(_radius, new ConstantLength(0)), _rotation)), new Name("Right"), Point
-				.Right));
-
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ConstantLength(0), _radius), _rotation)), new Name("Bottom"),
-		                              Point.Bottom));
-
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_radius, -1), new ConstantLength(0)), _rotation)),
-		                              new Name("Left"), Point.Left));
-
-		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_radius, -1)), _rotation)),
-		                              new Name("Top"), Point.Top));
-
-		addAnchor(new CircleQuarterAnchor(Anchor.Top, new Name("Top"), CircleQuarterAnchor.Quarter.North, _radius,
-		                                  _rotation, _centerPoint));
-
-		addAnchor(new CircleQuarterAnchor(Anchor.Right, new Name("Right"), CircleQuarterAnchor.Quarter.East, _radius,
-		                                  _rotation, _centerPoint));
-
-		addAnchor(new CircleQuarterAnchor(Anchor.Bottom, new Name("Bottom"), CircleQuarterAnchor.Quarter.South,
-		                                  _radius,
-		                                  _rotation, _centerPoint));
-
-		addAnchor(new CircleQuarterAnchor(Anchor.Left, new Name("Left"), CircleQuarterAnchor.Quarter.West, _radius,
-		                                  _rotation, _centerPoint));
-
-	}
-
-	@Override
-	public void initialize(final Runtime runtime, final double minX, final double minY, final double maxX, final
-	double maxY)
-	{
-		final double dx = maxX - minX;
-		final double dy = maxY - minY;
-
-		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
-		_radius.setForRuntime(runtime, Math.sqrt(dx * dx + dy * dy) / 2);
-		_rotation.setForRuntime(runtime, Math.atan2(-dy, -dx));
-	}
-
-	@Override
-	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double target)
-	{
-		final double radius = _radius.getValueForRuntime(runtime);
-		final double cx = _centerPoint.getXValueForRuntime(runtime);
-		final double cy = _centerPoint.getYValueForRuntime(runtime);
-
-		_circle.setFrame(cx - radius, cy - radius, 2 * radius, 2 * radius);
-		target.append(_circle, false);
-	}
-
-	@Override
-	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
-	{
-		final DataSet dataSet = runtime.getDataSet();
-
-		coloredShape.setBackgroundColor(_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
-		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
-		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
-
-		appendToPathForRuntime(runtime, coloredShape.getPath());
-	}
-
-	private final Ellipse2D.Double _circle = new Ellipse2D.Double();
-
-	@Override
-	public Rotator getRotator()
-	{
-		return _rotator;
-	}
-
-	@Override
-	public Scaler getScaler()
-	{
-		return _scaler;
-	}
-
-	@Override
-	public Translator getTranslator()
-	{
-		return _translator;
-	}
-
-	@Override
-	public Outline getOutline()
-	{
-		return _outline;
-	}
-
 	static class CircleQuarterAnchor extends BaseAnchor
 	{
-
-		enum Quarter
-		{
-			North(-Math.PI / 2), East(0), South(-3 * Math.PI / 2), West(Math.PI);
-
-			final double angle;
-
-			Quarter(final double angle)
-			{
-				this.angle = angle;
-			}
-		}
 
 		private final Quarter _quarter;
 		private final StaticLength _radius;
 		private final StaticAngle _angle;
 		private final ReferencePoint _center;
-
-		public CircleQuarterAnchor(final IdentityToken token, final Name name, final Quarter quarter, final
-		StaticLength radius, final StaticAngle angle, final ReferencePoint center)
+		public CircleQuarterAnchor(final IdentityToken token, final Name name, final
+		Quarter quarter, final StaticLength radius, final StaticAngle angle, final
+		ReferencePoint center)
 		{
 			super(token, name);
 			_quarter = quarter;
@@ -222,15 +230,18 @@ public final class CircleForm extends BaseForm<CircleForm>
 			final double oldAngle = _angle.getValueForRuntime(runtime);
 			final double oldRadius = _radius.getValueForRuntime(runtime);
 
-			final double oldDeltaX = Vector.getRotatedX(oldRadius, 0, oldAngle + _quarter.angle);
-			final double oldDeltaY = Vector.getRotatedY(oldRadius, 0, oldAngle + _quarter.angle);
+			final double oldDeltaX = Vector.getRotatedX(oldRadius, 0,
+			                                            oldAngle + _quarter.angle);
+			final double oldDeltaY = Vector.getRotatedY(oldRadius, 0,
+			                                            oldAngle + _quarter.angle);
 
 			final double newDeltaX = oldDeltaX + x;
 			final double newDeltaY = oldDeltaY + y;
 
 			final double newRadius = Vector.length(newDeltaX, newDeltaY);
 
-			final double newAngle = Vector.angleOf(newDeltaX, newDeltaY) - _quarter.angle;
+			final double newAngle = Vector.angleOf(newDeltaX, newDeltaY) - _quarter
+					.angle;
 
 			_radius.setForRuntime(runtime, newRadius);
 			_angle.setForRuntime(runtime, newAngle);
@@ -258,12 +269,18 @@ public final class CircleForm extends BaseForm<CircleForm>
 			return _center.getYValueForRuntime(runtime) + deltaY;
 		}
 
-	}
+		enum Quarter
+		{
+			North(-Math.PI / 2), East(0), South(-3 * Math.PI / 2), West(Math.PI);
 
-	@Override
-	public AttributeSet getAttributes()
-	{
-		return _attributes;
+			final double angle;
+
+			Quarter(final double angle)
+			{
+				this.angle = angle;
+			}
+		}
+
 	}
 
 }

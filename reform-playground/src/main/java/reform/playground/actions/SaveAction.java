@@ -23,8 +23,8 @@ public class SaveAction extends AbstractAction
 	private final SaveAsAction _saveAs;
 	private final IdentifierEmitter _idEmitter;
 
-	public SaveAction(final Project project, final File file, final IdentifierEmitter idEmitter, final SaveAsAction
-			saveAsAction)
+	public SaveAction(final Project project, final File file, final IdentifierEmitter
+			idEmitter, final SaveAsAction saveAsAction)
 	{
 		_project = project;
 		_file = file;
@@ -32,8 +32,9 @@ public class SaveAction extends AbstractAction
 		_saveAs = saveAsAction;
 
 		putValue(NAME, "Save");
-		putValue(Action.ACCELERATOR_KEY,
-		         KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('S',
+		                                                        Toolkit
+				                                                        .getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 	@Override
@@ -59,8 +60,8 @@ public class SaveAction extends AbstractAction
 				JOptionPane.showMessageDialog(null, "Error: File not found");
 			} catch (final SerializationError e)
 			{
-				JOptionPane.showMessageDialog(null,
-				                              String.format("Error while serializing Project. (%s)", e.getMessage()));
+				JOptionPane.showMessageDialog(null, String.format(
+						"Error while serializing Project. (%s)", e.getMessage()));
 				e.printStackTrace();
 			} catch (final Exception e)
 			{

@@ -13,7 +13,8 @@ public class OffsetCenterPoint implements ReferencePoint
 	private final ReferencePoint _refB;
 	private final Length _offset;
 
-	public OffsetCenterPoint(final ReferencePoint refA, final ReferencePoint refB, final Length offset)
+	public OffsetCenterPoint(final ReferencePoint refA, final ReferencePoint refB, final
+	Length offset)
 	{
 		_refA = refA;
 		_refB = refB;
@@ -71,7 +72,8 @@ public class OffsetCenterPoint implements ReferencePoint
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return "center of " + _refA.getDescription(analyzer) + " and " + _refB.getDescription(analyzer);
+		return "center of " + _refA.getDescription(
+				analyzer) + " and " + _refB.getDescription(analyzer);
 	}
 
 	@Override

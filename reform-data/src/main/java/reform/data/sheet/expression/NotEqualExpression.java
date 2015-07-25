@@ -28,6 +28,7 @@ public final class NotEqualExpression extends BinaryExpressionBase implements Ex
 	@Override
 	public Value getValueFor(final DataSet set)
 	{
-		return Calculator.logicNegate(Calculator.strictEqual(_lhs.getValueFor(set), _rhs.getValueFor(set)));
+		return Calculator.logicNegate(
+				Calculator.strictEqual(_lhs.getValueFor(set), _rhs.getValueFor(set)));
 	}
 }

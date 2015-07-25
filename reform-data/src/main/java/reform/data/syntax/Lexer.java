@@ -86,16 +86,13 @@ public class Lexer
 
 		private final Lexer _lexer;
 		private final CharSequence _input;
-		private int _currentPos = 0;
-
 		int _index = 1;
 		int _line = 1;
 		int _column = 1;
-
 		char _accFirst;
 		final StringBuffer _accumulator;
 		final Queue<Character> _inputQueue;
-
+		private int _currentPos = 0;
 		private boolean _hasNext = true;
 
 		TokenIterator(final Lexer lexer, final CharSequence input)
@@ -155,8 +152,8 @@ public class Lexer
 						final Rule rule = this._lexer._rules.get(i);
 						final int prio = j - rule._inversePriority;
 
-						if (prio >= currentPrio && rule.matches(this._accumulator.toString() + this._inputQueue.peek
-								()))
+						if (prio >= currentPrio && rule.matches(
+								this._accumulator.toString() + this._inputQueue.peek()))
 						{
 							currentRule = rule;
 							currentPrio = prio;
@@ -179,8 +176,10 @@ public class Lexer
 
 			if (currentRule != null)
 			{
-				final Position sourcePos = new Position(_index, currentLine, currentColumn);
-				final Token current = new Token(currentRule.type, this._accumulator.toString(), sourcePos);
+				final Position sourcePos = new Position(_index, currentLine,
+				                                        currentColumn);
+				final Token current = new Token(currentRule.type,
+				                                this._accumulator.toString(), sourcePos);
 				this._index += this._accumulator.length();
 				this._accumulator.setLength(0);
 
@@ -190,11 +189,13 @@ public class Lexer
 			if (_accumulator.length() != 0)
 			{
 				_hasNext = false;
-				throw new LexingException(_accFirst, new Position(_index, currentLine, currentColumn));
+				throw new LexingException(_accFirst, new Position(_index, currentLine,
+				                                                  currentColumn));
 			}
 
 			_hasNext = false;
-			return new Token(Token.Type.EOF, "", new Position(_index, currentLine, currentColumn));
+			return new Token(Token.Type.EOF, "",
+			                 new Position(_index, currentLine, currentColumn));
 		}
 
 		void _consume()

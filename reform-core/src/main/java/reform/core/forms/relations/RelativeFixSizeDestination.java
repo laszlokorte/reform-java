@@ -58,10 +58,29 @@ public class RelativeFixSizeDestination implements InitialDestination
 	}
 
 	@Override
+	public Alignment getAlignment()
+	{
+		return _alignment;
+	}
+
+	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return (_alignment == Alignment.Leading ? "from " : "around ") + _ref.getDescription(analyzer) + " " +
+		return (_alignment == Alignment.Leading ? "from " : "around ") + _ref
+				.getDescription(analyzer) + " " +
 				deltaAsString();
+	}
+
+	@Override
+	public boolean isDegenerated()
+	{
+		return _delta.x == 0 && _delta.y == 0;
+	}
+
+	@Override
+	public void setAlignment(final Alignment alignment)
+	{
+		_alignment = alignment;
 	}
 
 	private String deltaAsString()
@@ -76,7 +95,8 @@ public class RelativeFixSizeDestination implements InitialDestination
 		}
 		else
 		{
-			return String.format("%.1f Horizontally, %.1f Vertically", _delta.x, _delta.y);
+			return String.format("%.1f Horizontally, %.1f Vertically", _delta.x,
+			                     _delta.y);
 		}
 	}
 
@@ -84,12 +104,6 @@ public class RelativeFixSizeDestination implements InitialDestination
 	public boolean isValidFor(final Runtime runtime)
 	{
 		return _ref.isValidFor(runtime);
-	}
-
-	@Override
-	public Alignment getAlignment()
-	{
-		return _alignment;
 	}
 
 	public ReferencePoint getReference()
@@ -100,18 +114,6 @@ public class RelativeFixSizeDestination implements InitialDestination
 	public Vec2 getDelta()
 	{
 		return _delta;
-	}
-
-	@Override
-	public boolean isDegenerated()
-	{
-		return _delta.x == 0 && _delta.y == 0;
-	}
-
-	@Override
-	public void setAlignment(final Alignment alignment)
-	{
-		_alignment = alignment;
 	}
 
 	public void setDelta(final Vec2 delta)

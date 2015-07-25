@@ -38,50 +38,42 @@ public final class Paper implements Form
 
 	private final AttributeSet _attributes = new AttributeSet();
 
-	public enum Point implements ExposedPointToken<Paper>
-	{
-		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(5), Right(6), Bottom(7), Left(8);
-
-		private final int _v;
-
-		Point(final int i)
-		{
-			_v = i;
-		}
-
-		@Override
-		public int getValue()
-		{
-			return _v;
-		}
-	}
-
 	public Paper()
 	{
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
-		                                 new Name("Top Left"), Point.TopLeft));
-		_snapPoints.add(
-				new ExposedPoint(new ComposedCartesianPoint(_width, new ConstantLength(0)), new Name("Top " + "Right"),
-				                 Point.TopRight));
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, _height), new Name("Bottom Right"),
-		                                 Point.BottomRight));
-		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), _height),
-		                                 new Name("Bottom" + " " + "" + "Left"), Point.BottomLeft));
 		_snapPoints.add(new ExposedPoint(
-				new CenterPoint(new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
-				                new ComposedCartesianPoint(_width, _height)), new Name("Center"), Point.Center));
-		_snapPoints.add(
-				new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), new ConstantLength(0)),
-				                 new Name("Top"), Point.Top));
-		_snapPoints.add(
-				new ExposedPoint(new ComposedCartesianPoint(new ConstantLength(0), new ScaledLength(_height, 0.5)),
-				                 new Name("Right"), Point.Right));
-		_snapPoints.add(
-				new ExposedPoint(new ComposedCartesianPoint(new ScaledLength(_width, 0.5), _height), new Name
-						("Bottom"), Point.Bottom));
-		_snapPoints.add(
-				new ExposedPoint(new ComposedCartesianPoint(_width, new ScaledLength(_height, 0.5)), new Name("Left"),
-				                 Point.Left));
+				new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
+				new Name("Top Left"), Point.TopLeft));
+		_snapPoints.add(new ExposedPoint(
+				                new ComposedCartesianPoint(_width, new ConstantLength
+						                (0)), new Name("Top " + "Right"), Point.TopRight));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width, _height),
+		                                 new Name("Bottom Right"), Point.BottomRight));
+		_snapPoints.add(new ExposedPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), _height),
+				new Name("Bottom" + " " + "" + "Left"), Point.BottomLeft));
+		_snapPoints.add(new ExposedPoint(new CenterPoint(
+				new ComposedCartesianPoint(new ConstantLength(0), new ConstantLength(0)),
+				new ComposedCartesianPoint(_width, _height)), new Name("Center"),
+		                                 Point.Center));
+		_snapPoints.add(new ExposedPoint(
+				                new ComposedCartesianPoint(new ScaledLength(_width, 0.5),
+				                                           new ConstantLength(0)),
+				                new Name("Top"), Point.Top));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(new ConstantLength
+				                                                            (0),
+		                                                            new ScaledLength(
+				                                                            _height,
+				                                                            0.5)),
+		                                 new Name("Right"), Point.Right));
+		_snapPoints.add(new ExposedPoint(
+				                new ComposedCartesianPoint(new ScaledLength(_width, 0.5),
+				                                           _height), new Name("Bottom"),
+				                Point.Bottom));
+		_snapPoints.add(new ExposedPoint(new ComposedCartesianPoint(_width,
+		                                                            new ScaledLength(
+				                                                            _height,
+				                                                            0.5)),
+		                                 new Name("Left"), Point.Left));
 	}
 
 	@Override
@@ -97,35 +89,36 @@ public final class Paper implements Form
 	}
 
 	@Override
-	public void initialize(final Runtime runtime, final double minX, final double minY, final double maxX, final
-	double maxY)
+	public void initialize(final Runtime runtime, final double minX, final double minY,
+	                       final double maxX, final double maxY)
 	{
 		_width.setForRuntime(runtime, maxX - minX);
 		_height.setForRuntime(runtime, maxY - minY);
 	}
 
 	@Override
-	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double reuse)
+	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double
+			reuse)
 	{
 	}
 
-
 	@Override
-	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
+	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape
+			coloredShape)
 	{
 		appendToPathForRuntime(runtime, coloredShape.getPath());
+	}
+
+	@Override
+	public Iterable<Identifier<? extends ExposedPoint>> getPoints()
+	{
+		return _snapPoints;
 	}
 
 	@Override
 	public ReferencePoint getPoint(final Identifier<? extends ExposedPoint> pointId)
 	{
 		return _snapPoints.getById(pointId);
-	}
-
-	@Override
-	public Name getName()
-	{
-		return _name;
 	}
 
 	@Override
@@ -150,15 +143,15 @@ public final class Paper implements Form
 	}
 
 	@Override
-	public Iterable<Identifier<? extends ExposedPoint>> getPoints()
-	{
-		return _snapPoints;
-	}
-
-	@Override
 	public DrawingType getType()
 	{
 		return DrawingType.None;
+	}
+
+	@Override
+	public void setType(final DrawingType draw)
+	{
+		throw new Error("Can not set drawing type of paper");
 	}
 
 	@Override
@@ -180,15 +173,34 @@ public final class Paper implements Form
 	}
 
 	@Override
-	public void setType(final DrawingType draw)
-	{
-		throw new Error("Can not set drawing type of paper");
-	}
-
-	@Override
 	public AttributeSet getAttributes()
 	{
 		return _attributes;
+	}
+
+	@Override
+	public Name getName()
+	{
+		return _name;
+	}
+
+	public enum Point implements ExposedPointToken<Paper>
+	{
+		Center(0), TopRight(1), BottomRight(2), TopLeft(3), BottomLeft(4), Top(5), Right(
+			6), Bottom(7), Left(8);
+
+		private final int _v;
+
+		Point(final int i)
+		{
+			_v = i;
+		}
+
+		@Override
+		public int getValue()
+		{
+			return _v;
+		}
 	}
 
 

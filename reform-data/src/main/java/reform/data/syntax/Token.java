@@ -5,18 +5,9 @@ import java.util.Objects;
 
 public class Token
 {
-	public enum Type
-	{
-		LiteralValue,
-		ArgumentSeparator,
-		Identifier, ParenthesisLeft, ParenthesisRight, Operator,
-		EOF, Ignore, FunctionName
-	}
-
 	public final Type type;
 	public final CharSequence value;
 	public final Position position;
-
 	public Token(final Type type, final CharSequence value, final Position position)
 	{
 		this.type = type;
@@ -46,11 +37,20 @@ public class Token
 
 		final Token other = (Token) obj;
 
-		return other.type.equals(type) && other.value.equals(value) && other.position.equals(position);
+		return other.type.equals(type) && other.value.equals(
+				value) && other.position.equals(position);
 	}
 
 	public String toString()
 	{
 		return String.format("%s: %s %s", type.name(), value, position);
+	}
+
+	public enum Type
+	{
+		LiteralValue,
+		ArgumentSeparator,
+		Identifier, ParenthesisLeft, ParenthesisRight, Operator,
+		EOF, Ignore, FunctionName
 	}
 }

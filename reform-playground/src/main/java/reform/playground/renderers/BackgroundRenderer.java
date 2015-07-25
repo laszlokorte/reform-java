@@ -10,11 +10,11 @@ public class BackgroundRenderer implements CanvasRenderer
 
 	private final Color _colorLight;
 	private final Color _colorDark;
-
-	private boolean _isPreview = false;
 	private final ToolState _toolState;
+	private boolean _isPreview = false;
 
-	public BackgroundRenderer(final ToolState toolState, final Color colorLight, final Color colorDark)
+	public BackgroundRenderer(final ToolState toolState, final Color colorLight, final
+	Color colorDark)
 	{
 		_colorLight = colorLight;
 		_colorDark = colorDark;

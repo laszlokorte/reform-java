@@ -13,21 +13,16 @@ public abstract class EventedSheetBase implements EventedSheet
 
 	final EventedPicture _evtPicture;
 
-	abstract Sheet getSheet();
-
 	public EventedSheetBase(final EventedPicture evtPicture)
 	{
 		_evtPicture = evtPicture;
 	}
 
+	abstract Sheet getSheet();
+
 	public int size()
 	{
 		return getSheet().size();
-	}
-
-	public void addListener(final Listener listener)
-	{
-		_listeners.add(listener);
 	}
 
 	public void removeListener(final Listener listener)
@@ -35,6 +30,10 @@ public abstract class EventedSheetBase implements EventedSheet
 		_listeners.remove(listener);
 	}
 
+	public void addListener(final Listener listener)
+	{
+		_listeners.add(listener);
+	}
 
 	public String getName(final int index)
 	{

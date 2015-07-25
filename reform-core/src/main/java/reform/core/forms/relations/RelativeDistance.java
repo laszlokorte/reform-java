@@ -22,8 +22,10 @@ public class RelativeDistance implements TranslationDistance
 	@Override
 	public double getXValueForRuntime(final Runtime runtime)
 	{
-		final double deltaX = _refB.getXValueForRuntime(runtime) - _refA.getXValueForRuntime(runtime);
-		final double deltaY = _refB.getYValueForRuntime(runtime) - _refA.getYValueForRuntime(runtime);
+		final double deltaX = _refB.getXValueForRuntime(
+				runtime) - _refA.getXValueForRuntime(runtime);
+		final double deltaY = _refB.getYValueForRuntime(
+				runtime) - _refA.getYValueForRuntime(runtime);
 
 		return _direction.getAdjustedXForRuntime(runtime, 0, 0, deltaX, deltaY);
 	}
@@ -31,8 +33,10 @@ public class RelativeDistance implements TranslationDistance
 	@Override
 	public double getYValueForRuntime(final Runtime runtime)
 	{
-		final double deltaX = _refB.getXValueForRuntime(runtime) - _refA.getXValueForRuntime(runtime);
-		final double deltaY = _refB.getYValueForRuntime(runtime) - _refA.getYValueForRuntime(runtime);
+		final double deltaX = _refB.getXValueForRuntime(
+				runtime) - _refA.getXValueForRuntime(runtime);
+		final double deltaY = _refB.getYValueForRuntime(
+				runtime) - _refA.getYValueForRuntime(runtime);
 
 		return _direction.getAdjustedYForRuntime(runtime, 0, 0, deltaX, deltaY);
 	}
@@ -40,8 +44,14 @@ public class RelativeDistance implements TranslationDistance
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return getDirectionString() + " so " + _refA.getDescription(analyzer) + " matches " + _refB.getDescription(
-				analyzer);
+		return getDirectionString() + " so " + _refA.getDescription(
+				analyzer) + " matches " + _refB.getDescription(analyzer);
+	}
+
+	@Override
+	public boolean isDegenerated()
+	{
+		return _refA.equals(_refB);
 	}
 
 	private String getDirectionString()
@@ -75,6 +85,11 @@ public class RelativeDistance implements TranslationDistance
 		return _direction;
 	}
 
+	public void setDirection(final Direction direction)
+	{
+		_direction = direction;
+	}
+
 	public ReferencePoint getReferenceA()
 	{
 		return _refA;
@@ -83,17 +98,6 @@ public class RelativeDistance implements TranslationDistance
 	public ReferencePoint getReferenceB()
 	{
 		return _refB;
-	}
-
-	@Override
-	public boolean isDegenerated()
-	{
-		return _refA.equals(_refB);
-	}
-
-	public void setDirection(final Direction direction)
-	{
-		_direction = direction;
 	}
 
 	public void setReferenceB(final ReferencePoint refB)

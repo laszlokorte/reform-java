@@ -22,7 +22,8 @@ public class ControlCache
 		_cold.clear();
 	}
 
-	public InstructionControl fetch(final Evaluable instruction, final ControlFactory factory)
+	public InstructionControl fetch(final Evaluable instruction, final ControlFactory
+			factory)
 	{
 		if (_cache.containsKey(instruction))
 		{

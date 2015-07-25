@@ -26,12 +26,20 @@ public class SheetIdTextField extends JTextField
 		return new LimitDocument();
 	}
 
+	@Override
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean
+			pressed)
+	{
+		super.processKeyBinding(ks, e, condition, pressed);
+		return true;
+	}
+
 	private class LimitDocument extends PlainDocument
 	{
 
 		@Override
-		public void insertString(final int offset, final String str, final AttributeSet attr) throws
-				BadLocationException
+		public void insertString(final int offset, final String str, final AttributeSet
+				attr) throws BadLocationException
 		{
 			if (str == null)
 			{
@@ -46,12 +54,5 @@ public class SheetIdTextField extends JTextField
 			}
 		}
 
-	}
-
-	@Override
-	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed)
-	{
-		super.processKeyBinding(ks, e, condition, pressed);
-		return true;
 	}
 }

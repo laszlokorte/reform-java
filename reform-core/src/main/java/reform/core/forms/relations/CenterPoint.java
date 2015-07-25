@@ -19,20 +19,23 @@ public class CenterPoint implements ReferencePoint
 	@Override
 	public double getXValueForRuntime(final Runtime runtime)
 	{
-		return (_refA.getXValueForRuntime(runtime) + _refB.getXValueForRuntime(runtime)) / 2;
+		return (_refA.getXValueForRuntime(runtime) + _refB.getXValueForRuntime(
+				runtime)) / 2;
 	}
 
 	@Override
 	public double getYValueForRuntime(final Runtime runtime)
 	{
-		return (_refA.getYValueForRuntime(runtime) + _refB.getYValueForRuntime(runtime)) / 2;
+		return (_refA.getYValueForRuntime(runtime) + _refB.getYValueForRuntime(
+				runtime)) / 2;
 
 	}
 
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return "center of " + _refA.getDescription(analyzer) + " and " + _refB.getDescription(analyzer);
+		return "center of " + _refA.getDescription(
+				analyzer) + " and " + _refB.getDescription(analyzer);
 	}
 
 	@Override

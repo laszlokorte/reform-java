@@ -9,14 +9,8 @@ import java.util.ArrayList;
 public class EventedCommander
 {
 
-	public interface Listener
-	{
-		void onCommand(EventedCommander commander);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private final Commander _commander;
-
 	public EventedCommander(final Commander commander)
 	{
 		_commander = commander;
@@ -80,5 +74,10 @@ public class EventedCommander
 	public void removeListener(final Listener listener)
 	{
 		_listeners.remove(listener);
+	}
+
+	public interface Listener
+	{
+		void onCommand(EventedCommander commander);
 	}
 }

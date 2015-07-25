@@ -14,7 +14,8 @@ public class SelectToolAction extends AbstractAction implements ToolControllerLi
 	private final ToolController _toolController;
 	private final Tool _tool;
 
-	public SelectToolAction(final ToolController toolController, final Tool tool, final String name)
+	public SelectToolAction(final ToolController toolController, final Tool tool, final
+	String name)
 	{
 		_toolController = toolController;
 		_tool = tool;

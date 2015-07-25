@@ -12,16 +12,11 @@ import reform.naming.Name;
 public class ExposedPoint implements ReferencePoint, Identifiable<ExposedPoint>
 {
 
-	public interface ExposedPointToken<T> extends IdentityToken
-	{
-
-	}
-
 	private final Identifier<ExposedPoint> _id;
 	private final ReferencePoint _point;
 	private final Name _name;
-
-	public ExposedPoint(final ReferencePoint point, final Name name, final ExposedPointToken<? extends Form> id)
+	public ExposedPoint(final ReferencePoint point, final Name name, final
+	ExposedPointToken<? extends Form> id)
 	{
 		_point = point;
 		_name = name;
@@ -41,20 +36,25 @@ public class ExposedPoint implements ReferencePoint, Identifiable<ExposedPoint>
 	}
 
 	@Override
-	public Identifier<? extends ExposedPoint> getId()
-	{
-		return _id;
-	}
-
-	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
 		return _name.getValue();
 	}
 
 	@Override
+	public Identifier<? extends ExposedPoint> getId()
+	{
+		return _id;
+	}
+
+	@Override
 	public boolean isValidFor(final Runtime runtime)
 	{
 		return _point.isValidFor(runtime);
+	}
+
+	public interface ExposedPointToken<T> extends IdentityToken
+	{
+
 	}
 }

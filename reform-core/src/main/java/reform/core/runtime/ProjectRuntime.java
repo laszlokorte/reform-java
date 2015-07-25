@@ -14,26 +14,12 @@ import java.util.ArrayList;
 
 public class ProjectRuntime implements Runtime
 {
-	public interface Listener
-	{
-		void onBeginEvaluation(ProjectRuntime runtime);
-
-		void onFinishEvaluation(ProjectRuntime runtime);
-
-		void onEvalInstruction(ProjectRuntime runtime, Evaluable instruction);
-
-		void onPopScope(ProjectRuntime runtime, FastIterable<Identifier<? extends Form>> ids);
-
-		void onError(ProjectRuntime runtime, Evaluable instruction, RuntimeError error);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private final Project _project;
 	private final Vec2i _size = new Vec2i();
 	private final DataSet _dataSet;
 	private final Stack _stack = new Stack();
 	private boolean _stopped = false;
-
 	public ProjectRuntime(final Project project, final Vec2i size, final DataSet dataSet)
 	{
 		_project = project;
@@ -138,9 +124,16 @@ public class ProjectRuntime implements Runtime
 	}
 
 	@Override
-	public void set(final Identifier<? extends Form> id, final int offset, final long value)
+	public void set(final Identifier<? extends Form> id, final int offset, final long
+			value)
 	{
 		_stack.setData(id, offset, value);
+	}
+
+	@Override
+	public FastIterable<Identifier<? extends Form>> getStackIterator()
+	{
+		return _stack;
 	}
 
 	@Override
@@ -164,13 +157,25 @@ public class ProjectRuntime implements Runtime
 	@Override
 	public Runtime getSubroutine(final Identifier<? extends Picture> id)
 	{
-		return new ProjectRuntime(_project, _project.getPicture(id).getSize(), new DataSet());
+		return new ProjectRuntime(_project, _project.getPicture(id).getSize(),
+		                          new DataSet());
 	}
 
 	@Override
 	public DataSet getDataSet()
 	{
 		return _dataSet;
+	}
+
+	@Override
+	public Vec2i getSize()
+	{
+		return _size;
+	}
+
+	public void setSize(final Vec2i size)
+	{
+		_size.set(size);
 	}
 
 	public void addListener(final Listener listener)
@@ -183,28 +188,25 @@ public class ProjectRuntime implements Runtime
 		_listeners.remove(listener);
 	}
 
-	@Override
-	public Vec2i getSize()
-	{
-		return _size;
-	}
-
-	@Override
-	public FastIterable<Identifier<? extends Form>> getStackIterator()
-	{
-		return _stack;
-	}
-
-	public void setSize(final Vec2i size)
-	{
-		_size.set(size);
-	}
-
 	public void stop()
 	{
 		synchronized (_listeners)
 		{
 			_stopped = true;
 		}
+	}
+
+	public interface Listener
+	{
+		void onBeginEvaluation(ProjectRuntime runtime);
+
+		void onFinishEvaluation(ProjectRuntime runtime);
+
+		void onEvalInstruction(ProjectRuntime runtime, Evaluable instruction);
+
+		void onPopScope(ProjectRuntime runtime, FastIterable<Identifier<? extends Form>>
+				ids);
+
+		void onError(ProjectRuntime runtime, Evaluable instruction, RuntimeError error);
 	}
 }

@@ -22,7 +22,8 @@ public class RotatedPoint implements ReferencePoint
 	public double getXValueForRuntime(final Runtime runtime)
 	{
 		final double angle = _angle.getValueForRuntime(runtime);
-		return Vector.getRotatedX(_point.getXValueForRuntime(runtime), _point.getYValueForRuntime(runtime), angle);
+		return Vector.getRotatedX(_point.getXValueForRuntime(runtime),
+		                          _point.getYValueForRuntime(runtime), angle);
 
 	}
 
@@ -30,7 +31,8 @@ public class RotatedPoint implements ReferencePoint
 	public double getYValueForRuntime(final Runtime runtime)
 	{
 		final double angle = _angle.getValueForRuntime(runtime);
-		return Vector.getRotatedY(_point.getXValueForRuntime(runtime), _point.getYValueForRuntime(runtime), angle);
+		return Vector.getRotatedY(_point.getXValueForRuntime(runtime),
+		                          _point.getYValueForRuntime(runtime), angle);
 	}
 
 	@Override

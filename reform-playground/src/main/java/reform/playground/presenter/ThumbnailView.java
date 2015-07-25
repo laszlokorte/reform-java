@@ -10,43 +10,20 @@ import java.util.List;
 
 class ThumbnailView extends JComponent
 {
-	public interface Adapter
-	{
-
-		int getCount();
-
-		int getWidth(int i);
-
-		int getHeight(int i);
-
-		boolean isSelected(int i);
-
-		void draw(Graphics2D g2, int i);
-
-		void onClickAtIndex(int clicked);
-
-		void onDoubleClick();
-
-		void onDoubleClickAtIndex(int clicked);
-
-	}
-
 	private static final long serialVersionUID = 1L;
-
 	private final HashMap<RenderingHints.Key, Object> _renderOptions = new HashMap<>();
-
 	private final List<Integer> _rowOffsets = new ArrayList<>();
-
 	private final Adapter _adapter;
-
 	private final Color _selectionColor = new Color(0x23A9E5);
 
 	public ThumbnailView(final Adapter adapter)
 	{
 		_adapter = adapter;
 
-		_renderOptions.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+		_renderOptions.put(RenderingHints.KEY_ANTIALIASING,
+		                   RenderingHints.VALUE_ANTIALIAS_ON);
+		_renderOptions.put(RenderingHints.KEY_STROKE_CONTROL,
+		                   RenderingHints.VALUE_STROKE_NORMALIZE);
 
 		setPreferredSize(new Dimension(100, 100));
 		setOpaque(false);
@@ -80,7 +57,8 @@ class ThumbnailView extends JComponent
 
 			final int picWidth = _adapter.getWidth(i);
 			final int picHeight = _adapter.getHeight(i);
-			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
+			final double scale = Math.min(1.0 * maxWidth / picWidth,
+			                              1.0 * maxHeight / picHeight);
 			final int w = (int) Math.round(scale * picWidth);
 			final int h = (int) Math.round(scale * picHeight);
 
@@ -118,14 +96,6 @@ class ThumbnailView extends JComponent
 		g2.dispose();
 	}
 
-	public void update()
-	{
-
-		doLayout();
-		revalidate();
-		repaint();
-	}
-
 	@Override
 	public Dimension getPreferredSize()
 	{
@@ -138,7 +108,8 @@ class ThumbnailView extends JComponent
 		{
 			final int picWidth = _adapter.getWidth(i);
 			final int picHeight = _adapter.getHeight(i);
-			final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
+			final double scale = Math.min(1.0 * maxWidth / picWidth,
+			                              1.0 * maxHeight / picHeight);
 			final int w = (int) Math.round(scale * picWidth);
 
 			totalWidth += 10 + w;
@@ -173,10 +144,13 @@ class ThumbnailView extends JComponent
 
 					final int picWidth = _adapter.getWidth(clicked);
 					final int picHeight = _adapter.getHeight(clicked);
-					final double scale = Math.min(1.0 * maxWidth / picWidth, 1.0 * maxHeight / picHeight);
+					final double scale = Math.min(1.0 * maxWidth / picWidth,
+					                              1.0 * maxHeight / picHeight);
 					final int width = (int) Math.round(scale * picWidth);
 
-					scrollRectToVisible(new Rectangle(_rowOffsets.get(clicked) - 10, 0, width + 20, getHeight()));
+					scrollRectToVisible(
+							new Rectangle(_rowOffsets.get(clicked) - 10, 0, width + 20,
+							              getHeight()));
 					_adapter.onClickAtIndex(clicked);
 				}
 				else if (clicked > -2)
@@ -184,11 +158,20 @@ class ThumbnailView extends JComponent
 					_adapter.onDoubleClick();
 
 					doLayout();
-					scrollRectToVisible(new Rectangle(getWidth() + 100, 0, 120, getHeight()));
+					scrollRectToVisible(
+							new Rectangle(getWidth() + 100, 0, 120, getHeight()));
 				}
 			}
 			repaint();
 		}
+	}
+
+	public void update()
+	{
+
+		doLayout();
+		revalidate();
+		repaint();
 	}
 
 	private int indexAt(final int x)
@@ -223,5 +206,26 @@ class ThumbnailView extends JComponent
 		}
 
 		return result;
+	}
+
+	public interface Adapter
+	{
+
+		int getCount();
+
+		int getWidth(int i);
+
+		int getHeight(int i);
+
+		boolean isSelected(int i);
+
+		void draw(Graphics2D g2, int i);
+
+		void onClickAtIndex(int clicked);
+
+		void onDoubleClick();
+
+		void onDoubleClickAtIndex(int clicked);
+
 	}
 }

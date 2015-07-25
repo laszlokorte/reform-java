@@ -10,17 +10,7 @@ import java.util.ArrayList;
 public class EventedProject
 {
 
-	public interface Listener
-	{
-		void onPictureAdded(EventedProject project, Identifier<? extends Picture> pictureId);
-
-		void onPictureRemoved(EventedProject project, Identifier<? extends Picture> pictureId);
-
-		void onPictureChanged(EventedProject project, Identifier<? extends Picture> pictureId);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
-
 	private final Project _project;
 
 	public EventedProject(final Project project)
@@ -51,7 +41,8 @@ public class EventedProject
 		return _project.getPictures();
 	}
 
-	public EventedPicture getEventedPicture(final Identifier<? extends Picture> pictureId)
+	public EventedPicture getEventedPicture(final Identifier<? extends Picture>
+			                                        pictureId)
 	{
 		return new EventedPicture(this, pictureId);
 	}
@@ -97,5 +88,17 @@ public class EventedProject
 	public int getPictureCount()
 	{
 		return _project.getPictureCount();
+	}
+
+	public interface Listener
+	{
+		void onPictureAdded(EventedProject project, Identifier<? extends Picture>
+				pictureId);
+
+		void onPictureRemoved(EventedProject project, Identifier<? extends Picture>
+				pictureId);
+
+		void onPictureChanged(EventedProject project, Identifier<? extends Picture>
+				pictureId);
 	}
 }

@@ -17,12 +17,11 @@ public class HueColorTrack extends JComponent
 	private static final Color C5 = new Color(0, 0, 255);
 	private static final Color C6 = new Color(255, 0, 255);
 
-	private final float[] gradientPositions = {0f, 1f / 6, 2f / 6, 3f / 6, 4f / 6, 5f / 6, 1f};
+	private final float[] gradientPositions = {0f, 1f / 6, 2f / 6, 3f / 6, 4f / 6, 5f /
+			6, 1f};
 	private final Color[] gradientColors = {C1, C2, C3, C4, C5, C6, C1};
 
 	private final ColorModel _model;
-	private LinearGradientPaint _linGrad;
-
 	private final MouseAdapter _listener = new MouseAdapter()
 	{
 
@@ -34,7 +33,8 @@ public class HueColorTrack extends JComponent
 			requestFocus();
 			final double h = 1.0 * e.getY() / (getHeight() - 4);
 
-			_model.setHSVA(Math.min(1, Math.max(0, h)), _model.getSaturation(), _model.getValue(), _model.getAlpha());
+			_model.setHSVA(Math.min(1, Math.max(0, h)), _model.getSaturation(),
+			               _model.getValue(), _model.getAlpha());
 		}
 
 		@Override
@@ -43,9 +43,11 @@ public class HueColorTrack extends JComponent
 			super.mousePressed(e);
 			final double h = 1.0 * e.getY() / (getHeight() - 4);
 
-			_model.setHSVA(Math.min(1, Math.max(0, h)), _model.getSaturation(), _model.getValue(), _model.getAlpha());
+			_model.setHSVA(Math.min(1, Math.max(0, h)), _model.getSaturation(),
+			               _model.getValue(), _model.getAlpha());
 		}
 	};
+	private LinearGradientPaint _linGrad;
 
 	public HueColorTrack(final ColorModel model)
 	{
@@ -55,7 +57,8 @@ public class HueColorTrack extends JComponent
 		{
 			public void componentResized(final ComponentEvent e)
 			{
-				_linGrad = new LinearGradientPaint(0, 0, 0, getHeight(), gradientPositions, gradientColors);
+				_linGrad = new LinearGradientPaint(0, 0, 0, getHeight(),
+				                                   gradientPositions, gradientColors);
 			}
 		});
 
@@ -83,8 +86,10 @@ public class HueColorTrack extends JComponent
 		g.fillRect(0, 0, width, height);
 
 		g.setColor(Color.WHITE);
-		g.fillRoundRect(3, 4 + (int) ((height - 11) * _model.getHue()), width - 6, 3, 2, 2);
+		g.fillRoundRect(3, 4 + (int) ((height - 11) * _model.getHue()), width - 6, 3, 2,
+		                2);
 		g.setColor(Color.BLACK);
-		g.drawRoundRect(3, 4 + (int) ((height - 11) * _model.getHue()), width - 6, 3, 2, 2);
+		g.drawRoundRect(3, 4 + (int) ((height - 11) * _model.getHue()), width - 6, 3, 2,
+		                2);
 	}
 }

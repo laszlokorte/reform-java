@@ -8,9 +8,11 @@ import reform.stage.elements.SnapPoint;
 
 public class IntersectionSnapPointPool
 {
-	private final Pool<IntersectionSnapPoint> _pool = new SimplePool<>(IntersectionSnapPoint::new);
+	private final Pool<IntersectionSnapPoint> _pool = new SimplePool<>(
+			IntersectionSnapPoint::new);
 
-	public IntersectionSnapPoint create(final Entity entityA, final Entity entityB, final int index, final Vec2 pos)
+	public IntersectionSnapPoint create(final Entity entityA, final Entity entityB,
+	                                    final int index, final Vec2 pos)
 	{
 
 		final IntersectionSnapPoint p = _pool.take();

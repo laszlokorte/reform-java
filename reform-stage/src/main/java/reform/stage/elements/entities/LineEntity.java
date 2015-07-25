@@ -53,8 +53,10 @@ public class LineEntity implements Entity
 		_points.add(_end);
 		_points.add(_center);
 
-		_startHandle = new Handle(formId, LineForm.Point.Start, LineForm.Anchor.Start, new PivotPair(_end, _center));
-		_endHandle = new Handle(formId, LineForm.Point.End, LineForm.Anchor.End, new PivotPair(_start, _center));
+		_startHandle = new Handle(formId, LineForm.Point.Start, LineForm.Anchor.Start,
+		                          new PivotPair(_end, _center));
+		_endHandle = new Handle(formId, LineForm.Point.End, LineForm.Anchor.End,
+		                        new PivotPair(_start, _center));
 
 		_handles.add(_startHandle);
 		_handles.add(_endHandle);
@@ -100,7 +102,8 @@ public class LineEntity implements Entity
 	@Override
 	public boolean contains(final Vec2 position)
 	{
-		return Vector.isBetween(position.x, position.y, _start.getX(), _start.getY(), _end.getX(), _end.getY(), 0.5);
+		return Vector.isBetween(position.x, position.y, _start.getX(), _start.getY(),
+		                        _end.getX(), _end.getY(), 0.5);
 	}
 
 	@Override

@@ -11,21 +11,14 @@ import reform.stage.tooling.cursor.Cursor;
 public class SelectionTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Pressed
-
-	}
-
 	private final ToolState _toolState;
 	private final FormSelection _formSelection;
 	private final Cursor _cursor;
 	private final Stage _stage;
-
 	private State _state = State.Idle;
 
-	public SelectionTool(final ToolState toolState, final FormSelection formSelection, final Cursor cursor, final
-	Stage stage)
+	public SelectionTool(final ToolState toolState, final FormSelection formSelection,
+	                     final Cursor cursor, final Stage stage)
 	{
 		_toolState = toolState;
 		_formSelection = formSelection;
@@ -56,8 +49,8 @@ public class SelectionTool implements Tool
 	{
 		_state = State.Pressed;
 
-		if (_formSelection.isSet() && _stage.getEntityForId(_formSelection.getSelected()).contains(
-				_cursor.getPosition()))
+		if (_formSelection.isSet() && _stage.getEntityForId(
+				_formSelection.getSelected()).contains(_cursor.getPosition()))
 		{
 			_toolState.setSelectionState(ToolState.SelectionState.Form);
 
@@ -132,6 +125,12 @@ public class SelectionTool implements Tool
 		{
 			cancel();
 		}
+	}
+
+	private enum State
+	{
+		Idle, Pressed
+
 	}
 
 }

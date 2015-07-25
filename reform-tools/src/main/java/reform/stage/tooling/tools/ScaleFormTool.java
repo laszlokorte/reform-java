@@ -23,33 +23,27 @@ import reform.stage.tooling.cursor.Cursor;
 public class ScaleFormTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Snapped, Pressed
-	}
-
 	private final SelectionTool _selectionTool;
 	private final ToolState _toolState;
 	private final Cursor _cursor;
 	private final HitTester _hitTester;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
-
-	private State _state = State.Idle;
-	private Choice _pivotChoice = Choice.Primary;
-	private ReferencePoint _pivotPrimary;
-	private ReferencePoint _pivotSecondary;
 	private final Vec2 _pivotPrimaryPos = new Vec2();
 	private final Vec2 _pivotSecondaryPos = new Vec2();
 	private final Vec2 _currentOffset = new Vec2();
 	private final Vec2 _startPosition = new Vec2();
+	private State _state = State.Idle;
+	private Choice _pivotChoice = Choice.Primary;
+	private ReferencePoint _pivotPrimary;
+	private ReferencePoint _pivotSecondary;
 	private Handle _currentHandle;
 	private ScaleInstruction _currentInstruction;
 	private ConstantScaleFactor _currentFactor;
 	private Instruction _baseInstruction;
-
-	public ScaleFormTool(final SelectionTool selectionTool, final ToolState toolState, final Cursor cursor, final
-	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
+	public ScaleFormTool(final SelectionTool selectionTool, final ToolState toolState,
+	                     final Cursor cursor, final HitTester hitTester, final
+	                     InstructionFocus focus, final EventedProcedure eProcedure)
 	{
 		_selectionTool = selectionTool;
 		_toolState = toolState;
@@ -66,11 +60,6 @@ public class ScaleFormTool implements Tool
 		_toolState.setSelectionState(ToolState.SelectionState.Handle);
 
 		refreshHandles();
-	}
-
-	private void refreshHandles()
-	{
-		_toolState.setHandles(_hitTester.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
 	}
 
 	@Override
@@ -109,10 +98,13 @@ public class ScaleFormTool implements Tool
 			_startPosition.set(_currentHandle.getX(), _currentHandle.getY());
 			_baseInstruction = _focus.getFocused();
 			_currentFactor = new ConstantScaleFactor(1);
-			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary;
+			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ?
+					_pivotPrimary : _pivotSecondary;
 
-			_currentInstruction = new ScaleInstruction(_currentHandle.getFormId(), _currentFactor, pivotPoint);
-			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
+			_currentInstruction = new ScaleInstruction(_currentHandle.getFormId(),
+			                                           _currentFactor, pivotPoint);
+			_eProcedure.addInstruction(_currentInstruction, Position.After,
+			                           _baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
 			                   _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
@@ -187,14 +179,16 @@ public class ScaleFormTool implements Tool
 	@Override
 	public void input(final Input input)
 	{
-		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary : Choice.Primary;
+		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary : Choice
+				.Primary;
 
 		switch (_state)
 		{
 			case Idle:
 			case Snapped:
 			{
-				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected, HandleFilter.Pivot);
+				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected,
+				                                   HandleFilter.Pivot);
 				if (_currentHandle == null)
 				{
 					_state = State.Idle;
@@ -204,8 +198,10 @@ public class ScaleFormTool implements Tool
 					final PivotPair pivotPair = _currentHandle.getPivot();
 					_pivotPrimary = pivotPair.createReference(Choice.Primary);
 					_pivotSecondary = pivotPair.createReference(Choice.Secondary);
-					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary), pivotPair.getY(Choice.Primary));
-					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary), pivotPair.getY(Choice.Secondary));
+					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary),
+					                     pivotPair.getY(Choice.Primary));
+					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary),
+					                       pivotPair.getY(Choice.Secondary));
 					_state = State.Snapped;
 				}
 
@@ -214,8 +210,11 @@ public class ScaleFormTool implements Tool
 			}
 			case Pressed:
 			{
-				_currentFactor.setFactor(calcFactor(input.getShiftModifier().isActive()));
-				_currentInstruction.setFixPoint(_pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary);
+				_currentFactor.setFactor(calcFactor(input.getShiftModifier().isActive
+						()));
+				_currentInstruction.setFixPoint(
+						_pivotChoice == Choice.Primary ? _pivotPrimary :
+								_pivotSecondary);
 
 				_eProcedure.publishInstructionChange(_currentInstruction);
 				break;
@@ -224,7 +223,9 @@ public class ScaleFormTool implements Tool
 
 		if (_state != State.Idle)
 		{
-			_toolState.setPivot(_pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos);
+			_toolState.setPivot(
+					_pivotChoice == Choice.Primary ? _pivotPrimaryPos :
+							_pivotSecondaryPos);
 		}
 		else
 		{
@@ -247,9 +248,16 @@ public class ScaleFormTool implements Tool
 
 	}
 
+	private void refreshHandles()
+	{
+		_toolState.setHandles(
+				_hitTester.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
+	}
+
 	private double calcFactor(final boolean stepped)
 	{
-		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos;
+		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos :
+				_pivotSecondaryPos;
 
 		final double startPosX = _startPosition.x;
 		final double startPosY = _startPosition.y;
@@ -263,8 +271,10 @@ public class ScaleFormTool implements Tool
 		final double deltaCurrentX = currentX - pivotPos.x;
 		final double deltaCurrentY = currentY - pivotPos.y;
 
-		final double deltaProjectedX = Vector.projectionX(deltaCurrentX, deltaCurrentY, deltaStartX, deltaStartY);
-		final double deltaProjectedY = Vector.projectionY(deltaCurrentX, deltaCurrentY, deltaStartX, deltaStartY);
+		final double deltaProjectedX = Vector.projectionX(deltaCurrentX, deltaCurrentY,
+		                                                  deltaStartX, deltaStartY);
+		final double deltaProjectedY = Vector.projectionY(deltaCurrentX, deltaCurrentY,
+		                                                  deltaStartX, deltaStartY);
 
 		final double startDistance = Vector.length(deltaStartX, deltaStartY);
 		final double projectedDistance = Vector.length(deltaProjectedX, deltaProjectedY);
@@ -274,10 +284,16 @@ public class ScaleFormTool implements Tool
 			return 0;
 		}
 
-		final double factor = Math.signum(Vector.dot(deltaProjectedX, deltaProjectedY, deltaStartX,
-		                                             deltaStartY)) * projectedDistance / startDistance;
+		final double factor = Math.signum(
+				Vector.dot(deltaProjectedX, deltaProjectedY, deltaStartX,
+				           deltaStartY)) * projectedDistance / startDistance;
 
 		return stepped ? Vector.inStepsOf(factor, 0.1) : factor;
 
+	}
+
+	private enum State
+	{
+		Idle, Snapped, Pressed
 	}
 }

@@ -11,18 +11,7 @@ import java.util.List;
 public class ToolState
 {
 
-	public enum ViewState
-	{
-		Preview, Selection, Snap, SnapEntity, Handle, EntityPoint, SnapHandle, Crop, Control, SnapControl
-	}
-
-	public enum SelectionState
-	{
-		None, Form, Handle, EntityPoint, SnapPoint, CropPoint, Control
-	}
-
 	private final List<ToolStateListener> _listeners = new ArrayList<>();
-
 	private final List<SnapPoint> _visibleSnapPoints = new ArrayList<>();
 	private final List<EntityPoint> _entityPoints = new ArrayList<>();
 	private final List<Handle> _handles = new ArrayList<>();
@@ -30,13 +19,15 @@ public class ToolState
 	private EntityPoint _activeEntityPoint;
 	private Handle _activeHandle;
 	private CropPoint _activeCropPoint;
-
 	private Vec2 _pivot;
-
 	private String _description;
-
 	private ViewState _viewState = ViewState.Selection;
 	private SelectionState _selectionState = SelectionState.None;
+
+	public ViewState getViewState()
+	{
+		return _viewState;
+	}
 
 	public void setViewState(final ViewState viewState)
 	{
@@ -47,9 +38,9 @@ public class ToolState
 		}
 	}
 
-	public ViewState getViewState()
+	public SelectionState getSelectionState()
 	{
-		return _viewState;
+		return _selectionState;
 	}
 
 	public void setSelectionState(final SelectionState selectionState)
@@ -59,18 +50,6 @@ public class ToolState
 			_selectionState = selectionState;
 			notifyChange();
 		}
-	}
-
-	public SelectionState getSelectionState()
-	{
-		return _selectionState;
-	}
-
-	public void setSnapPoints(final Collection<SnapPoint> points)
-	{
-		_visibleSnapPoints.clear();
-		_visibleSnapPoints.addAll(points);
-		notifyChange();
 	}
 
 	public void clearSnapPoints()
@@ -85,21 +64,9 @@ public class ToolState
 		notifyChange();
 	}
 
-	public void setActiveSnapPoint(final SnapPoint p)
-	{
-		_activeSnapPoint = p;
-		notifyChange();
-	}
-
 	public boolean isActiveSnapPoint(final SnapPoint p)
 	{
 		return _activeSnapPoint != null && _activeSnapPoint.equals(p);
-	}
-
-	public void setActiveEntityPoint(final EntityPoint p)
-	{
-		_activeEntityPoint = p;
-		notifyChange();
 	}
 
 	public boolean isActiveEntityPoint(final SnapPoint p)
@@ -114,15 +81,10 @@ public class ToolState
 			return ((EntityPoint) _activeSnapPoint).getFormId().equals(e.getId());
 		}
 
-		return _activeSnapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) _activeSnapPoint)
-				.getFormIdA().equals(
-				e.getId()) || ((IntersectionSnapPoint) _activeSnapPoint).getFormIdB().equals(e.getId()));
-	}
-
-	public void setActiveCropPoint(final CropPoint p)
-	{
-		_activeCropPoint = p;
-		notifyChange();
+		return _activeSnapPoint instanceof IntersectionSnapPoint && ((
+				(IntersectionSnapPoint) _activeSnapPoint).getFormIdA().equals(
+				e.getId()) || ((IntersectionSnapPoint) _activeSnapPoint).getFormIdB()
+				.equals(e.getId()));
 	}
 
 	public boolean isActiveCropPoint(final CropPoint p)
@@ -133,6 +95,12 @@ public class ToolState
 	public CropPoint getActiveCropPoint()
 	{
 		return _activeCropPoint;
+	}
+
+	public void setActiveCropPoint(final CropPoint p)
+	{
+		_activeCropPoint = p;
+		notifyChange();
 	}
 
 	public void addListener(final ToolStateListener l)
@@ -169,9 +137,73 @@ public class ToolState
 		return _visibleSnapPoints;
 	}
 
+	public void setSnapPoints(final Collection<SnapPoint> points)
+	{
+		_visibleSnapPoints.clear();
+		_visibleSnapPoints.addAll(points);
+		notifyChange();
+	}
+
 	public List<EntityPoint> getEntityPoints()
 	{
 		return _entityPoints;
+	}
+
+	public void setEntityPoints(final Collection<EntityPoint> points)
+	{
+		_entityPoints.clear();
+		_entityPoints.addAll(points);
+		notifyChange();
+	}
+
+	public boolean isActiveHandle(final Handle handle)
+	{
+		return _activeHandle == handle;
+	}
+
+	public void clearEntityPoints()
+	{
+		_entityPoints.clear();
+		notifyChange();
+	}
+
+	public Vec2 getPivot()
+	{
+		return _pivot;
+	}
+
+	public void setPivot(final Vec2 pivot)
+	{
+		_pivot = pivot;
+		notifyChange();
+	}
+
+	public List<Handle> getHandles()
+	{
+		return _handles;
+	}
+
+	public void setHandles(final Collection<Handle> handles)
+	{
+		_handles.clear();
+		_handles.addAll(handles);
+		notifyChange();
+	}
+
+	public SnapPoint getActiveSnapPoint()
+	{
+		return _activeSnapPoint;
+	}
+
+	public void setActiveSnapPoint(final SnapPoint p)
+	{
+		_activeSnapPoint = p;
+		notifyChange();
+	}
+
+	public Handle getActiveHandle()
+	{
+		return _activeHandle;
 	}
 
 	public void setActiveHandle(final Handle handle)
@@ -183,60 +215,26 @@ public class ToolState
 		}
 	}
 
-	public boolean isActiveHandle(final Handle handle)
-	{
-		return _activeHandle == handle;
-	}
-
-	public void setEntityPoints(final Collection<EntityPoint> points)
-	{
-		_entityPoints.clear();
-		_entityPoints.addAll(points);
-		notifyChange();
-	}
-
-	public void clearEntityPoints()
-	{
-		_entityPoints.clear();
-		notifyChange();
-	}
-
-	public void setPivot(final Vec2 pivot)
-	{
-		_pivot = pivot;
-		notifyChange();
-	}
-
-	public Vec2 getPivot()
-	{
-		return _pivot;
-	}
-
-	public void setHandles(final Collection<Handle> handles)
-	{
-		_handles.clear();
-		_handles.addAll(handles);
-		notifyChange();
-	}
-
-	public List<Handle> getHandles()
-	{
-		return _handles;
-	}
-
-	public SnapPoint getActiveSnapPoint()
-	{
-		return _activeSnapPoint;
-	}
-
-	public Handle getActiveHandle()
-	{
-		return _activeHandle;
-	}
-
 	public EntityPoint getActiveEntityPoint()
 	{
 		return _activeEntityPoint;
+	}
+
+	public void setActiveEntityPoint(final EntityPoint p)
+	{
+		_activeEntityPoint = p;
+		notifyChange();
+	}
+
+	public enum ViewState
+	{
+		Preview, Selection, Snap, SnapEntity, Handle, EntityPoint, SnapHandle, Crop,
+		Control, SnapControl
+	}
+
+	public enum SelectionState
+	{
+		None, Form, Handle, EntityPoint, SnapPoint, CropPoint, Control
 	}
 
 

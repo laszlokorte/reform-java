@@ -14,7 +14,8 @@ public class TranslateInstruction extends BaseInstruction
 	private final Identifier<? extends Form> _target;
 	private TranslationDistance _distance;
 
-	public TranslateInstruction(final Identifier<? extends Form> target, final TranslationDistance distance)
+	public TranslateInstruction(final Identifier<? extends Form> target, final
+	TranslationDistance distance)
 	{
 
 		_target = target;
@@ -56,7 +57,8 @@ public class TranslateInstruction extends BaseInstruction
 			formName = "???";
 		}
 
-		analyzer.publish(this, "Move " + formName + " " + _distance.getDescription(analyzer));
+		analyzer.publish(this,
+		                 "Move " + formName + " " + _distance.getDescription(analyzer));
 	}
 
 	@Override

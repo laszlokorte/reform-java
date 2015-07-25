@@ -6,14 +6,13 @@ import java.awt.*;
 
 public class ColorPickerPanel extends JPanel
 {
+	private static final int MAX = 100;
 	private final ColorModel _model;
 	private final SaturationValueColorPlane _svPlane;
 	private final HueColorTrack _hueTrack;
 	private final AlphaColorTrack _alphaTrack;
 	private final JPanel _numberPanel = new JPanel();
 	private final JPanel _hsvPanel = new JPanel();
-
-	private static final int MAX = 100;
 
 	public ColorPickerPanel(final ColorModel model, final JTextField textfield)
 	{

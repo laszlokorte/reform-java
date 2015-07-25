@@ -83,7 +83,8 @@ public final class Identifier<T>
 			return false;
 		}
 
-		@SuppressWarnings("unchecked") final Identifier<? extends T> other = (Identifier<? extends T>) obj;
+		@SuppressWarnings("unchecked") final Identifier<? extends T> other =
+				(Identifier<? extends T>) obj;
 		return other._value == _value && other._subscript == _subscript;
 	}
 

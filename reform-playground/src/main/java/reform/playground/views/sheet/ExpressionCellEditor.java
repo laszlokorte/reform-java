@@ -14,14 +14,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ExpressionCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
+public class ExpressionCellEditor extends AbstractCellEditor implements
+		TableCellEditor, ActionListener
 {
-
-	private final DataSet _dataSet;
 
 	private static final Color _selectionBackground = new Color(0x23AEEC);
 	private static final Color _selectionForegroud = new Color(0xffffff);
-
+	private final DataSet _dataSet;
 	private final JLabel _label = new JLabel();
 	private final JPanel _labelField = new JPanel();
 	private final JTextField _textField = new JTextField("X");
@@ -84,8 +83,9 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	}
 
 	@Override
-	public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected,
-	                                             final int row, final int column)
+	public Component getTableCellEditorComponent(final JTable table, final Object value,
+	                                             final boolean isSelected, final int
+			                                                 row, final int column)
 	{
 		final Definition def = ((Definition) value);
 		final Expression expr = def.getExpression();
@@ -95,7 +95,8 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 		_label.setText(_currentValue);
 
 		final Identifier<? extends Definition> id = def.getId();
-		if (!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || expr instanceof InvalidExpression)
+		if (!_dataSet.hasValueFor(id) || _dataSet.hasError(
+				id) || expr instanceof InvalidExpression)
 		{
 			_label.setForeground(Color.RED.darker());
 		}
@@ -117,13 +118,6 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	}
 
 	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		_currentValue = _textField.getText();
-		fireEditingStopped();
-	}
-
-	@Override
 	public boolean stopCellEditing()
 	{
 		if (!_initialValue.equals(_currentValue))
@@ -135,5 +129,12 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 			cancelCellEditing();
 			return true;
 		}
+	}	@Override
+	public void actionPerformed(final ActionEvent e)
+	{
+		_currentValue = _textField.getText();
+		fireEditingStopped();
 	}
+
+
 }

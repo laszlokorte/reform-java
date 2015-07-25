@@ -15,7 +15,8 @@ public class IntersectionPoint implements ReferencePoint
 	private final Identifier<? extends Form> _formAId;
 	private final Identifier<? extends Form> _formBId;
 
-	public IntersectionPoint(final int index, final Identifier<? extends Form> formAId, final Identifier<? extends
+	public IntersectionPoint(final int index, final Identifier<? extends Form> formAId,
+	                         final Identifier<? extends
 			Form> formBId)
 	{
 		_index = index;
@@ -37,7 +38,8 @@ public class IntersectionPoint implements ReferencePoint
 		final Outline outlineA = a.getOutline();
 		final Outline outlineB = b.getOutline();
 
-		return !Double.isNaN(Intersector.intersectXForRuntime(runtime, outlineA, outlineB, _index));
+		return !Double.isNaN(
+				Intersector.intersectXForRuntime(runtime, outlineA, outlineB, _index));
 	}
 
 	@Override
@@ -65,7 +67,8 @@ public class IntersectionPoint implements ReferencePoint
 		final Form formA = analyzer.getForm(_formAId);
 		final Form formB = analyzer.getForm(_formBId);
 
-		return "Intersection#" + (_index + 1) + " of " + (formA != null ? formA.getName().getValue() : "???") + " " +
+		return "Intersection#" + (_index + 1) + " of " + (formA != null ? formA.getName
+				().getValue() : "???") + " " +
 				"and" +
 				" " +
 				"" + (formB != null ? formB.getName().getValue() : "???");

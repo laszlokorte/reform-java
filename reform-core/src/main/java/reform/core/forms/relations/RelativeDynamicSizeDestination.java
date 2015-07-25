@@ -14,7 +14,8 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 	private Direction _direction = FreeDirection.Free;
 	private Alignment _alignment = Alignment.Leading;
 
-	public RelativeDynamicSizeDestination(final ReferencePoint refA, final ReferencePoint refB)
+	public RelativeDynamicSizeDestination(final ReferencePoint refA, final
+	ReferencePoint refB)
 	{
 		_refA = refA;
 		_refB = refB;
@@ -29,7 +30,8 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		final double bX = _refB.getXValueForRuntime(runtime);
 		final double bY = _refB.getYValueForRuntime(runtime);
 
-		final double forcedBX = _direction.getAdjustedXForRuntime(runtime, aX, aY, bX, bY);
+		final double forcedBX = _direction.getAdjustedXForRuntime(runtime, aX, aY, bX,
+		                                                          bY);
 		return _alignment.getAlignedMin(aX, forcedBX);
 	}
 
@@ -42,7 +44,8 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		final double bX = _refB.getXValueForRuntime(runtime);
 		final double bY = _refB.getYValueForRuntime(runtime);
 
-		final double forcedBY = _direction.getAdjustedYForRuntime(runtime, aX, aY, bX, bY);
+		final double forcedBY = _direction.getAdjustedYForRuntime(runtime, aX, aY, bX,
+		                                                          bY);
 		return _alignment.getAlignedMin(aY, forcedBY);
 
 	}
@@ -56,7 +59,8 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		final double bX = _refB.getXValueForRuntime(runtime);
 		final double bY = _refB.getYValueForRuntime(runtime);
 
-		final double forcedBX = _direction.getAdjustedXForRuntime(runtime, aX, aY, bX, bY);
+		final double forcedBX = _direction.getAdjustedXForRuntime(runtime, aX, aY, bX,
+		                                                          bY);
 		return _alignment.getAlignedMax(aX, forcedBX);
 	}
 
@@ -69,15 +73,35 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		final double bX = _refB.getXValueForRuntime(runtime);
 		final double bY = _refB.getYValueForRuntime(runtime);
 
-		final double forcedBY = _direction.getAdjustedYForRuntime(runtime, aX, aY, bX, bY);
+		final double forcedBY = _direction.getAdjustedYForRuntime(runtime, aX, aY, bX,
+		                                                          bY);
 		return _alignment.getAlignedMax(aY, forcedBY);
+	}
+
+	@Override
+	public Alignment getAlignment()
+	{
+		return _alignment;
 	}
 
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return directionAsString() + (_alignment == Alignment.Leading ? "from " : "around ") + _refA.getDescription(
+		return directionAsString() + (_alignment == Alignment.Leading ? "from " :
+				"around ") + _refA.getDescription(
 				analyzer) + " to " + _refB.getDescription(analyzer);
+	}
+
+	@Override
+	public boolean isDegenerated()
+	{
+		return _refA.equals(_refB);
+	}
+
+	@Override
+	public void setAlignment(final Alignment alignment)
+	{
+		_alignment = alignment;
 	}
 
 	private String directionAsString()
@@ -106,12 +130,6 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		return _refA.isValidFor(runtime) && _refB.isValidFor(runtime);
 	}
 
-	@Override
-	public Alignment getAlignment()
-	{
-		return _alignment;
-	}
-
 	public ReferencePoint getReferenceA()
 	{
 		return _refA;
@@ -122,30 +140,18 @@ public class RelativeDynamicSizeDestination implements InitialDestination
 		return _refB;
 	}
 
-	@Override
-	public boolean isDegenerated()
-	{
-		return _refA.equals(_refB);
-	}
-
-	@Override
-	public void setAlignment(final Alignment alignment)
-	{
-		_alignment = alignment;
-	}
-
 	public void setReferenceB(final ReferencePoint refB)
 	{
 		_refB = refB;
 	}
 
-	public void setDirection(final Direction direction)
-	{
-		_direction = direction;
-	}
-
 	public Direction getDirection()
 	{
 		return _direction;
+	}
+
+	public void setDirection(final Direction direction)
+	{
+		_direction = direction;
 	}
 }

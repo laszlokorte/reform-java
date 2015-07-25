@@ -10,15 +10,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Stack implements Iterable<Identifier<? extends Form>>, FastIterable<Identifier<? extends Form>>
+public class Stack implements Iterable<Identifier<? extends Form>>,
+		FastIterable<Identifier<? extends Form>>
 {
 	private final static int INITIAL_CAPACITY = 100;
 
 	private final IdentifiableList<Form> _content = new IdentifiableList<>();
 	private final ArrayList<Frame> _frames = new ArrayList<>();
+	private final Map<Identifier<? extends Form>, Integer> _offsets = new HashMap<>();
 	private long[] _data = new long[INITIAL_CAPACITY];
 	private int _dataSize = 0;
-	private final Map<Identifier<? extends Form>, Integer> _offsets = new HashMap<>();
 
 	public Stack()
 	{
@@ -69,7 +70,8 @@ public class Stack implements Iterable<Identifier<? extends Form>>, FastIterable
 		return _data[_offsets.get(id) + offset];
 	}
 
-	public void setData(final Identifier<? extends Form> id, final int offset, final long value)
+	public void setData(final Identifier<? extends Form> id, final int offset, final
+	long value)
 	{
 		// if (!_content.contains(id)
 		// || offset >= _content.getById(id).getSizeOnStack()) {

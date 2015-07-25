@@ -56,8 +56,10 @@ public class TextEntity implements Entity
 		_points.add(_top);
 		_points.add(_bottom);
 
-		_startHandle = new Handle(formId, TextForm.Point.Start, TextForm.Anchor.Start, new PivotPair(_end, _bottom));
-		_endHandle = new Handle(formId, TextForm.Point.End, TextForm.Anchor.End, new PivotPair(_start, _bottom));
+		_startHandle = new Handle(formId, TextForm.Point.Start, TextForm.Anchor.Start,
+		                          new PivotPair(_end, _bottom));
+		_endHandle = new Handle(formId, TextForm.Point.End, TextForm.Anchor.End,
+		                        new PivotPair(_start, _bottom));
 		_topHandle = new Handle(formId, TextForm.Point.Top, TextForm.Anchor.Top);
 
 		_handles.add(_startHandle);

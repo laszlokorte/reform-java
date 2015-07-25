@@ -12,7 +12,8 @@ public class ForeignFormsPoint implements ReferencePoint
 	private final Identifier<? extends ExposedPoint> _pointId;
 	private final Identifier<? extends Form> _formId;
 
-	public ForeignFormsPoint(final Identifier<? extends Form> formId, final Identifier<? extends ExposedPoint> pointId)
+	public ForeignFormsPoint(final Identifier<? extends Form> formId, final Identifier<?
+			extends ExposedPoint> pointId)
 	{
 		_formId = formId;
 		_pointId = pointId;
@@ -38,7 +39,8 @@ public class ForeignFormsPoint implements ReferencePoint
 		{
 			return "???";
 		}
-		return form.getName().getValue() + "'s " + form.getPoint(_pointId).getDescription(analyzer);
+		return form.getName().getValue() + "'s " + form.getPoint(_pointId)
+				.getDescription(analyzer);
 	}
 
 	@Override

@@ -21,29 +21,18 @@ import reform.stage.elements.factory.EntityFactory;
 public class StageCollector implements ProjectRuntime.Listener
 {
 	private final Analyzer _analyzer;
-
-	public interface Adapter
-	{
-		boolean isInFocus(Evaluable instruction);
-	}
-
 	private final Stage _stage;
 	private final Adapter _adapter;
-
 	private final Pool<ColoredShape> _pathPool = new SimplePool<>(ColoredShape::new);
-
 	private final StageBuffer _buffer = new StageBuffer();
 	private final EntityCache _entityCache = new EntityCache();
 	private final EntityFactory _entityFactory = new EntityFactory();
-
-
 	private final ControlCache _controlCache = new ControlCache();
 	private final ControlFactory _controlFactory = new ControlFactory();
-
 	private boolean _collected;
 	private boolean _errorOnCurrent = false;
-
-	public StageCollector(final Stage stage, final Adapter adapter, final Analyzer analyzer)
+	public StageCollector(final Stage stage, final Adapter adapter, final Analyzer
+			analyzer)
 	{
 		_stage = stage;
 		_analyzer = analyzer;
@@ -69,7 +58,8 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable instruction)
+	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
+			instruction)
 	{
 		if (_adapter.isInFocus(instruction))
 		{
@@ -81,7 +71,8 @@ public class StageCollector implements ProjectRuntime.Listener
 			{
 				_collected = true;
 			}
-			final FastIterable<Identifier<? extends Form>> it = runtime.getStackIterator();
+			final FastIterable<Identifier<? extends Form>> it = runtime
+					.getStackIterator();
 			for (int i = 0, j = it.size(); i < j; i++)
 			{
 				final Identifier<? extends Form> id = it.get(i);
@@ -101,7 +92,8 @@ public class StageCollector implements ProjectRuntime.Listener
 			}
 			if (_errorOnCurrent)
 			{
-				final InstructionControl control = _controlCache.fetch(instruction, _controlFactory);
+				final InstructionControl control = _controlCache.fetch(instruction,
+				                                                       _controlFactory);
 				control.updateForRuntime(runtime);
 				_buffer.setInstructionControl(control);
 			}
@@ -109,7 +101,8 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<? extends Form>> poppedIds)
+	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<?
+			extends Form>> poppedIds)
 	{
 		for (int i = 0, j = poppedIds.size(); i < j; i++)
 		{
@@ -132,12 +125,18 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final RuntimeError error)
+	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final
+	RuntimeError error)
 	{
 		if (_adapter.isInFocus(instruction) && !_collected)
 		{
 			_errorOnCurrent = true;
 		}
+	}
+
+	public interface Adapter
+	{
+		boolean isInFocus(Evaluable instruction);
 	}
 
 }

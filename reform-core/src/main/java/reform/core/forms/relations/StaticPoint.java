@@ -30,17 +30,17 @@ public class StaticPoint implements ReferencePoint
 		return Double.longBitsToDouble(runtime.get(_formId, _offset + 1));
 	}
 
-	public void setForRuntime(final Runtime runtime, final double x, final double y)
-	{
-		runtime.set(_formId, _offset, Double.doubleToRawLongBits(x));
-		runtime.set(_formId, _offset + 1, Double.doubleToRawLongBits(y));
-	}
-
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setForRuntime(final Runtime runtime, final double x, final double y)
+	{
+		runtime.set(_formId, _offset, Double.doubleToRawLongBits(x));
+		runtime.set(_formId, _offset + 1, Double.doubleToRawLongBits(y));
 	}
 
 	@Override

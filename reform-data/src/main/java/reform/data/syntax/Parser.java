@@ -5,181 +5,6 @@ import java.util.*;
 public class Parser<E>
 {
 
-	public enum Associativity
-	{
-		Left, Right
-	}
-
-	public enum Arity
-	{
-		Unary, Binary
-	}
-
-	public static class Context<E>
-	{
-
-		final Stack<Token> stack = new Stack<>();
-		final Stack<E> output = new Stack<>();
-
-		final Stack<Boolean> wereValues = new Stack<>();
-		final Stack<Integer> argCount = new Stack<>();
-		final Set<Token> unaries = new HashSet<>();
-
-		Token prevToken = null;
-
-		boolean lastTokenAtom = false;
-	}
-
-	public interface ParserDelegate<E>
-	{
-
-		default boolean isOpeningToken(final Token token)
-		{
-			return token.type == Token.Type.ParenthesisLeft;
-		}
-
-		default boolean isClosingToken(final Token token)
-		{
-			return token.type == Token.Type.ParenthesisRight;
-		}
-
-		default boolean isMatchingPair(final Token left, final Token right)
-		{
-			return left.type == Token.Type.ParenthesisLeft && right.type == Token.Type.ParenthesisRight;
-		}
-
-		default boolean hasFunctionOfName(final Token left)
-		{
-			return false;
-		}
-
-		E variableTokenToNode(Token token);
-
-		E emptyNode();
-
-		E unaryOperatorToNode(Token operator, E operand);
-
-		E binaryOperatorToNode(Token operator, E leftHand, E rightHand);
-
-		E functionTokenToNode(Token function, List<E> args);
-
-		boolean hasBinaryOperator(Token operator);
-
-		boolean hasUnaryOperator(Token operator);
-
-		Associativity assocOfOperator(Token token);
-
-		int precedenceOfOperator(Token token, boolean unary);
-
-		default void unknownToken(final Token token, final Context<E> context, final Finalizer<E> finalizer)
-		{
-			throw new UnexpectedTokenException(token);
-		}
-
-		default E unknownOperator(final Token op, final Context<E> context, final Finalizer<E> finalizer)
-		{
-			throw new UnexpectedTokenException(op);
-		}
-
-		Context<E> newContext();
-
-		default E finish(final Finalizer<E> finalizer, final Context<E> context)
-		{
-			return finalizer.finalizy(context);
-		}
-
-		E literalTokenToNode(Token token);
-	}
-
-	interface Finalizer<E>
-	{
-		E finalizy(Context<E> context);
-	}
-
-	/**
-	 * Superclass for all Exceptions thrown when parsing fails.
-	 */
-	public static class ParsingException extends RuntimeException
-	{
-		private final Token _token;
-
-		public ParsingException(final String message, final Token token)
-		{
-			super(message);
-			_token = token;
-		}
-
-		public Token getToken()
-		{
-			return _token;
-		}
-	}
-
-	/**
-	 * Exception thrown when the parser reads an token it did not expect.
-	 */
-	public static class UnexpectedTokenException extends ParsingException
-	{
-
-		public UnexpectedTokenException(final Token t)
-		{
-			super(String.format("Unexpected token %s (%s).", t.value, t.type), t);
-		}
-
-		public UnexpectedTokenException(final Token t, final String explain)
-		{
-			super(String.format("Unexpected token %s (%s). %s", t.value, t.type, explain), t);
-		}
-
-	}
-
-	/**
-	 * Exception thrown when two tokens which must occure in pairs do not match.
-	 */
-	public static class MismatchedTokenException extends ParsingException
-	{
-		final boolean open;
-
-		public MismatchedTokenException(final Token t, final boolean open)
-		{
-			super(String.format(open ? "Token '%s' (%s) has to be closed." : "Unxpected closing token '%s' (%s).",
-			                    t.value, t.type), t);
-			this.open = open;
-		}
-
-	}
-
-	/**
-	 * Exception thrown when the parser reads an operator token but can not find matching operands.
-	 */
-	public static class MissingOperandException extends ParsingException
-	{
-		final Arity arity;
-		final int missing;
-
-		public MissingOperandException(final Token t, final Arity arity, final int missing)
-		{
-			super(String.format("Missing %d operand for %s operator '%s'.", missing, arity.name(), t.value), t);
-			this.arity = arity;
-			this.missing = missing;
-		}
-	}
-
-	/**
-	 * Exception thrown when the parser does not know the operand.
-	 */
-	public static class UnknownOperatorException extends ParsingException
-	{
-		final Arity arity;
-
-		public UnknownOperatorException(final Token t, final Arity arity)
-		{
-			super(String.format("Unknown %s operator '%s'.", arity.name(), t.value), t);
-			this.arity = arity;
-		}
-
-	}
-
 	private final ParserDelegate<E> _delegate;
 
 	public Parser(final ParserDelegate<E> delegate)
@@ -200,7 +25,8 @@ public class Parser<E>
 		{
 			if (needOpen && !_delegate.isOpeningToken(token))
 			{
-				throw new UnexpectedTokenException(token, "Expected Opening Parenthesis.");
+				throw new UnexpectedTokenException(token,
+				                                   "Expected Opening Parenthesis.");
 			}
 			needOpen = false;
 			switch (token.type)
@@ -258,7 +84,8 @@ public class Parser<E>
 					break;
 
 				case ArgumentSeparator:
-					while (!context.stack.isEmpty() && !_delegate.isOpeningToken(context.stack.peek()))
+					while (!context.stack.isEmpty() && !_delegate.isOpeningToken(
+							context.stack.peek()))
 					{
 						context.output.push(_pipe(context.stack.pop(), context));
 					}
@@ -276,7 +103,8 @@ public class Parser<E>
 					break;
 
 				case Operator:
-					if (isOperator(context.prevToken) && _delegate.hasUnaryOperator(token))
+					if (isOperator(context.prevToken) && _delegate.hasUnaryOperator(
+							token))
 					{
 						if (context.lastTokenAtom)
 						{
@@ -288,27 +116,35 @@ public class Parser<E>
 					else
 					{
 
-						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.Identifier)
+						if (!context.stack.isEmpty() && context.stack.peek().type ==
+								Token.Type.Identifier)
 						{
 							context.output.push(_pipe(context.stack.pop(), context));
 						}
 
-						while ((!context.stack.isEmpty() && (context.stack.peek().type == Token.Type.Operator) &&
-								(_delegate.precedenceOfOperator(token, actsAsUnary(context,
-								                                                   token)) < _delegate
+						while ((!context.stack.isEmpty() && (context.stack.peek().type
+								== Token.Type.Operator) &&
+								(_delegate.precedenceOfOperator(token,
+								                                actsAsUnary(context,
+								                                            token)) <
+										_delegate.precedenceOfOperator(
+										context.stack.peek(), actsAsUnary(context,
+										                                  context.stack
+												                                  .peek())) || (_delegate.assocOfOperator(
+										token) == Associativity.Left && _delegate
+										.precedenceOfOperator(token,
+										                      actsAsUnary(context,
+										                                  token)) ==
+										_delegate
 										.precedenceOfOperator(context.stack.peek(),
-										                      actsAsUnary(context, context.stack.peek())) || (_delegate.assocOfOperator(
-										token) == Associativity.Left && _delegate.precedenceOfOperator(token,
-								                                                                       actsAsUnary(
-										                                                                       context,
-										                                                                       token))
-										== _delegate.precedenceOfOperator(
-										context.stack.peek(), actsAsUnary(context, context.stack.peek()))))))
+										                      actsAsUnary(context,
+										                                  context.stack.peek()))))))
 						{
 							context.output.push(_pipe(context.stack.pop(), context));
 						}
 
-						///if(forceParentheses && (context.stack.isEmpty || !_delegate.isOpeningToken(context.stack
+						///if(forceParentheses && (context.stack.isEmpty || !_delegate
+						// .isOpeningToken(context.stack
 						// .peek()
 						// ))) {
 						///	throw new AmbiguousParsingException(token);
@@ -330,7 +166,8 @@ public class Parser<E>
 					}
 					else if (_delegate.isClosingToken(token))
 					{
-						while (!context.stack.isEmpty() && !_delegate.isMatchingPair(context.stack.peek(), token))
+						while (!context.stack.isEmpty() && !_delegate.isMatchingPair(
+								context.stack.peek(), token))
 						{
 							context.output.push(_pipe(context.stack.pop(), context));
 						}
@@ -344,9 +181,11 @@ public class Parser<E>
 							throw new MismatchedTokenException(token, false);
 						}
 
-						if (!context.stack.isEmpty() && context.stack.peek().type == Token.Type.Identifier)
+						if (!context.stack.isEmpty() && context.stack.peek().type ==
+								Token.Type.Identifier)
 						{
-							///if(forceParentheses && (context.wereValues.isEmpty() || !context.wereValues.peek())) {
+							///if(forceParentheses && (context.wereValues.isEmpty() ||
+							// !context.wereValues.peek())) {
 							///	throw new RedundancyParsingException(stackScopeBottom);
 							///}
 							context.output.push(_pipe(context.stack.pop(), context));
@@ -389,10 +228,11 @@ public class Parser<E>
 			final E result = context.output.pop();
 			if (!context.output.isEmpty())
 			{
-				throw new ParsingException(
-						String.format("Unexpecteded parse error. Parser is in invalid state. %s " + "%s",
-						              context.output.peek(), result),
-						new Token(Token.Type.EOF, "E", new Position(1, 1, 0)));
+				throw new ParsingException(String.format(
+						"Unexpecteded parse error. Parser is in invalid state. %s " +
+								"%s",
+						context.output.peek(), result), new Token(Token.Type.EOF, "E", new Position(1, 1,
+				                                                               0)));
 			}
 			return result;
 		}
@@ -401,7 +241,6 @@ public class Parser<E>
 			return _delegate.emptyNode();
 		}
 	}
-
 
 	E _pipe(final Token op, final Context<E> context)
 	{
@@ -422,8 +261,9 @@ public class Parser<E>
 				}
 				else if (w)
 				{
-					throw new ParsingException(
-							String.format("Unexpected end of argument list for function '%s'.", op.value), op);
+					throw new ParsingException(String.format(
+							"Unexpected end of argument list for function '%s'.",
+							op.value), op);
 				}
 				Collections.reverse(temp);
 				return _delegate.functionTokenToNode(op, temp);
@@ -486,8 +326,194 @@ public class Parser<E>
 
 	private boolean isOperator(final Token t)
 	{
-		return t == null || t.type == Token.Type.Operator || t.type == Token.Type.ArgumentSeparator || _delegate
-				.isOpeningToken(t);
+		return t == null || t.type == Token.Type.Operator || t.type == Token.Type
+				.ArgumentSeparator || _delegate.isOpeningToken(
+				t);
+	}
+
+	public enum Associativity
+	{
+		Left, Right
+	}
+
+	public enum Arity
+	{
+		Unary, Binary
+	}
+
+	public interface ParserDelegate<E>
+	{
+
+		default boolean isOpeningToken(final Token token)
+		{
+			return token.type == Token.Type.ParenthesisLeft;
+		}
+
+		default boolean isClosingToken(final Token token)
+		{
+			return token.type == Token.Type.ParenthesisRight;
+		}
+
+		default boolean isMatchingPair(final Token left, final Token right)
+		{
+			return left.type == Token.Type.ParenthesisLeft && right.type == Token.Type
+					.ParenthesisRight;
+		}
+
+		default boolean hasFunctionOfName(final Token left)
+		{
+			return false;
+		}
+
+		E variableTokenToNode(Token token);
+
+		E emptyNode();
+
+		E unaryOperatorToNode(Token operator, E operand);
+
+		E binaryOperatorToNode(Token operator, E leftHand, E rightHand);
+
+		E functionTokenToNode(Token function, List<E> args);
+
+		boolean hasBinaryOperator(Token operator);
+
+		boolean hasUnaryOperator(Token operator);
+
+		Associativity assocOfOperator(Token token);
+
+		int precedenceOfOperator(Token token, boolean unary);
+
+		default void unknownToken(final Token token, final Context<E> context, final
+		Finalizer<E> finalizer)
+		{
+			throw new UnexpectedTokenException(token);
+		}
+
+		default E unknownOperator(final Token op, final Context<E> context, final
+		Finalizer<E> finalizer)
+		{
+			throw new UnexpectedTokenException(op);
+		}
+
+		Context<E> newContext();
+
+		default E finish(final Finalizer<E> finalizer, final Context<E> context)
+		{
+			return finalizer.finalizy(context);
+		}
+
+		E literalTokenToNode(Token token);
+	}
+
+	interface Finalizer<E>
+	{
+		E finalizy(Context<E> context);
+	}
+
+	public static class Context<E>
+	{
+
+		final Stack<Token> stack = new Stack<>();
+		final Stack<E> output = new Stack<>();
+
+		final Stack<Boolean> wereValues = new Stack<>();
+		final Stack<Integer> argCount = new Stack<>();
+		final Set<Token> unaries = new HashSet<>();
+
+		Token prevToken = null;
+
+		boolean lastTokenAtom = false;
+	}
+
+	/**
+	 * Superclass for all Exceptions thrown when parsing fails.
+	 */
+	public static class ParsingException extends RuntimeException
+	{
+		private final Token _token;
+
+		public ParsingException(final String message, final Token token)
+		{
+			super(message);
+			_token = token;
+		}
+
+		public Token getToken()
+		{
+			return _token;
+		}
+	}
+
+	/**
+	 * Exception thrown when the parser reads an token it did not expect.
+	 */
+	public static class UnexpectedTokenException extends ParsingException
+	{
+
+		public UnexpectedTokenException(final Token t)
+		{
+			super(String.format("Unexpected token %s (%s).", t.value, t.type), t);
+		}
+
+		public UnexpectedTokenException(final Token t, final String explain)
+		{
+			super(String.format("Unexpected token %s (%s). %s", t.value, t.type,
+			                    explain),
+			      t);
+		}
+
+	}
+
+	/**
+	 * Exception thrown when two tokens which must occure in pairs do not match.
+	 */
+	public static class MismatchedTokenException extends ParsingException
+	{
+		final boolean open;
+
+		public MismatchedTokenException(final Token t, final boolean open)
+		{
+			super(String.format(
+					open ? "Token '%s' (%s) has to be closed." : "Unxpected closing " +
+							"token '%s' (%s).",
+					t.value, t.type), t);
+			this.open = open;
+		}
+
+	}
+
+	/**
+	 * Exception thrown when the parser reads an operator token but can not find
+	 * matching operands.
+	 */
+	public static class MissingOperandException extends ParsingException
+	{
+		final Arity arity;
+		final int missing;
+
+		public MissingOperandException(final Token t, final Arity arity, final int
+				missing)
+		{
+			super(String.format("Missing %d operand for %s operator '%s'.", missing,
+			                    arity.name(), t.value), t);
+			this.arity = arity;
+			this.missing = missing;
+		}
+	}
+
+	/**
+	 * Exception thrown when the parser does not know the operand.
+	 */
+	public static class UnknownOperatorException extends ParsingException
+	{
+		final Arity arity;
+
+		public UnknownOperatorException(final Token t, final Arity arity)
+		{
+			super(String.format("Unknown %s operator '%s'.", arity.name(), t.value), t);
+			this.arity = arity;
+		}
+
 	}
 
 }

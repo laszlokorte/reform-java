@@ -6,6 +6,22 @@ import reform.core.runtime.Validatable;
 
 public interface InitialDestination extends Validatable
 {
+	double getMinXForRuntime(final Runtime runtime);
+
+	double getMinYForRuntime(final Runtime runtime);
+
+	double getMaxXForRuntime(final Runtime runtime);
+
+	double getMaxYForRuntime(final Runtime runtime);
+
+	Alignment getAlignment();
+
+	void setAlignment(final Alignment alignment);
+
+	String getDescription(Analyzer analyzer);
+
+	boolean isDegenerated();
+
 	enum Alignment
 	{
 		Leading
@@ -41,20 +57,4 @@ public interface InitialDestination extends Validatable
 
 		abstract public double getAlignedMax(double a, double b);
 	}
-
-	double getMinXForRuntime(final Runtime runtime);
-
-	double getMinYForRuntime(final Runtime runtime);
-
-	double getMaxXForRuntime(final Runtime runtime);
-
-	double getMaxYForRuntime(final Runtime runtime);
-
-	Alignment getAlignment();
-
-	String getDescription(Analyzer analyzer);
-
-	boolean isDegenerated();
-
-	void setAlignment(final Alignment alignment);
 }

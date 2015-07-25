@@ -6,10 +6,10 @@ import java.awt.geom.GeneralPath;
 
 public class ColoredShape
 {
+	private final GeneralPath.Double _path = new GeneralPath.Double();
 	private Stroke _stroke = new BasicStroke(1);
 	private Color _backgroundColor;
 	private Color _strokeColor;
-	private final GeneralPath.Double _path = new GeneralPath.Double();
 
 	public Stroke getStroke()
 	{
@@ -21,14 +21,14 @@ public class ColoredShape
 		return _backgroundColor;
 	}
 
-	public GeneralPath.Double getPath()
-	{
-		return _path;
-	}
-
 	public void setBackgroundColor(final int color)
 	{
 		_backgroundColor = color != 0 ? new Color(color, true) : null;
+	}
+
+	public GeneralPath.Double getPath()
+	{
+		return _path;
 	}
 
 	public void setStrokeColor(final int color)

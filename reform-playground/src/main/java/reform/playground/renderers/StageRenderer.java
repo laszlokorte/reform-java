@@ -14,13 +14,12 @@ public class StageRenderer implements CanvasRenderer
 
 	private final Stage _stage;
 
-	private final Stroke _stroke = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	private final Stroke _stroke = new BasicStroke(1, BasicStroke.CAP_ROUND,
+	                                               BasicStroke.JOIN_ROUND);
 	private final Color _fillColor = new Color(0x99888888, true);
 	private final Color _borderColor = new Color(0x333333, false);
-
-	private boolean _preview;
-
 	private final ToolState _toolState;
+	private boolean _preview;
 
 	public StageRenderer(final Stage stage, final ToolState toolState)
 	{

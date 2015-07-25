@@ -34,7 +34,8 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			_functionNames.add(functions[i].name().toLowerCase());
 		}
 		_sheet = sheet.getRaw();
-		Parser.ParserDelegate<Expression> delegate = new Delegate(sheet.getRaw(), _functionNames);
+		Parser.ParserDelegate<Expression> delegate = new Delegate(sheet.getRaw(),
+		                                                          _functionNames);
 		_parser = new Parser<>(delegate);
 	}
 
@@ -119,6 +120,13 @@ public class ExpressionParser implements ExpressionEditor.Parser
 
 	private final static class Delegate implements Parser.ParserDelegate<Expression>
 	{
+		private static final Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
+		private static final Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
+		private static final Pattern doublePattern = Pattern.compile(
+				"^(0|[1-9][0-9]*)?\\.[0-9]*$");
+		private static final Pattern colorPattern = Pattern.compile("^#[0-9a-fA-F]{6}$");
+		private static final Pattern colorPatternAlpha = Pattern.compile(
+				"^#[0-9a-fA-F]{8}$");
 		private final Sheet _sheet;
 		private final HashSet<String> _functionNames;
 
@@ -126,6 +134,12 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		{
 			_sheet = sheet;
 			_functionNames = functionNames;
+		}
+
+		@Override
+		public boolean hasFunctionOfName(final Token left)
+		{
+			return _functionNames.contains(left.value.toString());
 		}
 
 		@Override
@@ -141,19 +155,14 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public boolean hasFunctionOfName(final Token left)
-		{
-			return _functionNames.contains(left.value.toString());
-		}
-
-		@Override
 		public Expression emptyNode()
 		{
 			return new ConstantExpression(new Value(0));
 		}
 
 		@Override
-		public Expression unaryOperatorToNode(final Token operator, final Expression operand)
+		public Expression unaryOperatorToNode(final Token operator, final Expression
+				operand)
 		{
 			if (operator.value.equals("-"))
 			{
@@ -174,8 +183,8 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Expression binaryOperatorToNode(final Token operator, final Expression leftHand, final Expression
-				rightHand)
+		public Expression binaryOperatorToNode(final Token operator, final Expression
+				leftHand, final Expression rightHand)
 		{
 			if (operator.value.equals("+"))
 			{
@@ -240,13 +249,17 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Expression functionTokenToNode(final Token function, final List<Expression> args)
+		public Expression functionTokenToNode(final Token function, final
+		List<Expression> args)
 		{
 			final Expression[] params = new Expression[args.size()];
 			args.toArray(params);
 			final String funcName = function.value.toString();
-			final String enumName = funcName.substring(0, 1).toUpperCase() + funcName.substring(1);
-			return new FunctionCallExpression(Calculator.Function.valueOf(enumName), params);
+			final String enumName = funcName.substring(0,
+			                                           1).toUpperCase() + funcName
+					.substring(1);
+			return new FunctionCallExpression(Calculator.Function.valueOf(enumName),
+			                                  params);
 		}
 
 		@Override
@@ -334,7 +347,8 @@ public class ExpressionParser implements ExpressionEditor.Parser
 				case "||":
 					return 50;
 				default:
-					throw new Parser.UnknownOperatorException(token, Parser.Arity.Binary);
+					throw new Parser.UnknownOperatorException(token, Parser.Arity
+							.Binary);
 
 			}
 		}
@@ -344,12 +358,6 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		{
 			return new Parser.Context<>();
 		}
-
-		private static final Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
-		private static final Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
-		private static final Pattern doublePattern = Pattern.compile("^(0|[1-9][0-9]*)?\\.[0-9]*$");
-		private static final Pattern colorPattern = Pattern.compile("^#[0-9a-fA-F]{6}$");
-		private static final Pattern colorPatternAlpha = Pattern.compile("^#[0-9a-fA-F]{8}$");
 
 		@Override
 		public Expression literalTokenToNode(final Token token)
@@ -364,29 +372,31 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			}
 			else if (intPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(Integer.parseInt(token.value.toString(), 10)));
+				return new ConstantExpression(
+						new Value(Integer.parseInt(token.value.toString(), 10)));
 			}
 			else if (doublePattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(Double.parseDouble(token.value.toString())));
+				return new ConstantExpression(
+						new Value(Double.parseDouble(token.value.toString())));
 			}
 			else if (stringPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(
-						new Value(token.value.subSequence(1, token.value.length() - 1).toString()));
+				return new ConstantExpression(new Value(
+						token.value.subSequence(1, token.value.length() - 1).toString
+								()));
 			}
 			else if (colorPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(
-						0xff000000 | Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16),
-						true));
+				return new ConstantExpression(new Value(0xff000000 | Integer.parseInt(
+						token.value.subSequence(1, token.value.length()).toString(), 16),
+				                                        true));
 			}
 			else if (colorPatternAlpha.matcher(token.value).find())
 			{
-				return new ConstantExpression(
-						new Value((int) Long.parseLong(token.value.subSequence(1, token.value.length()).toString(),
-						                               16),
-						          true));
+				return new ConstantExpression(new Value((int) Long.parseLong(
+						token.value.subSequence(1, token.value.length()).toString(), 16),
+				                                        true));
 			}
 			else
 			{

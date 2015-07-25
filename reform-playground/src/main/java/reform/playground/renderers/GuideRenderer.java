@@ -14,7 +14,8 @@ public class GuideRenderer implements CanvasRenderer
 
 	private final Stage _stage;
 	private final ToolState _toolState;
-	private final Stroke _stroke = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+	private final Stroke _stroke = new BasicStroke(1, BasicStroke.CAP_ROUND,
+	                                               BasicStroke.JOIN_ROUND);
 	private final Color _guideColor = new Color(0x00ffff);
 	private boolean _preview;
 

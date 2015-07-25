@@ -111,7 +111,8 @@ public class PaperEntity implements Entity
 	@Override
 	public boolean contains(final Vec2 position)
 	{
-		return _topLeft.getX() < position.x && _topLeft.getY() < position.y && _bottomRight.getX() > position.x &&
+		return _topLeft.getX() < position.x && _topLeft.getY() < position.y &&
+				_bottomRight.getX() > position.x &&
 				_bottomRight.getY() > position.y;
 	}
 

@@ -13,7 +13,8 @@ public class CircleOutline implements Outline
 	private final Length _radius;
 	private final RotationAngle _angle;
 
-	public CircleOutline(final ReferencePoint center, final Length radius, final RotationAngle angle)
+	public CircleOutline(final ReferencePoint center, final Length radius, final
+	RotationAngle angle)
 	{
 		_center = center;
 		_radius = radius;
@@ -25,7 +26,10 @@ public class CircleOutline implements Outline
 	{
 		final double radius = _radius.getValueForRuntime(runtime);
 		final double angle = _angle.getValueForRuntime(runtime);
-		return _center.getXValueForRuntime(runtime) + Vector.getRotatedX(radius, 0, t * Math.PI * 2 + angle);
+		return _center.getXValueForRuntime(runtime) + Vector.getRotatedX(radius, 0,
+		                                                                 t * Math.PI * 2
+				                                                                 +
+				                                                                 angle);
 	}
 
 	@Override
@@ -33,7 +37,10 @@ public class CircleOutline implements Outline
 	{
 		final double radius = _radius.getValueForRuntime(runtime);
 		final double angle = _angle.getValueForRuntime(runtime);
-		return _center.getYValueForRuntime(runtime) + Vector.getRotatedY(radius, 0, t * Math.PI * 2 + angle);
+		return _center.getYValueForRuntime(runtime) + Vector.getRotatedY(radius, 0,
+		                                                                 t * Math.PI * 2
+				                                                                 +
+				                                                                 angle);
 	}
 
 	@Override

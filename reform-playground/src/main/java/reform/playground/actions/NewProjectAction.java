@@ -22,14 +22,16 @@ public class NewProjectAction extends AbstractAction
 
 	private final IdentifierEmitter _idEmitter;
 
-	public NewProjectAction(final WindowBuilder windowBuilder, final IdentifierEmitter idEmitter)
+	public NewProjectAction(final WindowBuilder windowBuilder, final IdentifierEmitter
+			idEmitter)
 	{
 		_windowBuilder = windowBuilder;
 		_idEmitter = idEmitter;
 
 		putValue(NAME, "New");
-		putValue(Action.ACCELERATOR_KEY,
-		         KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('N',
+		                                                        Toolkit
+				                                                        .getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 	@Override
@@ -38,8 +40,8 @@ public class NewProjectAction extends AbstractAction
 		final Project project = new Project();
 
 		project.addPicture(
-				new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350), new Sheet(), new Procedure(),
-				            new Sheet()));
+				new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(500, 350),
+				            new Sheet(), new Procedure(), new Sheet()));
 
 		_windowBuilder.open(null, project, _idEmitter, false);
 	}

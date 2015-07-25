@@ -19,9 +19,11 @@ public class CropRenderer implements CanvasRenderer
 
 	private final Stroke _borderStroke = new BasicStroke(2);
 	private final Color _borderColor = new Color(0x2f7f3f);
-	private final Asset _cropDot = new Dot(8, 2, new Color(0x30b040), new Color(0x2f7f3f));
+	private final Asset _cropDot = new Dot(8, 2, new Color(0x30b040),
+	                                       new Color(0x2f7f3f));
 
-	private final Asset _cropDotActive = new Dot(9, 3, new Color(0x45C556), new Color(0x1f6f2f));
+	private final Asset _cropDotActive = new Dot(9, 3, new Color(0x45C556),
+	                                             new Color(0x1f6f2f));
 
 	public CropRenderer(final Stage stage, final ToolState toolState)
 	{

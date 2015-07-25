@@ -15,11 +15,6 @@ public class Position
 		this.columnNumber = columnNumber;
 	}
 
-	public String toString()
-	{
-		return String.format("Pos(%d,l:%d,c:%d)", index, lineNumber, columnNumber);
-	}
-
 	public int hashCode()
 	{
 		return Objects.hash(index, lineNumber, columnNumber);
@@ -42,7 +37,13 @@ public class Position
 
 		final Position other = (Position) obj;
 
-		return other.index == index && other.lineNumber == lineNumber && other.columnNumber == columnNumber;
+		return other.index == index && other.lineNumber == lineNumber && other
+				.columnNumber == columnNumber;
+	}
+
+	public String toString()
+	{
+		return String.format("Pos(%d,l:%d,c:%d)", index, lineNumber, columnNumber);
 	}
 }
 

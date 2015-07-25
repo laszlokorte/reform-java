@@ -8,14 +8,16 @@ import reform.stage.tooling.InstructionFocus;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public final class WrapInIfAction extends AbstractAction implements InstructionFocus.Listener
+public final class WrapInIfAction extends AbstractAction implements InstructionFocus
+		.Listener
 {
 
 	private static final long serialVersionUID = 1L;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public WrapInIfAction(final InstructionFocus focus, final EventedProcedure eProcedure)
+	public WrapInIfAction(final InstructionFocus focus, final EventedProcedure
+			eProcedure)
 	{
 		_focus = focus;
 		_eProcedure = eProcedure;

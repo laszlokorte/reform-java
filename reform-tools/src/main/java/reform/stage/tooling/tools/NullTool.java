@@ -14,22 +14,16 @@ public class NullTool implements Tool
 	}
 
 	@Override
+	public void tearDown()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void cancel()
 	{
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void input(final Input input)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void focusChanged()
-	{
 
 	}
 
@@ -42,13 +36,6 @@ public class NullTool implements Tool
 
 	@Override
 	public void release()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void tearDown()
 	{
 		// TODO Auto-generated method stub
 
@@ -72,5 +59,18 @@ public class NullTool implements Tool
 	public void cycle()
 	{
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void input(final Input input)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void focusChanged()
+	{
+
 	}
 }

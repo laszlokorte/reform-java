@@ -23,33 +23,27 @@ import reform.stage.tooling.cursor.Cursor;
 public class RotateFormTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Snapped, Pressed
-	}
-
 	private final SelectionTool _selectionTool;
 	private final ToolState _toolState;
 	private final Cursor _cursor;
 	private final HitTester _hitTester;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
-
-	private State _state = State.Idle;
-	private Choice _pivotChoice = Choice.Primary;
-	private ReferencePoint _pivotPrimary;
-	private ReferencePoint _pivotSecondary;
 	private final Vec2 _pivotPrimaryPos = new Vec2();
 	private final Vec2 _pivotSecondaryPos = new Vec2();
 	private final Vec2 _currentOffset = new Vec2();
 	private final Vec2 _startPosition = new Vec2();
+	private State _state = State.Idle;
+	private Choice _pivotChoice = Choice.Primary;
+	private ReferencePoint _pivotPrimary;
+	private ReferencePoint _pivotSecondary;
 	private Handle _currentHandle;
 	private RotateInstruction _currentInstruction;
 	private ConstantRotationAngle _currentAngle;
 	private Instruction _baseInstruction;
-
-	public RotateFormTool(final SelectionTool selectionTool, final ToolState toolState, final Cursor cursor, final
-	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
+	public RotateFormTool(final SelectionTool selectionTool, final ToolState toolState,
+	                      final Cursor cursor, final HitTester hitTester, final
+	                      InstructionFocus focus, final EventedProcedure eProcedure)
 	{
 		_selectionTool = selectionTool;
 		_toolState = toolState;
@@ -66,11 +60,6 @@ public class RotateFormTool implements Tool
 		_toolState.setSelectionState(ToolState.SelectionState.Handle);
 
 		refreshHandles();
-	}
-
-	private void refreshHandles()
-	{
-		_toolState.setHandles(_hitTester.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
 	}
 
 	@Override
@@ -109,10 +98,13 @@ public class RotateFormTool implements Tool
 			_startPosition.set(_currentHandle.getX(), _currentHandle.getY());
 			_baseInstruction = _focus.getFocused();
 			_currentAngle = new ConstantRotationAngle(0);
-			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary;
+			final ReferencePoint pivotPoint = _pivotChoice == Choice.Primary ?
+					_pivotPrimary : _pivotSecondary;
 
-			_currentInstruction = new RotateInstruction(_currentHandle.getFormId(), _currentAngle, pivotPoint);
-			_eProcedure.addInstruction(_currentInstruction, Position.After, _baseInstruction);
+			_currentInstruction = new RotateInstruction(_currentHandle.getFormId(),
+			                                            _currentAngle, pivotPoint);
+			_eProcedure.addInstruction(_currentInstruction, Position.After,
+			                           _baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
 			                   _cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
@@ -187,14 +179,16 @@ public class RotateFormTool implements Tool
 	@Override
 	public void input(final Input input)
 	{
-		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary : Choice.Primary;
+		_pivotChoice = input.getAltModifier().isActive() ? Choice.Secondary : Choice
+				.Primary;
 
 		switch (_state)
 		{
 			case Idle:
 			case Snapped:
 			{
-				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected, HandleFilter.Pivot);
+				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected,
+				                                   HandleFilter.Pivot);
 				if (_currentHandle == null)
 				{
 					_state = State.Idle;
@@ -204,8 +198,10 @@ public class RotateFormTool implements Tool
 					final PivotPair pivotPair = _currentHandle.getPivot();
 					_pivotPrimary = pivotPair.createReference(Choice.Primary);
 					_pivotSecondary = pivotPair.createReference(Choice.Secondary);
-					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary), pivotPair.getY(Choice.Primary));
-					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary), pivotPair.getY(Choice.Secondary));
+					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary),
+					                     pivotPair.getY(Choice.Primary));
+					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary),
+					                       pivotPair.getY(Choice.Secondary));
 					_state = State.Snapped;
 				}
 
@@ -215,7 +211,9 @@ public class RotateFormTool implements Tool
 			case Pressed:
 			{
 				_currentAngle.setAngle(calcAngle(input.getShiftModifier().isActive()));
-				_currentInstruction.setFixPoint(_pivotChoice == Choice.Primary ? _pivotPrimary : _pivotSecondary);
+				_currentInstruction.setFixPoint(
+						_pivotChoice == Choice.Primary ? _pivotPrimary :
+								_pivotSecondary);
 
 				_eProcedure.publishInstructionChange(_currentInstruction);
 				break;
@@ -224,7 +222,9 @@ public class RotateFormTool implements Tool
 
 		if (_state != State.Idle)
 		{
-			_toolState.setPivot(_pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos);
+			_toolState.setPivot(
+					_pivotChoice == Choice.Primary ? _pivotPrimaryPos :
+							_pivotSecondaryPos);
 		}
 		else
 		{
@@ -235,7 +235,6 @@ public class RotateFormTool implements Tool
 
 		refreshHandles();
 	}
-
 
 	@Override
 	public void focusChanged()
@@ -248,15 +247,30 @@ public class RotateFormTool implements Tool
 
 	}
 
+	private void refreshHandles()
+	{
+		_toolState.setHandles(
+				_hitTester.getAllHandles(EntityFilter.OnlySelected, HandleFilter.Pivot));
+	}
 
 	private double calcAngle(final boolean stepped)
 	{
-		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos : _pivotSecondaryPos;
+		final Vec2 pivotPos = _pivotChoice == Choice.Primary ? _pivotPrimaryPos :
+				_pivotSecondaryPos;
 
-		final double angle = -Vector.angle(_cursor.getX() - _currentOffset.x, _cursor.getY() - _currentOffset.y,
-		                                   pivotPos.x, pivotPos.y) + Vector.angle(_startPosition.x, _startPosition.y,
-		                                                                          pivotPos.x, pivotPos.y);
+		final double angle = -Vector.angle(_cursor.getX() - _currentOffset.x,
+		                                   _cursor.getY() - _currentOffset.y, pivotPos.x,
+		                                   pivotPos.y) + Vector.angle(_startPosition.x,
+		                                                              _startPosition.y,
+		                                                              pivotPos.x,
+		                                                              pivotPos.y);
 
 		return stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle;
+	}
+
+
+	private enum State
+	{
+		Idle, Snapped, Pressed
 	}
 }

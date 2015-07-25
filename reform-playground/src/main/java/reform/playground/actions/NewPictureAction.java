@@ -23,7 +23,8 @@ public class NewPictureAction extends AbstractAction
 
 	private final IdentifierEmitter _idEmitter;
 
-	public NewPictureAction(final EventedProject project, final IdentifierEmitter idEmitter)
+	public NewPictureAction(final EventedProject project, final IdentifierEmitter
+			idEmitter)
 	{
 		_project = project;
 		_idEmitter = idEmitter;
@@ -33,8 +34,8 @@ public class NewPictureAction extends AbstractAction
 	public void actionPerformed(final ActionEvent e)
 	{
 		_project.addPicture(
-				new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(400, 400), new Sheet(), new Procedure(),
-				            new Sheet()));
+				new Picture(_idEmitter.emit(), new Name("Unnamed"), new Vec2i(400, 400),
+				            new Sheet(), new Procedure(), new Sheet()));
 	}
 
 }

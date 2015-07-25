@@ -5,6 +5,15 @@ import java.util.ArrayList;
 public class ColorModel
 {
 
+	private final ArrayList<Listener> _listeners = new ArrayList<>();
+	private double _red = 0;
+	private double _green = 0;
+	private double _blue = 0;
+	private double _alpha = 1;
+	private double _hue = 0;
+	private double _saturation = 0;
+	private double _value = 0;
+
 	public void setHexARGB(final int hexARGB)
 	{
 		final int alpha = (hexARGB >>> 24) & 0xff;
@@ -14,22 +23,6 @@ public class ColorModel
 
 		setRGBA(red / 255.0, green / 255.0, blue / 255.0, alpha / 255.0);
 	}
-
-	public interface Listener
-	{
-		void onColorChange(ColorModel model);
-	}
-
-	private final ArrayList<Listener> _listeners = new ArrayList<>();
-
-	private double _red = 0;
-	private double _green = 0;
-	private double _blue = 0;
-	private double _alpha = 1;
-
-	private double _hue = 0;
-	private double _saturation = 0;
-	private double _value = 0;
 
 	public void setRGBA(final double r, final double g, final double b, final double a)
 	{
@@ -66,15 +59,6 @@ public class ColorModel
 
 		updateRGB();
 
-		for (int i = 0, j = _listeners.size(); i < j; i++)
-		{
-			_listeners.get(i).onColorChange(this);
-		}
-	}
-
-	public void setAlpha(final double alpha)
-	{
-		_alpha = alpha;
 		for (int i = 0, j = _listeners.size(); i < j; i++)
 		{
 			_listeners.get(i).onColorChange(this);
@@ -143,7 +127,6 @@ public class ColorModel
 			_blue = blue * v;
 		}
 	}
-
 
 	private void updateHSV()
 	{
@@ -215,6 +198,15 @@ public class ColorModel
 		return _alpha;
 	}
 
+	public void setAlpha(final double alpha)
+	{
+		_alpha = alpha;
+		for (int i = 0, j = _listeners.size(); i < j; i++)
+		{
+			_listeners.get(i).onColorChange(this);
+		}
+	}
+
 	public double getHue()
 	{
 		return _hue;
@@ -238,5 +230,10 @@ public class ColorModel
 	public void removeListener(final Listener l)
 	{
 		_listeners.remove(l);
+	}
+
+	public interface Listener
+	{
+		void onColorChange(ColorModel model);
 	}
 }

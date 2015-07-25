@@ -23,13 +23,45 @@ import java.util.Set;
 public class WindowBuilder
 {
 
+	private final ArrayList<Window> _windows = new ArrayList<>();
+	private final JFileChooser _fileChooser = new JFileChooser();
+	private Window _currentWindow = null;
+
+	public WindowBuilder()
+	{
+		_fileChooser.setFileFilter(new FileNameExtensionFilter("JSON", "json"));
+
+	}
+
+	public void open(final File file, final Project project, final IdentifierEmitter
+			idEmitter, final boolean fresh)
+	{
+
+		if (_currentWindow != null && _currentWindow._fresh)
+		{
+			closeCurrentWindow();
+		}
+		_windows.add(new Window(this, file, project, idEmitter, fresh));
+	}
+
+	public void closeCurrentWindow()
+	{
+		_currentWindow._frame.dispatchEvent(
+				new WindowEvent(_currentWindow._frame, WindowEvent.WINDOW_CLOSING));
+	}
+
+	public JFileChooser getFileChooser()
+	{
+		return _fileChooser;
+	}
+
 	private static class Window
 	{
 		private final JFrame _frame;
 		private boolean _fresh = false;
 
-		public Window(final WindowBuilder windowBuilder, final File file, final Project project, final
-		IdentifierEmitter idEmitter, final boolean fresh)
+		public Window(final WindowBuilder windowBuilder, final File file, final Project
+				project, final IdentifierEmitter idEmitter, final boolean fresh)
 		{
 			final EventedProject eProject = new EventedProject(project);
 			_frame = new JFrame("Reform Playground");
@@ -38,7 +70,8 @@ public class WindowBuilder
 
 			_frame.setMinimumSize(new Dimension(600, 500));
 
-			final ProjectPresenter projectPresenter = new ProjectPresenter(eProject, idEmitter);
+			final ProjectPresenter projectPresenter = new ProjectPresenter(eProject,
+			                                                               idEmitter);
 
 			// final GlassLayerUI layerUI = new GlassLayerUI();
 			// final JLayer<JComponent> layer = new JLayer<>(
@@ -48,13 +81,15 @@ public class WindowBuilder
 
 			final JMenuBar menuBar = new JMenuBar();
 
-			final SaveAsAction saveAsAction = new SaveAsAction(windowBuilder, project, file, idEmitter);
+			final SaveAsAction saveAsAction = new SaveAsAction(windowBuilder, project,
+			                                                   file, idEmitter);
 
 			final JMenu fileMenu = new JMenu("File");
 			fileMenu.add(new JMenuItem(new NewProjectAction(windowBuilder, idEmitter)));
 			fileMenu.add(new JMenuItem(new OpenAction(windowBuilder)));
 			fileMenu.add(new JMenuItem(new OpenExampleAction(windowBuilder)));
-			fileMenu.add(new JMenuItem(new SaveAction(project, file, idEmitter, saveAsAction)));
+			fileMenu.add(new JMenuItem(
+					new SaveAction(project, file, idEmitter, saveAsAction)));
 			fileMenu.add(new JMenuItem(saveAsAction));
 			fileMenu.addSeparator();
 			fileMenu.add(new JMenuItem(new CloseAction(windowBuilder)));
@@ -72,26 +107,27 @@ public class WindowBuilder
 			{
 
 				@Override
-				public void onPictureRemoved(final EventedProject project, final Identifier<? extends Picture>
-						pictureId)
+				public void onPictureAdded(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
 				{
 					// TODO Auto-generated method stub
 
 				}
 
 				@Override
-				public void onPictureChanged(final EventedProject project, final Identifier<? extends Picture>
-						pictureId)
+				public void onPictureRemoved(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
+				{
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onPictureChanged(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
 				{
 					_fresh = false;
 					eProject.removeListener(this);
-				}
-
-				@Override
-				public void onPictureAdded(final EventedProject project, final Identifier<? extends Picture> pictureId)
-				{
-					// TODO Auto-generated method stub
-
 				}
 			});
 
@@ -100,6 +136,20 @@ public class WindowBuilder
 
 				@Override
 				public void windowOpened(final WindowEvent e)
+				{
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowClosing(final WindowEvent e)
+				{
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void windowClosed(final WindowEvent e)
 				{
 					// TODO Auto-generated method stub
 
@@ -120,74 +170,34 @@ public class WindowBuilder
 				}
 
 				@Override
-				public void windowDeactivated(final WindowEvent e)
-				{
-					windowBuilder._currentWindow = null;
-				}
-
-				@Override
-				public void windowClosing(final WindowEvent e)
-				{
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void windowClosed(final WindowEvent e)
-				{
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
 				public void windowActivated(final WindowEvent e)
 				{
 					windowBuilder._currentWindow = Window.this;
+				}
+
+				@Override
+				public void windowDeactivated(final WindowEvent e)
+				{
+					windowBuilder._currentWindow = null;
 				}
 			});
 
 			{
 
 				final Set<KeyStroke> forwardKeys = new HashSet<>(1);
-				forwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_MASK));
-				_frame.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardKeys);
+				forwardKeys.add(
+						KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_MASK));
+				_frame.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+				                             forwardKeys);
 
 				final Set<KeyStroke> backwardKeys = new HashSet<>(1);
-				backwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK | InputEvent
-						.CTRL_MASK));
-				_frame.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardKeys);
+				backwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
+				                                        InputEvent.SHIFT_MASK |
+						                                        InputEvent.CTRL_MASK));
+				_frame.setFocusTraversalKeys(KeyboardFocusManager
+						                             .BACKWARD_TRAVERSAL_KEYS,
+				                             backwardKeys);
 			}
 		}
-	}
-
-	private final ArrayList<Window> _windows = new ArrayList<>();
-	private Window _currentWindow = null;
-
-	private final JFileChooser _fileChooser = new JFileChooser();
-
-	public WindowBuilder()
-	{
-		_fileChooser.setFileFilter(new FileNameExtensionFilter("JSON", "json"));
-
-	}
-
-	public void open(final File file, final Project project, final IdentifierEmitter idEmitter, final boolean fresh)
-	{
-
-		if (_currentWindow != null && _currentWindow._fresh)
-		{
-			closeCurrentWindow();
-		}
-		_windows.add(new Window(this, file, project, idEmitter, fresh));
-	}
-
-	public void closeCurrentWindow()
-	{
-		_currentWindow._frame.dispatchEvent(new WindowEvent(_currentWindow._frame, WindowEvent.WINDOW_CLOSING));
-	}
-
-	public JFileChooser getFileChooser()
-	{
-		return _fileChooser;
 	}
 }

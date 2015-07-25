@@ -13,25 +13,18 @@ public class Cursor
 
 	private final HitTester _hitTester;
 	private final Vec2 _position = new Vec2(-9999, -9999);
-
-	private int _snapCycle = 0;
 	private final ArrayList<SnapPoint> _snapPointCache = new ArrayList<>();
-
-	private int _entityPointCycle = 0;
 	private final ArrayList<EntityPoint> _entityPointCache = new ArrayList<>();
-
-	private int _snapGlompCycle = 0;
 	private final ArrayList<SnapPoint> _snapPointGlompCache = new ArrayList<>();
-
-	private int _entityCycle = 0;
 	private final ArrayList<Entity> _entityCache = new ArrayList<>();
-
-	private int _handleCycle = 0;
 	private final ArrayList<Handle> _handleCache = new ArrayList<>();
-
-	private int _cropCycle = 0;
 	private final ArrayList<CropPoint> _cropPointCache = new ArrayList<>();
-
+	private int _snapCycle = 0;
+	private int _entityPointCycle = 0;
+	private int _snapGlompCycle = 0;
+	private int _entityCycle = 0;
+	private int _handleCycle = 0;
+	private int _cropCycle = 0;
 	private boolean _cycled = false;
 
 	public Cursor(final HitTester hitTester)
@@ -56,7 +49,8 @@ public class Cursor
 		if (_snapPointCache.isEmpty() || _snapCycle >= _snapPointCache.size())
 		{
 			_snapPointCache.clear();
-			_snapPointCache.addAll(_hitTester.getSnapPointsNear(_position, _snapCycle + 1, filter));
+			_snapPointCache.addAll(
+					_hitTester.getSnapPointsNear(_position, _snapCycle + 1, filter));
 		}
 		final SnapPoint prevSnap;
 		if (!_snapPointCache.isEmpty())
@@ -75,12 +69,15 @@ public class Cursor
 		if (_entityPointCache.isEmpty() || _entityPointCycle >= _entityPointCache.size())
 		{
 			_entityPointCache.clear();
-			_entityPointCache.addAll(_hitTester.getEntityPointsNear(_position, _entityPointCycle + 1, filter));
+			_entityPointCache.addAll(
+					_hitTester.getEntityPointsNear(_position, _entityPointCycle + 1,
+					                               filter));
 		}
 		final EntityPoint prevEntityPoint;
 		if (!_entityPointCache.isEmpty())
 		{
-			prevEntityPoint = _entityPointCache.get(_entityPointCycle % _entityPointCache.size());
+			prevEntityPoint = _entityPointCache.get(
+					_entityPointCycle % _entityPointCache.size());
 		}
 		else
 		{
@@ -91,16 +88,20 @@ public class Cursor
 
 	public SnapPoint getSnapPointGlomp(final HitTester.EntityFilter filter)
 	{
-		if (_snapPointGlompCache.isEmpty() || _snapGlompCycle >= _snapPointGlompCache.size())
+		if (_snapPointGlompCache.isEmpty() || _snapGlompCycle >= _snapPointGlompCache
+				.size())
 		{
 			_snapPointGlompCache.clear();
-			_snapPointGlompCache.addAll(_hitTester.getSnapPointsNearGlomp(_position, _snapGlompCycle + 1, filter));
+			_snapPointGlompCache.addAll(
+					_hitTester.getSnapPointsNearGlomp(_position, _snapGlompCycle + 1,
+					                                  filter));
 
 		}
 		final SnapPoint prevSnapGlomp;
 		if (!_snapPointGlompCache.isEmpty())
 		{
-			prevSnapGlomp = _snapPointGlompCache.get(_snapGlompCycle % _snapPointGlompCache.size());
+			prevSnapGlomp = _snapPointGlompCache.get(
+					_snapGlompCycle % _snapPointGlompCache.size());
 		}
 		else
 		{
@@ -115,7 +116,8 @@ public class Cursor
 		if (_cropPointCache.isEmpty() || _cropCycle >= _cropPointCache.size())
 		{
 			_cropPointCache.clear();
-			_cropPointCache.addAll(_hitTester.getCropPointsNear(_position, _cropCycle + 1));
+			_cropPointCache.addAll(
+					_hitTester.getCropPointsNear(_position, _cropCycle + 1));
 		}
 		final CropPoint prevCropPoint;
 		if (!_cropPointCache.isEmpty())
@@ -220,7 +222,9 @@ public class Cursor
 		if (_handleCache.isEmpty() || _handleCycle >= _handleCache.size())
 		{
 			_handleCache.clear();
-			_handleCache.addAll(_hitTester.getHandleNear(_position, _handleCycle + 1, filter, handleFilter));
+			_handleCache.addAll(
+					_hitTester.getHandleNear(_position, _handleCycle + 1, filter,
+					                         handleFilter));
 		}
 		final Handle prevHandle;
 		if (!_handleCache.isEmpty())

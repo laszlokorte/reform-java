@@ -22,26 +22,26 @@ public class ExpressionScaleFactor implements ScaleFactor
 	}
 
 	@Override
-	public boolean isValidFor(final Runtime runtime)
-	{
-		return true;
-	}
-
-	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
 		return _factorExpression.asString(false);
-	}
-
-	public Expression getExpression()
-	{
-		return _factorExpression;
 	}
 
 	@Override
 	public boolean isDegenerated()
 	{
 		return false;
+	}
+
+	@Override
+	public boolean isValidFor(final Runtime runtime)
+	{
+		return true;
+	}
+
+	public Expression getExpression()
+	{
+		return _factorExpression;
 	}
 
 	public void setFactorExpression(final Expression factorExpression)

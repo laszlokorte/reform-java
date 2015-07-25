@@ -20,10 +20,13 @@ class StageBuffer
 	private final ArrayList<ColoredShape> _currentShapes = new ArrayList<>();
 	private final ArrayList<ColoredShape> _finalShapes = new ArrayList<>();
 
-	private final ArrayList<Identifier<? extends Form>> _currentShapeIds = new ArrayList<>();
-	private final ArrayList<Identifier<? extends Form>> _finalShapeIds = new ArrayList<>();
+	private final ArrayList<Identifier<? extends Form>> _currentShapeIds = new
+			ArrayList<>();
+	private final ArrayList<Identifier<? extends Form>> _finalShapeIds = new
+			ArrayList<>();
 
-	private final IntersectionSnapPointPool _intersectionSnapPointPool = new IntersectionSnapPointPool();
+	private final IntersectionSnapPointPool _intersectionSnapPointPool = new
+			IntersectionSnapPointPool();
 	private InstructionControl _instructionControl = null;
 
 
@@ -52,12 +55,15 @@ class StageBuffer
 			for (int k = 0; k < i; k++)
 			{
 				final Entity other = _entities.get(k);
-				final Vec2[] intersections = EntityOutline.intersect(e.getOutline(), other.getOutline());
+				final Vec2[] intersections = EntityOutline.intersect(e.getOutline(),
+				                                                     other.getOutline());
 				for (int l = intersections.length - 1; l >= 0; l--)
 				{
 					if (intersections[l] != null)
 					{
-						stage.addIntersectionPoint(_intersectionSnapPointPool.create(e, other, l, intersections[l]));
+						stage.addIntersectionPoint(
+								_intersectionSnapPointPool.create(e, other, l,
+								                                  intersections[l]));
 					}
 				}
 			}
@@ -91,7 +97,8 @@ class StageBuffer
 		_currentShapeIds.add(id);
 	}
 
-	public void addFinalShape(final ColoredShape shape, final Identifier<? extends Form> id)
+	public void addFinalShape(final ColoredShape shape, final Identifier<? extends Form>
+			id)
 	{
 		_finalShapes.add(shape);
 		_finalShapeIds.add(id);

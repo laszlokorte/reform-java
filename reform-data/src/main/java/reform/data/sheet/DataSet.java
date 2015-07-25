@@ -7,7 +7,8 @@ import java.util.HashSet;
 
 public class DataSet
 {
-	private final HashMap<Identifier<? extends Definition>, Value> _results = new HashMap<>();
+	private final HashMap<Identifier<? extends Definition>, Value> _results = new
+			HashMap<>();
 	private final HashSet<Identifier<? extends Definition>> _errors = new HashSet<>();
 
 	public Value lookUp(final Identifier<? extends Definition> id)

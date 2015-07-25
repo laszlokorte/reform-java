@@ -17,9 +17,11 @@ public class HandleRenderer implements CanvasRenderer
 	private final Stage _stage;
 	private final ToolState _toolState;
 
-	private final Asset _cropDot = new Dot(6, 2, new Color(0x78C98B), new Color(0x78C98B));
+	private final Asset _cropDot = new Dot(6, 2, new Color(0x78C98B),
+	                                       new Color(0x78C98B));
 
-	private final Asset _cropDotActive = new Dot(7, 1, new Color(0x78C98B), new Color(0x78C98B));
+	private final Asset _cropDotActive = new Dot(7, 1, new Color(0x78C98B),
+	                                             new Color(0x78C98B));
 	private boolean _preview;
 
 	public HandleRenderer(final Stage stage, final ToolState toolState)
@@ -33,7 +35,8 @@ public class HandleRenderer implements CanvasRenderer
 	{
 
 		final ToolState.ViewState viewState = _toolState.getViewState();
-		if (viewState == ToolState.ViewState.Handle || viewState == ToolState.ViewState.SnapHandle)
+		if (viewState == ToolState.ViewState.Handle || viewState == ToolState.ViewState
+				.SnapHandle)
 		{
 			final Vec2i size = _stage.getSize();
 
@@ -42,7 +45,8 @@ public class HandleRenderer implements CanvasRenderer
 			Handle active = null;
 			if (_preview)
 			{
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+				g2.setComposite(
+						AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
 			}
 
 			final List<Handle> handles = _toolState.getHandles();

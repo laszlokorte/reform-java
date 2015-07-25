@@ -33,7 +33,8 @@ public class ExportImageAction extends AbstractAction
 
 	private final JFileChooser _fileChooser;
 
-	public ExportImageAction(final Stage stage, final ToolController toolController, final PreviewTool previewTool)
+	public ExportImageAction(final Stage stage, final ToolController toolController,
+	                         final PreviewTool previewTool)
 	{
 		_stage = stage;
 		_toolController = toolController;
@@ -48,7 +49,8 @@ public class ExportImageAction extends AbstractAction
 			final String ext = formats[i].toLowerCase();
 			if (formatSet.add(ext))
 			{
-				_fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(ext, ext));
+				_fileChooser.addChoosableFileFilter(
+						new FileNameExtensionFilter(ext, ext));
 			}
 		}
 
@@ -89,32 +91,39 @@ public class ExportImageAction extends AbstractAction
 
 					if (suffix.equals("svg"))
 					{
-						DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+						DOMImplementation domImpl = GenericDOMImplementation
+								.getDOMImplementation();
 
 						String svgNS = "http://www.w3.org/2000/svg";
 						Document document = domImpl.createDocument(svgNS, "svg", null);
 
 						SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-						svgGenerator.setSVGCanvasSize(new Dimension(_stage.getSize().x, _stage.getSize().y));
+						svgGenerator.setSVGCanvasSize(
+								new Dimension(_stage.getSize().x, _stage.getSize().y));
 
 
 						draw(svgGenerator);
 
-						Writer out = new OutputStreamWriter(new FileOutputStream(selectedFile), "UTF-8");
+						Writer out = new OutputStreamWriter(
+								new FileOutputStream(selectedFile), "UTF-8");
 						svgGenerator.stream(out, true);
 					}
 					else
 					{
-						final BufferedImage image = new BufferedImage(_stage.getSize().x, _stage.getSize().y,
-						                                              BufferedImage.TYPE_INT_RGB);
+						final BufferedImage image = new BufferedImage(_stage.getSize().x,
+						                                              _stage.getSize().y,
+						                                              BufferedImage
+								                                              .TYPE_INT_RGB);
 
 						final Graphics2D g2 = image.createGraphics();
 
 						draw(g2);
 
-						final ImageWriter writer = ImageIO.getImageWritersBySuffix(suffix).next();
+						final ImageWriter writer = ImageIO.getImageWritersBySuffix(
+								suffix).next();
 
-						final ImageOutputStream stream = ImageIO.createImageOutputStream(selectedFile);
+						final ImageOutputStream stream = ImageIO.createImageOutputStream(
+								selectedFile);
 						writer.setOutput(stream);
 						writer.write(image);
 						writer.dispose();
@@ -143,7 +152,8 @@ public class ExportImageAction extends AbstractAction
 	{
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, _stage.getSize().x, _stage.getSize().y);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+		                    RenderingHints.VALUE_ANTIALIAS_ON);
 
 		final List<ColoredShape> finalShapes = _stage.getFinalShapes();
 		for (int i = 0, j = finalShapes.size(); i < j; i++)

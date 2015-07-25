@@ -11,12 +11,11 @@ import java.awt.image.BufferedImage;
 
 public class AlphaColorTrack extends JComponent
 {
+private final Composite _composite = AlphaComposite.getInstance(AlphaComposite
+			                                                                .DST_IN, 1
+
+	private final ColorModel _model;.0F);
 	private BufferedImage _overlay;
-
-	private final Composite _composite = AlphaComposite.getInstance(AlphaComposite.DST_IN, 1.0F);
-
-	private final ColorModel _model;
-
 	private Color _color = Color.BLACK;
 
 	public AlphaColorTrack(final ColorModel model)
@@ -52,12 +51,18 @@ public class AlphaColorTrack extends JComponent
 		{
 			public void componentResized(final ComponentEvent e)
 			{
-				_overlay = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+				_overlay = new BufferedImage(getWidth(), getHeight(),
+				                             BufferedImage.TYPE_4BYTE_ABGR);
 
-				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0, getWidth(), 0,
-				                                                                   new float[]{0, 1},
-				                                                                   new Color[]{Color.WHITE, new Color(
-						                                                                   0x00ffffff, true)});
+				final LinearGradientPaint horizontalGrad = new LinearGradientPaint(0, 0,
+				                                                                   getWidth(),
+				                                                                   0,
+				                                                                   new
+						                                                                   float[]{0, 1},
+				                                                                   new
+						                                                                   Color[]{Color.WHITE, new Color(
+						                                                                   0x00ffffff,
+						                                                                   true)});
 
 				final Graphics2D g2 = (Graphics2D) _overlay.getGraphics();
 
@@ -95,7 +100,8 @@ public class AlphaColorTrack extends JComponent
 
 	private void onChange(final ColorModel colorModel)
 	{
-		_color = new Color((float) colorModel.getRed(), (float) colorModel.getGreen(), (float) colorModel.getBlue());
+		_color = new Color((float) colorModel.getRed(), (float) colorModel.getGreen(),
+		                   (float) colorModel.getBlue());
 		repaint();
 	}
 
@@ -111,9 +117,11 @@ public class AlphaColorTrack extends JComponent
 		g2.drawImage(_overlay, 0, 0, null);
 
 		g.setColor(Color.WHITE);
-		g.fillRoundRect(4 + (int) ((width - 11) * _model.getAlpha()), 3, 3, height - 6, 2, 2);
+		g.fillRoundRect(4 + (int) ((width - 11) * _model.getAlpha()), 3, 3, height - 6, 2,
+		                2);
 		g.setColor(Color.BLACK);
-		g.drawRoundRect(4 + (int) ((width - 11) * _model.getAlpha()), 3, 3, height - 6, 2, 2);
+		g.drawRoundRect(4 + (int) ((width - 11) * _model.getAlpha()), 3, 3, height - 6, 2,
+		                2);
 
 	}
 

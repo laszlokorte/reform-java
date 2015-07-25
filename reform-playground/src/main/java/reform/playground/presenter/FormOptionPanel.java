@@ -26,195 +26,29 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure.Listener, ActionListener
+public final class FormOptionPanel implements FormSelection.Listener, EventedProcedure
+		.Listener, ActionListener
 {
 
 	private final ExpressionEditor.Parser _parser;
-
-	private static class ExpressionPanel
-	{
-		private Attribute _attribute;
-		private final ExpressionEditor _expressionEditor;
-
-		private final FormOptionPanel _delegate;
-
-		ExpressionPanel(final FormOptionPanel delegate)
-		{
-			_delegate = delegate;
-			_expressionEditor = new ExpressionEditor(_delegate._parser);
-			_expressionEditor.addChangeListener(this::onModelChange);
-			_expressionEditor.setColumns(10);
-		}
-
-		private void onModelChange(final ChangeEvent changeEvent)
-		{
-			if (_attribute != null)
-			{
-				_attribute.setValue(_expressionEditor.getExpression());
-
-				_delegate.onChange();
-			}
-		}
-
-		void setAttribute(final Attribute attr)
-		{
-			if (attr != null)
-			{
-				_attribute = null; // prevent cycle
-
-				_expressionEditor.setExpression(attr.getValue());
-			}
-			_attribute = attr;
-		}
-
-		public Component getComponent()
-		{
-			return _expressionEditor;
-		}
-
-		public void setEnabled(final boolean enabled)
-		{
-			_expressionEditor.setVisible(enabled);
-		}
-	}
-
-	private static class ColorPanel
-	{
-		private Attribute _attribute;
-		private final ExpressionEditor _expressionEditor;
-		private final ColorPicker _colorPicker;
-		private final FormOptionPanel _delegate;
-
-		ColorPanel(final FormOptionPanel delegate)
-		{
-			_expressionEditor = new ExpressionEditor(delegate._parser);
-			_colorPicker = new ColorPicker(_expressionEditor);
-			_colorPicker.getModel().addListener(this::onModelChange);
-			_expressionEditor.addChangeListener(this::onExpressionChange);
-			_delegate = delegate;
-		}
-
-		private boolean _expressionChanged = false;
-		private boolean _colorChanged = false;
-
-		private void onExpressionChange(final ChangeEvent changeEvent)
-		{
-			if (_expressionChanged)
-			{
-				return;
-			}
-			_expressionChanged = true;
-			final Expression expression = _expressionEditor.getExpression();
-
-			if (expression instanceof ConstantExpression)
-			{
-				final ConstantExpression c = (ConstantExpression) expression;
-				if (c.getValue().type == Value.Type.Color)
-				{
-					if (!_colorChanged)
-					{
-						_colorPicker.getModel().setHexARGB(c.getValue().getColor());
-					}
-				}
-				else
-				{
-					_colorPicker.getModel().setHexARGB(0xff000000);
-					_colorPicker.setMixed();
-				}
-			}
-			else
-			{
-				_colorPicker.getModel().setHexARGB(0xff000000);
-				_colorPicker.setMixed();
-			}
-			_attribute.setValue(expression);
-			_delegate.onChange();
-			_expressionChanged = false;
-		}
-
-		private void onModelChange(final ColorModel colorModel)
-		{
-			if (_expressionChanged)
-			{
-				return;
-			}
-			if (_attribute != null && _colorPicker.getButton().isEnabled())
-			{
-				_colorChanged = true;
-				final Expression expression = new ConstantExpression(
-						new Value(colorModel.getAlpha(), colorModel.getRed(), colorModel.getGreen(),
-						          colorModel.getBlue()));
-
-				_expressionEditor.setExpression(expression);
-				onExpressionChange(null);
-				_colorChanged = false;
-			}
-		}
-
-		void setAttribute(final Attribute attr)
-		{
-			if (attr != null)
-			{
-				_attribute = null; // prevent cycle
-				final Expression currentExpression = attr.getValue();
-
-				_expressionEditor.setExpression(currentExpression);
-				if (currentExpression instanceof ConstantExpression)
-				{
-					final ConstantExpression c = (ConstantExpression) currentExpression;
-
-					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
-				}
-				else
-				{
-					_colorPicker.getModel().setHexARGB(0);
-					_colorPicker.setMixed();
-				}
-
-			}
-			_attribute = attr;
-		}
-
-		public Component getButton()
-		{
-			return _colorPicker.getButton();
-		}
-
-		public void dispose()
-		{
-			_colorPicker.dispose();
-		}
-
-		public void setEnabled(final boolean enabled)
-		{
-			_colorPicker.getButton().setEnabled(enabled);
-			if (!enabled)
-			{
-				_colorPicker.dispose();
-			}
-		}
-	}
-
 	private final JComponent _panel = Box.createHorizontalBox();
-
-	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(() -> new ColorPanel(this));
-
-	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(() -> new ExpressionPanel(this));
-
-	private final Pool<Component> _struts = new SimplePool<>(() -> Box.createHorizontalStrut(5));
-
-
+	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(
+			() -> new ColorPanel(this));
+	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(
+			() -> new ExpressionPanel(this));
+	private final Pool<Component> _struts = new SimplePool<>(
+			() -> Box.createHorizontalStrut(5));
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
 	private final JToggleButton _guideToggle = new JToggleButton(_rulerIcon);
-
 	private final FormSelection _selection;
 	private final EventedProcedure _eProcedure;
 	private final Analyzer _analyzer;
-
 	private final Component _glue = Box.createGlue();
+	private boolean _ownChange = false;
 
-	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection,
-	                       final ExpressionEditor.Parser parser)
+	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer,
+	                       final FormSelection selection, final ExpressionEditor.Parser
+			                       parser)
 	{
 		_eProcedure = eProcedure;
 		_selection = selection;
@@ -239,39 +73,36 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		return _panel;
 	}
 
-
 	@Override
-	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionAdded(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final
+	Instruction instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionChanged(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionChanged(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 
 	}
-
-	private boolean _ownChange = false;
 
 	@Override
 	public void onFormChanged(final EventedProcedure procedure, final Form form)
@@ -379,9 +210,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 			if (e.getSource() == _guideToggle)
 			{
-				form.setType(_guideToggle.isSelected() ? DrawingType.Guide : DrawingType.Draw);
+				form.setType(
+						_guideToggle.isSelected() ? DrawingType.Guide : DrawingType
+								.Draw);
 				_colorPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
-				_expressionPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_expressionPanels.eachActive(
+						(p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
 			_ownChange = true;
@@ -399,6 +233,167 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			_ownChange = true;
 			_eProcedure.publishFormChange(form);
 			_ownChange = false;
+		}
+	}
+
+	private static class ExpressionPanel
+	{
+		private final ExpressionEditor _expressionEditor;
+		private final FormOptionPanel _delegate;
+		private Attribute _attribute;
+
+		ExpressionPanel(final FormOptionPanel delegate)
+		{
+			_delegate = delegate;
+			_expressionEditor = new ExpressionEditor(_delegate._parser);
+			_expressionEditor.addChangeListener(this::onModelChange);
+			_expressionEditor.setColumns(10);
+		}
+
+		private void onModelChange(final ChangeEvent changeEvent)
+		{
+			if (_attribute != null)
+			{
+				_attribute.setValue(_expressionEditor.getExpression());
+
+				_delegate.onChange();
+			}
+		}
+
+		void setAttribute(final Attribute attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+
+				_expressionEditor.setExpression(attr.getValue());
+			}
+			_attribute = attr;
+		}
+
+		public Component getComponent()
+		{
+			return _expressionEditor;
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_expressionEditor.setVisible(enabled);
+		}
+	}
+
+	private static class ColorPanel
+	{
+		private final ExpressionEditor _expressionEditor;
+		private final ColorPicker _colorPicker;
+		private final FormOptionPanel _delegate;
+		private Attribute _attribute;
+		private boolean _expressionChanged = false;
+		private boolean _colorChanged = false;
+		ColorPanel(final FormOptionPanel delegate)
+		{
+			_expressionEditor = new ExpressionEditor(delegate._parser);
+			_colorPicker = new ColorPicker(_expressionEditor);
+			_colorPicker.getModel().addListener(this::onModelChange);
+			_expressionEditor.addChangeListener(this::onExpressionChange);
+			_delegate = delegate;
+		}
+
+		private void onExpressionChange(final ChangeEvent changeEvent)
+		{
+			if (_expressionChanged)
+			{
+				return;
+			}
+			_expressionChanged = true;
+			final Expression expression = _expressionEditor.getExpression();
+
+			if (expression instanceof ConstantExpression)
+			{
+				final ConstantExpression c = (ConstantExpression) expression;
+				if (c.getValue().type == Value.Type.Color)
+				{
+					if (!_colorChanged)
+					{
+						_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+					}
+				}
+				else
+				{
+					_colorPicker.getModel().setHexARGB(0xff000000);
+					_colorPicker.setMixed();
+				}
+			}
+			else
+			{
+				_colorPicker.getModel().setHexARGB(0xff000000);
+				_colorPicker.setMixed();
+			}
+			_attribute.setValue(expression);
+			_delegate.onChange();
+			_expressionChanged = false;
+		}
+
+		private void onModelChange(final ColorModel colorModel)
+		{
+			if (_expressionChanged)
+			{
+				return;
+			}
+			if (_attribute != null && _colorPicker.getButton().isEnabled())
+			{
+				_colorChanged = true;
+				final Expression expression = new ConstantExpression(
+						new Value(colorModel.getAlpha(), colorModel.getRed(),
+						          colorModel.getGreen(), colorModel.getBlue()));
+
+				_expressionEditor.setExpression(expression);
+				onExpressionChange(null);
+				_colorChanged = false;
+			}
+		}
+
+		void setAttribute(final Attribute attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+				final Expression currentExpression = attr.getValue();
+
+				_expressionEditor.setExpression(currentExpression);
+				if (currentExpression instanceof ConstantExpression)
+				{
+					final ConstantExpression c = (ConstantExpression) currentExpression;
+
+					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+				}
+				else
+				{
+					_colorPicker.getModel().setHexARGB(0);
+					_colorPicker.setMixed();
+				}
+
+			}
+			_attribute = attr;
+		}
+
+		public Component getButton()
+		{
+			return _colorPicker.getButton();
+		}
+
+		public void dispose()
+		{
+			_colorPicker.dispose();
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_colorPicker.getButton().setEnabled(enabled);
+			if (!enabled)
+			{
+				_colorPicker.dispose();
+			}
 		}
 	}
 }

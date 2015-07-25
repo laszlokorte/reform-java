@@ -22,12 +22,6 @@ public class ConstantExpression implements Expression
 	}
 
 	@Override
-	public String toString()
-	{
-		return _value.asString();
-	}
-
-	@Override
 	public Value getValueFor(final DataSet set)
 	{
 		return _value;
@@ -37,6 +31,12 @@ public class ConstantExpression implements Expression
 	public void collectDependencies(final Collection<ReferenceExpression> dependencies)
 	{
 
+	}
+
+	@Override
+	public String toString()
+	{
+		return _value.asString();
 	}
 
 	public Value getValue()

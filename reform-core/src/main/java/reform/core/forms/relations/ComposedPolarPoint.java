@@ -21,13 +21,15 @@ public class ComposedPolarPoint implements ReferencePoint
 	@Override
 	public double getXValueForRuntime(final Runtime runtime)
 	{
-		return Math.cos(_angle.getValueForRuntime(runtime)) * _radius.getValueForRuntime(runtime);
+		return Math.cos(_angle.getValueForRuntime(runtime)) * _radius.getValueForRuntime(
+				runtime);
 	}
 
 	@Override
 	public double getYValueForRuntime(final Runtime runtime)
 	{
-		return Math.sin(_angle.getValueForRuntime(runtime)) * _radius.getValueForRuntime(runtime);
+		return Math.sin(_angle.getValueForRuntime(runtime)) * _radius.getValueForRuntime(
+				runtime);
 	}
 
 	@Override

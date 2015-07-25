@@ -14,7 +14,8 @@ public class BasicAngleRotator implements Rotator
 	}
 
 	@Override
-	public void rotate(final Runtime runtime, final double angle, final double fixX, final double fixY)
+	public void rotate(final Runtime runtime, final double angle, final double fixX,
+	                   final double fixY)
 	{
 		_angle.setForRuntime(runtime, _angle.getValueForRuntime(runtime) + angle);
 

@@ -26,8 +26,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 
-public final class InstructionsOptionPanel implements InstructionFocus.Listener, ChangeListener, EventedProcedure
-		.Listener
+public final class InstructionsOptionPanel implements InstructionFocus.Listener,
+		ChangeListener, EventedProcedure.Listener
 {
 	private final JPanel _panel = new JPanel();
 	private final JLabel _label = new JLabel("T:");
@@ -37,8 +37,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus, ExpressionParser
-			expressionParser)
+	public InstructionsOptionPanel(final EventedProcedure eProcedure, final
+	InstructionFocus focus, ExpressionParser expressionParser)
 	{
 		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS));
 		_expressionEditor = new ExpressionEditor(expressionParser);
@@ -78,7 +78,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (focus.getFocused() instanceof ScaleInstruction)
 			{
-				final ScaleInstruction instruction = (ScaleInstruction) focus.getFocused();
+				final ScaleInstruction instruction = (ScaleInstruction) focus
+						.getFocused();
 				final ScaleFactor factor = instruction.getFactor();
 				if (factor instanceof ConstantScaleFactor)
 				{
@@ -97,7 +98,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (focus.getFocused() instanceof RotateInstruction)
 			{
-				final RotateInstruction instruction = (RotateInstruction) focus.getFocused();
+				final RotateInstruction instruction = (RotateInstruction) focus
+						.getFocused();
 				final RotationAngle angle = instruction.getAngle();
 				if (angle instanceof ConstantRotationAngle)
 				{
@@ -116,7 +118,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (focus.getFocused() instanceof IfConditionInstruction)
 			{
-				final IfConditionInstruction instruction = (IfConditionInstruction) focus.getFocused();
+				final IfConditionInstruction instruction = (IfConditionInstruction)
+						focus.getFocused();
 				_label.setText("C:");
 				_expressionEditor.setExpression(instruction.getCondition());
 				showExpression = true;
@@ -141,7 +144,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (_focus.getFocused() instanceof ScaleInstruction)
 			{
-				final ScaleInstruction instruction = (ScaleInstruction) _focus.getFocused();
+				final ScaleInstruction instruction = (ScaleInstruction) _focus
+						.getFocused();
 				final ScaleFactor factor = instruction.getFactor();
 
 				if (factor instanceof ConstantScaleFactor)
@@ -154,14 +158,16 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 						if (expression instanceof ConstantExpression)
 						{
 							Value v = ((ConstantExpression) expression).getValue();
-							if (v.type == Value.Type.Integer || v.type == Value.Type.Double)
+							if (v.type == Value.Type.Integer || v.type == Value.Type
+									.Double)
 							{
 								((ConstantScaleFactor) factor).setFactor(v.getDouble());
 								break SetFactor;
 							}
 						}
 
-						instruction.setFactor(new ExpressionScaleFactor(_expressionEditor.getExpression()));
+						instruction.setFactor(new ExpressionScaleFactor(
+								_expressionEditor.getExpression()));
 					}
 
 					_eProcedure.publishInstructionChange(instruction);
@@ -176,7 +182,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (_focus.getFocused() instanceof RotateInstruction)
 			{
-				final RotateInstruction instruction = (RotateInstruction) _focus.getFocused();
+				final RotateInstruction instruction = (RotateInstruction) _focus
+						.getFocused();
 				final RotationAngle angle = instruction.getAngle();
 
 				if (angle instanceof ConstantRotationAngle)
@@ -189,14 +196,16 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 						if (expression instanceof ConstantExpression)
 						{
 							Value v = ((ConstantExpression) expression).getValue();
-							if (v.type == Value.Type.Integer || v.type == Value.Type.Double)
+							if (v.type == Value.Type.Integer || v.type == Value.Type
+									.Double)
 							{
 								((ConstantRotationAngle) angle).setAngle(v.getDouble());
 								break SetAngle;
 							}
 						}
 
-						instruction.setAngle(new ExpressionRotationAngle(_expressionEditor.getExpression()));
+						instruction.setAngle(new ExpressionRotationAngle(
+								_expressionEditor.getExpression()));
 					}
 
 					_eProcedure.publishInstructionChange(instruction);
@@ -210,7 +219,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 			}
 			else if (_focus.getFocused() instanceof IfConditionInstruction)
 			{
-				final IfConditionInstruction instruction = (IfConditionInstruction) _focus.getFocused();
+				final IfConditionInstruction instruction = (IfConditionInstruction)
+						_focus.getFocused();
 				instruction.setCondition(_expressionEditor.getExpression());
 				_eProcedure.publishInstructionChange(instruction);
 			}
@@ -218,32 +228,32 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	}
 
 	@Override
-	public void onInstructionAdded(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionAdded(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionRemoved(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionWillBeRemoved(final EventedProcedure procedure, final
+	Instruction instruction, final InstructionGroup parent)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onInstructionChanged(final EventedProcedure procedure, final Instruction instruction, final
-	InstructionGroup parent)
+	public void onInstructionChanged(final EventedProcedure procedure, final Instruction
+			instruction, final InstructionGroup parent)
 	{
 		if (_focus.isSet() && _focus.getFocused() == instruction)
 		{

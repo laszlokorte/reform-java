@@ -24,7 +24,8 @@ public final class Vector
 	/**
 	 * Return the distance between the two given points.
 	 */
-	static public double distance(final double aX, final double aY, final double bX, final double bY)
+	static public double distance(final double aX, final double aY, final double bX,
+	                              final double bY)
 	{
 		final double dx = aX - bX;
 		final double dy = aY - bY;
@@ -34,7 +35,8 @@ public final class Vector
 	/**
 	 * Return the square of the distance between the two given points.
 	 */
-	static public double distance2(final double aX, final double aY, final double bX, final double bY)
+	static public double distance2(final double aX, final double aY, final double bX,
+	                               final double bY)
 	{
 		final double dx = aX - bX;
 		final double dy = aY - bY;
@@ -44,7 +46,8 @@ public final class Vector
 	/**
 	 * Return the dot product of the two given vectors.
 	 */
-	static public double dot(final double aX, final double aY, final double bX, final double bY)
+	static public double dot(final double aX, final double aY, final double bX, final
+	double bY)
 	{
 
 		return aX * bX + aY * bY;
@@ -63,8 +66,8 @@ public final class Vector
 	 * Return the x component of the projection of the source vector projected
 	 * onto the target vector.
 	 */
-	static public double projectionX(final double sourceX, final double sourceY, final double targetX, final double
-			targetY)
+	static public double projectionX(final double sourceX, final double sourceY, final
+	double targetX, final double targetY)
 	{
 		if (targetX == 0 && targetY == 0)
 		{
@@ -82,8 +85,8 @@ public final class Vector
 	 * Return the y component of the projection of the source vector projected
 	 * onto the target vector.
 	 */
-	static public double projectionY(final double sourceX, final double sourceY, final double targetX, final double
-			targetY)
+	static public double projectionY(final double sourceX, final double sourceY, final
+	double targetX, final double targetY)
 	{
 		if (targetX == 0 && targetY == 0)
 		{
@@ -136,7 +139,8 @@ public final class Vector
 	 * Return the angle of the vector from the given center to the given point.
 	 * The angle is measured in radians clockwise from the positive x axis.
 	 */
-	public static double angle(final double x, final double y, final double centerX, final double centerY)
+	public static double angle(final double x, final double y, final double centerX,
+	                           final double centerY)
 	{
 		return angleOf(x - centerX, -(y - centerY));
 	}
@@ -145,24 +149,26 @@ public final class Vector
 	 * Return if the given point lies on the line between the other two given
 	 * points.
 	 */
-	public static boolean isBetween(final double pX, final double pY, final double aX, final double aY, final double
-			bX, final double bY, final double eps)
+	public static boolean isBetween(final double pX, final double pY, final double aX,
+	                                final double aY, final double bX, final double bY,
+	                                final double eps)
 	{
-		final double delta = Vector.distance(pX, pY, aX, aY) + Vector.distance(pX, pY, bX, bY) - Vector.distance(aX,
-		                                                                                                         aY,
-		                                                                                                         bX,
-		                                                                                                         bY);
+		final double delta = Vector.distance(pX, pY, aX, aY) + Vector.distance(pX, pY,
+		                                                                       bX,
+		                                                                       bY) -
+				Vector.distance(
+				aX, aY, bX, bY);
 		return -eps < delta && delta < eps;
 	}
 
-	private static double sign(final double p1x, final double p1y, final double p2x, final double p2y, final double
-			p3x, final double p3y)
+	private static double sign(final double p1x, final double p1y, final double p2x,
+	                           final double p2y, final double p3x, final double p3y)
 	{
 		return (p1x - p3x) * (p2y - p3y) - (p2x - p3x) * (p1y - p3y);
 	}
 
-	public static boolean isInTriangle(final double px, final double py, final double t1x, final double t1y, final
-	double t2x, final double t2y, final double t3x, final double t3y)
+	public static boolean isInTriangle(final double px, final double py, final double
+			t1x, final double t1y, final double t2x, final double t2y, final double t3x, final double t3y)
 	{
 		final boolean b1;
 		final boolean b2;
@@ -175,8 +181,8 @@ public final class Vector
 		return b1 == b2 && b2 == b3;
 	}
 
-	public static boolean isLeft(final double ax, final double ay, final double bx, final double by, final double px,
-	                             final double py)
+	public static boolean isLeft(final double ax, final double ay, final double bx,
+	                             final double by, final double px, final double py)
 	{
 		return (bx - ax) * (py - ay) - (by - ay) * (px - ax) > 0;
 	}
@@ -186,8 +192,9 @@ public final class Vector
 		return a + (b - a) * t;
 	}
 
-	public static Vec2 intersectionForLines(final double x1, final double y1, final double x2, final double y2, final
-	double x3, final double y3, final double x4, final double y4)
+	public static Vec2 intersectionForLines(final double x1, final double y1, final
+	double x2, final double y2, final double x3, final double y3, final double x4, final
+	double y4)
 	{
 		// line segment from (x1,y1) to (x2,y2) intersecting segment from
 		// (x3,y3) to (x4,y4)
@@ -223,9 +230,9 @@ public final class Vector
 		return Math.PI * 2 * radius;
 	}
 
-	public static Vec2 intersectionForCircles(final double centerAX, final double centerAY, final double radiusA,
-	                                          final double centerBX, final double centerBY, final double radiusB,
-	                                          final int index)
+	public static Vec2 intersectionForCircles(final double centerAX, final double
+			centerAY, final double radiusA, final double centerBX, final double
+			centerBY, final double radiusB, final int index)
 	{
 		if (index > 1)
 		{
@@ -277,9 +284,9 @@ public final class Vector
 		}
 	}
 
-	public static Vec2 intersectionForCircleLine(final double ax, final double ay, final double bx, final double by,
-	                                             final double centerX, final double centerY, final double radius, int
-			                                             index)
+	public static Vec2 intersectionForCircleLine(final double ax, final double ay, final
+	double bx, final double by, final double centerX, final double centerY, final double
+			radius, int index)
 	{
 		if (index > 1)
 		{
@@ -288,8 +295,8 @@ public final class Vector
 
 		final double a = (bx - ax) * (bx - ax) + (by - ay) * (by - ay);
 		final double b = 2 * ((bx - ax) * (ax - centerX) + (by - ay) * (ay - centerY));
-		final double c = centerX * centerX + centerY * centerY + ax * ax + ay * ay - 2 * (centerX * ax + centerY * ay)
-				- radius * radius;
+		final double c = centerX * centerX + centerY * centerY + ax * ax + ay * ay - 2 *
+				(centerX * ax + centerY * ay) - radius * radius;
 
 		double det = b * b - 4 * a * c;
 		if (Math.abs(det) < 1e-8)

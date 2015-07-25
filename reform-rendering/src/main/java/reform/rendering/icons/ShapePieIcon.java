@@ -12,7 +12,8 @@ public class ShapePieIcon implements Icon
 
 	public ShapePieIcon()
 	{
-		final Arc2D.Double pie = new Arc2D.Double(-400, -400, 800, 800, 50, 250, Arc2D.PIE);
+		final Arc2D.Double pie = new Arc2D.Double(-400, -400, 800, 800, 50, 250,
+		                                          Arc2D.PIE);
 		final Stroke s = new BasicStroke(100);
 		_shape.add(new Area(s.createStrokedShape(pie)));
 
@@ -21,7 +22,8 @@ public class ShapePieIcon implements Icon
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0,
+		                                                           width / 1000.0);
 		g.translate(x, y);
 		g.fill(t.createTransformedShape(_shape));
 		g.translate(-x, -y);

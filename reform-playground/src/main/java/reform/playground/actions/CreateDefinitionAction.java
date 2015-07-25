@@ -16,8 +16,8 @@ public class CreateDefinitionAction extends AbstractAction
 	private final EventedSheet _eSheet;
 	private final IdentifierEmitter _idEmitter;
 
-	public CreateDefinitionAction(final ExpressionEditor.Parser parser, final EventedSheet eSheet, final
-	IdentifierEmitter idEmitter)
+	public CreateDefinitionAction(final ExpressionEditor.Parser parser, final
+	EventedSheet eSheet, final IdentifierEmitter idEmitter)
 	{
 		_parser = parser;
 		_eSheet = eSheet;
@@ -27,7 +27,9 @@ public class CreateDefinitionAction extends AbstractAction
 	@Override
 	public void actionPerformed(final ActionEvent e)
 	{
-		_eSheet.addDefinition(new Definition(_idEmitter.emit(), _parser.getUniqueNameFor("param", null),
-		                                     new ConstantExpression(new Value(0))));
+		_eSheet.addDefinition(
+				new Definition(_idEmitter.emit(), _parser.getUniqueNameFor("param",
+				                                                           null),
+				               new ConstantExpression(new Value(0))));
 	}
 }

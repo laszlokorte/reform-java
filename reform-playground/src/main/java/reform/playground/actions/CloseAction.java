@@ -18,8 +18,9 @@ public class CloseAction extends AbstractAction
 		_windowBuilder = windowBuilder;
 
 		putValue(NAME, "Close");
-		putValue(Action.ACCELERATOR_KEY,
-		         KeyStroke.getKeyStroke('W', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('W',
+		                                                        Toolkit
+				                                                        .getDefaultToolkit().getMenuShortcutKeyMask()));
 	}
 
 	@Override

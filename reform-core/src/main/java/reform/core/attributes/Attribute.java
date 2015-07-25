@@ -6,15 +6,9 @@ import reform.data.sheet.expression.Expression;
 
 public class Attribute
 {
-	public enum Type
-	{
-		Number, Color, String
-	}
-
 	private final String _name;
 	private final Type _type;
 	private Expression _value;
-
 	public Attribute(final String name, final Type type, final Value initialValue)
 	{
 		_name = name;
@@ -40,5 +34,10 @@ public class Attribute
 	public void setValue(final Expression newValue)
 	{
 		_value = newValue;
+	}
+
+	public enum Type
+	{
+		Number, Color, String
 	}
 }

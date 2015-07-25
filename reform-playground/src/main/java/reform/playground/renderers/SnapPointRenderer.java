@@ -20,9 +20,11 @@ public class SnapPointRenderer implements CanvasRenderer
 
 	private final Stroke _borderStroke = new BasicStroke(4);
 	private final Color _borderColor = new Color(0x99E3B424, true);
-	private final Asset _cropDot = new Dot(5, 1, new Color(0xE3B424), new Color(0xE3B424));
+	private final Asset _cropDot = new Dot(5, 1, new Color(0xE3B424),
+	                                       new Color(0xE3B424));
 
-	private final Asset _cropDotActive = new Dot(7, 1, new Color(0xE3B424), new Color(0xE3B424));
+	private final Asset _cropDotActive = new Dot(7, 1, new Color(0xE3B424),
+	                                             new Color(0xE3B424));
 	private boolean _preview;
 
 	public SnapPointRenderer(final Stage stage, final ToolState toolState)
@@ -36,8 +38,8 @@ public class SnapPointRenderer implements CanvasRenderer
 	{
 
 		final ToolState.ViewState viewState = _toolState.getViewState();
-		if (viewState == ToolState.ViewState.Snap || viewState == ToolState.ViewState.SnapEntity || viewState ==
-				ToolState.ViewState.SnapHandle)
+		if (viewState == ToolState.ViewState.Snap || viewState == ToolState.ViewState
+				.SnapEntity || viewState == ToolState.ViewState.SnapHandle)
 		{
 
 			final Vec2i size = _stage.getSize();
@@ -47,7 +49,8 @@ public class SnapPointRenderer implements CanvasRenderer
 			SnapPoint active = null;
 			if (_preview)
 			{
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+				g2.setComposite(
+						AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 			}
 
 			final List<Entity> entities = _stage.getEntities();

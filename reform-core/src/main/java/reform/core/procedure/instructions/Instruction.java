@@ -8,9 +8,9 @@ import reform.identity.Identifier;
 public interface Instruction extends Evaluable, Analyzable
 {
 
-	void setParent(InstructionGroup parent);
-
 	InstructionGroup getParent();
+
+	void setParent(InstructionGroup parent);
 
 	Identifier<? extends Form> getTarget();
 }

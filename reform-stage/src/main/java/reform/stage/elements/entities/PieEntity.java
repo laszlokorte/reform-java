@@ -51,8 +51,10 @@ public class PieEntity implements Entity
 		_points.add(_end);
 		_points.add(_center);
 
-		_startHandle = new Handle(formId, PieForm.Point.Start, PieForm.Anchor.Start, new PivotPair(_center, _end));
-		_endHandle = new Handle(formId, PieForm.Point.End, PieForm.Anchor.End, new PivotPair(_center, _start));
+		_startHandle = new Handle(formId, PieForm.Point.Start, PieForm.Anchor.Start,
+		                          new PivotPair(_center, _end));
+		_endHandle = new Handle(formId, PieForm.Point.End, PieForm.Anchor.End,
+		                        new PivotPair(_center, _start));
 
 		_handles.add(_startHandle);
 		_handles.add(_endHandle);

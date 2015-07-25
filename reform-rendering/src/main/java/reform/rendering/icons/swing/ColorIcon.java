@@ -8,8 +8,8 @@ public class ColorIcon implements javax.swing.Icon
 
 	private final Color _transparentGrey = new Color(0x88111111, true);
 	private final Font _font = new JPanel().getFont().deriveFont(Font.BOLD, 20);
-	private Color _color;
 	private final int _size;
+	private Color _color;
 
 	public ColorIcon(final Color color, final int size)
 	{
@@ -64,7 +64,8 @@ public class ColorIcon implements javax.swing.Icon
 
 				g2.setColor(Color.WHITE);
 				g2.setFont(_font);
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				                    RenderingHints.VALUE_ANTIALIAS_ON);
 				g2.drawString("?", _size / 2 - 5, _size / 2 + 8);
 			}
 

@@ -9,14 +9,14 @@ import java.awt.event.ActionEvent;
 public class ColorPicker
 {
 
+	private static final JFrame _frame = new JFrame("Color Picker");
+	private static ColorPicker _current = null;
 	private final ColorModel _model = new ColorModel();
 	private final ColorIcon _icon = new ColorIcon(Color.BLACK);
 	private final JButton _button = new JButton(_icon);
-	private static final JFrame _frame = new JFrame("Color Picker");
-	private static ColorPicker _current = null;
 	private final ColorPickerPanel _panel;
-	private int _ARGB;
 	private final ActionMap _actionMap = new ActionMap();
+	private int _ARGB;
 
 	public ColorPicker(final JTextField textfield)
 	{
@@ -38,8 +38,8 @@ public class ColorPicker
 	private void onChange(final ColorModel colorModel)
 	{
 		_icon.setColor(
-				new Color((float) colorModel.getRed(), (float) colorModel.getGreen(), (float) colorModel.getBlue(),
-				          (float) colorModel.getAlpha()));
+				new Color((float) colorModel.getRed(), (float) colorModel.getGreen(),
+				          (float) colorModel.getBlue(), (float) colorModel.getAlpha()));
 		_button.repaint();
 	}
 

@@ -14,8 +14,10 @@ public class ModuloExpression extends BinaryExpressionBase implements Expression
 	@Override
 	public String asString(final boolean parens)
 	{
-		final boolean leftParen = _lhs instanceof AdditionExpression || _lhs instanceof SubtractionExpression;
-		final boolean rightParen = _rhs instanceof AdditionExpression || _rhs instanceof SubtractionExpression;
+		final boolean leftParen = _lhs instanceof AdditionExpression || _lhs instanceof
+				SubtractionExpression;
+		final boolean rightParen = _rhs instanceof AdditionExpression || _rhs instanceof
+				SubtractionExpression;
 		final String op = " % ";
 		final String s = _lhs.asString(leftParen) + op + _rhs.asString(rightParen);
 		if (parens)

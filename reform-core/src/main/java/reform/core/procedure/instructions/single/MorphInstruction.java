@@ -18,8 +18,8 @@ public class MorphInstruction extends BaseInstruction
 	private final Identifier<? extends Anchor> _anchorId;
 	private TranslationDistance _distance;
 
-	public MorphInstruction(final Identifier<? extends Form> formId, final Identifier<? extends Anchor> anchorId,
-	                        final TranslationDistance distance)
+	public MorphInstruction(final Identifier<? extends Form> formId, final Identifier<?
+			extends Anchor> anchorId, final TranslationDistance distance)
 	{
 		_formId = formId;
 		_anchorId = anchorId;
@@ -82,7 +82,9 @@ public class MorphInstruction extends BaseInstruction
 			anchorName = "";
 		}
 
-		analyzer.publish(this, "Move " + formName + "'s " + anchorName + " " + _distance.getDescription(analyzer));
+		analyzer.publish(this,
+		                 "Move " + formName + "'s " + anchorName + " " + _distance
+				                 .getDescription(analyzer));
 	}
 
 	@Override
@@ -91,14 +93,14 @@ public class MorphInstruction extends BaseInstruction
 		return _formId;
 	}
 
-	public void setDistance(final TranslationDistance distance)
-	{
-		_distance = distance;
-	}
-
 	public TranslationDistance getDistance()
 	{
 		return _distance;
+	}
+
+	public void setDistance(final TranslationDistance distance)
+	{
+		_distance = distance;
 	}
 
 	public Identifier<? extends Form> getFormId()

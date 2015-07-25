@@ -43,7 +43,9 @@ public class CreateFormInstruction extends BaseInstruction
 	public void analyze(final Analyzer analyzer)
 	{
 		analyzer.announceForm(_form);
-		analyzer.publish(this, "Create " + _form.getName().getValue() + " " + _destination.getDescription(analyzer));
+		analyzer.publish(this,
+		                 "Create " + _form.getName().getValue() + " " + _destination
+				                 .getDescription(analyzer));
 	}
 
 	@Override

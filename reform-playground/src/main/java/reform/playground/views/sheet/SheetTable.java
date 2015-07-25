@@ -11,8 +11,10 @@ public class SheetTable extends JTable
 {
 	private final ExpressionCellRenderer _expressionCellRenderer;
 	private final ExpressionCellEditor _expressionCellEditor;
-	private final IdentifierCellRenderer _identifierCellRenderer = new IdentifierCellRenderer();
-	private final IdentifierCellEditor _identifierCellEditor = new IdentifierCellEditor();
+	private final IdentifierCellRenderer _identifierCellRenderer = new
+			IdentifierCellRenderer();
+	private final IdentifierCellEditor _identifierCellEditor = new
+			IdentifierCellEditor();
 
 	public SheetTable(final TableModel dataModel, final DataSet dataSet)
 	{

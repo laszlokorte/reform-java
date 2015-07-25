@@ -12,21 +12,15 @@ import reform.stage.tooling.cursor.Cursor;
 public class CropTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Hover, Pressed
-	}
-
 	private final ToolState _toolState;
 	private final Cursor _cursor;
 	private final EventedPicture _eventedPicture;
-
-	private State _state = State.Idle;
-	private CropPoint _currentPoint = null;
 	private final Vec2 _pressOffset = new Vec2();
 	private final Vec2i _oldSize = new Vec2i();
-
-	public CropTool(final ToolState toolState, final Cursor cursor, final EventedPicture ePicture)
+	private State _state = State.Idle;
+	private CropPoint _currentPoint = null;
+	public CropTool(final ToolState toolState, final Cursor cursor, final EventedPicture
+			ePicture)
 	{
 		_toolState = toolState;
 		_cursor = cursor;
@@ -70,7 +64,8 @@ public class CropTool implements Tool
 			_state = State.Pressed;
 			_oldSize.set(_eventedPicture.getSize());
 			final Vec2 cursorPos = _cursor.getPosition();
-			_pressOffset.set(cursorPos.x - _currentPoint.getX(), cursorPos.y - _currentPoint.getY());
+			_pressOffset.set(cursorPos.x - _currentPoint.getX(),
+			                 cursorPos.y - _currentPoint.getY());
 		}
 	}
 
@@ -162,8 +157,10 @@ public class CropTool implements Tool
 	{
 		final Vec2 pos = _cursor.getPosition();
 
-		final int deltaX = (int) (pos.x - _currentPoint.getX() - _pressOffset.x) * _currentPoint.getOffsetX();
-		final int deltaY = (int) (pos.y - _currentPoint.getY() - _pressOffset.y) * _currentPoint.getOffsetY();
+		final int deltaX = (int) (pos.x - _currentPoint.getX() - _pressOffset.x) *
+				_currentPoint.getOffsetX();
+		final int deltaY = (int) (pos.y - _currentPoint.getY() - _pressOffset.y) *
+				_currentPoint.getOffsetY();
 
 		final int newWidth = Math.max(_eventedPicture.getSize().x + deltaX, 10);
 		final int newHeight = Math.max(_eventedPicture.getSize().y + deltaY, 10);
@@ -185,6 +182,11 @@ public class CropTool implements Tool
 	public boolean isActive()
 	{
 		return _state == State.Pressed;
+	}
+
+	private enum State
+	{
+		Idle, Hover, Pressed
 	}
 
 }

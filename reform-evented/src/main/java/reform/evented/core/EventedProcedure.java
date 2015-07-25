@@ -13,21 +13,7 @@ import java.util.ArrayList;
 public class EventedProcedure
 {
 
-	public interface Listener
-	{
-		void onInstructionAdded(EventedProcedure procedure, Instruction instruction, InstructionGroup parent);
-
-		void onInstructionRemoved(EventedProcedure procedure, Instruction instruction, InstructionGroup parent);
-
-		void onInstructionWillBeRemoved(EventedProcedure procedure, Instruction instruction, InstructionGroup parent);
-
-		void onInstructionChanged(EventedProcedure procedure, Instruction instruction, InstructionGroup parent);
-
-		void onFormChanged(EventedProcedure procedure, Form form);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
-
 	private final EventedPicture _evtPicture;
 
 	public EventedProcedure(final EventedPicture evtPicture)
@@ -35,8 +21,8 @@ public class EventedProcedure
 		_evtPicture = evtPicture;
 	}
 
-	public void addInstruction(final Instruction instruction, final InstructionGroup.Position pos, final Instruction
-			base)
+	public void addInstruction(final Instruction instruction, final InstructionGroup
+			.Position pos, final Instruction base)
 	{
 		final InstructionGroup parent = base.getParent();
 
@@ -76,7 +62,8 @@ public class EventedProcedure
 	{
 		for (int i = 0, j = _listeners.size(); i < j; i++)
 		{
-			_listeners.get(i).onInstructionChanged(this, instruction, instruction.getParent());
+			_listeners.get(i).onInstructionChanged(this, instruction,
+			                                       instruction.getParent());
 		}
 		_evtPicture.propagateProcedureChange();
 	}
@@ -116,7 +103,8 @@ public class EventedProcedure
 		_evtPicture.getProcedure().analyze(analyzer);
 	}
 
-	public void wrapInstruction(final Instruction instruction, final InstructionGroup group)
+	public void wrapInstruction(final Instruction instruction, final InstructionGroup
+			group)
 	{
 		final InstructionGroup parent = instruction.getParent();
 
@@ -138,6 +126,23 @@ public class EventedProcedure
 			_listeners.get(i).onFormChanged(this, form);
 		}
 		_evtPicture.propagateProcedureChange();
+	}
+
+	public interface Listener
+	{
+		void onInstructionAdded(EventedProcedure procedure, Instruction instruction,
+		                        InstructionGroup parent);
+
+		void onInstructionRemoved(EventedProcedure procedure, Instruction instruction,
+		                          InstructionGroup parent);
+
+		void onInstructionWillBeRemoved(EventedProcedure procedure, Instruction
+				instruction, InstructionGroup parent);
+
+		void onInstructionChanged(EventedProcedure procedure, Instruction instruction,
+		                          InstructionGroup parent);
+
+		void onFormChanged(EventedProcedure procedure, Form form);
 	}
 
 }

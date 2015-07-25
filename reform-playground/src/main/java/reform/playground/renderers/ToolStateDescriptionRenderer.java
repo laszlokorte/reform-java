@@ -25,16 +25,16 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer
 	private final Cursor _cursor;
 
 	private final ToolTipRenderer _toolTipRenderer;
-
-	private boolean _preview;
 	private final Color _snapTextColor = new Color(0xFFD88A);
 	private final Color _handleTextColor = new Color(0x97FFAF);
 	private final Color _pointTextColor = new Color(0xBBECFF);
 	private final Color _selectionTextColor = new Color(0xDCDCDC);
+	private boolean _preview;
 
-	public ToolStateDescriptionRenderer(final Stage stage, final ToolState toolState, final FormSelection selection,
-	                                    final Analyzer analyzer, final ToolTipRenderer toolTipRenderer, final Cursor
-			                                    cursor)
+	public ToolStateDescriptionRenderer(final Stage stage, final ToolState toolState,
+	                                    final FormSelection selection, final Analyzer
+			                                    analyzer, final ToolTipRenderer
+			                                    toolTipRenderer, final Cursor cursor)
 	{
 		_stage = stage;
 		_toolState = toolState;
@@ -49,17 +49,20 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer
 	{
 		final Vec2i size = _stage.getSize();
 
-		if (!_preview && _toolState.getViewState() != ToolState.ViewState.Preview && _cursor.isCycled())
+		if (!_preview && _toolState.getViewState() != ToolState.ViewState.Preview &&
+				_cursor.isCycled())
 		{
 			g2.translate((width - size.x) / 2, (height - size.y) / 2);
 
-			final ToolState.SelectionState selectionState = _toolState.getSelectionState();
+			final ToolState.SelectionState selectionState = _toolState
+					.getSelectionState();
 			if (selectionState == ToolState.SelectionState.SnapPoint)
 			{
 				final SnapPoint snap = _toolState.getActiveSnapPoint();
 				if (snap != null)
 				{
-					_toolTipRenderer.render(g2, snap.getX(), snap.getY(), snap.getLabel(), _snapTextColor);
+					_toolTipRenderer.render(g2, snap.getX(), snap.getY(), snap
+							                        .getLabel(), _snapTextColor);
 
 				}
 			}
@@ -68,7 +71,8 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer
 				final Handle handle = _toolState.getActiveHandle();
 				if (handle != null)
 				{
-					_toolTipRenderer.render(g2, handle.getX(), handle.getY(), handle.getLabel(), _handleTextColor);
+					_toolTipRenderer.render(g2, handle.getX(), handle.getY(),
+					                        handle.getLabel(), _handleTextColor);
 
 				}
 			}
@@ -77,7 +81,8 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer
 				final EntityPoint point = _toolState.getActiveEntityPoint();
 				if (point != null)
 				{
-					_toolTipRenderer.render(g2, point.getX(), point.getY(), point.getLabel(), _pointTextColor);
+					_toolTipRenderer.render(g2, point.getX(), point.getY(),
+					                        point.getLabel(), _pointTextColor);
 
 				}
 			}
@@ -86,8 +91,10 @@ public class ToolStateDescriptionRenderer implements CanvasRenderer
 				final Identifier<? extends Form> formId = _selection.getSelected();
 				if (formId != null)
 				{
-					final String formName = _analyzer.getForm(formId).getName().getValue();
-					_toolTipRenderer.renderCentered(g2, size.x / 2, size.y / 2, formName, _selectionTextColor);
+					final String formName = _analyzer.getForm(
+							formId).getName().getValue();
+					_toolTipRenderer.renderCentered(g2, size.x / 2, size.y / 2, formName,
+					                                _selectionTextColor);
 				}
 			}
 

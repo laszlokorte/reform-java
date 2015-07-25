@@ -44,8 +44,8 @@ public class Procedure
 		analyzer.finish();
 	}
 
-	public void addInstruction(final Instruction instruction, final InstructionGroup.Position pos, final Instruction
-			base)
+	public void addInstruction(final Instruction instruction, final InstructionGroup
+			.Position pos, final Instruction base)
 	{
 		final InstructionGroup parent = base.getParent();
 		if (base instanceof InstructionGroup)
@@ -85,7 +85,8 @@ public class Procedure
 
 	public void __dbg__addInstruction(final Instruction instruction)
 	{
-		_root.insertInstruction(instruction, Position.After, _root.get(_root.size() - 1));
+		_root.insertInstruction(instruction, Position.After, _root.get(_root.size() -
+				                                                               1));
 	}
 
 	public Paper getPaper()
@@ -100,6 +101,7 @@ public class Procedure
 
 	public boolean canRemoveInstruction(final Instruction instruction)
 	{
-		return !(instruction instanceof NullInstruction) && !(instruction instanceof RootInstruction);
+		return !(instruction instanceof NullInstruction) && !(instruction instanceof
+				RootInstruction);
 	}
 }

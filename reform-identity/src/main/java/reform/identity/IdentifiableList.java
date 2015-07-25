@@ -11,8 +11,8 @@ import java.util.Iterator;
  *
  * @param <E>
  */
-public class IdentifiableList<E extends Identifiable<E>> implements Iterable<Identifier<? extends E>>,
-		FastIterable<Identifier<? extends E>>
+public class IdentifiableList<E extends Identifiable<E>> implements
+		Iterable<Identifier<? extends E>>, FastIterable<Identifier<? extends E>>
 {
 	private final ArrayList<Identifier<? extends E>> _ids = new ArrayList<>();
 	private final HashMap<Identifier<? extends E>, E> _mapping = new HashMap<>();
@@ -101,6 +101,12 @@ public class IdentifiableList<E extends Identifiable<E>> implements Iterable<Ide
 		return _ids.size();
 	}
 
+	@Override
+	public Identifier<? extends E> get(final int i)
+	{
+		return getIdAtIndex(i);
+	}
+
 	/**
 	 * Remove all elements from the list.
 	 */
@@ -114,11 +120,5 @@ public class IdentifiableList<E extends Identifiable<E>> implements Iterable<Ide
 	public Iterator<Identifier<? extends E>> iterator()
 	{
 		return _ids.iterator();
-	}
-
-	@Override
-	public Identifier<? extends E> get(final int i)
-	{
-		return getIdAtIndex(i);
 	}
 }

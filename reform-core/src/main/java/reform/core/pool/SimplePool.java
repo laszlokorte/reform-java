@@ -1,7 +1,6 @@
 package reform.core.pool;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SimplePool<E> implements Pool<E>
 {
@@ -13,6 +12,24 @@ public class SimplePool<E> implements Pool<E>
 	public SimplePool(final PoolFactory<E> factory)
 	{
 		_factory = factory;
+	}
+
+	@Override
+	public E take()
+	{
+		E element;
+
+		if (_notInUse.size() == 0)
+		{
+			element = _factory.create();
+		}
+		else
+		{
+			element = _notInUse.remove(_notInUse.size() - 1);
+		}
+
+		_inUse.add(element);
+		return element;
 	}
 
 	@Override
@@ -58,22 +75,6 @@ public class SimplePool<E> implements Pool<E>
 			final E e = _inUse.get(i);
 			modifier.modify(e);
 		}
-	}
-
-	@Override
-	public E take()
-	{
-		E element;
-
-		if (_notInUse.size() == 0)
-		{
-			element = _factory.create();
-		} else {
-			element = _notInUse.remove(_notInUse.size()-1);
-		}
-
-		_inUse.add(element);
-		return element;
 	}
 
 	@Override

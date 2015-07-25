@@ -7,7 +7,8 @@ public class FlatNode
 	private final String _label;
 	private final Analyzable _source;
 
-	public FlatNode(final int indentation, final String label, final Analyzable source, final boolean isGroup)
+	public FlatNode(final int indentation, final String label, final Analyzable source,
+	                final boolean isGroup)
 	{
 		_indentation = indentation;
 		_label = label;

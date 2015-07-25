@@ -21,14 +21,16 @@ public class ToolCropIcon implements Icon
 		_shape.add(new Area(new Rectangle2D.Double(-500 + 50, -500 + 220, 800, 100)));
 		_shape.add(new Area(new Rectangle2D.Double(-500 + 220, -500 + 750, 800, 100)));
 
-		_shape.add(new Area(t.createTransformedShape(new Rectangle2D.Double(-500, -30, 1000, 60))));
+		_shape.add(new Area(
+				t.createTransformedShape(new Rectangle2D.Double(-500, -30, 1000, 60))));
 
 	}
 
 	@Override
 	public void draw(final Graphics2D g, final int x, final int y, final int width)
 	{
-		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0, width / 1000.0);
+		final AffineTransform t = AffineTransform.getScaleInstance(width / 1000.0,
+		                                                           width / 1000.0);
 		g.translate(x, y);
 		g.fill(_shape.createTransformedArea(t));
 		g.translate(-x, -y);

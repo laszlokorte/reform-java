@@ -7,14 +7,8 @@ import java.util.ArrayList;
 
 public class FormSelection
 {
-	public interface Listener
-	{
-		void onSelectionChanged(FormSelection focus);
-	}
-
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private Identifier<? extends Form> _form;
-
 	public FormSelection()
 	{
 		// TODO Auto-generated constructor stub
@@ -60,5 +54,10 @@ public class FormSelection
 	public void reset()
 	{
 		setSelection(null);
+	}
+
+	public interface Listener
+	{
+		void onSelectionChanged(FormSelection focus);
 	}
 }

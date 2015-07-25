@@ -38,6 +38,12 @@ public class ConstantDistance implements TranslationDistance
 		return deltaAsString();
 	}
 
+	@Override
+	public boolean isDegenerated()
+	{
+		return _delta.x == 0 && _delta.y == 0;
+	}
+
 	private String deltaAsString()
 	{
 		if (_delta.y == 0 && _delta.x != 0)
@@ -50,7 +56,8 @@ public class ConstantDistance implements TranslationDistance
 		}
 		else
 		{
-			return String.format("%.1f Horizontally, %.1f Vertically", _delta.x, _delta.y);
+			return String.format("%.1f Horizontally, %.1f Vertically", _delta.x,
+			                     _delta.y);
 		}
 	}
 
@@ -63,12 +70,6 @@ public class ConstantDistance implements TranslationDistance
 	public Vec2 getDelta()
 	{
 		return _delta;
-	}
-
-	@Override
-	public boolean isDegenerated()
-	{
-		return _delta.x == 0 && _delta.y == 0;
 	}
 
 	public void setDelta(final Vec2 delta)

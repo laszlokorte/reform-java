@@ -18,7 +18,9 @@
         </option>
         <option name="LINE_SEPARATOR" value="&#10;" />
         <option name="FIELD_NAME_PREFIX" value="_" />
+        <option name="GENERATE_FINAL_LOCALS" value="true" />
         <option name="GENERATE_FINAL_PARAMETERS" value="true" />
+        <option name="RIGHT_MARGIN" value="90" />
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
@@ -41,6 +43,16 @@
             <option name="SMART_TABS" value="true" />
           </indentOptions>
           <arrangement>
+            <groups>
+              <group>
+                <type>GETTERS_AND_SETTERS</type>
+                <order>KEEP</order>
+              </group>
+              <group>
+                <type>OVERRIDDEN_METHODS</type>
+                <order>KEEP</order>
+              </group>
+            </groups>
             <rules>
               <section>
                 <rule>
@@ -251,17 +263,17 @@
               <section>
                 <rule>
                   <match>
-                    <AND>
-                      <METHOD>true</METHOD>
-                      <STATIC>true</STATIC>
-                    </AND>
+                    <METHOD>true</METHOD>
                   </match>
                 </rule>
               </section>
               <section>
                 <rule>
                   <match>
-                    <METHOD>true</METHOD>
+                    <AND>
+                      <METHOD>true</METHOD>
+                      <STATIC>true</STATIC>
+                    </AND>
                   </match>
                 </rule>
               </section>

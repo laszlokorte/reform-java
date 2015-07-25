@@ -24,22 +24,21 @@ public class ScaleInstructionControl implements InstructionControl
 	}
 
 	@Override
-	public void updateForRuntime(final reform.core.runtime.Runtime runtime)
-	{
-
-	}
-
-	@Override
 	public List<ControlPoint> getControlPoints()
 	{
 		return _controlPoints;
 	}
 
-
 	@Override
 	public RubberBand getRubberBand()
 	{
 		return null;
+	}
+
+	@Override
+	public void updateForRuntime(final reform.core.runtime.Runtime runtime)
+	{
+
 	}
 
 	public boolean canEdit()

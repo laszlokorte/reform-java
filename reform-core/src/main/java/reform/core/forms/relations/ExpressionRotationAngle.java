@@ -22,26 +22,26 @@ public class ExpressionRotationAngle implements RotationAngle
 	}
 
 	@Override
-	public boolean isValidFor(final Runtime runtime)
-	{
-		return true;
-	}
-
-	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
 		return _angleExpression.asString(false);
-	}
-
-	public Expression getExpression()
-	{
-		return _angleExpression;
 	}
 
 	@Override
 	public boolean isDegenerated()
 	{
 		return false;
+	}
+
+	@Override
+	public boolean isValidFor(final Runtime runtime)
+	{
+		return true;
+	}
+
+	public Expression getExpression()
+	{
+		return _angleExpression;
 	}
 
 	public void setAngleExpression(final Expression angleExpression)

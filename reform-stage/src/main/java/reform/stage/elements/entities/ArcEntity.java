@@ -52,8 +52,10 @@ public class ArcEntity implements Entity
 		_points.add(_end);
 		_points.add(_center);
 
-		_startHandle = new Handle(formId, ArcForm.Point.Start, ArcForm.Anchor.Start, new PivotPair(_center, _end));
-		_endHandle = new Handle(formId, ArcForm.Point.End, ArcForm.Anchor.End, new PivotPair(_center, _start));
+		_startHandle = new Handle(formId, ArcForm.Point.Start, ArcForm.Anchor.Start,
+		                          new PivotPair(_center, _end));
+		_endHandle = new Handle(formId, ArcForm.Point.End, ArcForm.Anchor.End,
+		                        new PivotPair(_center, _start));
 		_centerHandle = new Handle(formId, ArcForm.Point.Center, ArcForm.Anchor.Center);
 
 		_handles.add(_startHandle);

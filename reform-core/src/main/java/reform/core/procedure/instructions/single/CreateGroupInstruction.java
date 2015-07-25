@@ -10,15 +10,15 @@ public class CreateGroupInstruction implements Instruction
 {
 
 	@Override
-	public void setParent(final InstructionGroup parent)
-	{
-
-	}
-
-	@Override
 	public InstructionGroup getParent()
 	{
 		return null;
+	}
+
+	@Override
+	public void setParent(final InstructionGroup parent)
+	{
+
 	}
 
 	@Override

@@ -17,8 +17,8 @@ public class ScaleInstruction extends BaseInstruction
 	private ScaleFactor _factor;
 	private ReferencePoint _fixPoint;
 
-	public ScaleInstruction(final Identifier<? extends Form> target, final ScaleFactor factor, final ReferencePoint
-			fixPoint)
+	public ScaleInstruction(final Identifier<? extends Form> target, final ScaleFactor
+			factor, final ReferencePoint fixPoint)
 	{
 		_target = target;
 		_factor = factor;
@@ -66,7 +66,8 @@ public class ScaleInstruction extends BaseInstruction
 			formName = "???";
 		}
 
-		analyzer.publish(this, "Scale " + formName + " by " + _factor.getDescription(analyzer) + " around " +
+		analyzer.publish(this, "Scale " + formName + " by " + _factor.getDescription(
+				analyzer) + " around " +
 				_fixPoint.getDescription(analyzer));
 	}
 
@@ -86,6 +87,11 @@ public class ScaleInstruction extends BaseInstruction
 		return _factor;
 	}
 
+	public void setFactor(final ScaleFactor factor)
+	{
+		_factor = factor;
+	}
+
 	public ReferencePoint getFixPoint()
 	{
 		return _fixPoint;
@@ -94,11 +100,6 @@ public class ScaleInstruction extends BaseInstruction
 	public void setFixPoint(final ReferencePoint fixPoint)
 	{
 		_fixPoint = fixPoint;
-	}
-
-	public void setFactor(final ScaleFactor factor)
-	{
-		_factor = factor;
 	}
 
 }

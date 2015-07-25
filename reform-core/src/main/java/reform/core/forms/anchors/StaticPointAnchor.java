@@ -10,7 +10,8 @@ public class StaticPointAnchor extends BaseAnchor
 
 	private final StaticPoint _point;
 
-	public StaticPointAnchor(final IdentityToken id, final Name name, final StaticPoint point)
+	public StaticPointAnchor(final IdentityToken id, final Name name, final StaticPoint
+			point)
 	{
 		super(id, name);
 		_point = point;

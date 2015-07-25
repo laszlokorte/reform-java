@@ -14,41 +14,22 @@ import java.util.List;
 public class HitTester
 {
 
-	public enum EntityFilter
-	{
-		OnlySelected, ExcludeSelected, Any
-	}
-
-	public enum HandleFilter
-	{
-		Pivot, Any
-	}
-
-	public interface Adapter
-	{
-		boolean isSelected(Entity entity);
-
-		boolean belongsToSelected(SnapPoint snapPoint);
-	}
-
+	static private final double _snapRadius = 8;
 	private final Stage _stage;
 	private final Adapter _adapter;
-
-	static private final double _snapRadius = 8;
-
 	private final ArrayList<SnapPoint> _resultSnapPoint = new ArrayList<>();
 	private final ArrayList<Entity> _resultEntity = new ArrayList<>();
 	private final ArrayList<Handle> _resultHandle = new ArrayList<>();
 	final ArrayList<CropPoint> _resultCropPoint = new ArrayList<>();
 	final ArrayList<EntityPoint> _resultEntityPoint = new ArrayList<>();
-
 	public HitTester(final Stage stage, final Adapter adapter)
 	{
 		_stage = stage;
 		_adapter = adapter;
 	}
 
-	public ArrayList<SnapPoint> getSnapPointsNear(final Vec2 pos, final int max, final EntityFilter filter)
+	public ArrayList<SnapPoint> getSnapPointsNear(final Vec2 pos, final int max, final
+	EntityFilter filter)
 	{
 		_resultSnapPoint.clear();
 		int i = 0;
@@ -83,17 +64,20 @@ public class HitTester
 				}
 			}
 
-			final List<IntersectionSnapPoint> intersections = _stage.getIntersectionPoints();
+			final List<IntersectionSnapPoint> intersections = _stage
+					.getIntersectionPoints();
 			for (int h = 0, j = intersections.size(); h < j; h++)
 			{
 				final IntersectionSnapPoint p = intersections.get(h);
 				if (p.isInSnapRadius(pos.x, pos.y))
 				{
-					if (filter == EntityFilter.ExcludeSelected && _adapter.belongsToSelected(p))
+					if (filter == EntityFilter.ExcludeSelected && _adapter
+							.belongsToSelected(p))
 					{
 						continue;
 					}
-					if (filter == EntityFilter.OnlySelected && !_adapter.belongsToSelected(p))
+					if (filter == EntityFilter.OnlySelected && !_adapter
+							.belongsToSelected(p))
 					{
 						continue;
 					}
@@ -110,7 +94,8 @@ public class HitTester
 		return _resultSnapPoint;
 	}
 
-	public ArrayList<SnapPoint> getSnapPointsNearGlomp(final Vec2 pos, final int max, final EntityFilter filter)
+	public ArrayList<SnapPoint> getSnapPointsNearGlomp(final Vec2 pos, final int max,
+	                                                   final EntityFilter filter)
 	{
 		_resultSnapPoint.clear();
 		final List<Entity> entities = _stage.getEntities();
@@ -207,8 +192,8 @@ public class HitTester
 		return _resultEntity;
 	}
 
-	public ArrayList<Handle> getHandleNear(final Vec2 pos, final int max, final EntityFilter filter, final
-	HandleFilter handleFilter)
+	public ArrayList<Handle> getHandleNear(final Vec2 pos, final int max, final
+	EntityFilter filter, final HandleFilter handleFilter)
 	{
 		_resultHandle.clear();
 		int i = 0;
@@ -272,7 +257,8 @@ public class HitTester
 		return _resultCropPoint;
 	}
 
-	public ArrayList<EntityPoint> getEntityPointsNear(final Vec2 pos, final int max, final EntityFilter filter)
+	public ArrayList<EntityPoint> getEntityPointsNear(final Vec2 pos, final int max,
+	                                                  final EntityFilter filter)
 	{
 		_resultEntityPoint.clear();
 		int i = 0;
@@ -338,18 +324,23 @@ public class HitTester
 		return _resultEntityPoint;
 	}
 
-	public ArrayList<Handle> getAllHandles(final EntityFilter Filter, final HandleFilter handleFilter)
+	public ArrayList<Handle> getAllHandles(final EntityFilter Filter, final HandleFilter
+			handleFilter)
 	{
 		_resultHandle.clear();
 		final List<Entity> entities = _stage.getEntities();
 		for (int h = 0, j = entities.size(); h < j; h++)
 		{
 			final Entity e = entities.get(h);
-			if (_adapter.isSelected(e) && Filter == reform.stage.hittest.HitTester.EntityFilter.ExcludeSelected)
+			if (_adapter.isSelected(
+					e) && Filter == reform.stage.hittest.HitTester.EntityFilter
+					.ExcludeSelected)
 			{
 				continue;
 			}
-			if (!_adapter.isSelected(e) && Filter == reform.stage.hittest.HitTester.EntityFilter.OnlySelected)
+			if (!_adapter.isSelected(
+					e) && Filter == reform.stage.hittest.HitTester.EntityFilter
+					.OnlySelected)
 			{
 				continue;
 			}
@@ -366,5 +357,22 @@ public class HitTester
 			}
 		}
 		return _resultHandle;
+	}
+
+	public enum EntityFilter
+	{
+		OnlySelected, ExcludeSelected, Any
+	}
+
+	public enum HandleFilter
+	{
+		Pivot, Any
+	}
+
+	public interface Adapter
+	{
+		boolean isSelected(Entity entity);
+
+		boolean belongsToSelected(SnapPoint snapPoint);
 	}
 }

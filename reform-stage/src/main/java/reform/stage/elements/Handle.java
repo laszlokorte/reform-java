@@ -26,8 +26,8 @@ public class Handle
 	private final PivotPair _pivot;
 	private final StringBuilder _label = new StringBuilder();
 
-	public <T extends Form> Handle(final Identifier<T> formId, final ExposedPointToken<? super T> pointToken, final
-	IdentityToken anchorToken, final PivotPair pivot)
+	public <T extends Form> Handle(final Identifier<T> formId, final ExposedPointToken<?
+			super T> pointToken, final IdentityToken anchorToken, final PivotPair pivot)
 	{
 		_formId = formId;
 		_pointId = new Identifier<>(pointToken);
@@ -35,8 +35,8 @@ public class Handle
 		_pivot = pivot;
 	}
 
-	public <T extends Form> Handle(final Identifier<T> formId, final ExposedPointToken<? super T> pointToken, final
-	IdentityToken anchorToken)
+	public <T extends Form> Handle(final Identifier<T> formId, final ExposedPointToken<?
+			super T> pointToken, final IdentityToken anchorToken)
 	{
 		this(formId, pointToken, anchorToken, null);
 	}

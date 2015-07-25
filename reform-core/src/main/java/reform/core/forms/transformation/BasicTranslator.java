@@ -14,7 +14,8 @@ public class BasicTranslator implements Translator
 	}
 
 	@Override
-	public void translate(final Runtime runtime, final double deltaX, final double deltaY)
+	public void translate(final Runtime runtime, final double deltaX, final double
+			deltaY)
 	{
 		for (int i = 0; i < _points.length; i++)
 		{

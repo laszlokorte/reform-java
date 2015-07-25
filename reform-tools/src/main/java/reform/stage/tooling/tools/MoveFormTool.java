@@ -22,28 +22,22 @@ import reform.stage.tooling.cursor.Cursor;
 public class MoveFormTool implements Tool
 {
 
-	private enum State
-	{
-		Idle, Snapped, Pressed, PressedSnapped
-	}
-
 	private final SelectionTool _selectionTool;
 	private final ToolState _toolState;
 	private final Cursor _cursor;
 	private final HitTester _hitTester;
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
-
-	private State _state = State.Idle;
-	private boolean _swapDirection;
 	private final Vec2 _currentOffset = new Vec2();
 	private final Vec2 _startPosition = new Vec2();
+	private State _state = State.Idle;
+	private boolean _swapDirection;
 	private EntityPoint _currentPoint;
 	private TranslateInstruction _currentInstruction;
 	private TranslationDistance _currentDistance;
-
-	public MoveFormTool(final SelectionTool selectionTool, final ToolState toolState, final Cursor cursor, final
-	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
+	public MoveFormTool(final SelectionTool selectionTool, final ToolState toolState,
+	                    final Cursor cursor, final HitTester hitTester, final
+	                    InstructionFocus focus, final EventedProcedure eProcedure)
 	{
 		_selectionTool = selectionTool;
 		_toolState = toolState;
@@ -59,7 +53,8 @@ public class MoveFormTool implements Tool
 		_toolState.setViewState(ToolState.ViewState.EntityPoint);
 		_toolState.setSelectionState(ToolState.SelectionState.EntityPoint);
 
-		_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+		_toolState.setEntityPoints(
+				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
 
 	@Override
@@ -99,8 +94,10 @@ public class MoveFormTool implements Tool
 			_toolState.setViewState(ToolState.ViewState.SnapEntity);
 			_startPosition.set(_currentPoint.getX(), _currentPoint.getY());
 			_currentDistance = new ConstantDistance(new Vec2());
-			_currentInstruction = new TranslateInstruction(_currentPoint.getFormId(), _currentDistance);
-			_eProcedure.addInstruction(_currentInstruction, Position.After, _focus.getFocused());
+			_currentInstruction = new TranslateInstruction(_currentPoint.getFormId(),
+			                                               _currentDistance);
+			_eProcedure.addInstruction(_currentInstruction, Position.After,
+			                           _focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _currentPoint.getX(),
 			                   _cursor.getPosition().y - _currentPoint.getY());
 			_focus.setFocus(_currentInstruction);
@@ -110,7 +107,8 @@ public class MoveFormTool implements Tool
 		else
 		{
 			_selectionTool.press();
-			_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+			_toolState.setEntityPoints(
+					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 		}
 	}
 
@@ -146,11 +144,13 @@ public class MoveFormTool implements Tool
 	{
 		if (_state == State.Pressed || _state == State.PressedSnapped)
 		{
-			_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
+			_toolState.setSnapPoints(
+					_hitTester.getAllSnapPoints(HitTester.EntityFilter.ExcludeSelected));
 		}
 
 		_selectionTool.refresh();
-		_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+		_toolState.setEntityPoints(
+				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
 
 	@Override
@@ -172,7 +172,8 @@ public class MoveFormTool implements Tool
 		}
 		_selectionTool.cycle();
 
-		_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+		_toolState.setEntityPoints(
+				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
 
 	@Override
@@ -183,7 +184,8 @@ public class MoveFormTool implements Tool
 			case Idle:
 			case Snapped:
 			{
-				_currentPoint = _cursor.getEntityPoint(HitTester.EntityFilter.OnlySelected);
+				_currentPoint = _cursor.getEntityPoint(
+						HitTester.EntityFilter.OnlySelected);
 				if (_currentPoint == null)
 				{
 					_state = State.Idle;
@@ -199,13 +201,17 @@ public class MoveFormTool implements Tool
 			case Pressed:
 			case PressedSnapped:
 			{
-				final SnapPoint currentSnapPoint = _cursor.getSnapPoint(EntityFilter.ExcludeSelected);
+				final SnapPoint currentSnapPoint = _cursor.getSnapPoint(
+						EntityFilter.ExcludeSelected);
 
 				if (currentSnapPoint == null)
 				{
 					_state = State.Pressed;
-					final Vec2 delta = new Vec2(_cursor.getPosition().x - _startPosition.x - _currentOffset.x,
-					                            _cursor.getPosition().y - _startPosition.y - _currentOffset.y);
+					final Vec2 delta = new Vec2(
+							_cursor.getPosition().x - _startPosition.x -
+									_currentOffset.x,
+							_cursor.getPosition().y - _startPosition.y - _currentOffset
+									.y);
 					if (input.getShiftModifier().isActive())
 					{
 						adjustVector(delta);
@@ -233,12 +239,14 @@ public class MoveFormTool implements Tool
 					}
 					else
 					{
-						d = new RelativeDistance(_currentPoint.createReference(), currentSnapPoint.createReference());
+						d = new RelativeDistance(_currentPoint.createReference(),
+						                         currentSnapPoint.createReference());
 					}
 					if (input.getShiftModifier().isActive())
 					{
-						d.setDirection(getDirectionFor(currentSnapPoint.getX() - _startPosition.x,
-						                               currentSnapPoint.getY() - _startPosition.y));
+						d.setDirection(getDirectionFor(
+								currentSnapPoint.getX() - _startPosition.x,
+								currentSnapPoint.getY() - _startPosition.y));
 					}
 					else
 					{
@@ -257,9 +265,9 @@ public class MoveFormTool implements Tool
 
 		_selectionTool.input(input);
 
-		_toolState.setEntityPoints(_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
+		_toolState.setEntityPoints(
+				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
 	}
-
 
 	@Override
 	public void focusChanged()
@@ -271,7 +279,6 @@ public class MoveFormTool implements Tool
 		_selectionTool.focusChanged();
 
 	}
-
 
 	private Direction getDirectionFor(final double x, final double y)
 	{
@@ -308,6 +315,11 @@ public class MoveFormTool implements Tool
 		{
 			vector.y = 0;
 		}
+	}
+
+	private enum State
+	{
+		Idle, Snapped, Pressed, PressedSnapped
 	}
 
 }

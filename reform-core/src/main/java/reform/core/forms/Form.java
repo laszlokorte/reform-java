@@ -44,13 +44,13 @@ public interface Form extends Identifiable<Form>, Named
 
 	DrawingType getType();
 
+	void setType(DrawingType draw);
+
 	Iterable<Identifier<? extends Anchor>> getAnchors();
 
 	Anchor getAnchor(Identifier<? extends Anchor> anchorId);
 
 	Outline getOutline();
-
-	void setType(DrawingType draw);
 
 	AttributeSet getAttributes();
 }

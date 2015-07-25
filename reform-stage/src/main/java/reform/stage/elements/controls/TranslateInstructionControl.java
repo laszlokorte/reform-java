@@ -38,6 +38,18 @@ public class TranslateInstructionControl implements InstructionControl
 	}
 
 	@Override
+	public List<ControlPoint> getControlPoints()
+	{
+		return _controlPoints;
+	}
+
+	@Override
+	public RubberBand getRubberBand()
+	{
+		return _rubberBand;
+	}
+
+	@Override
 	public void updateForRuntime(final reform.core.runtime.Runtime runtime)
 	{
 		final TranslationDistance distance = _instruction.getDistance();
@@ -56,8 +68,10 @@ public class TranslateInstructionControl implements InstructionControl
 				_sourcePoint.updatePosition(baseX, baseY);
 
 				_targetPoint.setError(false);
-				_targetPoint.updatePosition(baseX + distance.getXValueForRuntime(runtime),
-				                            baseY + distance.getYValueForRuntime(runtime));
+				_targetPoint.updatePosition(baseX + distance.getXValueForRuntime
+						                            (runtime), baseY + distance
+						.getYValueForRuntime(
+						                            runtime));
 
 				_canEdit = true;
 			}
@@ -107,19 +121,6 @@ public class TranslateInstructionControl implements InstructionControl
 		{
 			_canEdit = false;
 		}
-	}
-
-	@Override
-	public List<ControlPoint> getControlPoints()
-	{
-		return _controlPoints;
-	}
-
-
-	@Override
-	public RubberBand getRubberBand()
-	{
-		return _rubberBand;
 	}
 
 	public boolean canEdit()

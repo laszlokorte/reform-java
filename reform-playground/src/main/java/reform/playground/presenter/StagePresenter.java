@@ -27,15 +27,16 @@ public class StagePresenter
 	private final InstructionControlRenderer _instructionControlRenderer;
 	private final ToolStateDescriptionRenderer _toolStateDescriptionRenderer;
 
-	public StagePresenter(final Stage stage, final FormSelection formSelection, final ToolState toolState, final
-	Analyzer analyzer, final Cursor cursor)
+	public StagePresenter(final Stage stage, final FormSelection formSelection, final
+	ToolState toolState, final Analyzer analyzer, final Cursor cursor)
 	{
 		_stage = stage;
 		_canvas = new Canvas();
 
 		final ToolTipRenderer toolTipRenderer = new ToolTipRenderer();
 
-		_backgroundRenderer = new BackgroundRenderer(toolState, Color.GRAY, Color.DARK_GRAY);
+		_backgroundRenderer = new BackgroundRenderer(toolState, Color.GRAY,
+		                                             Color.DARK_GRAY);
 		_stageRenderer = new StageRenderer(stage, toolState);
 		_selectionRenderer = new SelectionRenderer(stage, formSelection, toolState);
 		_cropRenderer = new CropRenderer(stage, toolState);
@@ -45,8 +46,12 @@ public class StagePresenter
 		_pivotRenderer = new PivotRenderer(stage, toolState);
 		_guideRenderer = new GuideRenderer(stage, toolState);
 		_instructionControlRenderer = new InstructionControlRenderer(stage, toolState);
-		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer(stage, toolState, formSelection, analyzer,
-		                                                                 toolTipRenderer, cursor);
+		_toolStateDescriptionRenderer = new ToolStateDescriptionRenderer(stage,
+		                                                                 toolState,
+		                                                                 formSelection,
+		                                                                 analyzer,
+		                                                                 toolTipRenderer,
+		                                                                 cursor);
 
 
 		_canvas.addRenderer(_backgroundRenderer);
@@ -79,8 +84,23 @@ public class StagePresenter
 
 	public void updateSize()
 	{
-		_canvas.setPreferredSize(new Dimension(_stage.getSize().x + 30, _stage.getSize().y + 30));
+		_canvas.setPreferredSize(
+				new Dimension(_stage.getSize().x + 30, _stage.getSize().y + 30));
 		_canvas.revalidate();
+		_canvas.repaint();
+	}
+
+	public void setPreview(final boolean b)
+	{
+		_backgroundRenderer.setPreview(b);
+		_stageRenderer.setPreview(b);
+		_selectionRenderer.setPreview(b);
+		_snapPointRenderer.setPreview(b);
+		_entityPointRenderer.setPreview(b);
+		_handleRenderer.setPreview(b);
+		_pivotRenderer.setPreview(b);
+		_guideRenderer.setPreview(b);
+
 		_canvas.repaint();
 	}
 
@@ -102,7 +122,8 @@ public class StagePresenter
 
 	}
 
-	private static class ToolStateListener implements reform.stage.tooling.ToolStateListener
+	private static class ToolStateListener implements reform.stage.tooling
+			.ToolStateListener
 	{
 
 		private final StagePresenter _stagePresenter;
@@ -118,19 +139,5 @@ public class StagePresenter
 			_stagePresenter.update();
 		}
 
-	}
-
-	public void setPreview(final boolean b)
-	{
-		_backgroundRenderer.setPreview(b);
-		_stageRenderer.setPreview(b);
-		_selectionRenderer.setPreview(b);
-		_snapPointRenderer.setPreview(b);
-		_entityPointRenderer.setPreview(b);
-		_handleRenderer.setPreview(b);
-		_pivotRenderer.setPreview(b);
-		_guideRenderer.setPreview(b);
-
-		_canvas.repaint();
 	}
 }

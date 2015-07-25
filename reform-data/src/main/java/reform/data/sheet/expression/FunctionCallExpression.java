@@ -12,7 +12,8 @@ public class FunctionCallExpression implements Expression
 	private final Calculator.Function _function;
 	private final Expression[] _params;
 
-	public FunctionCallExpression(final Calculator.Function name, final Expression... params)
+	public FunctionCallExpression(final Calculator.Function name, final Expression...
+			params)
 	{
 		_function = name;
 		_params = params;

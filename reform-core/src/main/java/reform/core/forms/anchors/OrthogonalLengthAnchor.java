@@ -14,8 +14,8 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 	private final ReferencePoint _pointA;
 	private final ReferencePoint _pointB;
 
-	public OrthogonalLengthAnchor(final IdentityToken token, final Name name, final StaticLength offset, final
-	ReferencePoint pointA, final ReferencePoint pointB)
+	public OrthogonalLengthAnchor(final IdentityToken token, final Name name, final
+	StaticLength offset, final ReferencePoint pointA, final ReferencePoint pointB)
 	{
 		super(token, name);
 		_offset = offset;
@@ -36,8 +36,12 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		final double orthogonalX = distance == 0 ? 0 : -Vector.orthogonalX(deltaX, deltaY) / distance;
-		final double orthogonalY = distance == 0 ? -1 : -Vector.orthogonalY(deltaX, deltaY) / distance;
+		final double orthogonalX = distance == 0 ? 0 : -Vector.orthogonalX(deltaX,
+		                                                                   deltaY) /
+				distance;
+		final double orthogonalY = distance == 0 ? -1 : -Vector.orthogonalY(deltaX,
+		                                                                    deltaY) /
+				distance;
 
 		final double oldX = orthogonalX * oldOffset;
 		final double oldY = orthogonalY * oldOffset;

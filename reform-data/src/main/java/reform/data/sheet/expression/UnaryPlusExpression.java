@@ -16,8 +16,8 @@ public final class UnaryPlusExpression extends UnaryExpressionBase implements Ex
 	public String asString(final boolean parens)
 	{
 		final String s = "+" + _inner.asString(
-				!(_inner instanceof ConstantExpression || _inner instanceof ReferenceExpression || _inner instanceof
-						ExponentialExpression));
+				!(_inner instanceof ConstantExpression || _inner instanceof
+						ReferenceExpression || _inner instanceof ExponentialExpression));
 		if (parens)
 		{
 			return "(" + s + ")";

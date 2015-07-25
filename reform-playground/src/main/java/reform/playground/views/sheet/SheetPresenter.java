@@ -15,7 +15,8 @@ public class SheetPresenter
 	private final TableModel _dataModel;
 	private final JTable _table;
 
-	public SheetPresenter(final EventedSheet sheet, final DataSet dataSet, final ExpressionParser parser)
+	public SheetPresenter(final EventedSheet sheet, final DataSet dataSet, final
+	ExpressionParser parser)
 	{
 		Solver solver = new Solver(dataSet);
 		_dataModel = new SheetTableModel(sheet, solver, parser);
@@ -40,11 +41,13 @@ public class SheetPresenter
 				final int index = e.getFirstRow();
 				if (index > 0)
 				{
-					_table.getSelectionModel().setSelectionInterval(index - 1, index - 1);
+					_table.getSelectionModel().setSelectionInterval(index - 1, index -
+							1);
 				}
 				else if (index < _dataModel.getRowCount())
 				{
-					_table.getSelectionModel().setSelectionInterval(index + 1, index + 1);
+					_table.getSelectionModel().setSelectionInterval(index + 1, index +
+							1);
 				}
 				else
 				{
@@ -57,7 +60,8 @@ public class SheetPresenter
 					final int viewRow = _table.convertRowIndexToView(e.getFirstRow());
 					_table.scrollRectToVisible(_table.getCellRect(viewRow, 0, true));
 					_table.editCellAt(e.getLastRow(), 1);
-					_table.getSelectionModel().setSelectionInterval(e.getFirstRow(), e.getLastRow());
+					_table.getSelectionModel().setSelectionInterval(e.getFirstRow(),
+					                                                e.getLastRow());
 				});
 			}
 

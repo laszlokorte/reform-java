@@ -13,7 +13,8 @@ import reform.math.Vector;
 
 public class EntityPoint implements SnapPoint
 {
-	private static final double SNAP_RADIUS2 = SnapPoint.SNAP_RADIUS * SnapPoint.SNAP_RADIUS;
+	private static final double SNAP_RADIUS2 = SnapPoint.SNAP_RADIUS * SnapPoint
+			.SNAP_RADIUS;
 	private static final double GRAB_RADIUS = 10;
 	private static final double GRAB_RADIUS2 = GRAB_RADIUS * GRAB_RADIUS;
 
@@ -22,7 +23,8 @@ public class EntityPoint implements SnapPoint
 	private final Vec2 _value = new Vec2();
 	private final StringBuilder _label = new StringBuilder(50);
 
-	public <T extends Form> EntityPoint(final Identifier<T> formId, final ExposedPointToken<? super T> token)
+	public <T extends Form> EntityPoint(final Identifier<T> formId, final
+	ExposedPointToken<? super T> token)
 	{
 		_formId = formId;
 		_pointId = new Identifier<>(token);
@@ -38,6 +40,22 @@ public class EntityPoint implements SnapPoint
 	public double getY()
 	{
 		return _value.y;
+	}
+
+	@Override
+	public ReferencePoint createReference()
+	{
+		return new ForeignFormsPoint(getFormId(), getPointId());
+	}
+
+	public String getLabel()
+	{
+		return _label.toString();
+	}
+
+	public boolean isInSnapRadius(final double x, final double y)
+	{
+		return Vector.distance2(x, y, _value.x, _value.y) < SNAP_RADIUS2;
 	}
 
 	public Identifier<? extends Form> getFormId()
@@ -63,12 +81,6 @@ public class EntityPoint implements SnapPoint
 	}
 
 	@Override
-	public ReferencePoint createReference()
-	{
-		return new ForeignFormsPoint(getFormId(), getPointId());
-	}
-
-	@Override
 	public boolean equals(final Object obj)
 	{
 		if (this == obj)
@@ -82,16 +94,6 @@ public class EntityPoint implements SnapPoint
 		final EntityPoint other = (EntityPoint) obj;
 
 		return _formId.equals(other._formId) && _pointId.equals(other._pointId);
-	}
-
-	public String getLabel()
-	{
-		return _label.toString();
-	}
-
-	public boolean isInSnapRadius(final double x, final double y)
-	{
-		return Vector.distance2(x, y, _value.x, _value.y) < SNAP_RADIUS2;
 	}
 
 	public boolean isInGrabRadius(final double x, final double y)

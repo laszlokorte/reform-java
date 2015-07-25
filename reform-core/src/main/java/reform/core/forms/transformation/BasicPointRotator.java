@@ -14,7 +14,8 @@ public class BasicPointRotator implements Rotator
 	}
 
 	@Override
-	public void rotate(final Runtime runtime, final double angle, final double fixX, final double fixY)
+	public void rotate(final Runtime runtime, final double angle, final double fixX,
+	                   final double fixY)
 	{
 
 		for (int i = 0; i < _points.length; i++)

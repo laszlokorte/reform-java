@@ -24,17 +24,6 @@ public class StaticAngle implements RotationAngle
 		return Double.longBitsToDouble(runtime.get(_formId, _offset));
 	}
 
-	public void setForRuntime(final Runtime runtime, final double angle)
-	{
-		runtime.set(_formId, _offset, Double.doubleToRawLongBits(angle));
-	}
-
-	@Override
-	public boolean isValidFor(final Runtime runtime)
-	{
-		return runtime.get(_formId) != null;
-	}
-
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
@@ -46,6 +35,17 @@ public class StaticAngle implements RotationAngle
 	public boolean isDegenerated()
 	{
 		return false;
+	}
+
+	public void setForRuntime(final Runtime runtime, final double angle)
+	{
+		runtime.set(_formId, _offset, Double.doubleToRawLongBits(angle));
+	}
+
+	@Override
+	public boolean isValidFor(final Runtime runtime)
+	{
+		return runtime.get(_formId) != null;
 	}
 
 }

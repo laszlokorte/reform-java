@@ -10,13 +10,14 @@ import java.util.Set;
 public class Definition
 {
 	private final Identifier<? extends Definition> _id;
-	private String _name;
-	private Expression _expression;
 	private final HashSet<ReferenceExpression> _dependencies = new HashSet<>();
 	boolean _fresh = false;
 	int _incoming = 0;
+	private String _name;
+	private Expression _expression;
 
-	public Definition(final Identifier<? extends Definition> id, final String name, final Expression expression)
+	public Definition(final Identifier<? extends Definition> id, final String name,
+	                  final Expression expression)
 	{
 		_id = id;
 		_expression = expression;
