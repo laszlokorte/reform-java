@@ -29,7 +29,7 @@ public class Canvas extends JComponent
 
 		g2.setRenderingHints(_renderingHits);
 
-		for (int i = 0; i < _renderers.size(); i++)
+		for (int i = 0, j = _renderers.size(); i < j; i++)
 		{
 			_renderers.get(i).render(g2, width, height);
 		}

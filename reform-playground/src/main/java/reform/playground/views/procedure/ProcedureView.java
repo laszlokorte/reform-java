@@ -395,91 +395,98 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 	{
 		if (_incomplete)
 		{
-			SwingUtilities.invokeLater(() -> {
-				_emptyImg = null;
-				_views = new BaseItem[_adapter.getSize()];
-				_inner.removeAll();
-				_nullItemPool.release();
-				_groupItemPool.release();
-				_picturedItemPool.release();
-
-				boolean shouldFocus = false;
-				for (int i = 0; i < _adapter.getSize(); i++)
-				{
-					if (_adapter.isEmptySlot(i))
-					{
-						final NullItem item = _nullItemPool.take();
-						item.setIndex(i);
-						item.setFocused(false);
-						_views[i] = item;
-					}
-					else if (_adapter.isGroup(i))
-					{
-						final GroupItem item = _groupItemPool.take();
-						item.setFocused(false);
-						item.setIndex(i);
-						item.setIndent(_adapter.getIndentation(i));
-						item.setText(_adapter.getDescription(i));
-						_views[i] = item;
-					}
-					else
-					{
-						Image img = _adapter.getImageAt(i);
-						if (img == null)
-						{
-							img = getEmptyImage(_adapter.getImageWidth(), _adapter.getImageHeight());
-						}
-						final PicturedItem item = _picturedItemPool.take();
-						item.setFocused(false);
-						item.setIndex(i);
-						item.setIndent(_adapter.getIndentation(i));
-						item.setText(_adapter.getDescription(i));
-						item.setImage(img);
-						_views[i] = item;
-
-					}
-
-					if (_adapter.hasFailed(i))
-					{
-						_views[i].setError(_adapter.getError(i).getMessage());
-					}
-					else
-					{
-						_views[i].resetError();
-					}
-
-					if (i == _focusedIndex)
-					{
-						if (_focused == null)
-						{
-							shouldFocus = true;
-						}
-						_views[i].setFocused(true);
-						_focused = _views[i];
-
-					}
-					_inner.add(_views[i]);
-					_views[i].validate();
-
-				}
-
-				getParent().repaint();
-
-				revalidate();
-
-				if (shouldFocus)
-				{
-					SwingUtilities.invokeLater(() -> {
-						final Rectangle bounds = _focused.getBounds();
-						final Rectangle rect = new Rectangle(bounds.x, bounds.y - 15, bounds.width, bounds.height +
-								30);
-						scrollRectToVisible(rect);
-					});
-				}
-
-				_incomplete = false;
-			});
+			SwingUtilities.invokeLater(this::update);
 		}
+	}
+
+	private void update()
+	{
+		_emptyImg = null;
+		if (_views.length != _adapter.getSize())
+		{
+			_views = new BaseItem[_adapter.getSize()];
+		}
+		_inner.removeAll();
+		_nullItemPool.release();
+		_groupItemPool.release();
+		_picturedItemPool.release();
+
+		boolean shouldFocus = false;
+		for (int i = 0, j = _adapter.getSize(); i < j; i++)
+		{
+			if (_adapter.isEmptySlot(i))
+			{
+				final NullItem item = _nullItemPool.take();
+				item.setIndex(i);
+				item.setFocused(false);
+				_views[i] = item;
+			}
+			else if (_adapter.isGroup(i))
+			{
+				final GroupItem item = _groupItemPool.take();
+				item.setFocused(false);
+				item.setIndex(i);
+				item.setIndent(_adapter.getIndentation(i));
+				item.setText(_adapter.getDescription(i));
+				_views[i] = item;
+			}
+			else
+			{
+				Image img = _adapter.getImageAt(i);
+				if (img == null)
+				{
+					img = getEmptyImage(_adapter.getImageWidth(), _adapter.getImageHeight());
+				}
+				final PicturedItem item = _picturedItemPool.take();
+				item.setFocused(false);
+				item.setIndex(i);
+				item.setIndent(_adapter.getIndentation(i));
+				item.setText(_adapter.getDescription(i));
+				item.setImage(img);
+				_views[i] = item;
+
+			}
+
+			if (_adapter.hasFailed(i))
+			{
+				_views[i].setError(_adapter.getError(i).getMessage());
+			}
+			else
+			{
+				_views[i].resetError();
+			}
+
+			if (i == _focusedIndex)
+			{
+				if (_focused == null)
+				{
+					shouldFocus = true;
+				}
+				_views[i].setFocused(true);
+				_focused = _views[i];
+
+			}
+			_inner.add(_views[i]);
+
+		}
+
+		revalidate();
+		repaint();
+
+
+		if (shouldFocus)
+		{
+			SwingUtilities.invokeLater(this::scrollToFocus);
+		}
+
+		_incomplete = false;
+	}
+
+	private void scrollToFocus()
+	{
+		final Rectangle bounds = _focused.getBounds();
+		final Rectangle rect = new Rectangle(bounds.x, bounds.y - 15, bounds.width, bounds.height + 30);
+		scrollRectToVisible(rect);
 	}
 
 	private BufferedImage _emptyImg;

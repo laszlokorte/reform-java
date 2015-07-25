@@ -49,7 +49,7 @@ public class ProjectRuntime implements Runtime
 
 		synchronized (_listeners)
 		{
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onBeginEvaluation(this);
 			}
@@ -68,7 +68,7 @@ public class ProjectRuntime implements Runtime
 		{
 			synchronized (_listeners)
 			{
-				for (int i = 0; i < _listeners.size(); i++)
+				for (int i = 0, j = _listeners.size(); i < j; i++)
 				{
 					_listeners.get(i).onFinishEvaluation(this);
 				}
@@ -89,7 +89,7 @@ public class ProjectRuntime implements Runtime
 
 		synchronized (_listeners)
 		{
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onEvalInstruction(this, instruction);
 			}
@@ -109,7 +109,7 @@ public class ProjectRuntime implements Runtime
 		final FastIterable<Identifier<? extends Form>> ids = _stack.getForms();
 		synchronized (_listeners)
 		{
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onPopScope(this, ids);
 			}
@@ -148,7 +148,7 @@ public class ProjectRuntime implements Runtime
 	{
 		synchronized (_listeners)
 		{
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onError(this, instruction, error);
 			}

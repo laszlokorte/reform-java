@@ -486,8 +486,8 @@ public class Parser<E>
 
 	private boolean isOperator(final Token t)
 	{
-		return t == null || t.type == Token.Type.Operator || t.type == Token.Type.ArgumentSeparator || _delegate.isOpeningToken(
-				t);
+		return t == null || t.type == Token.Type.Operator || t.type == Token.Type.ArgumentSeparator || _delegate
+				.isOpeningToken(t);
 	}
 
 }

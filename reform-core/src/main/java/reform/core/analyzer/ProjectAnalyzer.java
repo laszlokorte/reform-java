@@ -38,7 +38,7 @@ public class ProjectAnalyzer implements Analyzer
 
 		synchronized (_listeners)
 		{
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onFinishAnalysis(this);
 			}
@@ -105,7 +105,7 @@ public class ProjectAnalyzer implements Analyzer
 
 	public int indexOf(final Analyzable source)
 	{
-		for (int i = 0; i < _nodes.size(); i++)
+		for (int i = 0, j = _nodes.size(); i < j; i++)
 		{
 			if (_nodes.get(i).getSource() == source)
 			{

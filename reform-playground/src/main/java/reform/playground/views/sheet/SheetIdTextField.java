@@ -49,10 +49,9 @@ public class SheetIdTextField extends JTextField
 	}
 
 	@Override
-	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
-	                                    int condition, boolean pressed) {
-		super.processKeyBinding(ks, e, condition,
-		                        pressed);
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed)
+	{
+		super.processKeyBinding(ks, e, condition, pressed);
 		return true;
 	}
 }

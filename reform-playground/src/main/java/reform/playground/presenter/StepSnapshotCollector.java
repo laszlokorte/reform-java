@@ -114,7 +114,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 		}
 
 		final FastIterable<Identifier<? extends Form>> it = runtime.getStackIterator();
-		for (int i = 0; i < it.size(); i++)
+		for (int i = 0, j = it.size(); i < j; i++)
 		{
 			final Identifier<? extends Form> id = it.get(i);
 			final Form form = runtime.get(id);
@@ -196,7 +196,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 		_pathPool.release();
 		_redraw = false;
 
-		for (int i = 0; i < _listeners.size(); i++)
+		for (int i = 0, j = _listeners.size(); i < j; i++)
 		{
 			_listeners.get(i).onCollectionCompleted(this);
 		}

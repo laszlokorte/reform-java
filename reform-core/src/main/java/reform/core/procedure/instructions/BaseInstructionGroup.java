@@ -71,7 +71,7 @@ abstract public class BaseInstructionGroup extends BaseInstruction implements In
 		try
 		{
 			runtime.pushScope();
-			for (int i = 0; i < _children.size(); i++)
+			for (int i = 0, j = _children.size(); i < j; i++)
 			{
 				if (runtime.shouldStop())
 				{
@@ -97,7 +97,7 @@ abstract public class BaseInstructionGroup extends BaseInstruction implements In
 	protected void _analyzeChildren(final Analyzer analyzer)
 	{
 		analyzer.pushScope();
-		for (int i = 0; i < _children.size(); i++)
+		for (int i = 0, j = _children.size(); i < j; i++)
 		{
 			final Analyzable instruction = _children.get(i);
 			instruction.analyze(analyzer);

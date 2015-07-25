@@ -62,7 +62,7 @@ public class ExpressionEditor extends JTextField
 	{
 		_expression = _parser.parse(getText());
 		transferFocusUpCycle();
-		for (int i = 0; i < _listeners.size(); i++)
+		for (int i = 0, j = _listeners.size(); i < j; i++)
 		{
 			_listeners.get(i).stateChanged(new ChangeEvent(this));
 		}
@@ -74,10 +74,9 @@ public class ExpressionEditor extends JTextField
 	}
 
 	@Override
-	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
-	                                    int condition, boolean pressed) {
-		super.processKeyBinding(ks, e, condition,
-		                                            pressed);
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed)
+	{
+		super.processKeyBinding(ks, e, condition, pressed);
 
 		return true;
 	}

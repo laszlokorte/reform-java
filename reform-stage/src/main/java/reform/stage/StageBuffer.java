@@ -44,20 +44,20 @@ class StageBuffer
 		stage.wipe();
 		stage.setSize(_size);
 		_intersectionSnapPointPool.release();
-		for (int i = 0; i < _entities.size(); i++)
+		for (int i = 0, j = _entities.size(); i < j; i++)
 		{
 			final Entity e = _entities.get(i);
 			stage.addEntity(e);
 
-			for (int j = 0; j < i; j++)
+			for (int k = 0; k < i; k++)
 			{
-				final Entity other = _entities.get(j);
+				final Entity other = _entities.get(k);
 				final Vec2[] intersections = EntityOutline.intersect(e.getOutline(), other.getOutline());
-				for (int k = intersections.length - 1; k >= 0; k--)
+				for (int l = intersections.length - 1; l >= 0; l--)
 				{
-					if (intersections[k] != null)
+					if (intersections[l] != null)
 					{
-						stage.addIntersectionPoint(_intersectionSnapPointPool.create(e, other, k, intersections[k]));
+						stage.addIntersectionPoint(_intersectionSnapPointPool.create(e, other, l, intersections[l]));
 					}
 				}
 			}

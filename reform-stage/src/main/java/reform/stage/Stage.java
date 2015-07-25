@@ -106,7 +106,7 @@ public class Stage
 	{
 		_size.set(size);
 
-		for (int i = 0; i < _cropPoints.size(); i++)
+		for (int i = 0, j = _cropPoints.size(); i < j; i++)
 		{
 			_cropPoints.get(i).updatePosition(size.x, size.y);
 		}
@@ -115,7 +115,7 @@ public class Stage
 	void complete()
 	{
 		Collections.reverse(_entities);
-		for (int i = 0; i < _listeners.size(); i++)
+		for (int i = 0, j = _listeners.size(); i < j; i++)
 		{
 			_listeners.get(i).onStageComplete(this);
 		}

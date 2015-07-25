@@ -24,7 +24,7 @@ public class InstructionFocus
 		if (_instruction != instruction)
 		{
 			_instruction = instruction;
-			for (int i = 0; i < _listeners.size(); i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
 				_listeners.get(i).onFocusChanged(this);
 			}

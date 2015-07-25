@@ -566,7 +566,7 @@ public class ProjectSerializer
 
 
 		final FastIterable<Identifier<? extends Picture>> pictures = project.getPictures();
-		for (int i = 0; i < pictures.size(); i++)
+		for (int i = 0, j = pictures.size(); i < j; i++)
 		{
 			final Identifier<? extends Picture> id = pictures.get(i);
 			writePicture(writer, project.getPicture(id));

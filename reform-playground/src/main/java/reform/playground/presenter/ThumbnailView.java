@@ -209,7 +209,7 @@ class ThumbnailView extends JComponent
 			{
 				return -2;
 			}
-			for (int i = 0; i < _rowOffsets.size() - 1; i++)
+			for (int i = 0, j = _rowOffsets.size() - 1; i < j; i++)
 			{
 				if (x > _rowOffsets.get(i))
 				{

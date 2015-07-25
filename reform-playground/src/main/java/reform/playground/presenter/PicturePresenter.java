@@ -515,7 +515,7 @@ public class PicturePresenter
 					_selection.reset();
 				}
 				_toolController.refresh();
-				for (int i = 0; i < _listeners.size(); i++)
+				for (int i = 0, j = _listeners.size(); i < j; i++)
 				{
 					_listeners.get(i).onPreviewChange(PicturePresenter.this);
 				}
@@ -1011,7 +1011,8 @@ public class PicturePresenter
 				return ((EntityPoint) snapPoint).getFormId().equals(_selection.getSelected());
 			}
 
-			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(
+			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA()
+					.equals(
 					_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(
 					_selection.getSelected()));
 
