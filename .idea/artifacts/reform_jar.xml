@@ -17,8 +17,17 @@
       <element id="module-output" name="reform-serializer" />
       <element id="module-output" name="reform-stage" />
       <element id="module-output" name="reform-tools" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/reform-serializer/json.jar" path-in-jar="/" />
       <element id="module-output" name="reform-components" />
+      <element id="dir-copy" path="$PROJECT_DIR$/reform-playground/src/main/resources" />
+      <element id="module-output" name="reform" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-awt-util-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-dom-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-svg-dom-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-svggen-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-util-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/batik-xml-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/xml-apis-1.4.01.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

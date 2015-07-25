@@ -98,6 +98,7 @@ public class ExportImageAction extends AbstractAction
 						SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 						svgGenerator.setSVGCanvasSize(new Dimension(_stage.getSize().x, _stage.getSize().y));
 
+
 						draw(svgGenerator);
 
 						Writer out = new OutputStreamWriter(new FileOutputStream(selectedFile), "UTF-8");

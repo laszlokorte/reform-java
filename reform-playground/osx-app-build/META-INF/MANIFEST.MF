@@ -1,4 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: . libs/json.jar
+Class-Path: . libs/json.jar libs/batik-awt-util-1.8.jar libs/batik-dom
+ -1.8.jar libs/batik-svg-dom-1.8.jar libs/batik-svggen-1.8.jar libs/ba
+ tik-util-1.8.jar libs/xml-apis-1.4.01.jar libs/batik-xml-1.8.jar
 Main-Class: reform.playground.main.Main
 
