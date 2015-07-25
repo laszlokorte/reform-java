@@ -8,6 +8,7 @@ import reform.core.forms.relations.*;
 import reform.core.forms.relations.ExposedPoint.ExposedPointToken;
 import reform.core.forms.transformation.*;
 import reform.core.graphics.ColoredShape;
+import reform.core.graphics.DrawingType;
 import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
@@ -87,9 +88,13 @@ public final class PictureForm extends BaseForm<PictureForm>
 		{
 			for (int i = 0, j = ids.size(); i < j; i++)
 			{
-				ColoredShape s = new ColoredShape();
-				runtime.get(ids.get(i)).writeColoredShapeForRuntime(runtime, s);
-				_shapes[runtime.getDepth() - 1].add(s);
+				Form form = runtime.get(ids.get(i));
+				if(form.getType() == DrawingType.Draw)
+				{
+					ColoredShape s = new ColoredShape();
+					form.writeColoredShapeForRuntime(runtime, s);
+					_shapes[runtime.getDepth() - 1].add(s);
+				}
 			}
 		}
 
@@ -180,13 +185,14 @@ public final class PictureForm extends BaseForm<PictureForm>
 	{
 		ProjectRuntime pr = (ProjectRuntime) runtime;
 
+		double width = Math.abs(maxX - minX);
+		double height =  Math.abs(maxY - minY);
 		_rotation.setForRuntime(runtime, 0);
 		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
-		_width.setForRuntime(runtime, Math.abs(maxX - minX));
-		_height.setForRuntime(runtime, Math.abs(maxY - minY));
+		_width.setForRuntime(runtime, maxX - minX);
+		_height.setForRuntime(runtime, maxY - minY);
 
-		Picture p = runtime.subCall(_pictureId, (int) (maxX - minX), (int) (maxY -
-				minY));
+		Picture p = runtime.subCall(_pictureId, (int) (width), (int) (height));
 		if (p != null)
 		{
 			pr.addListener(_listener);
@@ -252,14 +258,20 @@ public final class PictureForm extends BaseForm<PictureForm>
 		final double y = _centerPoint.getYValueForRuntime(runtime);
 		double rot = _rotation.getValueForRuntime(runtime);
 
+		int d = ((ProjectRuntime) runtime).getDepth();
+
+		double origWidth2 = runtime.getSize().x / 2;
+		double origHeight2 = runtime.getSize().y / 2;
+		double widthRatio = width2/origWidth2;
+		double heightRatio = height2/origHeight2;
 		_t.setToIdentity();
 		_t.translate(x, y);
 		_t.rotate(rot);
-		_t.scale(Math.signum(x), Math.signum(y));
 		_t.translate(-width2, -height2);
+		_t.scale(widthRatio,heightRatio);
 		coloredShape.setStrokeColor(0xff883377);
 		coloredShape.setStrokeWidth(5);
-		ArrayList<ColoredShape> shapes = _shapes[((ProjectRuntime) runtime).getDepth()];
+		ArrayList<ColoredShape> shapes = _shapes[d];
 		for (int i = 0; i < shapes.size(); i++)
 		{
 			coloredShape.getPath().append(
