@@ -7,6 +7,7 @@ import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
+import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.errors.RuntimeError;
@@ -421,7 +422,16 @@ public class PicturePresenter
 		}
 
 		{
-			final JButton button = new JButton();
+			final Tool createPictureTool = new CreateFormTool(selectionTool,
+			                                              new FormFactory<PictureForm>("Picture",
+			                                                                idEmitter,
+			                                                                (id, name) -> PictureForm.construct(id,name, _picture.getId())),
+			                                              _toolState, _cursor,
+			                                              _hitTester,
+			                                              _focus, eProcedure);
+
+			final JButton button = new JButton(
+					new SelectToolAction(_toolController, createPictureTool, "Create Picture"));
 			button.setFocusable(false);
 
 			button.setIcon(_pictureIcon);

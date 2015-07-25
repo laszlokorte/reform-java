@@ -11,10 +11,10 @@ import java.awt.image.BufferedImage;
 
 public class AlphaColorTrack extends JComponent
 {
-private final Composite _composite = AlphaComposite.getInstance(AlphaComposite
-			                                                                .DST_IN, 1
+	private final Composite _composite = AlphaComposite.getInstance(AlphaComposite
+			                                                                .DST_IN, 1.0F);
 
-	private final ColorModel _model;.0F);
+	private final ColorModel _model;
 	private BufferedImage _overlay;
 	private Color _color = Color.BLACK;
 

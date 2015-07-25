@@ -38,6 +38,10 @@ public class EntityFactory
 		{
 			return new TextEntity(((TextForm) form).getId());
 		}
+		else if (form.getClass() == PictureForm.class)
+		{
+			return new PictureEntity(((PictureForm) form).getId());
+		}
 
 		return new UnknownEntity(form.getId());
 	}

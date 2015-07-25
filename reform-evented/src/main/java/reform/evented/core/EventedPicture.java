@@ -15,6 +15,7 @@ public class EventedPicture
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private final EventedProject _evtProject;
 	private final Identifier<? extends Picture> _pictureId;
+
 	public EventedPicture(final EventedProject evtProject, final Identifier<? extends
 			Picture> pictureId)
 	{
@@ -113,6 +114,11 @@ public class EventedPicture
 	public boolean exists()
 	{
 		return _evtProject.containsPicture(_pictureId);
+	}
+
+	public Identifier<? extends Picture> getId()
+	{
+		return _pictureId;
 	}
 
 	public interface Listener

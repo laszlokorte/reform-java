@@ -10,6 +10,10 @@ import reform.math.Vec2i;
 
 public interface Runtime
 {
+	Picture subCall(Identifier<? extends Picture> id, int width, int height);
+
+	void subEnd();
+
 	void begin();
 
 	void finish();
@@ -35,8 +39,6 @@ public interface Runtime
 	void reportError(Evaluable instruction, RuntimeError error);
 
 	boolean shouldStop();
-
-	Runtime getSubroutine(Identifier<? extends Picture> pictureId);
 
 	DataSet getDataSet();
 

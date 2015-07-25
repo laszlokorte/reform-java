@@ -358,7 +358,7 @@ public class ProjectSerializer
 		}
 		else if (type.equals(PictureForm.class.getSimpleName()))
 		{
-			form = PictureForm.construct(readId(jsonObject, "id"), readName(jsonObject));
+			form = PictureForm.construct(readId(jsonObject, "id"), readName(jsonObject), readId(jsonObject, "picture_id"));
 		}
 		else
 		{
@@ -1099,6 +1099,10 @@ public class ProjectSerializer
 		writer.value(form.getName().getValue());
 		writer.key("type");
 		writer.value(form.getType().name());
+		if(form instanceof PictureForm) {
+			writer.key("picture_id");
+			writeId(writer, ((PictureForm) form).getPictureId());
+		}
 		writer.endObject();
 	}
 }
