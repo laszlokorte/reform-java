@@ -109,7 +109,7 @@ public class RectangleEntity implements Entity
 
 		_bottomHandle = new Handle(formId, RectangleForm.Point.Bottom,
 		                           RectangleForm.Anchor.Bottom,
-		                           new PivotPair(_topLeft, _center));
+		                           new PivotPair(_top, _center));
 
 		_handles.add(_topHandle);
 		_handles.add(_bottomHandle);

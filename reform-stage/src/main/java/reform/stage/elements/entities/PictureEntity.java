@@ -109,7 +109,7 @@ public class PictureEntity implements Entity
 
 		_bottomHandle = new Handle(formId, PictureForm.Point.Bottom,
 		                           PictureForm.Anchor.Bottom,
-		                           new PivotPair(_topLeft, _center));
+		                           new PivotPair(_top, _center));
 
 		_handles.add(_topHandle);
 		_handles.add(_bottomHandle);

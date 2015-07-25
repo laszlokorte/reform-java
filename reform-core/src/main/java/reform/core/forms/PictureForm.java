@@ -52,6 +52,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Identifier<? extends Picture> _pictureId;
 	private final ArrayList[] _shapes = new ArrayList[3];
+	private final int[] _sizes = new int[6];
 
 	{
 		for (int i = 0; i < _shapes.length; i++)
@@ -66,8 +67,11 @@ public final class PictureForm extends BaseForm<PictureForm>
 		@Override
 		public void onBeginEvaluation(final ProjectRuntime runtime)
 		{
-			_shapes[runtime.getDepth() - 1].clear();
 
+			int d = runtime.getDepth() - 1;
+			_sizes[2*d] = runtime.getSize().x;
+			_sizes[2*d+1] = runtime.getSize().y;
+			_shapes[d].clear();
 		}
 
 		@Override
@@ -260,8 +264,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 		int d = ((ProjectRuntime) runtime).getDepth();
 
-		double origWidth2 = runtime.getSize().x / 2;
-		double origHeight2 = runtime.getSize().y / 2;
+		double origWidth2 = _sizes[2*d] / 2;
+		double origHeight2 = _sizes[2*d+1] / 2;
 		double widthRatio = width2/origWidth2;
 		double heightRatio = height2/origHeight2;
 		_t.setToIdentity();
