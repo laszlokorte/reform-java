@@ -37,6 +37,8 @@
 
  - improve export
 
+ - fix degenerated arc rotation
+
 Done
 ====
  - Shape Styles
