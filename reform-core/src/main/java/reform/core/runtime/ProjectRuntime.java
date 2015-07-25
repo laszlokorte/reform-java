@@ -47,7 +47,7 @@ public class ProjectRuntime implements Runtime
 		_stopped = false;
 		_stack.clear();
 
-		synchronized (_listeners)
+		//synchronized (_listeners)
 		{
 			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
@@ -66,7 +66,7 @@ public class ProjectRuntime implements Runtime
 
 		if (!_stopped)
 		{
-			synchronized (_listeners)
+			//synchronized (_listeners)
 			{
 				for (int i = 0, j = _listeners.size(); i < j; i++)
 				{
@@ -87,7 +87,7 @@ public class ProjectRuntime implements Runtime
 	public void afterEval(final Evaluable instruction)
 	{
 
-		synchronized (_listeners)
+		//synchronized (_listeners)
 		{
 			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
@@ -107,7 +107,7 @@ public class ProjectRuntime implements Runtime
 	public void popScope()
 	{
 		final FastIterable<Identifier<? extends Form>> ids = _stack.getForms();
-		synchronized (_listeners)
+		//synchronized (_listeners)
 		{
 			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{

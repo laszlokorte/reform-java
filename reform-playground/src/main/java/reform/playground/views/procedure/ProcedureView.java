@@ -222,7 +222,6 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 				_label.setBackground(Color.WHITE);
 				_label.setForeground(Color.BLACK);
 				_label.setDisabledTextColor(Color.BLACK);
-
 			}
 		}
 	}
@@ -231,10 +230,15 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 	{
 		private static final long serialVersionUID = 1L;
 
+		private static final Color _errorColor = Color.red.darker();
+		private final static Font _errorFont = new JLabel().getFont().deriveFont(Font.BOLD);
 		private final JTextArea _label;
 		private final JLabel _errorLabel = new JLabel();
 		private final JLabel _iconLabel;
 		private final ImageIcon _icon;
+		private final Dimension _size = new Dimension(300, 30);
+		private final Dimension _iconSize = new Dimension(30, 30);
+		private int _indent = -1;
 
 		public PicturedItem(final Adapter adapter)
 		{
@@ -249,12 +253,12 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 			_iconLabel = new JLabel(_icon);
 			add(_iconLabel, BorderLayout.WEST);
 
-			_errorLabel.setForeground(Color.RED.darker());
+			_errorLabel.setForeground(_errorColor);
 
 			add(_label, BorderLayout.CENTER);
 
-			setMinimumSize(new Dimension(300, 30));
-			setPreferredSize(new Dimension(300, 30));
+			setMinimumSize(_size);
+			setPreferredSize(_size);
 		}
 
 		public void setImage(final Image image)
@@ -264,7 +268,8 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 			if (image != null)
 			{
 				_icon.setImage(image);
-				_iconLabel.setMinimumSize(new Dimension(image.getWidth(null), image.getHeight(null)));
+				_iconSize.setSize(image.getWidth(null), image.getHeight(null));
+				_iconLabel.setMinimumSize(_iconSize);
 				height = Math.max(image.getHeight(null) + 10, 70);
 			}
 			else
@@ -273,13 +278,16 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 				height = 70;
 			}
 
-			setMinimumSize(new Dimension(300, height));
-			setPreferredSize(new Dimension(300, height));
+			_size.setSize(300, height);
 		}
 
 		public void setIndent(final int indent)
 		{
-			setBorder(BorderFactory.createEmptyBorder(5, 20 * indent + 5, 5, 20));
+			if(_indent != indent)
+			{
+				setBorder(BorderFactory.createEmptyBorder(5, 20 * indent + 5, 5, 20));
+				_indent = indent;
+			}
 		}
 
 		public void setText(final String text)
@@ -299,8 +307,6 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 			}
 			else
 			{
-				_errorLabel.setForeground(Color.red.darker());
-
 				_label.setBackground(Color.WHITE);
 				_label.setForeground(Color.BLACK);
 				_label.setDisabledTextColor(Color.BLACK);
@@ -311,7 +317,7 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 		public void setError(final String error)
 		{
 			super.setError(error);
-			_errorLabel.setFont(_label.getFont().deriveFont(Font.BOLD));
+			_errorLabel.setFont(_errorFont);
 			_errorLabel.setText(error);
 			_iconLabel.setBorder(_errorBorder);
 			_iconLabel.setBackground(Color.red);
@@ -322,7 +328,7 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 		public void resetError()
 		{
 			super.resetError();
-			_errorLabel.setFont(_label.getFont().deriveFont(Font.BOLD));
+			_errorLabel.setFont(_errorFont);
 			_iconLabel.setBorder(null);
 			_iconLabel.setBackground(null);
 			remove(_errorLabel);
@@ -369,7 +375,7 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 
 	public void setFocus(final int i)
 	{
-		if (_focused != null)
+		if (_focused != null && !_incomplete)
 		{
 			_focused.setFocused(false);
 		}
@@ -465,6 +471,8 @@ public final class ProcedureView extends JComponent implements InstructionFocus.
 				_views[i].setFocused(true);
 				_focused = _views[i];
 
+			} else {
+				_views[i].setFocused(false);
 			}
 			_inner.add(_views[i]);
 

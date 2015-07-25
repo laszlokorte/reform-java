@@ -1,13 +1,14 @@
 package reform.core.pool;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SimplePool<E> implements Pool<E>
 {
 	private final PoolFactory<E> _factory;
 
-	private final ConcurrentLinkedQueue<E> _inUse = new ConcurrentLinkedQueue<>();
-	private final ConcurrentLinkedQueue<E> _notInUse = new ConcurrentLinkedQueue<>();
+	private final ArrayList<E> _inUse = new ArrayList<>();
+	private final ArrayList<E> _notInUse = new ArrayList<>();
 
 	public SimplePool(final PoolFactory<E> factory)
 	{
@@ -17,17 +18,23 @@ public class SimplePool<E> implements Pool<E>
 	@Override
 	public void release()
 	{
-		_notInUse.addAll(_inUse);
-		_inUse.clear();
+		int i = _inUse.size();
+		while (i-- > 0)
+		{
+			E e = _inUse.remove(i);
+			_notInUse.add(e);
+		}
 	}
 
 	@Override
 	public void release(final PoolModifier<E> releaser)
 	{
-		_notInUse.addAll(_inUse);
-		while (_inUse.size() > 0)
+		int i = _inUse.size();
+		while (i-- > 0)
 		{
-			releaser.modify(_inUse.poll());
+			E e = _inUse.remove(i);
+			releaser.modify(e);
+			_notInUse.add(e);
 		}
 	}
 
@@ -37,9 +44,8 @@ public class SimplePool<E> implements Pool<E>
 		int i = _notInUse.size();
 		while (i-- > 0)
 		{
-			final E e = _notInUse.poll();
+			final E e = _notInUse.get(i);
 			cleaner.modify(e);
-			_notInUse.add(e);
 		}
 	}
 
@@ -49,9 +55,8 @@ public class SimplePool<E> implements Pool<E>
 		int i = _inUse.size();
 		while (i-- > 0)
 		{
-			final E e = _inUse.poll();
+			final E e = _inUse.get(i);
 			modifier.modify(e);
-			_inUse.add(e);
 		}
 	}
 
@@ -60,9 +65,11 @@ public class SimplePool<E> implements Pool<E>
 	{
 		E element;
 
-		if ((element = _notInUse.poll()) == null)
+		if (_notInUse.size() == 0)
 		{
 			element = _factory.create();
+		} else {
+			element = _notInUse.remove(_notInUse.size()-1);
 		}
 
 		_inUse.add(element);
