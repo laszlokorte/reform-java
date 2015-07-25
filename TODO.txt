@@ -31,8 +31,6 @@
 
  - color picker Hue slider singularity
 
- - expression field tabbing
-
  - sort shapes correctly
 
  - improve export
