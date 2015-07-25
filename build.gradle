@@ -2,8 +2,13 @@ group 'de.laszlokorte.reform'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'edu.sc.seis.macAppBundle'
 
-sourceCompatibility = 1.5
+mainClassName = "reform.playground.main.Main"
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -11,4 +16,31 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile project(':reform-playground')
+}
+
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+macAppBundle {
+    mainClassName = "reform.playground.main.Main"
+    icon = "Reform.icns"
+    bundleJRE = true
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.edu.sc.seis:macAppBundle:2.1.1"
+    }
 }

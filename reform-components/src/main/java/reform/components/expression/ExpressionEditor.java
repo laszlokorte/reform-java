@@ -1,6 +1,5 @@
 package reform.components.expression;
 
-import com.sun.java.swing.action.StateChangeAction;
 import reform.data.sheet.Definition;
 import reform.data.sheet.expression.Expression;
 

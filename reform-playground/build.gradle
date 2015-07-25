@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -11,4 +11,18 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'org.apache.xmlgraphics:batik-svggen:1.8'
+    compile 'org.apache.xmlgraphics:batik-dom:1.8'
+    compile 'org.apache.xmlgraphics:batik-svg-dom:1.8'
+    compile 'org.apache.xmlgraphics:batik-awt-util:1.8'
+    compile 'org.apache.xmlgraphics:batik-util:1.8'
+    compile 'org.apache.xmlgraphics:batik-xml:1.8'
+    compile project(':reform-core')
+    compile project(':reform-evented')
+    compile project(':reform-rendering')
+    compile project(':reform-serializer')
+    compile project(':reform-stage')
+    compile project(':reform-tools')
+    compile project(':reform-components')
+
 }

@@ -44,7 +44,7 @@
             <element id="directory" name="en.lproj">
               <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Localizable.strings" />
             </element>
-            <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Icon.icns" />
+            <element id="file-copy" path="$PROJECT_DIR$/Reform.icns" />
           </element>
           <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/Info.plist" />
           <element id="file-copy" path="$PROJECT_DIR$/reform-playground/osx-app-build/PkgInfo" />

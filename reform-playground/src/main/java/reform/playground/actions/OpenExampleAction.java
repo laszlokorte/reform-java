@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.io.InputStreamReader;
 
 public class OpenExampleAction extends AbstractAction
 {
@@ -44,7 +45,7 @@ public class OpenExampleAction extends AbstractAction
 		{
 
 			final Project project = serializer.read(
-					new JSONObject(new JSONTokener(getClass().getResourceAsStream("/new.json"))));
+					new JSONObject(new JSONTokener(new InputStreamReader(getClass().getResourceAsStream("/reform/playground/new.json")))));
 
 			_windowBuilder.open(null, project, idEmitter, false);
 		} catch (final JSONException e)
