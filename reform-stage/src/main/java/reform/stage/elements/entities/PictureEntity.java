@@ -149,9 +149,13 @@ public class PictureEntity implements Entity
 		_leftHandle.updateForRuntime(runtime, analyzer);
 
 		_shape.reset();
-		final Form form = runtime.get(_formId);
-		form.appendToPathForRuntime(runtime, _shape);
+		_shape.moveTo(_topLeft.getX(), _topLeft.getY());
+		_shape.lineTo(_topRight.getX(), _topRight.getY());
+		_shape.lineTo(_bottomRight.getX(), _bottomRight.getY());
+		_shape.lineTo(_bottomLeft.getX(), _bottomLeft.getY());
+		_shape.closePath();
 
+		final Form form = runtime.get(_formId);
 		_label = form.getName().getValue();
 
 		_isGuide = runtime.get(_formId).getType() == DrawingType.Guide;
