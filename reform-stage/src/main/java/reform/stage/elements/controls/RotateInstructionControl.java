@@ -1,7 +1,6 @@
 package reform.stage.elements.controls;
 
 import reform.core.procedure.instructions.single.RotateInstruction;
-import reform.core.procedure.instructions.single.TranslateInstruction;
 import reform.stage.elements.ControlPoint;
 import reform.stage.elements.InstructionControl;
 import reform.stage.elements.RubberBand;
@@ -43,7 +42,8 @@ public class RotateInstructionControl implements InstructionControl
 		return null;
 	}
 
-	public boolean canEdit() {
+	public boolean canEdit()
+	{
 		return false;
 	}
 

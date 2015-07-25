@@ -1,7 +1,10 @@
 package reform.playground.views.sheet;
 
 import reform.components.expression.ExpressionEditor;
-import reform.data.sheet.*;
+import reform.data.sheet.Calculator;
+import reform.data.sheet.Definition;
+import reform.data.sheet.Sheet;
+import reform.data.sheet.Value;
 import reform.data.sheet.expression.*;
 import reform.data.syntax.Lexer;
 import reform.data.syntax.Parser;
@@ -9,68 +12,72 @@ import reform.data.syntax.Token;
 import reform.evented.core.EventedSheet;
 import reform.identity.Identifier;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class ExpressionParser implements ExpressionEditor.Parser
 {
 	private final Sheet _sheet;
 	private final Lexer _lexer = getLexer();
-	private final Parser.ParserDelegate _delegate;
 	private final Parser<Expression> _parser;
 	private final HashSet<String> _functionNames = new HashSet<>();
 
 
-	public ExpressionParser(EventedSheet sheet)
+	public ExpressionParser(final EventedSheet sheet)
 	{
 
-		Calculator.Function[] functions = Calculator.Function.values();
+		final Calculator.Function[] functions = Calculator.Function.values();
 
-		for(int i=0;i<functions.length;i++) {
+		for (int i = 0; i < functions.length; i++)
+		{
 			_functionNames.add(functions[i].name().toLowerCase());
 		}
 		_sheet = sheet.getRaw();
-		_delegate = new Delegate(sheet.getRaw(), _functionNames);
-		_parser = new Parser(_delegate);
+		Parser.ParserDelegate<Expression> delegate = new Delegate(sheet.getRaw(), _functionNames);
+		_parser = new Parser<>(delegate);
 	}
 
 	@Override
-	public Expression parse(CharSequence charSeq) {
-		try {
+	public Expression parse(final CharSequence charSeq)
+	{
+		try
+		{
 			return _parser.parse(_lexer.tokenize(charSeq));
-		} catch (Parser.ParsingException e) {
+		} catch (final Parser.ParsingException e)
+		{
 			return new InvalidExpression(charSeq);
-		} catch (Lexer.LexingException e) {
+		} catch (final Lexer.LexingException e)
+		{
 			return new InvalidExpression(charSeq);
 		}
 	}
 
 
-
-	public String getUniqueNameFor(String wantedName, Definition def) {
+	public String getUniqueNameFor(final String wantedName, final Definition def)
+	{
 		String testName = wantedName;
-		int postfix=0;
+		int postfix = 0;
 		Definition otherDef = _sheet.findDefinitionWithName(testName);
-		while(otherDef != null && otherDef != def || _functionNames.contains(testName)) {
+		while (otherDef != null && otherDef != def || _functionNames.contains(testName))
+		{
 			testName = wantedName + ++postfix;
 			otherDef = _sheet.findDefinitionWithName(testName);
 		}
 
-		if(postfix > 0) {
+		if (postfix > 0)
+		{
 			return testName;
-		} else {
+		}
+		else
+		{
 			return wantedName;
 		}
 	}
 
 	private static Lexer getLexer()
 	{
-		Lexer.Generator generator = new Lexer.Generator();
+		final Lexer.Generator generator = new Lexer.Generator();
 
 		generator.ignore("\\s+");
 		generator.ignore("\\u00A0+");
@@ -112,27 +119,23 @@ public class ExpressionParser implements ExpressionEditor.Parser
 
 	private final static class Delegate implements Parser.ParserDelegate<Expression>
 	{
-
-		private static char[] UNARY_OPERATORS = new char[]{'+', '-', '~'};
-		private static char[] BINARY_OPERATORS = new char[]{'+', '-', '*', '/', '%'};
-
 		private final Sheet _sheet;
 		private final HashSet<String> _functionNames;
 
-		public Delegate(Sheet sheet, HashSet<String> functionNames)
+		public Delegate(final Sheet sheet, final HashSet<String> functionNames)
 		{
 			_sheet = sheet;
 			_functionNames = functionNames;
 		}
 
 		@Override
-		public Expression variableTokenToNode(Token token)
+		public Expression variableTokenToNode(final Token token)
 		{
-			String name = token.value.toString();
-			Definition def = _sheet.findDefinitionWithName(name);
+			final String name = token.value.toString();
+			final Definition def = _sheet.findDefinitionWithName(name);
 			if (def == null)
 			{
-				return new ReferenceExpression(new Identifier(-1), name);
+				return new ReferenceExpression(new Identifier<>(-1), name);
 			}
 			return new ReferenceExpression(def.getId(), name);
 		}
@@ -150,7 +153,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Expression unaryOperatorToNode(Token operator, Expression operand)
+		public Expression unaryOperatorToNode(final Token operator, final Expression operand)
 		{
 			if (operator.value.equals("-"))
 			{
@@ -171,7 +174,8 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Expression binaryOperatorToNode(Token operator, Expression leftHand, Expression rightHand)
+		public Expression binaryOperatorToNode(final Token operator, final Expression leftHand, final Expression
+				rightHand)
 		{
 			if (operator.value.equals("+"))
 			{
@@ -236,17 +240,17 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Expression functionTokenToNode(Token function, List<Expression> args)
+		public Expression functionTokenToNode(final Token function, final List<Expression> args)
 		{
-			Expression[] params = new Expression[args.size()];
+			final Expression[] params = new Expression[args.size()];
 			args.toArray(params);
-			String funcName = function.value.toString();
-			String enumName = funcName.substring(0, 1).toUpperCase() + funcName.substring(1);
+			final String funcName = function.value.toString();
+			final String enumName = funcName.substring(0, 1).toUpperCase() + funcName.substring(1);
 			return new FunctionCallExpression(Calculator.Function.valueOf(enumName), params);
 		}
 
 		@Override
-		public boolean hasBinaryOperator(Token operator)
+		public boolean hasBinaryOperator(final Token operator)
 		{
 			switch (operator.value.toString())
 			{
@@ -271,7 +275,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public boolean hasUnaryOperator(Token operator)
+		public boolean hasUnaryOperator(final Token operator)
 		{
 			switch (operator.value.toString())
 			{
@@ -285,7 +289,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public Parser.Associativity assocOfOperator(Token token)
+		public Parser.Associativity assocOfOperator(final Token token)
 		{
 			switch (token.value.toString())
 			{
@@ -297,7 +301,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		}
 
 		@Override
-		public int precedenceOfOperator(Token token, boolean actsAsUnary)
+		public int precedenceOfOperator(final Token token, final boolean actsAsUnary)
 		{
 			switch (token.value.toString())
 			{
@@ -341,14 +345,14 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			return new Parser.Context<>();
 		}
 
-		private static Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
-		private static Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
-		private static Pattern doublePattern = Pattern.compile("^(0|[1-9][0-9]*)?\\.[0-9]*$");
-		private static Pattern colorPattern = Pattern.compile("^#[0-9a-fA-F]{6}$");
-		private static Pattern colorPatternAlpha = Pattern.compile("^#[0-9a-fA-F]{8}$");
+		private static final Pattern stringPattern = Pattern.compile("^\"[^\"]*\"$");
+		private static final Pattern intPattern = Pattern.compile("^(0|[1-9][0-9]*)$");
+		private static final Pattern doublePattern = Pattern.compile("^(0|[1-9][0-9]*)?\\.[0-9]*$");
+		private static final Pattern colorPattern = Pattern.compile("^#[0-9a-fA-F]{6}$");
+		private static final Pattern colorPatternAlpha = Pattern.compile("^#[0-9a-fA-F]{8}$");
 
 		@Override
-		public Expression literalTokenToNode(Token token)
+		public Expression literalTokenToNode(final Token token)
 		{
 			if (token.value.equals("true"))
 			{
@@ -368,17 +372,21 @@ public class ExpressionParser implements ExpressionEditor.Parser
 			}
 			else if (stringPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(token.value.subSequence(1, token.value.length() - 1).toString()));
+				return new ConstantExpression(
+						new Value(token.value.subSequence(1, token.value.length() - 1).toString()));
 			}
 			else if (colorPattern.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value(0xff000000 | Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16),
-				                                        true));
+				return new ConstantExpression(new Value(
+						0xff000000 | Integer.parseInt(token.value.subSequence(1, token.value.length()).toString(), 16),
+						true));
 			}
 			else if (colorPatternAlpha.matcher(token.value).find())
 			{
-				return new ConstantExpression(new Value((int)Long.parseLong(token.value.subSequence(1, token.value.length()).toString(), 16),
-				                                        true));
+				return new ConstantExpression(
+						new Value((int) Long.parseLong(token.value.subSequence(1, token.value.length()).toString(),
+						                               16),
+						          true));
 			}
 			else
 			{

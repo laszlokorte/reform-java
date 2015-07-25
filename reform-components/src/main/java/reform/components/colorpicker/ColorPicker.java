@@ -1,8 +1,5 @@
 package reform.components.colorpicker;
 
-import reform.components.expression.ExpressionEditor;
-import reform.data.sheet.expression.ConstantExpression;
-import reform.data.sheet.expression.Expression;
 import reform.rendering.icons.swing.ColorIcon;
 
 import javax.swing.*;
@@ -21,7 +18,7 @@ public class ColorPicker
 	private int _ARGB;
 	private final ActionMap _actionMap = new ActionMap();
 
-	public ColorPicker(JTextField textfield)
+	public ColorPicker(final JTextField textfield)
 	{
 		_panel = new ColorPickerPanel(_model, textfield);
 

@@ -24,10 +24,7 @@ import reform.stage.tooling.InstructionFocus;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.text.DecimalFormat;
 
 public final class InstructionsOptionPanel implements InstructionFocus.Listener, ChangeListener, EventedProcedure
 		.Listener
@@ -40,7 +37,8 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 	private final InstructionFocus _focus;
 	private final EventedProcedure _eProcedure;
 
-	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus, ExpressionParser expressionParser)
+	public InstructionsOptionPanel(final EventedProcedure eProcedure, final InstructionFocus focus, ExpressionParser
+			expressionParser)
 	{
 		_panel.setLayout(new BoxLayout(_panel, BoxLayout.LINE_AXIS));
 		_expressionEditor = new ExpressionEditor(expressionParser);
@@ -88,7 +86,9 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 					_label.setText("S:");
 					_expressionEditor.setValue(f.getValue());
 					showExpression = true;
-				}else if(factor instanceof ExpressionScaleFactor) {
+				}
+				else if (factor instanceof ExpressionScaleFactor)
+				{
 					ExpressionScaleFactor f = (ExpressionScaleFactor) factor;
 					_label.setText("S:");
 					_expressionEditor.setExpression(f.getExpression());
@@ -105,7 +105,9 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 					_label.setText("R:");
 					_expressionEditor.setValue(a.getValue());
 					showExpression = true;
-				} else if(angle instanceof ExpressionRotationAngle) {
+				}
+				else if (angle instanceof ExpressionRotationAngle)
+				{
 					ExpressionRotationAngle a = (ExpressionRotationAngle) angle;
 					_label.setText("R:");
 					_expressionEditor.setExpression(a.getExpression());
@@ -163,7 +165,9 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 					}
 
 					_eProcedure.publishInstructionChange(instruction);
-				} else if(factor instanceof ExpressionScaleFactor) {
+				}
+				else if (factor instanceof ExpressionScaleFactor)
+				{
 					final ExpressionScaleFactor f = (ExpressionScaleFactor) factor;
 					f.setFactorExpression(_expressionEditor.getExpression());
 					_eProcedure.publishInstructionChange(instruction);
@@ -196,7 +200,9 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 					}
 
 					_eProcedure.publishInstructionChange(instruction);
-				} else if(angle instanceof ExpressionRotationAngle) {
+				}
+				else if (angle instanceof ExpressionRotationAngle)
+				{
 					final ExpressionRotationAngle f = (ExpressionRotationAngle) angle;
 					f.setAngleExpression(_expressionEditor.getExpression());
 					_eProcedure.publishInstructionChange(instruction);

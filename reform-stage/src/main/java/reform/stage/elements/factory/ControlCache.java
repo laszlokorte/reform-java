@@ -1,6 +1,5 @@
 package reform.stage.elements.factory;
 
-import reform.core.procedure.instructions.Instruction;
 import reform.core.runtime.Evaluable;
 import reform.stage.elements.InstructionControl;
 

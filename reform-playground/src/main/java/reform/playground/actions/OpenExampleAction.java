@@ -44,8 +44,8 @@ public class OpenExampleAction extends AbstractAction
 		try
 		{
 
-			final Project project = serializer.read(
-					new JSONObject(new JSONTokener(new InputStreamReader(getClass().getResourceAsStream("/reform/playground/new.json")))));
+			final Project project = serializer.read(new JSONObject(new JSONTokener(
+					new InputStreamReader(getClass().getResourceAsStream("/reform/playground/new.json")))));
 
 			_windowBuilder.open(null, project, idEmitter, false);
 		} catch (final JSONException e)

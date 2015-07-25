@@ -7,12 +7,13 @@ public class UnknownAnchorError implements RuntimeError
 {
 	private final Identifier<? extends Anchor> _anchorId;
 
-	public UnknownAnchorError(Identifier<? extends Anchor> anchorId)
+	public UnknownAnchorError(final Identifier<? extends Anchor> anchorId)
 	{
 		_anchorId = anchorId;
 	}
 
-	public Identifier<? extends Anchor> getAnchorId() {
+	public Identifier<? extends Anchor> getAnchorId()
+	{
 		return _anchorId;
 	}
 

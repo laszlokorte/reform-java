@@ -3,8 +3,10 @@ package reform.data.syntax;
 
 import java.util.Objects;
 
-public class Token {
-	public enum Type {
+public class Token
+{
+	public enum Type
+	{
 		LiteralValue,
 		ArgumentSeparator,
 		Identifier, ParenthesisLeft, ParenthesisRight, Operator,
@@ -15,31 +17,40 @@ public class Token {
 	public final CharSequence value;
 	public final Position position;
 
-	public Token(Type type, CharSequence value, Position position) {
+	public Token(final Type type, final CharSequence value, final Position position)
+	{
 		this.type = type;
 		this.value = value;
 		this.position = position;
 	}
 
-	public int hashCode() {
+	public int hashCode()
+	{
 		return Objects.hash(type, value, position);
 	}
 
-	public boolean equals(Object obj) {
-		if(obj == null) {
+	public boolean equals(final Object obj)
+	{
+		if (obj == null)
+		{
 			return false;
-		} else if(this == obj) {
+		}
+		else if (this == obj)
+		{
 			return true;
-		} else if(obj.getClass() != getClass()) {
+		}
+		else if (obj.getClass() != getClass())
+		{
 			return false;
 		}
 
-		Token other = (Token)obj;
+		final Token other = (Token) obj;
 
-		return other.type.equals(type) && other.value.equals(other.value) && other.position.equals(position);
+		return other.type.equals(type) && other.value.equals(value) && other.position.equals(position);
 	}
 
-	public String toString() {
+	public String toString()
+	{
 		return String.format("%s: %s %s", type.name(), value, position);
 	}
 }

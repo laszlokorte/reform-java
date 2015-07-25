@@ -2,13 +2,11 @@ package reform.stage.elements.entities;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
-import reform.core.forms.LineForm;
 import reform.core.forms.TextForm;
 import reform.core.graphics.DrawingType;
 import reform.core.runtime.Runtime;
 import reform.identity.Identifier;
 import reform.math.Vec2;
-import reform.math.Vector;
 import reform.stage.elements.Entity;
 import reform.stage.elements.EntityPoint;
 import reform.stage.elements.Handle;
@@ -82,7 +80,7 @@ public class TextEntity implements Entity
 
 		_startHandle.updateForRuntime(runtime, analyzer);
 		_endHandle.updateForRuntime(runtime, analyzer);
-		_topHandle.updateForRuntime(runtime,analyzer);
+		_topHandle.updateForRuntime(runtime, analyzer);
 
 		_shape.reset();
 		final Form form = runtime.get(_formId);
@@ -109,7 +107,7 @@ public class TextEntity implements Entity
 	@Override
 	public boolean contains(final Vec2 position)
 	{
-		return _shape.intersects(position.x-5, position.y-5, 10, 10);
+		return _shape.intersects(position.x - 5, position.y - 5, 10, 10);
 	}
 
 	@Override

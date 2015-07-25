@@ -146,7 +146,8 @@ public class ToolController
 
 	public void onFocusChanged()
 	{
-		if(_tool!=null) {
+		if (_tool != null)
+		{
 			_tool.focusChanged();
 		}
 	}

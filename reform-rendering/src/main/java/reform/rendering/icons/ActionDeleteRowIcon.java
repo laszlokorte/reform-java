@@ -19,12 +19,12 @@ public class ActionDeleteRowIcon implements Icon
 		_shape.add(new Area(new Rectangle2D.Double(0, -100, 600, 100)));
 
 
-		Area cross = new Area();
+		final Area cross = new Area();
 		cross.add(new Area(new Rectangle2D.Double(-225, -50, 450, 100)));
 		cross.add(new Area(new Rectangle2D.Double(-50, -225, 100, 450)));
 
 
-		AffineTransform t = AffineTransform.getTranslateInstance(-300,150);
+		final AffineTransform t = AffineTransform.getTranslateInstance(-300, 150);
 		t.rotate(Math.PI / 4);
 		_shape.add(cross.createTransformedArea(t));
 

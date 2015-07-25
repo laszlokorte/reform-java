@@ -7,7 +7,7 @@ import reform.identity.Identifier;
 
 public interface EventedSheet
 {
-	public interface Listener
+	interface Listener
 	{
 		void onNameChanged(EventedSheet eventedSheet, Identifier<? extends Definition> dataDefinition, int index);
 
@@ -19,31 +19,31 @@ public interface EventedSheet
 		void onDefinitionRemoved(EventedSheet eventedSheet, Definition definition, int index);
 	}
 
-	public int size();
+	int size();
 
 
-	public void removeListener(final Listener listener);
+	void removeListener(final Listener listener);
 
-	public void addListener(final Listener listener);
-
-
-	public String getName(final int index);
-
-	public void setName(final int index, String name);
-
-	public Expression getExpression(final int index);
-
-	public Definition getDefinition(int index);
+	void addListener(final Listener listener);
 
 
-	public void setExpression(final int index, Expression expression);
+	String getName(final int index);
+
+	void setName(final int index, String name);
+
+	Expression getExpression(final int index);
+
+	Definition getDefinition(int index);
 
 
-	public void addDefinition(final Definition definition);
+	void setExpression(final int index, Expression expression);
 
 
-	public void removeDefinition(final int index);
+	void addDefinition(final Definition definition);
 
 
-	public Sheet getRaw();
+	void removeDefinition(final int index);
+
+
+	Sheet getRaw();
 }

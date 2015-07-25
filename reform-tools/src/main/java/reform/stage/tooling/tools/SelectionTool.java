@@ -128,7 +128,8 @@ public class SelectionTool implements Tool
 	@Override
 	public void focusChanged()
 	{
-		if(_state == State.Pressed) {
+		if (_state == State.Pressed)
+		{
 			cancel();
 		}
 	}

@@ -10,18 +10,15 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class SheetPresenter
 {
 	private final TableModel _dataModel;
 	private final JTable _table;
-	private final Solver _solver;
 
-	public SheetPresenter(EventedSheet sheet, DataSet dataSet, ExpressionParser parser) {
-		_solver = new Solver(dataSet);
-		_dataModel = new SheetTableModel(sheet, _solver, parser);
+	public SheetPresenter(final EventedSheet sheet, final DataSet dataSet, final ExpressionParser parser)
+	{
+		Solver solver = new Solver(dataSet);
+		_dataModel = new SheetTableModel(sheet, solver, parser);
 		_table = new SheetTable(_dataModel, dataSet);
 		_table.setFocusable(false);
 		_table.setSelectionBackground(Color.LIGHT_GRAY);
@@ -33,45 +30,49 @@ public class SheetPresenter
 		_table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		_table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		TableModelListener l = new TableModelListener() {
-
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				if(e.getType() == TableModelEvent.DELETE) {
-					if(_table.isEditing()) {
-						_table.getCellEditor().cancelCellEditing();
-					}
-					int index = e.getFirstRow();
-					if(index > 0) {
-						_table.getSelectionModel().setSelectionInterval(index-1, index-1);
-					} else if(index < _dataModel.getRowCount()) {
-						_table.getSelectionModel().setSelectionInterval(index+1, index+1);
-					} else {
-						_table.getSelectionModel().clearSelection();
-					}
+		final TableModelListener l = e -> {
+			if (e.getType() == TableModelEvent.DELETE)
+			{
+				if (_table.isEditing())
+				{
+					_table.getCellEditor().cancelCellEditing();
 				}
-				if (e.getType() == TableModelEvent.INSERT) {
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							int viewRow = _table.convertRowIndexToView(e.getFirstRow());
-							_table.scrollRectToVisible(_table.getCellRect(viewRow, 0, true));
-							_table.editCellAt(e.getLastRow(), 1);
-							_table.getSelectionModel().setSelectionInterval(e.getFirstRow(), e.getLastRow());
-						}
-					});
+				final int index = e.getFirstRow();
+				if (index > 0)
+				{
+					_table.getSelectionModel().setSelectionInterval(index - 1, index - 1);
 				}
-
-				_table.repaint();
+				else if (index < _dataModel.getRowCount())
+				{
+					_table.getSelectionModel().setSelectionInterval(index + 1, index + 1);
+				}
+				else
+				{
+					_table.getSelectionModel().clearSelection();
+				}
 			}
+			if (e.getType() == TableModelEvent.INSERT)
+			{
+				SwingUtilities.invokeLater(() -> {
+					final int viewRow = _table.convertRowIndexToView(e.getFirstRow());
+					_table.scrollRectToVisible(_table.getCellRect(viewRow, 0, true));
+					_table.editCellAt(e.getLastRow(), 1);
+					_table.getSelectionModel().setSelectionInterval(e.getFirstRow(), e.getLastRow());
+				});
+			}
+
+			_table.repaint();
 		};
 		_table.getModel().addTableModelListener(l);
 	}
 
-	public JComponent getComponent() {
+	public JComponent getComponent()
+	{
 		return _table;
 	}
 
-	public ListSelectionModel getSelectionModel() {
+	public ListSelectionModel getSelectionModel()
+	{
 		return _table.getSelectionModel();
 	}
 

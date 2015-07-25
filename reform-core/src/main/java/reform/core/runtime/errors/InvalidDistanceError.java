@@ -6,14 +6,16 @@ public class InvalidDistanceError implements RuntimeError
 {
 	private final TranslationDistance _distance;
 
-	public InvalidDistanceError(TranslationDistance distance)
+	public InvalidDistanceError(final TranslationDistance distance)
 	{
 		_distance = distance;
 	}
 
-	public TranslationDistance getDistance() {
+	public TranslationDistance getDistance()
+	{
 		return _distance;
 	}
+
 	@Override
 	public String getMessage()
 	{

@@ -2,29 +2,22 @@ package reform.playground.views.sheet;
 
 import reform.data.sheet.Definition;
 import reform.data.sheet.Solver;
-import reform.data.sheet.expression.Expression;
-import reform.data.sheet.expression.InvalidExpression;
-import reform.data.syntax.Lexer;
-import reform.data.syntax.Parser;
-import reform.evented.core.EventedDataSheet;
 import reform.evented.core.EventedSheet;
 import reform.identity.Identifier;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class SheetTableModel extends AbstractTableModel implements TableModel, EventedSheet.Listener
 {
 	private final EventedSheet _eSheet;
 	private final Solver _solver;
 	private final ExpressionParser _parser;
-	private static  final String[] COLUMNS = {"Key", "Value"};
-	private static  final Class<?>[] COLUMN_TYPES = {Definition.class, Definition.class};
+	private static final String[] COLUMNS = {"Key", "Value"};
+	private static final Class<?>[] COLUMN_TYPES = {Definition.class, Definition.class};
 
-	SheetTableModel(EventedSheet eSheet, Solver solver, ExpressionParser parser) {
+	SheetTableModel(final EventedSheet eSheet, final Solver solver, final ExpressionParser parser)
+	{
 		_eSheet = eSheet;
 		_solver = solver;
 		_parser = parser;
@@ -71,20 +64,23 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 	@Override
 	public void setValueAt(final Object aValue, final int rowIndex, final int columnIndex)
 	{
-		String string =  (String) aValue;
-		switch (columnIndex) {
+		final String string = (String) aValue;
+		switch (columnIndex)
+		{
 			case 0:
 				_eSheet.setName(rowIndex, _parser.getUniqueNameFor(string, _eSheet.getDefinition(rowIndex)));
 				break;
 			case 1:
 				_eSheet.setExpression(rowIndex, _parser.parse(string));
 				break;
-			default: throw new RuntimeException("invalid column");
+			default:
+				throw new RuntimeException("invalid column");
 		}
 	}
 
 	@Override
-	public void onNameChanged(final EventedSheet picture, final Identifier<? extends Definition> dataDefinition, int index)
+	public void onNameChanged(final EventedSheet picture, final Identifier<? extends Definition> dataDefinition, final
+	int index)
 	{
 		// needed to update reference labels
 		// TODO: extract label updating into separat method.
@@ -93,7 +89,8 @@ public class SheetTableModel extends AbstractTableModel implements TableModel, E
 	}
 
 	@Override
-	public void onDefinitionChanged(final EventedSheet picture, final Identifier<? extends Definition> dataDefinition, int index)
+	public void onDefinitionChanged(final EventedSheet picture, final Identifier<? extends Definition> dataDefinition,
+	                                final int index)
 	{
 		_solver.evaluate(_eSheet.getRaw());
 		fireTableRowsUpdated(index, index);

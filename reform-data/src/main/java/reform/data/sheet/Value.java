@@ -2,9 +2,6 @@ package reform.data.sheet;
 
 import java.util.Locale;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public final class Value
 {
 
@@ -35,7 +32,7 @@ public final class Value
 		this(integer, false);
 	}
 
-	public Value(final int integer, boolean isColor)
+	public Value(final int integer, final boolean isColor)
 	{
 		if (isColor)
 		{
@@ -88,7 +85,7 @@ public final class Value
 		_color = 0xff000000;
 	}
 
-	public Value( final double a, final double r, final double g, final double b)
+	public Value(final double a, final double r, final double g, final double b)
 	{
 		type = Type.Color;
 		_integerValue = 0;

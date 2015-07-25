@@ -13,7 +13,7 @@ public class SwingIcon implements javax.swing.Icon
 	private final boolean _smooth;
 	private final Color _selectedColor;
 
-	public SwingIcon(final Icon icon, final int size, final boolean smooth, Color selectedColor)
+	public SwingIcon(final Icon icon, final int size, final boolean smooth, final Color selectedColor)
 	{
 		_icon = icon;
 		_size = size;
@@ -60,7 +60,7 @@ public class SwingIcon implements javax.swing.Icon
 		{
 			g2.setColor(Color.BLACK);
 		}
-		_icon.draw(g2, x + _size / 2, 1+ y + _size / 2, _size - 4);
+		_icon.draw(g2, x + _size / 2, 1 + y + _size / 2, _size - 4);
 		g2.dispose();
 	}
 
@@ -73,7 +73,7 @@ public class SwingIcon implements javax.swing.Icon
 	@Override
 	public int getIconHeight()
 	{
-		return _size+2;
+		return _size + 2;
 	}
 
 }

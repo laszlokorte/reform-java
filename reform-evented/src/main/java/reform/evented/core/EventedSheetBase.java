@@ -41,14 +41,15 @@ public abstract class EventedSheetBase implements EventedSheet
 		return getSheet().get(index).getName();
 	}
 
-	public void setName(final int index, String name)
+	public void setName(final int index, final String name)
 	{
-		Sheet sheet = getSheet();
-		Definition def = sheet.get(index);
+		final Sheet sheet = getSheet();
+		final Definition def = sheet.get(index);
 
 		def.setName(name);
 
-		for(int i=0,j=_listeners.size();i<j;i++) {
+		for (int i = 0, j = _listeners.size(); i < j; i++)
+		{
 			_listeners.get(i).onNameChanged(this, def.getId(), index);
 		}
 
@@ -60,19 +61,20 @@ public abstract class EventedSheetBase implements EventedSheet
 		return getSheet().get(index).getExpression();
 	}
 
-	public Definition getDefinition(int index)
+	public Definition getDefinition(final int index)
 	{
 		return getSheet().get(index);
 	}
 
 
-	public void setExpression(final int index, Expression expression)
+	public void setExpression(final int index, final Expression expression)
 	{
-		Sheet sheet = getSheet();
-		Definition def = getSheet().get(index);
+		final Sheet sheet = getSheet();
+		final Definition def = getSheet().get(index);
 		def.setExpression(expression);
 		sheet.markDirty();
-		for(int i=0,j=_listeners.size();i<j;i++) {
+		for (int i = 0, j = _listeners.size(); i < j; i++)
+		{
 			_listeners.get(i).onDefinitionChanged(this, def.getId(), index);
 		}
 		_evtPicture.propagateProcedureChange();
@@ -82,10 +84,11 @@ public abstract class EventedSheetBase implements EventedSheet
 
 	public void addDefinition(final Definition definition)
 	{
-		Sheet sheet = getSheet();
+		final Sheet sheet = getSheet();
 		sheet.add(definition);
 		sheet.markDirty();
-		for(int i=0,j=_listeners.size();i<j;i++) {
+		for (int i = 0, j = _listeners.size(); i < j; i++)
+		{
 			_listeners.get(i).onDefinitionAdded(this, definition, sheet.size() - 1);
 		}
 		_evtPicture.propagateProcedureChange();
@@ -95,11 +98,12 @@ public abstract class EventedSheetBase implements EventedSheet
 
 	public void removeDefinition(final int index)
 	{
-		Sheet sheet = getSheet();
-		Definition def = sheet.get(index);
+		final Sheet sheet = getSheet();
+		final Definition def = sheet.get(index);
 		sheet.remove(index);
 
-		for(int i=0,j=_listeners.size();i<j;i++) {
+		for (int i = 0, j = _listeners.size(); i < j; i++)
+		{
 			_listeners.get(i).onDefinitionRemoved(this, def, index);
 		}
 		_evtPicture.propagateProcedureChange();

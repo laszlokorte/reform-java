@@ -34,7 +34,7 @@ public class ProjectRuntime implements Runtime
 	private final Stack _stack = new Stack();
 	private boolean _stopped = false;
 
-	public ProjectRuntime(final Project project, final Vec2i size, DataSet dataSet)
+	public ProjectRuntime(final Project project, final Vec2i size, final DataSet dataSet)
 	{
 		_project = project;
 		_size.set(size);

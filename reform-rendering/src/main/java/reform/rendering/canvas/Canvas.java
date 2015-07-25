@@ -36,7 +36,7 @@ public class Canvas extends JComponent
 
 		g2.dispose();
 	}
-	
+
 	public void addRenderer(final CanvasRenderer renderer)
 	{
 		_renderers.add(renderer);

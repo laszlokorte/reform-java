@@ -239,7 +239,8 @@ public class ScaleFormTool implements Tool
 	@Override
 	public void focusChanged()
 	{
-		if(_focus.getFocused() != _currentInstruction) {
+		if (_focus.getFocused() != _currentInstruction)
+		{
 			cancel();
 		}
 		_selectionTool.focusChanged();

@@ -8,20 +8,24 @@ public class ControlPoint
 	private final Vec2 _position = new Vec2();
 	private boolean _hasError = false;
 
-	public double getX() {
+	public double getX()
+	{
 		return _position.x;
 	}
 
-	public double getY() {
+	public double getY()
+	{
 		return _position.y;
 	}
 
-	public boolean hasError() {
+	public boolean hasError()
+	{
 		return _hasError;
 	}
 
-	public void updatePosition(double x, double y) {
-		_position.set(x,y);
+	public void updatePosition(final double x, final double y)
+	{
+		_position.set(x, y);
 	}
 
 	public void setError(final boolean error)

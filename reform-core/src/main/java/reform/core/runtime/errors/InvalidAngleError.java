@@ -6,12 +6,13 @@ public class InvalidAngleError implements RuntimeError
 {
 	private final RotationAngle _angle;
 
-	public InvalidAngleError(RotationAngle angle)
+	public InvalidAngleError(final RotationAngle angle)
 	{
 		_angle = angle;
 	}
 
-	public RotationAngle getAngle() {
+	public RotationAngle getAngle()
+	{
 		return _angle;
 	}
 

@@ -1,6 +1,5 @@
 package reform.core.forms;
 
-import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.RectangleForm.RectangleAnchor;
 import reform.core.forms.RectangleForm.RectangleAnchor.Side;

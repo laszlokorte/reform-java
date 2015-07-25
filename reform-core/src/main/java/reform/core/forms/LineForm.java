@@ -38,7 +38,8 @@ public final class LineForm extends BaseForm<LineForm>
 	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number, DEFAULT_STROKE_WIDTH);
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	                                                              DEFAULT_STROKE_WIDTH);
 
 	private final AttributeSet _attributes = new AttributeSet(_strokeColorAttribute, _strokeWidthAttribute);
 
@@ -117,7 +118,7 @@ public final class LineForm extends BaseForm<LineForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(0);
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());

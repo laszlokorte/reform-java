@@ -96,25 +96,34 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 		private boolean _expressionChanged = false;
 		private boolean _colorChanged = false;
+
 		private void onExpressionChange(final ChangeEvent changeEvent)
 		{
-			if(_expressionChanged) return;
+			if (_expressionChanged)
+			{
+				return;
+			}
 			_expressionChanged = true;
-			Expression expression = _expressionEditor.getExpression();
+			final Expression expression = _expressionEditor.getExpression();
 
-			if(expression instanceof ConstantExpression) {
-				ConstantExpression c = (ConstantExpression) expression;
-				if(c.getValue().type == Value.Type.Color)
+			if (expression instanceof ConstantExpression)
+			{
+				final ConstantExpression c = (ConstantExpression) expression;
+				if (c.getValue().type == Value.Type.Color)
 				{
-					if(!_colorChanged)
+					if (!_colorChanged)
 					{
 						_colorPicker.getModel().setHexARGB(c.getValue().getColor());
 					}
-				} else {
+				}
+				else
+				{
 					_colorPicker.getModel().setHexARGB(0xff000000);
 					_colorPicker.setMixed();
 				}
-			} else {
+			}
+			else
+			{
 				_colorPicker.getModel().setHexARGB(0xff000000);
 				_colorPicker.setMixed();
 			}
@@ -125,11 +134,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 		private void onModelChange(final ColorModel colorModel)
 		{
-			if(_expressionChanged) return;
+			if (_expressionChanged)
+			{
+				return;
+			}
 			if (_attribute != null && _colorPicker.getButton().isEnabled())
 			{
 				_colorChanged = true;
-				Expression expression = new ConstantExpression(
+				final Expression expression = new ConstantExpression(
 						new Value(colorModel.getAlpha(), colorModel.getRed(), colorModel.getGreen(),
 						          colorModel.getBlue()));
 
@@ -147,11 +159,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				final Expression currentExpression = attr.getValue();
 
 				_expressionEditor.setExpression(currentExpression);
-				if(currentExpression instanceof ConstantExpression) {
-					ConstantExpression c = (ConstantExpression) currentExpression;
+				if (currentExpression instanceof ConstantExpression)
+				{
+					final ConstantExpression c = (ConstantExpression) currentExpression;
 
 					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
-				} else {
+				}
+				else
+				{
 					_colorPicker.getModel().setHexARGB(0);
 					_colorPicker.setMixed();
 				}
@@ -186,7 +201,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(() -> new ExpressionPanel(this));
 
-	private final Pool<Component> _struts = new SimplePool<>(()-> Box.createHorizontalStrut(5));
+	private final Pool<Component> _struts = new SimplePool<>(() -> Box.createHorizontalStrut(5));
 
 
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
@@ -198,7 +213,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private final Component _glue = Box.createGlue();
 
-	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection, ExpressionEditor.Parser parser)
+	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection,
+	                       final ExpressionEditor.Parser parser)
 	{
 		_eProcedure = eProcedure;
 		_selection = selection;
@@ -300,7 +316,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				}
 				else if (type == Attribute.Type.Number || type == Attribute.Type.String)
 				{
-					ExpressionPanel panel = getExpressionPanel(attr);
+					final ExpressionPanel panel = getExpressionPanel(attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}

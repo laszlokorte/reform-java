@@ -101,7 +101,7 @@ public class StageCollector implements ProjectRuntime.Listener
 			}
 			if (_errorOnCurrent)
 			{
-				InstructionControl control = _controlCache.fetch(instruction, _controlFactory);
+				final InstructionControl control = _controlCache.fetch(instruction, _controlFactory);
 				control.updateForRuntime(runtime);
 				_buffer.setInstructionControl(control);
 			}

@@ -96,7 +96,7 @@ public class ScaleInstruction extends BaseInstruction
 		_fixPoint = fixPoint;
 	}
 
-	public void setFactor(ScaleFactor factor)
+	public void setFactor(final ScaleFactor factor)
 	{
 		_factor = factor;
 	}

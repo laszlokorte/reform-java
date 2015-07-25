@@ -2,7 +2,6 @@ package reform.core.graphics;
 
 
 import java.awt.*;
-import java.awt.Color;
 import java.awt.geom.GeneralPath;
 
 public class ColoredShape
@@ -12,27 +11,33 @@ public class ColoredShape
 	private Color _strokeColor;
 	private final GeneralPath.Double _path = new GeneralPath.Double();
 
-	public Stroke getStroke() {
+	public Stroke getStroke()
+	{
 		return _stroke;
 	}
 
-	public Color getBackgroundColor() {
+	public Color getBackgroundColor()
+	{
 		return _backgroundColor;
 	}
 
-	public GeneralPath.Double getPath() {
+	public GeneralPath.Double getPath()
+	{
 		return _path;
 	}
 
-	public void setBackgroundColor(final int color) {
+	public void setBackgroundColor(final int color)
+	{
 		_backgroundColor = color != 0 ? new Color(color, true) : null;
 	}
 
-	public void setStrokeColor(final int color) {
+	public void setStrokeColor(final int color)
+	{
 		_strokeColor = color != 0 ? new Color(color, true) : null;
 	}
 
-	public void reset() {
+	public void reset()
+	{
 		_backgroundColor = null;
 		_strokeColor = null;
 		_path.reset();
@@ -40,12 +45,12 @@ public class ColoredShape
 
 	public void draw(final Graphics2D g2)
 	{
-		if(_backgroundColor != null)
+		if (_backgroundColor != null)
 		{
 			g2.setColor(_backgroundColor);
 			g2.fill(_path);
 		}
-		if(_stroke != null && _strokeColor != null)
+		if (_stroke != null && _strokeColor != null)
 		{
 			g2.setColor(_strokeColor);
 			g2.setStroke(_stroke);

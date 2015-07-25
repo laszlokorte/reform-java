@@ -3,7 +3,6 @@ package reform.core.forms.relations;
 import reform.core.analyzer.Analyzer;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.RotationAngle;
-import reform.core.runtime.relations.ScaleFactor;
 import reform.data.sheet.expression.Expression;
 
 public class ExpressionRotationAngle implements RotationAngle

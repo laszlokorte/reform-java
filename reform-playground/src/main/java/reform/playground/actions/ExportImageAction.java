@@ -45,8 +45,8 @@ public class ExportImageAction extends AbstractAction
 		final HashSet<String> formatSet = new HashSet<>();
 		for (int i = 0; i < formats.length; i++)
 		{
-			String ext = formats[i].toLowerCase();
-			if(formatSet.add(ext))
+			final String ext = formats[i].toLowerCase();
+			if (formatSet.add(ext))
 			{
 				_fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(ext, ext));
 			}
@@ -89,8 +89,7 @@ public class ExportImageAction extends AbstractAction
 
 					if (suffix.equals("svg"))
 					{
-						DOMImplementation domImpl =
-								GenericDOMImplementation.getDOMImplementation();
+						DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
 
 						String svgNS = "http://www.w3.org/2000/svg";
 						Document document = domImpl.createDocument(svgNS, "svg", null);
@@ -146,8 +145,6 @@ public class ExportImageAction extends AbstractAction
 		g2.fillRect(0, 0, _stage.getSize().x, _stage.getSize().y);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		final Color strokeColor = Color.BLACK;
-		final Color fillColor = new Color(0x99222222, true);
 		final List<ColoredShape> finalShapes = _stage.getFinalShapes();
 		for (int i = 0, j = finalShapes.size(); i < j; i++)
 		{

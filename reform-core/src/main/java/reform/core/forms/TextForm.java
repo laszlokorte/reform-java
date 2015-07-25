@@ -4,7 +4,6 @@ import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.OrthogonalLengthAnchor;
 import reform.core.forms.anchors.StaticPointAnchor;
-import reform.core.forms.outline.LineOutline;
 import reform.core.forms.outline.NullOutline;
 import reform.core.forms.outline.Outline;
 import reform.core.forms.relations.*;
@@ -41,8 +40,11 @@ public final class TextForm extends BaseForm<TextForm>
 
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint, _endPoint);
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint, _endPoint),new AbsoluteScaler(
-			new BasicLengthScaler(_height, new ConstantRotationAngle(0), 0)));
+	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint, _endPoint),
+	                                                             new AbsoluteScaler(new BasicLengthScaler(_height,
+	                                                                                                      new
+			                                                                                                      ConstantRotationAngle(
+			                                                                                                      0), 0)));
 
 	private final Outline _outline = new NullOutline();
 
@@ -105,16 +107,15 @@ public final class TextForm extends BaseForm<TextForm>
 		super(id, SIZE, name);
 		addSnapPoint(new ExposedPoint(_startPoint, new Name("Start"), Point.Start));
 		addSnapPoint(new ExposedPoint(_endPoint, new Name("End"), Point.End));
-		addSnapPoint(new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _height), new Name("Top"),
-		                              Point.Top));
+		addSnapPoint(
+				new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _height), new Name("Top"), Point.Top));
 		addSnapPoint(new ExposedPoint(new CenterPoint(_startPoint, _endPoint), new Name("Bottom"), Point.Bottom));
 
 
 		addAnchor(new StaticPointAnchor(Anchor.Start, new Name("Start"), _startPoint));
 		addAnchor(new StaticPointAnchor(Anchor.End, new Name("End"), _endPoint));
 
-		addAnchor(new OrthogonalLengthAnchor(Anchor.Top, new Name("ControlPoint"), _height, _startPoint,
-		                                     _endPoint));
+		addAnchor(new OrthogonalLengthAnchor(Anchor.Top, new Name("ControlPoint"), _height, _startPoint, _endPoint));
 	}
 
 	@Override
@@ -131,20 +132,20 @@ public final class TextForm extends BaseForm<TextForm>
 	@Override
 	public void appendToPathForRuntime(final Runtime runtime, final GeneralPath.Double target)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 
-		GlyphVector v = _font.createGlyphVector(_metrics.getFontRenderContext(),
-		                                        _textAttribute.getValue().getValueFor(dataSet).getString());
+		final GlyphVector v = _font.createGlyphVector(_metrics.getFontRenderContext(),
+		                                              _textAttribute.getValue().getValueFor(dataSet).getString());
 
-		double endX = _endPoint.getXValueForRuntime(runtime);
-		double endY = _endPoint.getYValueForRuntime(runtime);
-		double startX = _startPoint.getXValueForRuntime(runtime);
-		double startY = _startPoint.getYValueForRuntime(runtime);
-		double scale = _fontSizeAttribute.getValue().getValueFor(dataSet).getDouble();
-		double height = _height.getValueForRuntime(runtime) / 16;
+		final double endX = _endPoint.getXValueForRuntime(runtime);
+		final double endY = _endPoint.getYValueForRuntime(runtime);
+		final double startX = _startPoint.getXValueForRuntime(runtime);
+		final double startY = _startPoint.getYValueForRuntime(runtime);
+		final double scale = _fontSizeAttribute.getValue().getValueFor(dataSet).getDouble();
+		final double height = _height.getValueForRuntime(runtime) / 16;
 
 
-		Shape s = v.getOutline();
+		final Shape s = v.getOutline();
 		_trans.setToIdentity();
 		_trans.translate((startX + endX) / 2, (startY + endY) / 2);
 		_trans.rotate(-Vector.angle(endX, endY, startX, startY));
@@ -160,7 +161,7 @@ public final class TextForm extends BaseForm<TextForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(_textColorAttribute.getValue().getValueFor(dataSet).getColor());
 		coloredShape.setStrokeColor(0);

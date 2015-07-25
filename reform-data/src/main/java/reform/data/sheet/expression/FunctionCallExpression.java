@@ -1,28 +1,31 @@
 package reform.data.sheet.expression;
 
 
-import reform.data.sheet.*;
-import reform.identity.Identifier;
+import reform.data.sheet.Calculator;
+import reform.data.sheet.DataSet;
+import reform.data.sheet.Value;
 
 import java.util.Collection;
 
-/**
- * Created by laszlokorte on 21.07.15.
- */
-public class FunctionCallExpression implements Expression {
+public class FunctionCallExpression implements Expression
+{
 	private final Calculator.Function _function;
 	private final Expression[] _params;
 
-	public FunctionCallExpression(Calculator.Function name, Expression... params) {
+	public FunctionCallExpression(final Calculator.Function name, final Expression... params)
+	{
 		_function = name;
 		_params = params;
 	}
 
 	@Override
-	public String asString(boolean paren) {
-		StringBuilder sb = new StringBuilder();
-		for(int i=0;i<_params.length;i++) {
-			if(i>0) {
+	public String asString(final boolean paren)
+	{
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < _params.length; i++)
+		{
+			if (i > 0)
+			{
 				sb.append(", ");
 			}
 			sb.append(_params[i].asString(false));
@@ -31,17 +34,21 @@ public class FunctionCallExpression implements Expression {
 	}
 
 	@Override
-	public Value getValueFor(DataSet set) {
-		Value[] params = new Value[_params.length];
-		for(int i=0;i<_params.length;i++) {
+	public Value getValueFor(final DataSet set)
+	{
+		final Value[] params = new Value[_params.length];
+		for (int i = 0; i < _params.length; i++)
+		{
 			params[i] = _params[i].getValueFor(set);
 		}
 		return Calculator.apply(_function, params);
 	}
 
 	@Override
-	public void collectDependencies(Collection<ReferenceExpression> dependencies) {
-		for(int i=0;i<_params.length;i++) {
+	public void collectDependencies(final Collection<ReferenceExpression> dependencies)
+	{
+		for (int i = 0; i < _params.length; i++)
+		{
 			_params[i].collectDependencies(dependencies);
 		}
 	}

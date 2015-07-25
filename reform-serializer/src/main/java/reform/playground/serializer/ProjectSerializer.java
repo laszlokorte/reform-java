@@ -63,7 +63,7 @@ public class ProjectSerializer
 		_formIds.clear();
 	}
 
-	private Project readProject(final JSONObject jsonObject)  throws JSONException
+	private Project readProject(final JSONObject jsonObject) throws JSONException
 	{
 		final Project project = new Project();
 
@@ -525,7 +525,8 @@ public class ProjectSerializer
 		}
 	}
 
-	private ForLoopInstruction readForLoopInstruction(final Procedure procedure, final JSONObject object) throws JSONException
+	private ForLoopInstruction readForLoopInstruction(final Procedure procedure, final JSONObject object) throws
+			JSONException
 	{
 		final ForLoopInstruction loop = new ForLoopInstruction(object.getInt("times"));
 
@@ -534,7 +535,8 @@ public class ProjectSerializer
 		return loop;
 	}
 
-	private IfConditionInstruction readIfConditionInstruction(final Procedure procedure, final JSONObject object) throws JSONException
+	private IfConditionInstruction readIfConditionInstruction(final Procedure procedure, final JSONObject object)
+			throws JSONException
 	{
 		final IfConditionInstruction condition = new IfConditionInstruction();
 
@@ -694,19 +696,22 @@ public class ProjectSerializer
 		writer.endObject();
 	}
 
-	private void writeIfConditionInstruction(final JSONWriter writer, final IfConditionInstruction instruction) throws JSONException
+	private void writeIfConditionInstruction(final JSONWriter writer, final IfConditionInstruction instruction) throws
+			JSONException
 	{
 		writer.key("condition");
 		writer.value(instruction.getCondition());
 	}
 
-	private void writeForLoopInstruction(final JSONWriter writer, final ForLoopInstruction instruction) throws JSONException
+	private void writeForLoopInstruction(final JSONWriter writer, final ForLoopInstruction instruction) throws
+			JSONException
 	{
 		writer.key("times");
 		writer.value(instruction.getTimes());
 	}
 
-	private void writeTranslateInstruction(final JSONWriter writer, final TranslateInstruction instruction) throws JSONException
+	private void writeTranslateInstruction(final JSONWriter writer, final TranslateInstruction instruction) throws
+			JSONException
 	{
 		writer.key("form");
 		writeId(writer, instruction.getFormId());
@@ -714,7 +719,8 @@ public class ProjectSerializer
 		writeTranslationDistance(writer, instruction.getDistance());
 	}
 
-	private void writeScaleInstruction(final JSONWriter writer, final ScaleInstruction instruction) throws JSONException
+	private void writeScaleInstruction(final JSONWriter writer, final ScaleInstruction instruction) throws
+			JSONException
 	{
 		writer.key("form");
 		writeId(writer, instruction.getFormId());
@@ -724,7 +730,8 @@ public class ProjectSerializer
 		writePoint(writer, instruction.getFixPoint());
 	}
 
-	private void writeRotateInstruction(final JSONWriter writer, final RotateInstruction instruction) throws JSONException
+	private void writeRotateInstruction(final JSONWriter writer, final RotateInstruction instruction) throws
+			JSONException
 	{
 		writer.key("form");
 		writeId(writer, instruction.getFormId());
@@ -734,7 +741,8 @@ public class ProjectSerializer
 		writePoint(writer, instruction.getFixPoint());
 	}
 
-	private void writeMorphInstruction(final JSONWriter writer, final MorphInstruction instruction) throws JSONException
+	private void writeMorphInstruction(final JSONWriter writer, final MorphInstruction instruction) throws
+			JSONException
 	{
 		writer.key("form");
 		writeId(writer, instruction.getFormId());
@@ -745,7 +753,8 @@ public class ProjectSerializer
 
 	}
 
-	private void writeCreateFormInstruction(final JSONWriter writer, final CreateFormInstruction instruction) throws JSONException
+	private void writeCreateFormInstruction(final JSONWriter writer, final CreateFormInstruction instruction) throws
+			JSONException
 	{
 		writer.key("form");
 		writeForm(writer, instruction.getForm());
@@ -795,13 +804,15 @@ public class ProjectSerializer
 		writer.endObject();
 	}
 
-	private void writeConstantScaleFactor(final JSONWriter writer, final ConstantScaleFactor factor) throws JSONException
+	private void writeConstantScaleFactor(final JSONWriter writer, final ConstantScaleFactor factor) throws
+			JSONException
 	{
 		writer.key("value");
 		writer.value(factor.getValue());
 	}
 
-	private void writeTranslationDistance(final JSONWriter writer, final TranslationDistance distance) throws JSONException
+	private void writeTranslationDistance(final JSONWriter writer, final TranslationDistance distance) throws
+			JSONException
 	{
 		final Class<? extends TranslationDistance> cls = distance.getClass();
 
@@ -866,7 +877,8 @@ public class ProjectSerializer
 		writer.endObject();
 	}
 
-	private void writeRelativeFixSizeDestination(final JSONWriter writer, final RelativeFixSizeDestination destination) throws JSONException
+	private void writeRelativeFixSizeDestination(final JSONWriter writer, final RelativeFixSizeDestination
+			destination) throws JSONException
 	{
 		final ReferencePoint ref = destination.getReference();
 		final Vec2 delta = destination.getDelta();
@@ -935,13 +947,15 @@ public class ProjectSerializer
 		writer.endObject();
 	}
 
-	private void writeCartesianDirection(final JSONWriter writer, final CartesianDirection direction) throws JSONException
+	private void writeCartesianDirection(final JSONWriter writer, final CartesianDirection direction) throws
+			JSONException
 	{
 		writer.key("value");
 		writer.value(direction.name());
 	}
 
-	private void writeProportionalDirection(final JSONWriter writer, final ProportionalDirection direction) throws JSONException
+	private void writeProportionalDirection(final JSONWriter writer, final ProportionalDirection direction) throws
+			JSONException
 	{
 		writer.key("proportion");
 		writer.value(direction.getProportion());

@@ -1,7 +1,6 @@
 package reform.playground.renderers;
 
 import reform.math.Vec2i;
-import reform.stage.tooling.cursor.Cursor;
 
 import javax.swing.*;
 import java.awt.*;

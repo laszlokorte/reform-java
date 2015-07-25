@@ -20,7 +20,7 @@ public final class Picture implements Identifiable<Picture>
 	private final Sheet _measurements;
 
 	public Picture(final Identifier<? extends Picture> id, final Name name, final Vec2i size, final Sheet dataSheet,
-	               final Procedure procedure, Sheet measurements)
+	               final Procedure procedure, final Sheet measurements)
 	{
 		_id = id;
 		_name = name;

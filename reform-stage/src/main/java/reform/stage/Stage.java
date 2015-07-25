@@ -9,7 +9,6 @@ import reform.stage.elements.Entity;
 import reform.stage.elements.InstructionControl;
 import reform.stage.elements.outline.IntersectionSnapPoint;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

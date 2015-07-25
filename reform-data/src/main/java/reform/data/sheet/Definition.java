@@ -1,15 +1,14 @@
 package reform.data.sheet;
 
-import com.sun.org.apache.xerces.internal.xni.XMLString;
 import reform.data.sheet.expression.Expression;
 import reform.data.sheet.expression.ReferenceExpression;
 import reform.identity.Identifier;
 
-import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Definition {
+public class Definition
+{
 	private final Identifier<? extends Definition> _id;
 	private String _name;
 	private Expression _expression;
@@ -17,27 +16,33 @@ public class Definition {
 	boolean _fresh = false;
 	int _incoming = 0;
 
-	public Definition(Identifier<? extends Definition> id, String name, Expression expression) {
+	public Definition(final Identifier<? extends Definition> id, final String name, final Expression expression)
+	{
 		_id = id;
 		_expression = expression;
 		_name = name;
 	}
 
-	public Identifier<? extends Definition> getId() {
+	public Identifier<? extends Definition> getId()
+	{
 		return _id;
 	}
 
-	public Expression getExpression() {
+	public Expression getExpression()
+	{
 		return _expression;
 	}
 
-	public void setExpression(Expression expression) {
+	public void setExpression(final Expression expression)
+	{
 		_fresh = false;
 		_expression = expression;
 	}
 
-	boolean refreshDependencies() {
-		if(!_fresh) {
+	boolean refreshDependencies()
+	{
+		if (!_fresh)
+		{
 			_dependencies.clear();
 			_expression.collectDependencies(_dependencies);
 			_fresh = true;
@@ -47,7 +52,8 @@ public class Definition {
 		return true;
 	}
 
-	Set<ReferenceExpression> getDependencies() {
+	Set<ReferenceExpression> getDependencies()
+	{
 		return _dependencies;
 	}
 

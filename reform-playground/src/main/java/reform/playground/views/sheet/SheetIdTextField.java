@@ -5,24 +5,24 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class SheetIdTextField extends JTextField
 {
 	private static final Pattern whiteSpace = Pattern.compile("\\s+");
-	private int limit;
+	private final int limit;
 
-	public SheetIdTextField(int limit) {
+	public SheetIdTextField(final int limit)
+	{
 		super();
 		this.limit = limit;
 	}
 
 
 	@Override
-	protected Document createDefaultModel() {
+	protected Document createDefaultModel()
+	{
 		return new LimitDocument();
 	}
 
@@ -30,16 +30,29 @@ public class SheetIdTextField extends JTextField
 	{
 
 		@Override
-		public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException
+		public void insertString(final int offset, final String str, final AttributeSet attr) throws
+				BadLocationException
 		{
-			if (str == null) return;
+			if (str == null)
+			{
+				return;
+			}
 
-			String noSpaces = whiteSpace.matcher(str).replaceAll("");
+			final String noSpaces = whiteSpace.matcher(str).replaceAll("");
 
-			if ((getLength() + noSpaces.length()) <= limit) {
+			if ((getLength() + noSpaces.length()) <= limit)
+			{
 				super.insertString(offset, noSpaces, attr);
 			}
 		}
 
+	}
+
+	@Override
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
+	                                    int condition, boolean pressed) {
+		super.processKeyBinding(ks, e, condition,
+		                        pressed);
+		return true;
 	}
 }

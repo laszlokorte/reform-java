@@ -12,7 +12,6 @@ import reform.core.forms.transformation.*;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.data.sheet.DataSet;
-import reform.data.sheet.Value;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.math.Vector;
@@ -33,16 +32,21 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint, _endPoint);
 
-	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint, _endPoint), new AbsoluteScaler(
-			new BasicLengthScaler(_offset, new ConstantRotationAngle(0), 0)));
+	private final transient Scaler _scaler = new CompositeScaler(new BasicPointScaler(_startPoint, _endPoint),
+	                                                             new AbsoluteScaler(new BasicLengthScaler(_offset,
+	                                                                                                      new
+			                                                                                                      ConstantRotationAngle(
+			                                                                                                      0), 0)));
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color, DEFAULT_FILL_COLOR);
+	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color,
+	                                                            DEFAULT_FILL_COLOR);
 	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number, DEFAULT_STROKE_WIDTH);
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	                                                              DEFAULT_STROKE_WIDTH);
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
 	                                                          _strokeWidthAttribute);
@@ -157,7 +161,7 @@ public final class ArcForm extends BaseForm<ArcForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 		coloredShape.setBackgroundColor(_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
 		coloredShape.setStrokeWidth(_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());

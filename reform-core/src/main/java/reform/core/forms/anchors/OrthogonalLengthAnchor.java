@@ -61,7 +61,8 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double deltaY = bY - aY;
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
-		if(distance == 0) {
+		if (distance == 0)
+		{
 			return aX;
 		}
 
@@ -84,7 +85,8 @@ public class OrthogonalLengthAnchor extends BaseAnchor
 		final double distance = Vector.distance(aX, aY, bX, bY);
 
 
-		if(distance == 0) {
+		if (distance == 0)
+		{
 			return aX - offset;
 		}
 

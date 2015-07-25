@@ -1,12 +1,8 @@
 package reform.stage.tooling.tools;
 
-import reform.stage.Stage;
-import reform.stage.elements.Entity;
-import reform.stage.tooling.FormSelection;
 import reform.stage.tooling.Input;
 import reform.stage.tooling.Tool;
 import reform.stage.tooling.ToolState;
-import reform.stage.tooling.cursor.Cursor;
 
 public class RepairInstructionTool implements Tool
 {
@@ -18,7 +14,7 @@ public class RepairInstructionTool implements Tool
 
 	private final ToolState _toolState;
 
-	private State _state = State.Idle;
+	private final State _state = State.Idle;
 
 	public RepairInstructionTool(final ToolState toolState)
 	{

@@ -37,7 +37,7 @@ public final class Identifier<T>
 		_subscript = 0;
 	}
 
-	public Identifier(final int value, byte subscript)
+	public Identifier(final int value, final byte subscript)
 	{
 		_value = value;
 		_subscript = subscript;
@@ -55,7 +55,7 @@ public final class Identifier<T>
 	}
 
 
-	public Identifier(final Identifier<? extends T> id, byte subscript)
+	public Identifier(final Identifier<? extends T> id, final byte subscript)
 	{
 		_value = id._value;
 		_subscript = subscript;
@@ -70,11 +70,16 @@ public final class Identifier<T>
 	@Override
 	public boolean equals(final Object obj)
 	{
-		if(obj == this) {
+		if (obj == this)
+		{
 			return true;
-		} else if(obj == null) {
+		}
+		else if (obj == null)
+		{
 			return false;
-		} else if(obj.getClass() != getClass()) {
+		}
+		else if (obj.getClass() != getClass())
+		{
 			return false;
 		}
 

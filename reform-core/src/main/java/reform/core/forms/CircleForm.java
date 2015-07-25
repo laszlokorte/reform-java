@@ -38,11 +38,13 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius, _rotation);
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color, DEFAULT_FILL_COLOR);
+	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color,
+	                                                            DEFAULT_FILL_COLOR);
 	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number, DEFAULT_STROKE_WIDTH);
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	                                                              DEFAULT_STROKE_WIDTH);
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
 	                                                          _strokeWidthAttribute);
@@ -149,7 +151,7 @@ public final class CircleForm extends BaseForm<CircleForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
@@ -205,7 +207,7 @@ public final class CircleForm extends BaseForm<CircleForm>
 		private final ReferencePoint _center;
 
 		public CircleQuarterAnchor(final IdentityToken token, final Name name, final Quarter quarter, final
-		StaticLength radius, final StaticAngle angle, ReferencePoint center)
+		StaticLength radius, final StaticAngle angle, final ReferencePoint center)
 		{
 			super(token, name);
 			_quarter = quarter;

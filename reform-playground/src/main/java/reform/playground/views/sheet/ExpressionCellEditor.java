@@ -8,23 +8,19 @@ import reform.identity.Identifier;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class ExpressionCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
 {
 
 	private final DataSet _dataSet;
 
-	private final Color _selectionBackground = new Color(0x23AEEC);
-	private final Color _selectionForegroud = new Color(0xffffff);
+	private static final Color _selectionBackground = new Color(0x23AEEC);
+	private static final Color _selectionForegroud = new Color(0xffffff);
 
 	private final JLabel _label = new JLabel();
 	private final JPanel _labelField = new JPanel();
@@ -33,7 +29,8 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	private String _currentValue = null;
 	private String _initialValue = null;
 
-	ExpressionCellEditor(DataSet dataSet) {
+	ExpressionCellEditor(final DataSet dataSet)
+	{
 		_dataSet = dataSet;
 		_textField.addActionListener(this);
 		_textField.setVisible(false);
@@ -61,8 +58,8 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 			}
 		});
 
-		ActionMap am = _textField.getActionMap();
-		InputMap im = _textField.getInputMap();
+		final ActionMap am = _textField.getActionMap();
+		final InputMap im = _textField.getInputMap();
 
 		im.put(KeyStroke.getKeyStroke("alt UP"), "increment");
 		im.put(KeyStroke.getKeyStroke("alt DOWN"), "decrement");
@@ -90,17 +87,20 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected,
 	                                             final int row, final int column)
 	{
-		Definition def = ((Definition)value);
-		Expression expr = def.getExpression();
+		final Definition def = ((Definition) value);
+		final Expression expr = def.getExpression();
 		_currentValue = expr.asString(false);
 		_initialValue = _currentValue;
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
 
-		Identifier<?extends Definition> id = def.getId();
-		if(!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || expr instanceof InvalidExpression) {
+		final Identifier<? extends Definition> id = def.getId();
+		if (!_dataSet.hasValueFor(id) || _dataSet.hasError(id) || expr instanceof InvalidExpression)
+		{
 			_label.setForeground(Color.RED.darker());
-		} else {
+		}
+		else
+		{
 			_label.setForeground(Color.WHITE);
 		}
 
@@ -126,9 +126,12 @@ public class ExpressionCellEditor extends AbstractCellEditor implements TableCel
 	@Override
 	public boolean stopCellEditing()
 	{
-		if(_initialValue != _currentValue) {
+		if (!_initialValue.equals(_currentValue))
+		{
 			return super.stopCellEditing();
-		} else {
+		}
+		else
+		{
 			cancelCellEditing();
 			return true;
 		}

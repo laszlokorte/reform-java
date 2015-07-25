@@ -10,14 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * Created by laszlokorte on 23.07.15.
- */
 public class IdentifierCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
 {
 
-	private final Color _selectionBackground = new Color(0x23AEEC);
-	private final Color _selectionForegroud = new Color(0xffffff);
+	private static final Color _selectionBackground = new Color(0x23AEEC);
+	private static final Color _selectionForegroud = new Color(0xffffff);
 
 	private final JLabel _label = new JLabel();
 	private final JPanel _labelField = new JPanel();
@@ -26,7 +23,17 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	private String _currentValue = null;
 	private String _initialValue = null;
 
-	IdentifierCellEditor() {
+	private final static Action NULL_ACTION = new AbstractAction()
+	{
+		@Override
+		public void actionPerformed(final ActionEvent e)
+		{
+
+		}
+	};
+
+	IdentifierCellEditor()
+	{
 		_textField.setColumns(10);
 		_textField.addActionListener(this);
 		_textField.setVisible(false);
@@ -39,13 +46,16 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 		_panel.setBackground(_selectionBackground);
 		_labelField.setBackground(_selectionBackground);
 		_label.setForeground(_selectionForegroud);
+		_textField.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "ignore");
+		_textField.getActionMap().put("ignore", NULL_ACTION);
 		_panel.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(final MouseEvent e)
 			{
 				super.mouseClicked(e);
-				if(e.getClickCount() == 2) {
+				if (e.getClickCount() == 2)
+				{
 					_labelField.setVisible(false);
 					_textField.setVisible(true);
 					_textField.requestFocus();
@@ -58,7 +68,7 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected,
 	                                             final int row, final int column)
 	{
-		_currentValue = ((Definition)value).getName();
+		_currentValue = ((Definition) value).getName();
 		_initialValue = _currentValue;
 		_textField.setText(_currentValue);
 		_label.setText(_currentValue);
@@ -85,9 +95,12 @@ public class IdentifierCellEditor extends AbstractCellEditor implements TableCel
 	@Override
 	public boolean stopCellEditing()
 	{
-		if(_initialValue != _currentValue) {
+		if (!_initialValue.equals(_currentValue))
+		{
 			return super.stopCellEditing();
-		} else {
+		}
+		else
+		{
 			cancelCellEditing();
 			return true;
 		}

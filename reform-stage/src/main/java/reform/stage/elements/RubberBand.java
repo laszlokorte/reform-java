@@ -1,14 +1,11 @@
 package reform.stage.elements;
 
-import reform.core.procedure.instructions.Instruction;
-import reform.math.Vec2;
-
 public class RubberBand
 {
 	private final ControlPoint _controlA;
 	private final ControlPoint _controlB;
 
-	public RubberBand(ControlPoint controlA, ControlPoint controlB)
+	public RubberBand(final ControlPoint controlA, final ControlPoint controlB)
 	{
 		_controlA = controlA;
 		_controlB = controlB;
@@ -24,11 +21,13 @@ public class RubberBand
 		return _controlA.getY();
 	}
 
-	public double getEndX() {
+	public double getEndX()
+	{
 		return _controlB.getX();
 	}
 
-	public double getEndY() {
+	public double getEndY()
+	{
 		return _controlB.getY();
 	}
 

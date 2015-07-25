@@ -2,7 +2,6 @@ package reform.core.procedure.instructions.single;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
-import reform.core.forms.relations.ExpressionRotationAngle;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.InvalidAngleError;

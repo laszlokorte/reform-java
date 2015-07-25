@@ -1,7 +1,6 @@
 package reform.components.colorpicker;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
 
 
@@ -16,12 +15,7 @@ public class ColorPickerPanel extends JPanel
 
 	private static final int MAX = 100;
 
-	private final SpinnerModel _colorSpinnerModelRed = new SpinnerNumberModel(1, 0, MAX, 1);
-	private final SpinnerModel _colorSpinnerModelGreen = new SpinnerNumberModel(1, 0, MAX, 1);
-	private final SpinnerModel _colorSpinnerModelBlue = new SpinnerNumberModel(1, 0, MAX, 1);
-	private final SpinnerModel _colorSpinnerModelAlpha = new SpinnerNumberModel(1, 0, MAX, 1);
-
-	public ColorPickerPanel(final ColorModel model, JTextField textfield)
+	public ColorPickerPanel(final ColorModel model, final JTextField textfield)
 	{
 		_model = model;
 		_svPlane = new SaturationValueColorPlane(_model);
@@ -49,7 +43,5 @@ public class ColorPickerPanel extends JPanel
 		inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "cancel");
 		inputMap.put(KeyStroke.getKeyStroke("ENTER"), "confirm");
 	}
-
-	private boolean _ownChange = false;
 
 }

@@ -80,6 +80,7 @@ public class EventedPicture
 	{
 		return new EventedDataSheet(this);
 	}
+
 	public EventedSheet getEventedMeasurementSheet()
 	{
 		return new EventedMeasurementSheet(this);

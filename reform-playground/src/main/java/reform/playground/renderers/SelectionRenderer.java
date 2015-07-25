@@ -46,8 +46,8 @@ public class SelectionRenderer implements CanvasRenderer
 	private void renderElements(final Graphics2D g2)
 	{
 		ToolState.ViewState viewState = _toolState.getViewState();
-		if (viewState!= ToolState.ViewState.Preview && viewState != ToolState
-				.ViewState.Crop && viewState != ToolState.ViewState.Control)
+		if (viewState != ToolState.ViewState.Preview && viewState != ToolState.ViewState.Crop && viewState !=
+				ToolState.ViewState.Control)
 		{
 			g2.setStroke(_stroke);
 			if (_preview)

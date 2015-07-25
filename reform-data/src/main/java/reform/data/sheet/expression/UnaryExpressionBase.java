@@ -7,16 +7,19 @@ abstract class UnaryExpressionBase implements Expression
 {
 	final Expression _inner;
 
-	UnaryExpressionBase(Expression inner) {
+	UnaryExpressionBase(final Expression inner)
+	{
 		_inner = inner;
 	}
 
 	@Override
-	public void collectDependencies(Collection<ReferenceExpression> dependencies) {
+	public void collectDependencies(final Collection<ReferenceExpression> dependencies)
+	{
 		_inner.collectDependencies(dependencies);
 	}
 
-	public Expression getInner() {
+	public Expression getInner()
+	{
 		return _inner;
 	}
 

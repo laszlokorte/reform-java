@@ -1,10 +1,8 @@
 package reform.stage.elements.controls;
 
 import reform.core.forms.Form;
-import reform.core.forms.anchors.Anchor;
 import reform.core.forms.relations.ConstantDistance;
 import reform.core.forms.relations.RelativeDistance;
-import reform.core.procedure.instructions.single.MorphInstruction;
 import reform.core.procedure.instructions.single.TranslateInstruction;
 import reform.core.runtime.relations.ReferencePoint;
 import reform.core.runtime.relations.TranslationDistance;
@@ -42,16 +40,17 @@ public class TranslateInstructionControl implements InstructionControl
 	@Override
 	public void updateForRuntime(final reform.core.runtime.Runtime runtime)
 	{
-		TranslationDistance distance =
-				_instruction.getDistance();
+		final TranslationDistance distance = _instruction.getDistance();
 
-		Identifier<? extends Form> formId = _instruction.getFormId();
-		Form form = runtime.get(formId);
-		if(form!=null) {
+		final Identifier<? extends Form> formId = _instruction.getFormId();
+		final Form form = runtime.get(formId);
+		if (form != null)
+		{
 
-			if(distance instanceof ConstantDistance) {
-				double baseX = runtime.getSize().x / 2.5;
-				double baseY = runtime.getSize().y / 2.7;
+			if (distance instanceof ConstantDistance)
+			{
+				final double baseX = runtime.getSize().x / 2.5;
+				final double baseY = runtime.getSize().y / 2.7;
 
 				_sourcePoint.setError(false);
 				_sourcePoint.updatePosition(baseX, baseY);
@@ -61,37 +60,51 @@ public class TranslateInstructionControl implements InstructionControl
 				                            baseY + distance.getYValueForRuntime(runtime));
 
 				_canEdit = true;
-			} else if(distance instanceof RelativeDistance) {
-				RelativeDistance rel = (RelativeDistance) distance;
-				ReferencePoint source = rel.getReferenceA();
-				ReferencePoint target = rel.getReferenceB();
+			}
+			else if (distance instanceof RelativeDistance)
+			{
+				final RelativeDistance rel = (RelativeDistance) distance;
+				final ReferencePoint source = rel.getReferenceA();
+				final ReferencePoint target = rel.getReferenceB();
 
-				if(source.isValidFor(runtime)) {
+				if (source.isValidFor(runtime))
+				{
 					_sourcePoint.setError(false);
-					_sourcePoint.updatePosition(source.getXValueForRuntime(runtime), source.getYValueForRuntime(runtime));
-				} else {
-					double baseX = runtime.getSize().x / 2.2;
-					double baseY = runtime.getSize().y / 2.3;
+					_sourcePoint.updatePosition(source.getXValueForRuntime(runtime),
+					                            source.getYValueForRuntime(runtime));
+				}
+				else
+				{
+					final double baseX = runtime.getSize().x / 2.2;
+					final double baseY = runtime.getSize().y / 2.3;
 
 					_sourcePoint.setError(true);
 					_sourcePoint.updatePosition(baseX, baseY);
 				}
 
-				if(target.isValidFor(runtime)) {
+				if (target.isValidFor(runtime))
+				{
 					_targetPoint.setError(false);
-					_sourcePoint.updatePosition(source.getXValueForRuntime(runtime), source.getYValueForRuntime(runtime));
-				} else {
-					double baseX = runtime.getSize().x / 2.2;
-					double baseY = runtime.getSize().y / 2.3;
+					_sourcePoint.updatePosition(source.getXValueForRuntime(runtime),
+					                            source.getYValueForRuntime(runtime));
+				}
+				else
+				{
+					final double baseX = runtime.getSize().x / 2.2;
+					final double baseY = runtime.getSize().y / 2.3;
 
 					_targetPoint.setError(true);
 					_targetPoint.updatePosition(baseX, baseY);
 				}
 				_canEdit = true;
-			} else {
+			}
+			else
+			{
 				_canEdit = false;
 			}
-		} else {
+		}
+		else
+		{
 			_canEdit = false;
 		}
 	}
@@ -109,7 +122,8 @@ public class TranslateInstructionControl implements InstructionControl
 		return _rubberBand;
 	}
 
-	public boolean canEdit() {
+	public boolean canEdit()
+	{
 		return _canEdit;
 	}
 

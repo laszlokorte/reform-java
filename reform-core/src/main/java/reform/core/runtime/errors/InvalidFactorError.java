@@ -6,14 +6,16 @@ public class InvalidFactorError implements RuntimeError
 {
 	private final ScaleFactor _factor;
 
-	public InvalidFactorError(ScaleFactor factor)
+	public InvalidFactorError(final ScaleFactor factor)
 	{
 		_factor = factor;
 	}
 
-	public ScaleFactor getFactor() {
+	public ScaleFactor getFactor()
+	{
 		return _factor;
 	}
+
 	@Override
 	public String getMessage()
 	{

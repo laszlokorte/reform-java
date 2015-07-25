@@ -41,11 +41,13 @@ public final class PieForm extends BaseForm<PieForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color, DEFAULT_FILL_COLOR);
+	private final Attribute _fillColorAttribute = new Attribute("Fill Color", Attribute.Type.Color,
+	                                                            DEFAULT_FILL_COLOR);
 	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color", Attribute.Type.Color,
 	                                                              DEFAULT_STROKE_COLOR);
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number, DEFAULT_STROKE_WIDTH);
+	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width", Attribute.Type.Number,
+	                                                              DEFAULT_STROKE_WIDTH);
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute, _strokeColorAttribute,
 	                                                          _strokeWidthAttribute);
@@ -155,7 +157,7 @@ public final class PieForm extends BaseForm<PieForm>
 	@Override
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape coloredShape)
 	{
-		DataSet dataSet = runtime.getDataSet();
+		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
 		coloredShape.setStrokeColor(_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
@@ -198,7 +200,7 @@ public final class PieForm extends BaseForm<PieForm>
 		private final ReferencePoint _center;
 
 		public PieCornerAnchor(final IdentityToken token, final Name name, final StaticLength radius, final
-		StaticAngle angle, ReferencePoint center)
+		StaticAngle angle, final ReferencePoint center)
 		{
 			super(token, name);
 			_radius = radius;

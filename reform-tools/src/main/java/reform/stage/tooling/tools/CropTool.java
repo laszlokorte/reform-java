@@ -182,7 +182,8 @@ public class CropTool implements Tool
 
 	}
 
-	public boolean isActive() {
+	public boolean isActive()
+	{
 		return _state == State.Pressed;
 	}
 

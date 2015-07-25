@@ -21,12 +21,12 @@ public class ActionCreateRowIcon implements Icon
 		_shape.add(new Area(new Rectangle2D.Double(0, 100, 600, 100)));
 
 
-		Area cross = new Area();
+		final Area cross = new Area();
 		cross.add(new Area(new Rectangle2D.Double(-200, -50, 400, 100)));
 		cross.add(new Area(new Rectangle2D.Double(-50, -200, 100, 400)));
 
 
-		AffineTransform t = AffineTransform.getTranslateInstance(-300,300);
+		final AffineTransform t = AffineTransform.getTranslateInstance(-300, 300);
 		_shape.add(cross.createTransformedArea(t));
 
 

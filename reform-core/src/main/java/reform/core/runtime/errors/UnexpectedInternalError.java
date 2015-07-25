@@ -6,7 +6,8 @@ public class UnexpectedInternalError implements RuntimeError
 
 	private final RuntimeException _exception;
 
-	public UnexpectedInternalError(final RuntimeException exception) {
+	public UnexpectedInternalError(final RuntimeException exception)
+	{
 		_exception = exception;
 	}
 

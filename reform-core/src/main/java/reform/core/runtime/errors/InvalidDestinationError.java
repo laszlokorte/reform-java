@@ -6,12 +6,13 @@ public class InvalidDestinationError implements RuntimeError
 {
 	private final InitialDestination _destination;
 
-	public InvalidDestinationError(InitialDestination destination)
+	public InvalidDestinationError(final InitialDestination destination)
 	{
 		_destination = destination;
 	}
 
-	public InitialDestination getDestination() {
+	public InitialDestination getDestination()
+	{
 		return _destination;
 	}
 

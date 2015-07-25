@@ -16,7 +16,7 @@ public final class Calculator
 
 		Int(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(val.getInteger());
 					}
@@ -24,7 +24,7 @@ public final class Calculator
 
 		Float(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(val.getDouble());
 					}
@@ -32,7 +32,7 @@ public final class Calculator
 
 		String(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(val.getString());
 					}
@@ -40,7 +40,7 @@ public final class Calculator
 
 		Boolean(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(val.getBoolean());
 					}
@@ -48,7 +48,7 @@ public final class Calculator
 
 		Rgb(3)
 				{
-					Value apply(Value r, Value g, Value b)
+					Value apply(final Value r, final Value g, final Value b)
 					{
 						return new Value(r.getDouble(), g.getDouble(), b.getDouble(), 1);
 					}
@@ -56,7 +56,7 @@ public final class Calculator
 
 		Argb(4)
 				{
-					Value apply(Value a, Value r, Value g, Value b)
+					Value apply(final Value a, final Value r, final Value g, final Value b)
 					{
 						return new Value(r.getDouble(), g.getDouble(), b.getDouble(), a.getDouble());
 					}
@@ -64,70 +64,70 @@ public final class Calculator
 
 		Sin(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(Math.sin(val.getDouble()));
 					}
 				}, Cos(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.cos(val.getDouble()));
 				}
 			}, Tan(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.tan(val.getDouble()));
 				}
 			},
 		Asin(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(Math.asin(val.getDouble()));
 					}
 				}, Acos(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.acos(val.getDouble()));
 				}
 			}, Atan(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.atan(val.getDouble()));
 				}
 			}, Atan2(2)
 			{
-				Value apply(Value a, Value b)
+				Value apply(final Value a, final Value b)
 				{
 					return new Value(Math.atan2(a.getDouble(), b.getDouble()));
 				}
 			},
 		Pow(2)
 				{
-					Value apply(Value a, Value b)
+					Value apply(final Value a, final Value b)
 					{
 						return new Value(Math.pow(a.getDouble(), b.getDouble()));
 					}
 				}, Sqrt(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.sqrt(val.getDouble()));
 				}
 			}, Exp(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.exp(val.getDouble()));
 				}
 			},
 		Min
 				{
-					Value apply(Value... val)
+					Value apply(final Value... val)
 					{
 						double accum = Double.POSITIVE_INFINITY;
 						boolean intOnly = true;
@@ -140,7 +140,7 @@ public final class Calculator
 					}
 				}, Max
 			{
-				Value apply(Value... val)
+				Value apply(final Value... val)
 				{
 					double accum = Double.NEGATIVE_INFINITY;
 					boolean intOnly = true;
@@ -154,7 +154,7 @@ public final class Calculator
 				}
 			}, Avg
 			{
-				Value apply(Value... val)
+				Value apply(final Value... val)
 				{
 					double accum = 0;
 					for (int i = 0; i < val.length; i++)
@@ -165,13 +165,13 @@ public final class Calculator
 				}
 			}, Count
 			{
-				Value apply(Value... val)
+				Value apply(final Value... val)
 				{
 					return new Value(val.length);
 				}
 			}, Sum
 			{
-				Value apply(Value... val)
+				Value apply(final Value... val)
 				{
 					double accum = 0;
 					boolean intOnly = true;
@@ -185,39 +185,39 @@ public final class Calculator
 			},
 		Log(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(Math.log10(val.getDouble()));
 					}
 				}, Ln(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value(Math.log(val.getDouble()));
 				}
 			},
 		Floor(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value((int) Math.sqrt(val.getDouble()));
 					}
 				}, Ceil(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value((int) Math.ceil(val.getDouble()));
 				}
 			}, Round(1)
 			{
-				Value apply(Value val)
+				Value apply(final Value val)
 				{
 					return new Value((int) Math.round(val.getDouble()));
 				}
 			},
 		Abs(1)
 				{
-					Value apply(Value val)
+					Value apply(final Value val)
 					{
 						return new Value(Math.abs(val.getDouble()));
 					}
@@ -233,40 +233,40 @@ public final class Calculator
 		public final int arity;
 		public final boolean variadic;
 
-		private Function(int arity)
+		Function(final int arity)
 		{
 			this.arity = arity;
 			this.variadic = false;
 
 		}
 
-		private Function()
+		Function()
 		{
 			this.arity = 0;
 			this.variadic = true;
 		}
 
-		Value apply(Value[] val)
+		Value apply(final Value[] val)
 		{
 			throw new SemanticException();
 		}
 
-		Value apply(Value val)
+		Value apply(final Value val)
 		{
 			throw new SemanticException();
 		}
 
-		Value apply(Value a, Value b)
+		Value apply(final Value a, final Value b)
 		{
 			throw new SemanticException();
 		}
 
-		Value apply(Value a, Value b, Value c)
+		Value apply(final Value a, final Value b, final Value c)
 		{
 			throw new SemanticException();
 		}
 
-		Value apply(Value a, Value b, Value c, Value d)
+		Value apply(final Value a, final Value b, final Value c, final Value d)
 		{
 			throw new SemanticException();
 		}
@@ -420,7 +420,7 @@ public final class Calculator
 		}
 	}
 
-	public static Value pow(Value lhs, Value rhs)
+	public static Value pow(final Value lhs, final Value rhs)
 	{
 		if (lhs.type == Value.Type.String || rhs.type == Value.Type.String)
 		{
@@ -444,7 +444,7 @@ public final class Calculator
 		}
 	}
 
-	public static Value negate(Value op)
+	public static Value negate(final Value op)
 	{
 		if (op.type == Value.Type.String)
 		{
@@ -468,30 +468,28 @@ public final class Calculator
 		}
 	}
 
-	public static Value logicNegate(Value op)
+	public static Value logicNegate(final Value op)
 	{
 		return new Value(!op.getBoolean());
 	}
 
-	public static Value logicAnd(Value a, Value b)
+	public static Value logicAnd(final Value a, final Value b)
 	{
 		return new Value(a.getBoolean() && b.getBoolean());
 	}
 
-	public static Value logicOr(Value a, Value b)
+	public static Value logicOr(final Value a, final Value b)
 	{
 		return new Value(a.getBoolean() || b.getBoolean());
 	}
 
-	public static Value greaterThan(Value a, Value b)
+	public static Value greaterThan(final Value a, final Value b)
 	{
-		if(a.type != Value.Type.Integer && a.type != Value.Type.Double) {
+		if (a.type != Value.Type.Integer && a.type != Value.Type.Double)
+		{
 			throw new SemanticException();
 		}
-		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
-			throw new SemanticException();
-		}
-		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		if (b.type != Value.Type.Integer && b.type != Value.Type.Double)
 		{
 			throw new SemanticException();
 		}
@@ -499,31 +497,26 @@ public final class Calculator
 		return new Value(a.getDouble() > b.getDouble());
 	}
 
-	public static Value lessThan(Value a, Value b)
+	public static Value lessThan(final Value a, final Value b)
 	{
-		if(a.type != Value.Type.Integer && a.type != Value.Type.Double) {
-			throw new SemanticException();
-		}
-		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
-			throw new SemanticException();
-		}
-		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		if (a.type != Value.Type.Integer && a.type != Value.Type.Double)
 		{
 			throw new SemanticException();
 		}
-
+		if (b.type != Value.Type.Integer && b.type != Value.Type.Double)
+		{
+			throw new SemanticException();
+		}
 		return new Value(a.getDouble() < b.getDouble());
 	}
 
-	public static Value greaterThanEqual(Value a, Value b)
+	public static Value greaterThanEqual(final Value a, final Value b)
 	{
-		if(a.type != Value.Type.Integer && a.type != Value.Type.Double) {
+		if (a.type != Value.Type.Integer && a.type != Value.Type.Double)
+		{
 			throw new SemanticException();
 		}
-		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
-			throw new SemanticException();
-		}
-		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		if (b.type != Value.Type.Integer && b.type != Value.Type.Double)
 		{
 			throw new SemanticException();
 		}
@@ -531,15 +524,13 @@ public final class Calculator
 		return new Value(a.getDouble() >= b.getDouble());
 	}
 
-	public static Value lessThanEqual(Value a, Value b)
+	public static Value lessThanEqual(final Value a, final Value b)
 	{
-		if(a.type != Value.Type.Integer && a.type != Value.Type.Double) {
+		if (a.type != Value.Type.Integer && a.type != Value.Type.Double)
+		{
 			throw new SemanticException();
 		}
-		if(b.type != Value.Type.Integer && b.type != Value.Type.Double) {
-			throw new SemanticException();
-		}
-		if (a.type == Value.Type.Color || b.type == Value.Type.Color)
+		if (b.type != Value.Type.Integer && b.type != Value.Type.Double)
 		{
 			throw new SemanticException();
 		}
@@ -547,23 +538,31 @@ public final class Calculator
 		return new Value(a.getDouble() <= b.getDouble());
 	}
 
-	public static Value strictEqual(Value a, Value b)
+	public static Value strictEqual(final Value a, final Value b)
 	{
-		if(a.type != b.type) {
+		if (a.type != b.type)
+		{
 			new Value(false);
 		}
 
-		switch (a.type) {
-			case String: return new Value(a.getString().equals(b.getString()));
-			case Integer:  return new Value(a.getInteger() == b.getInteger());
-			case Double:  return new Value(a.getDouble() == b.getDouble());
-			case Boolean:  return new Value(a.getBoolean() == b.getBoolean());
-			case Color:  return new Value(a.getColor() == b.getColor());
-			default: return new Value(false);
+		switch (a.type)
+		{
+			case String:
+				return new Value(a.getString().equals(b.getString()));
+			case Integer:
+				return new Value(a.getInteger() == b.getInteger());
+			case Double:
+				return new Value(a.getDouble() == b.getDouble());
+			case Boolean:
+				return new Value(a.getBoolean() == b.getBoolean());
+			case Color:
+				return new Value(a.getColor() == b.getColor());
+			default:
+				return new Value(false);
 		}
 	}
 
-	public static Value apply(Function func, Value[] params)
+	public static Value apply(final Function func, final Value[] params)
 	{
 		if (!func.variadic && params.length != func.arity)
 		{

@@ -6,14 +6,16 @@ public class InvalidFixpointError implements RuntimeError
 {
 	private final ReferencePoint _point;
 
-	public InvalidFixpointError(ReferencePoint point)
+	public InvalidFixpointError(final ReferencePoint point)
 	{
 		_point = point;
 	}
 
-	public ReferencePoint getPoint() {
+	public ReferencePoint getPoint()
+	{
 		return _point;
 	}
+
 	@Override
 	public String getMessage()
 	{

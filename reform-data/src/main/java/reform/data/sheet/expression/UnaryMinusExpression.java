@@ -1,43 +1,52 @@
 package reform.data.sheet.expression;
 
-import reform.data.sheet.*;
-import reform.identity.Identifier;
+import reform.data.sheet.Calculator;
+import reform.data.sheet.DataSet;
+import reform.data.sheet.Value;
 
-import java.util.Collection;
+public final class UnaryMinusExpression extends UnaryExpressionBase implements Expression
+{
 
-/**
- * Created by laszlokorte on 22.07.15.
- */
-public final class UnaryMinusExpression extends  UnaryExpressionBase implements Expression {
-
-	public UnaryMinusExpression(Expression inner) {
+	public UnaryMinusExpression(final Expression inner)
+	{
 		super(inner);
 	}
 
 
 	@Override
-	public String asString(boolean parens) {
-		String s = "-" + _inner.asString(!(_inner instanceof ConstantExpression || _inner instanceof ReferenceExpression ||
-				_inner instanceof ExponentialExpression));
-		if (parens) {
+	public String asString(final boolean parens)
+	{
+		final String s = "-" + _inner.asString(
+				!(_inner instanceof ConstantExpression || _inner instanceof ReferenceExpression ||
+						_inner instanceof ExponentialExpression));
+		if (parens)
+		{
 			return "(" + s + ")";
-		} else {
+		}
+		else
+		{
 			return s;
 		}
 	}
 
 	@Override
-	public Value getValueFor(DataSet set) {
+	public Value getValueFor(final DataSet set)
+	{
 		return Calculator.negate(_inner.getValueFor(set));
 	}
 
-	public static Expression wrapOrSimplify(Expression operand) {
-		if (operand instanceof UnaryMinusExpression) {
+	public static Expression wrapOrSimplify(final Expression operand)
+	{
+		if (operand instanceof UnaryMinusExpression)
+		{
 			return ((UnaryMinusExpression) operand)._inner;
-		} else if (operand instanceof ConstantExpression) {
-			ConstantExpression e = (ConstantExpression) operand;
-			Value v = e.getValue();
-			if (v.type == Value.Type.Integer || v.type == Value.Type.Double) {
+		}
+		else if (operand instanceof ConstantExpression)
+		{
+			final ConstantExpression e = (ConstantExpression) operand;
+			final Value v = e.getValue();
+			if (v.type == Value.Type.Integer || v.type == Value.Type.Double)
+			{
 				return new ConstantExpression(Calculator.negate(v));
 			}
 		}

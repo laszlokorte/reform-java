@@ -7,20 +7,24 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
-public class Lexer {
+public class Lexer
+{
 	private final List<Rule> _rules = new ArrayList<>();
 	private final List<Rule> _ignoreRules = new ArrayList<>();
 
-	public Lexer(List<Rule> rules, List<Rule> ignoreRules) {
+	public Lexer(final List<Rule> rules, final List<Rule> ignoreRules)
+	{
 		_rules.addAll(rules);
 		_ignoreRules.addAll(ignoreRules);
 	}
 
-	public Iterable<Token> tokenize(CharSequence input) {
+	public Iterable<Token> tokenize(final CharSequence input)
+	{
 		return new Tokens(this, input);
 	}
 
-	public static class Generator {
+	public static class Generator
+	{
 
 		private final ArrayList<Rule> _rules = new ArrayList<>();
 
@@ -28,50 +32,57 @@ public class Lexer {
 
 		/**
 		 * Add a new token pattern to this configuration.
-		 *
+		 * <p>
 		 * The name is meant for the parser to recognize a token.
 		 * The pattern is a part of a regular expression describing the expected input.
-		 *
-		 *     lexerGen.add('number', '-?[0-9]+')
+		 * <p>
+		 * lexerGen.add('number', '-?[0-9]+')
 		 */
-		public void add(Token.Type type, String pattern) {
+		public void add(final Token.Type type, final String pattern)
+		{
 			_rules.add(new Rule(type, pattern, _rules.size()));
 		}
 
 		/**
 		 * Configure a pattern to be ignored.
-		 *
+		 * <p>
 		 * The pattern is a part of a regular expression describing ignored input.
-		 *
-		 *     lexerGen.ignore('\s+')
+		 * <p>
+		 * lexerGen.ignore('\s+')
 		 */
-		public void ignore(String pattern) {
+		public void ignore(final String pattern)
+		{
 			_ignores.add(new Rule(Token.Type.Ignore, pattern));
 		}
 
-		public Lexer getLexer() {
+		public Lexer getLexer()
+		{
 			return new Lexer(_rules, _ignores);
 		}
 
 	}
 
-	private static class Tokens implements Iterable<Token> {
+	private static class Tokens implements Iterable<Token>
+	{
 
 		private final Lexer _lexer;
 		private final CharSequence _input;
 
-		public Tokens(Lexer lexer, CharSequence input) {
+		public Tokens(final Lexer lexer, final CharSequence input)
+		{
 			_lexer = lexer;
 			_input = input;
 		}
 
 		@Override
-		public Iterator<Token> iterator() {
+		public Iterator<Token> iterator()
+		{
 			return new TokenIterator(_lexer, _input);
 		}
 	}
 
-	private static class TokenIterator implements Iterator<Token> {
+	private static class TokenIterator implements Iterator<Token>
+	{
 
 		private final Lexer _lexer;
 		private final CharSequence _input;
@@ -82,12 +93,13 @@ public class Lexer {
 		int _column = 1;
 
 		char _accFirst;
-		StringBuffer _accumulator;
-		Queue<Character> _inputQueue;
+		final StringBuffer _accumulator;
+		final Queue<Character> _inputQueue;
 
 		private boolean _hasNext = true;
 
-		TokenIterator(Lexer lexer, CharSequence input) {
+		TokenIterator(final Lexer lexer, final CharSequence input)
+		{
 			_lexer = lexer;
 			_input = input;
 			_accumulator = new StringBuffer();
@@ -95,29 +107,40 @@ public class Lexer {
 		}
 
 		@Override
-		public boolean hasNext() {
+		public boolean hasNext()
+		{
 			return _hasNext;
 		}
 
 		@Override
-		public Token next() {
+		public Token next()
+		{
 			Rule currentRule = null;
 			int currentPrio = 0;
 			int currentColumn = _column;
 			int currentLine = _line;
 
 			outer:
-			while (true) {
-				if (_inputQueue.isEmpty()) {
-					if (_currentPos < _input.length()) {
+			while (true)
+			{
+				if (_inputQueue.isEmpty())
+				{
+					if (_currentPos < _input.length())
+					{
 						_inputQueue.add(_input.charAt(_currentPos++));
-					} else {
+					}
+					else
+					{
 						break;
 					}
-				} else {
-					for (int i = 0, j = this._lexer._ignoreRules.size(); i < j; i++) {
-						Rule rule = this._lexer._ignoreRules.get(i);
-						if (rule.matches(this._accumulator.toString())) {
+				}
+				else
+				{
+					for (int i = 0, j = this._lexer._ignoreRules.size(); i < j; i++)
+					{
+						final Rule rule = this._lexer._ignoreRules.get(i);
+						if (rule.matches(this._accumulator.toString()))
+						{
 							currentColumn = _column;
 							currentLine = _line;
 							this._index += this._accumulator.length();
@@ -127,18 +150,23 @@ public class Lexer {
 					}
 
 					boolean any = false;
-					for (int i = 0, j = this._lexer._rules.size(); i < j; i++) {
-						Rule rule = this._lexer._rules.get(i);
-						int prio = j - rule._inversePriority;
+					for (int i = 0, j = this._lexer._rules.size(); i < j; i++)
+					{
+						final Rule rule = this._lexer._rules.get(i);
+						final int prio = j - rule._inversePriority;
 
-						if (prio >= currentPrio && rule.matches(this._accumulator.toString() + this._inputQueue.peek())) {
+						if (prio >= currentPrio && rule.matches(this._accumulator.toString() + this._inputQueue.peek
+								()))
+						{
 							currentRule = rule;
 							currentPrio = prio;
 							any = true;
 						}
 					}
-					if(!any) {
-						if(currentRule != null) {
+					if (!any)
+					{
+						if (currentRule != null)
+						{
 							break;
 						}
 						currentRule = null;
@@ -149,16 +177,18 @@ public class Lexer {
 
 			}
 
-			if (currentRule != null) {
-				Position sourcePos = new Position(_index, currentLine, currentColumn);
-				Token current = new Token(currentRule.type, this._accumulator.toString(), sourcePos);
+			if (currentRule != null)
+			{
+				final Position sourcePos = new Position(_index, currentLine, currentColumn);
+				final Token current = new Token(currentRule.type, this._accumulator.toString(), sourcePos);
 				this._index += this._accumulator.length();
 				this._accumulator.setLength(0);
 
 				return current;
 			}
 
-			if (_accumulator.length() != 0) {
+			if (_accumulator.length() != 0)
+			{
 				_hasNext = false;
 				throw new LexingException(_accFirst, new Position(_index, currentLine, currentColumn));
 			}
@@ -167,15 +197,20 @@ public class Lexer {
 			return new Token(Token.Type.EOF, "", new Position(_index, currentLine, currentColumn));
 		}
 
-		void _consume() {
-			if (this._accumulator.length() == 0) {
+		void _consume()
+		{
+			if (this._accumulator.length() == 0)
+			{
 				_accFirst = this._inputQueue.peek();
 			}
 
-			if (this._inputQueue.peek() == '\n') {
+			if (this._inputQueue.peek() == '\n')
+			{
 				_column = 1;
 				_line++;
-			} else {
+			}
+			else
+			{
 				_column++;
 			}
 
@@ -185,7 +220,8 @@ public class Lexer {
 
 	}
 
-	private static class Rule {
+	private static class Rule
+	{
 
 		private final Token.Type type;
 
@@ -193,27 +229,32 @@ public class Lexer {
 
 		private final int _inversePriority;
 
-		Rule(Token.Type type, String pattern, int invPrio) {
+		Rule(final Token.Type type, final String pattern, final int invPrio)
+		{
 			this.type = type;
 			_pattern = Pattern.compile("^(" + pattern + ")$");
-			_inversePriority =invPrio;
+			_inversePriority = invPrio;
 		}
 
-		Rule(Token.Type type, String pattern) {
+		Rule(final Token.Type type, final String pattern)
+		{
 			this(type, pattern, 0);
 		}
 
-		public boolean matches(CharSequence input) {
+		public boolean matches(final CharSequence input)
+		{
 			return _pattern.matcher(input).find();
 		}
 
 	}
 
-	public static class LexingException extends RuntimeException {
+	public static class LexingException extends RuntimeException
+	{
 		public final Position sourcePosition;
 		public final char character;
 
-		LexingException(char character, Position sourcePosition) {
+		LexingException(final char character, final Position sourcePosition)
+		{
 			super(String.valueOf(character));
 			this.character = character;
 			this.sourcePosition = sourcePosition;

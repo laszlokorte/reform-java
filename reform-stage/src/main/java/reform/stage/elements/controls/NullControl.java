@@ -31,7 +31,8 @@ public class NullControl implements InstructionControl
 		return null;
 	}
 
-	public boolean canEdit() {
+	public boolean canEdit()
+	{
 		return false;
 	}
 }

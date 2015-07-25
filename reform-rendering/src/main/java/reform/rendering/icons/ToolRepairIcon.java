@@ -16,10 +16,10 @@ public class ToolRepairIcon implements Icon
 		final AffineTransform t = AffineTransform.getTranslateInstance(0, 0);
 		t.rotate(-Math.PI / 4);
 
-		Area shape = new Area();
+		final Area shape = new Area();
 		shape.add(new Area(new Rectangle2D.Double(-400, -80, 800, 160)));
-		shape.add(new Area(new Ellipse2D.Double(-600,-225,450,450)));
-		shape.add(new Area(new Ellipse2D.Double(150,-225,450,450)));
+		shape.add(new Area(new Ellipse2D.Double(-600, -225, 450, 450)));
+		shape.add(new Area(new Ellipse2D.Double(150, -225, 450, 450)));
 
 		shape.subtract(new Area(new Rectangle2D.Double(-600, -100, 250, 200)));
 		shape.subtract(new Area(new Rectangle2D.Double(350, -100, 250, 200)));

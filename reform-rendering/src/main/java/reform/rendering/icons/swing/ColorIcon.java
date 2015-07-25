@@ -34,23 +34,23 @@ public class ColorIcon implements javax.swing.Icon
 			final int cols = _size / cellSize;
 
 
-				g2.setClip(0, 0, _size, _size);
+			g2.setClip(0, 0, _size, _size);
 
-				for (int j = 0; j <= cols; j++)
+			for (int j = 0; j <= cols; j++)
+			{
+				for (int i = 0; i <= rows; i++)
 				{
-					for (int i = 0; i <= rows; i++)
+					if (i % 2 == j % 2)
 					{
-						if (i % 2 == j % 2)
-						{
-							g2.setColor(Color.GRAY);
-						}
-						else
-						{
-							g2.setColor(Color.WHITE);
-						}
-						g2.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+						g2.setColor(Color.GRAY);
 					}
+					else
+					{
+						g2.setColor(Color.WHITE);
+					}
+					g2.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
 				}
+			}
 			if (_color != null)
 			{
 				g2.setColor(_color);

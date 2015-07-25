@@ -21,14 +21,15 @@ public class ForLoopInstruction extends BaseInstructionGroup
 	@Override
 	public void evaluate(final Runtime runtime)
 	{
-		Value iterations = _times.getValueFor(runtime.getDataSet());
+		final Value iterations = _times.getValueFor(runtime.getDataSet());
 
-		if(iterations.type != Value.Type.Integer) {
+		if (iterations.type != Value.Type.Integer)
+		{
 			runtime.reportError(this, new InvalidExpressionError(_times));
 			return;
 		}
 
-		int count = iterations.getInteger();
+		final int count = iterations.getInteger();
 
 		for (int i = 0; i < count; i++)
 		{
@@ -50,7 +51,7 @@ public class ForLoopInstruction extends BaseInstructionGroup
 
 	public int getTimes()
 	{
-		return ((ConstantExpression)_times).getValue().getInteger();
+		return ((ConstantExpression) _times).getValue().getInteger();
 	}
 
 	public void setTimes(final int times)

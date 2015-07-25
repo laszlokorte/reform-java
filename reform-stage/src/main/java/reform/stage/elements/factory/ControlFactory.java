@@ -1,17 +1,12 @@
 package reform.stage.elements.factory;
 
-import reform.core.forms.*;
-import reform.core.procedure.Paper;
-import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.single.MorphInstruction;
 import reform.core.procedure.instructions.single.RotateInstruction;
 import reform.core.procedure.instructions.single.ScaleInstruction;
 import reform.core.procedure.instructions.single.TranslateInstruction;
 import reform.core.runtime.Evaluable;
-import reform.stage.elements.Entity;
 import reform.stage.elements.InstructionControl;
 import reform.stage.elements.controls.*;
-import reform.stage.elements.entities.*;
 
 public class ControlFactory
 {

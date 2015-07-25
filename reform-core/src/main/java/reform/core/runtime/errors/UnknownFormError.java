@@ -7,14 +7,16 @@ public class UnknownFormError implements RuntimeError
 {
 	private final Identifier<? extends Form> _formId;
 
-	public UnknownFormError(Identifier<? extends Form> formId)
+	public UnknownFormError(final Identifier<? extends Form> formId)
 	{
 		_formId = formId;
 	}
 
-	public Identifier<? extends Form> getFormId() {
+	public Identifier<? extends Form> getFormId()
+	{
 		return _formId;
 	}
+
 	@Override
 	public String getMessage()
 	{
