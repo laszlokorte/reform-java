@@ -238,25 +238,25 @@ public final class PictureForm extends BaseForm<PictureForm>
 		target.lineTo(-width2, height2);
 		target.closePath();
 
-		target.moveTo(10, 0);
-		target.lineTo(width2 - 10, height2 - 20);
-		target.lineTo(width2 - 10, -height2 + 20);
+		target.moveTo(5, 0);
+		target.lineTo(width2 - 5, height2 - 10);
+		target.lineTo(width2 - 5, -height2 + 10);
 		target.closePath();
 
-		target.moveTo(0, 10);
-		target.lineTo(-width2 + 20, height2 - 10);
-		target.lineTo(width2 - 20, height2 - 10);
+		target.moveTo(0, 5);
+		target.lineTo(-width2 + 10, height2 - 5);
+		target.lineTo(width2 - 10, height2 - 5);
 		target.closePath();
 
-		target.moveTo(0, -10);
-		target.lineTo(width2 - 20, -height2 + 10);
-		target.lineTo(-width2 + 20, -height2 + 10);
+		target.moveTo(0, -5);
+		target.lineTo(width2 - 10, -height2 + 5);
+		target.lineTo(-width2 + 10, -height2 + 5);
 		target.closePath();
 
 
-		target.moveTo(-10, 0);
-		target.lineTo(-width2 + 10, -height2 + 20);
-		target.lineTo(-width2 + 10, height2 - 20);
+		target.moveTo(-5, 0);
+		target.lineTo(-width2 + 5, -height2 + 10);
+		target.lineTo(-width2 + 5, height2 - 10);
 		target.closePath();
 
 		target.transform(
