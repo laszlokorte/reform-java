@@ -18,7 +18,7 @@ public class ColorPicker
 	private final ActionMap _actionMap = new ActionMap();
 	private int _ARGB;
 
-	public ColorPicker(final JTextField textfield)
+	public ColorPicker(final JComponent textfield)
 	{
 		_panel = new ColorPickerPanel(_model, textfield);
 

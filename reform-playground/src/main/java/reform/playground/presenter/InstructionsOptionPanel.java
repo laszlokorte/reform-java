@@ -47,8 +47,6 @@ public final class InstructionsOptionPanel implements InstructionFocus.Listener,
 		_panel.add(_label);
 		_panel.add(_expressionEditor);
 
-		_expressionEditor.setColumns(5);
-
 		_expressionEditor.addChangeListener(this);
 
 		focus.addListener(this);

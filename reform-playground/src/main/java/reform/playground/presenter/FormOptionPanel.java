@@ -7,21 +7,26 @@ import reform.core.analyzer.Analyzer;
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.Form;
+import reform.core.forms.PictureForm;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
+import reform.core.project.Picture;
 import reform.data.sheet.Value;
 import reform.data.sheet.expression.ConstantExpression;
 import reform.data.sheet.expression.Expression;
 import reform.evented.core.EventedProcedure;
+import reform.evented.core.EventedProject;
+import reform.identity.Identifier;
 import reform.rendering.icons.RulerIcon;
 import reform.rendering.icons.swing.SwingIcon;
 import reform.stage.tooling.FormSelection;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +41,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			() -> new ColorPanel(this));
 	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(
 			() -> new ExpressionPanel(this));
+	private final Pool<PictureIdPanel> _pictureIdPool = new SimplePool<>(
+			() -> new PictureIdPanel(this));
 	private final Pool<Component> _struts = new SimplePool<>(
 			() -> Box.createHorizontalStrut(5));
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
@@ -45,15 +52,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final Analyzer _analyzer;
 	private final Component _glue = Box.createGlue();
 	private boolean _ownChange = false;
+	private final EventedProject _eProject;
 
-	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer,
-	                       final FormSelection selection, final ExpressionEditor.Parser
-			                       parser)
+	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection, final ExpressionEditor.Parser parser, final EventedProject eProject)
 	{
 		_eProcedure = eProcedure;
 		_selection = selection;
 		_analyzer = analyzer;
 		_parser = parser;
+		_eProject = eProject;
 
 		_panel.add(_guideToggle);
 		_guideToggle.setBorder(null);
@@ -132,6 +139,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			final DrawingType drawType = form.getType();
 			_panel.setVisible(true);
 
+			_guideToggle.setSelected(drawType == DrawingType.Guide);
+			_panel.add(_guideToggle);
+			_panel.add(_struts.take());
+
+			_panel.add(_glue);
+
 			final AttributeSet attributes = form.getAttributes();
 			for (int i = 0, j = attributes.size(); i < j; i++)
 			{
@@ -150,14 +163,17 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					final ExpressionPanel panel = getExpressionPanel(attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
+				}else if (type == Attribute.Type.PictureId)
+				{
+					final PictureIdPanel panel = getPictureIdPanel(attr);
+					_panel.add(panel.getComponent());
+					panel.setEnabled(drawType == DrawingType.Draw);
 				}
 				_panel.add(_struts.take());
 
 			}
 
-			_panel.add(_glue);
-			_guideToggle.setSelected(drawType == DrawingType.Guide);
-			_panel.add(_guideToggle);
+
 		}
 		else
 		{
@@ -177,6 +193,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		return p;
 	}
 
+
+	private PictureIdPanel getPictureIdPanel(final Attribute attr)
+	{
+		final PictureIdPanel p = _pictureIdPool.take();
+		p.setAttribute(attr);
+
+		return p;
+	}
+
 	private ColorPanel getColorPanelFor(final Attribute attr)
 	{
 		final ColorPanel p = _colorPanels.take();
@@ -187,7 +212,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private void releaseColorPanels()
 	{
-		_colorPanels.release((ColorPanel p) -> {
+		_colorPanels.release((p) -> {
 			p.setAttribute(null);
 			_panel.remove(p.getButton());
 		});
@@ -195,7 +220,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private void releaseExpressionPanels()
 	{
-		_expressionPanels.release((ExpressionPanel p) -> {
+		_expressionPanels.release((p) -> {
+			p.setAttribute(null);
+			_panel.remove(p.getComponent());
+		});
+	}
+
+	private void releasePictureIdPanels()
+	{
+		_pictureIdPool.release((p) -> {
 			p.setAttribute(null);
 			_panel.remove(p.getComponent());
 		});
@@ -215,6 +248,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 								.Draw);
 				_colorPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
 				_expressionPanels.eachActive(
+						(p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_pictureIdPool.eachActive(
 						(p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
@@ -241,13 +276,16 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		private final ExpressionEditor _expressionEditor;
 		private final FormOptionPanel _delegate;
 		private Attribute _attribute;
+		private final JLabel _label= new JLabel();
+		private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
 		ExpressionPanel(final FormOptionPanel delegate)
 		{
 			_delegate = delegate;
 			_expressionEditor = new ExpressionEditor(_delegate._parser);
 			_expressionEditor.addChangeListener(this::onModelChange);
-			_expressionEditor.setColumns(10);
+			//_panel.add(_label);
+			_panel.add(_expressionEditor);
 		}
 
 		private void onModelChange(final ChangeEvent changeEvent)
@@ -267,18 +305,76 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				_attribute = null; // prevent cycle
 
 				_expressionEditor.setExpression(attr.getValue());
+				_expressionEditor.setToolTipText(attr.getName());
+				//_label.setText(attr.getName());
 			}
 			_attribute = attr;
 		}
 
 		public Component getComponent()
 		{
-			return _expressionEditor;
+			return _panel;
 		}
 
 		public void setEnabled(final boolean enabled)
 		{
-			_expressionEditor.setVisible(enabled);
+			_panel.setVisible(enabled);
+		}
+	}
+
+	private static class PictureIdPanel
+	{
+		private final JComboBox<Identifier<?extends Picture>> _optionPane = new JComboBox<>();
+		private final FormOptionPanel _delegate;
+		private Attribute _attribute;
+		private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+		PictureIdPanel(final FormOptionPanel delegate)
+		{
+			_delegate = delegate;
+			//_expressionEditor = new ExpressionEditor(_delegate._parser);
+			//_expressionEditor.addChangeListener(this::onModelChange);
+			//_panel.add(_label);
+			_panel.add(_optionPane);
+			_optionPane.addActionListener(this::onModelChange);
+		}
+
+		private void onModelChange(final ActionEvent changeEvent)
+		{
+			if (_attribute != null)
+			{
+				_attribute.setValue(new ConstantExpression(new Value(Identifier.getValue((Identifier)_optionPane.getSelectedItem()))));
+
+				_delegate.onChange();
+			}
+		}
+
+		void setAttribute(final Attribute attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+
+				//_expressionEditor.setExpression(attr.getValue());
+				//_expressionEditor.setToolTipText(attr.getName());
+				//_label.setText(attr.getName());
+				_optionPane.removeAllItems();
+				for(int i=0,j=_delegate._eProject.getPictureCount();i<j;i++) {
+					_optionPane.addItem(_delegate._eProject.getPictures().get(i));
+				}
+				_optionPane.setSelectedItem(new Identifier(attr.getValue().getValueFor(null).getInteger()));
+			}
+			_attribute = attr;
+		}
+
+		public Component getComponent()
+		{
+			return _panel;
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_panel.setVisible(enabled);
 		}
 	}
 
@@ -372,6 +468,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					_colorPicker.getModel().setHexARGB(0);
 					_colorPicker.setMixed();
 				}
+
+				_colorPicker.getButton().setToolTipText(attr.getName());
+
 
 			}
 			_attribute = attr;

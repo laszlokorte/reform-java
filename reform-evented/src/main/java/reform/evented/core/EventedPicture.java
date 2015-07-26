@@ -111,6 +111,11 @@ public class EventedPicture
 		return _evtProject.getRaw();
 	}
 
+	public EventedProject getEventedProject()
+	{
+		return _evtProject;
+	}
+
 	public boolean exists()
 	{
 		return _evtProject.containsPicture(_pictureId);

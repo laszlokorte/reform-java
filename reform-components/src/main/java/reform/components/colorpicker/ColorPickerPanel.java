@@ -14,7 +14,7 @@ public class ColorPickerPanel extends JPanel
 	private final JPanel _numberPanel = new JPanel();
 	private final JPanel _hsvPanel = new JPanel();
 
-	public ColorPickerPanel(final ColorModel model, final JTextField textfield)
+	public ColorPickerPanel(final ColorModel model, final JComponent textfield)
 	{
 		_model = model;
 		_svPlane = new SaturationValueColorPlane(_model);

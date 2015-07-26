@@ -428,11 +428,7 @@ public class PicturePresenter
 					                                                  FormFactory<PictureForm>(
 					                                                  "Picture",
 					                                                  idEmitter,
-					                                                  (id, name) ->
-							                                                  PictureForm.construct(
-							                                                  id, name,
-							                                                  _picture
-									                                                  .getId())),
+					                                                  PictureForm::construct),
 			                                                  _toolState, _cursor,
 			                                                  _hitTester, _focus,
 			                                                  eProcedure);
@@ -555,7 +551,8 @@ public class PicturePresenter
 			final FormOptionPanel formOptionPanelPanel = new FormOptionPanel(eProcedure,
 			                                                                 _analyzer,
 			                                                                 _selection,
-			                                                                 _parser);
+			                                                                 _parser,
+					_picture.getEventedProject());
 
 			toolBarRight.add(formOptionPanelPanel.getComponent());
 

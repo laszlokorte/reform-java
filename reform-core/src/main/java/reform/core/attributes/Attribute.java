@@ -38,6 +38,6 @@ public class Attribute
 
 	public enum Type
 	{
-		Number, Color, String
+		Number, Color, String, PictureId
 	}
 }

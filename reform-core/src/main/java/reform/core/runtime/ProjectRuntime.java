@@ -37,14 +37,15 @@ public class ProjectRuntime implements Runtime
 	@Override
 	public Picture subCall(Identifier<? extends Picture> picId, int width, int height)
 	{
-		if (_depth + 1 >= _frames.length)
+		Picture picture = _project.getPicture(picId);
+		if (_depth + 1 >= _frames.length || picture == null)
 		{
 			return null;
 		}
 
 		_depth += 1;
 		_frames[_depth]._size.set(width, height);
-		return _project.getPicture(picId);
+		return picture;
 	}
 
 	@Override

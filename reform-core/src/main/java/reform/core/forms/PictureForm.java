@@ -1,5 +1,6 @@
 package reform.core.forms;
 
+import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -13,6 +14,8 @@ import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.Expression;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -25,6 +28,7 @@ import java.awt.geom.GeneralPath;
 public final class PictureForm extends BaseForm<PictureForm>
 {
 
+	static private final Value DEFAULT_PICTURE_ID = new Value(0);
 	static private final int SIZE = 5;
 
 	private final transient StaticPoint _centerPoint = new StaticPoint(getId(), 0);
@@ -34,7 +38,6 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final AttributeSet _attributes = new AttributeSet();
 	private final Translator _translator = new BasicTranslator(_centerPoint);
 	private final Rotator _rotator = new CompositeRotator(
 			new BasicPointRotator(_centerPoint), new BasicAngleRotator(_rotation));
@@ -48,7 +51,12 @@ public final class PictureForm extends BaseForm<PictureForm>
 	                                                                         Math.PI /
 			                                                                         2));
 
-	private final Identifier<? extends Picture> _pictureId;
+	private final Attribute _pictureIdAttribute = new Attribute("Picture Id",
+			Attribute.Type.PictureId,
+			DEFAULT_PICTURE_ID);
+	private final AttributeSet _attributes = new AttributeSet(_pictureIdAttribute);
+
+
 	private final ColoredShape[] _shapes = new ColoredShape[Runtime.MAX_DEPTH];
 	private final int[] _sizes = new int[Runtime.MAX_DEPTH * 2];
 
@@ -111,12 +119,9 @@ public final class PictureForm extends BaseForm<PictureForm>
 		}
 	};
 
-	private PictureForm(final Identifier<PictureForm> id, final Name name, Identifier<?
-			extends Picture> pictureId)
+	private PictureForm(final Identifier<PictureForm> id, final Name name)
 	{
 		super(id, SIZE, name);
-
-		_pictureId = pictureId;
 
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
@@ -172,19 +177,18 @@ public final class PictureForm extends BaseForm<PictureForm>
 		                            _rotation, _width, _height,
 		                            PictureAnchor.Side.TopLeft));
 		addAnchor(new PictureAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint,
-		                            _rotation, _width, _height,
-		                            PictureAnchor.Side.TopRight));
+				_rotation, _width, _height, PictureAnchor.Side.TopRight));
 		addAnchor(new PictureAnchor(Anchor.BottomRight, new Name("Bottom Right"),
-		                            _centerPoint, _rotation, _width, _height,
-		                            PictureAnchor.Side.BottomRight));
+				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
+				.BottomRight));
 		addAnchor(new PictureAnchor(Anchor.BottomLeft, new Name("Bottom Left"),
-		                            _centerPoint, _rotation, _width, _height,
-		                            PictureAnchor.Side.BottomLeft));
+				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
+				.BottomLeft));
 
 		addAnchor(
 				new PictureAnchor(Anchor.Top, new Name("Center"), _centerPoint,
-				                  _rotation,
-				                  _width, _height, PictureAnchor.Side.Top));
+						_rotation,
+						_width, _height, PictureAnchor.Side.Top));
 		addAnchor(new PictureAnchor(Anchor.Right, new Name("Right"), _centerPoint,
 		                            _rotation, _width, _height,
 		                            PictureAnchor.Side.Right));
@@ -208,7 +212,9 @@ public final class PictureForm extends BaseForm<PictureForm>
 		_height.setForRuntime(runtime, maxY - minY);
 		int depth = runtime.getDepth();
 
-		Picture p = runtime.subCall(_pictureId, (int) (width), (int) (height));
+		Identifier<?extends Picture> pictureId = new Identifier<>(_pictureIdAttribute.getValue().getValueFor(runtime.getDataSet()).getInteger());
+
+		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height));
 		if (p != null)
 		{
 			_shapes[depth].reset();
@@ -290,18 +296,21 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 		int d = depth;
 
-		double origWidth2 = _sizes[2 * d] / 2;
-		double origHeight2 = _sizes[2 * d + 1] / 2;
-		double widthRatio = width2 / origWidth2;
-		double heightRatio = height2 / origHeight2;
+		double origWidth2 = _sizes[2 * d] / 2.0;
+		double origHeight2 = _sizes[2 * d + 1] / 2.0;
+		if(origWidth2 > 10 && origHeight2 >10)
+		{
+			double widthRatio = width2 / origWidth2;
+			double heightRatio = height2 / origHeight2;
 
-		_t.setToIdentity();
-		_t.translate(x, y);
-		_t.rotate(rot);
-		_t.translate(-width2, -height2);
-		_t.scale(widthRatio, heightRatio);
-		coloredShape.setChildTransform(_t);
-		coloredShape.addSubShapesFrom(_shapes[d]);
+			_t.setToIdentity();
+			_t.translate(x, y);
+			_t.rotate(rot);
+			_t.translate(-width2, -height2);
+			_t.scale(widthRatio, heightRatio);
+			coloredShape.setChildTransform(_t);
+			coloredShape.addSubShapesFrom(_shapes[d]);
+		}
 	}
 
 	@Override
@@ -339,15 +348,10 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	}
 
-	public Identifier<? extends Picture> getPictureId()
-	{
-		return _pictureId;
-	}
-
 	public static PictureForm construct(final Identifier<PictureForm> id, final Name
-			name, Identifier<? extends Picture> pictureId)
+			name)
 	{
-		return new PictureForm(id, name, pictureId);
+		return new PictureForm(id, name);
 	}
 
 	public enum Point implements ExposedPointToken<PictureForm>
