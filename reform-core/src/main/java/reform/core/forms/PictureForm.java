@@ -73,6 +73,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 		@Override
 		public void onFinishEvaluation(final Runtime runtime)
 		{
+			_shapes[runtime.getDepth()].reset();
+
 		}
 
 		@Override
@@ -98,7 +100,6 @@ public final class PictureForm extends BaseForm<PictureForm>
 					parentShape.addSubShape(s);
 				}
 			}
-			_shapes[depth].reset();
 
 		}
 
@@ -300,7 +301,6 @@ public final class PictureForm extends BaseForm<PictureForm>
 		_t.translate(-width2, -height2);
 		_t.scale(widthRatio, heightRatio);
 		coloredShape.setChildTransform(_t);
-		System.out.println(String.format("[OUT] write: %s", d));
 		coloredShape.addSubShapesFrom(_shapes[d]);
 	}
 
