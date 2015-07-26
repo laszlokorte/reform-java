@@ -7,8 +7,8 @@ import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
-import reform.core.project.Picture;
-import reform.core.runtime.*;
+import reform.core.runtime.Evaluable;
+import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
 import reform.data.sheet.DataSet;
@@ -278,6 +278,7 @@ public class PicturePresenter
 		leftSide.add(measureBox, BorderLayout.PAGE_END);
 
 		final JToolBar toolBarRight = new JToolBar();
+		toolBarRight.setBorder(BorderFactory.createEmptyBorder(0,0,2,0));
 		toolBarRight.setFloatable(false);
 		toolBarRight.setRollover(false);
 
@@ -311,8 +312,8 @@ public class PicturePresenter
 			                                                         eProcedure);
 
 			final JButton button = new JButton(
-					new SelectToolAction(_toolController, createLineTool, "Create " +
-							"Line"));
+					new SelectToolAction(_toolController, createLineTool,
+					                     "Create " + "Line"));
 			button.setFocusable(false);
 
 			button.setIcon(_lineIcon);
@@ -423,15 +424,22 @@ public class PicturePresenter
 
 		{
 			final Tool createPictureTool = new CreateFormTool(selectionTool,
-			                                              new FormFactory<PictureForm>("Picture",
-			                                                                idEmitter,
-			                                                                (id, name) -> PictureForm.construct(id,name, _picture.getId())),
-			                                              _toolState, _cursor,
-			                                              _hitTester,
-			                                              _focus, eProcedure);
+			                                                  new
+					                                                  FormFactory<PictureForm>(
+					                                                  "Picture",
+					                                                  idEmitter,
+					                                                  (id, name) ->
+							                                                  PictureForm.construct(
+							                                                  id, name,
+							                                                  _picture
+									                                                  .getId())),
+			                                                  _toolState, _cursor,
+			                                                  _hitTester, _focus,
+			                                                  eProcedure);
 
 			final JButton button = new JButton(
-					new SelectToolAction(_toolController, createPictureTool, "Create Picture"));
+					new SelectToolAction(_toolController, createPictureTool,
+					                     "Create Picture"));
 			button.setFocusable(false);
 
 			button.setIcon(_pictureIcon);
@@ -560,6 +568,8 @@ public class PicturePresenter
 		                                 ScrollPaneConstants
 				                                 .HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+		_stageScroller.setBorder(BorderFactory.createEmptyBorder());
+
 		rightSide.add(_stageScroller, BorderLayout.CENTER);
 
 		_splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftSide,
@@ -577,7 +587,9 @@ public class PicturePresenter
 			{
 				// TODO Auto-generated method stub
 
-			}			@Override
+			}
+
+			@Override
 			public void onPopScope(final Runtime runtime, final
 			FastIterable<Identifier<? extends Form>> ids)
 			{
@@ -619,8 +631,8 @@ public class PicturePresenter
 			}
 
 			@Override
-			public void onError(final Runtime runtime, final Evaluable
-					instruction, final RuntimeError error)
+			public void onError(final Runtime runtime, final Evaluable instruction,
+			                    final RuntimeError error)
 			{
 				// TODO Auto-generated method stub
 
@@ -924,7 +936,8 @@ public class PicturePresenter
 		void onPreviewChange(PicturePresenter presenter);
 	}
 
-	private static class PreviewCollector implements Preview, reform.core.runtime.Runtime.Listener
+	private static class PreviewCollector implements Preview, reform.core.runtime
+			.Runtime.Listener
 	{
 
 		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
@@ -958,15 +971,14 @@ public class PicturePresenter
 		}
 
 		@Override
-		public void onEvalInstruction(final Runtime runtime, final Evaluable
-				evaluable)
+		public void onEvalInstruction(final Runtime runtime, final Evaluable evaluable)
 		{
 
 		}
 
 		@Override
-		public void onError(final Runtime runtime, final Evaluable instruction,
-		                    final RuntimeError error)
+		public void onError(final Runtime runtime, final Evaluable instruction, final
+		RuntimeError error)
 		{
 
 		}
@@ -985,8 +997,8 @@ public class PicturePresenter
 		}
 
 		@Override
-		public void onPopScope(final Runtime runtime, final
-		FastIterable<Identifier<? extends Form>> poppedIds)
+		public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
+				extends Form>> poppedIds)
 		{
 			for (int i = 0, j = poppedIds.size(); i < j; i++)
 			{
@@ -1149,8 +1161,10 @@ public class PicturePresenter
 						_selection.getSelected());
 			}
 
-			return snapPoint instanceof IntersectionSnapPoint && (((IntersectionSnapPoint) snapPoint).getFormIdA().equals(
-					_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint).getFormIdB().equals(
+			return snapPoint instanceof IntersectionSnapPoint && ((
+					(IntersectionSnapPoint) snapPoint).getFormIdA().equals(
+					_selection.getSelected()) || ((IntersectionSnapPoint) snapPoint)
+					.getFormIdB().equals(
 					_selection.getSelected()));
 
 		}

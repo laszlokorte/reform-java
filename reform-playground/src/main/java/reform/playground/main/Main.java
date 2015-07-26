@@ -38,6 +38,9 @@ public final class Main
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		try
 		{
+			UIManager.getDefaults().put("SplitPane.border",
+			                            BorderFactory.createEmptyBorder());
+			UIManager.getDefaults().put("Button.border", BorderFactory.createEmptyBorder(3,4,3,4));
 
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name",

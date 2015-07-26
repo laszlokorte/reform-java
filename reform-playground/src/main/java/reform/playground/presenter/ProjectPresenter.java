@@ -46,6 +46,8 @@ public class ProjectPresenter implements Listener
 		_bottom.setPreferredSize(new Dimension(1100, 500));
 
 		_scroller.setMinimumSize(_picturesView.getPreferredSize());
+		_scroller.setBorder(BorderFactory.createEmptyBorder());
+
 
 		final FastIterable<Identifier<? extends Picture>> pictures = _project
 				.getPictures();
