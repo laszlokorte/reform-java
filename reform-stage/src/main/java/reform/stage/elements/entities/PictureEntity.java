@@ -82,34 +82,28 @@ public class PictureEntity implements Entity
 		_points.add(_center);
 
 		_topLeftHandle = new Handle(formId, PictureForm.Point.TopLeft,
-		                            PictureForm.Anchor.TopLeft,
-		                            new PivotPair(_bottomRight, _center));
+				PictureForm.Anchor.TopLeft, new PivotPair(_bottomRight, _center));
 
 		_topRightHandle = new Handle(formId, PictureForm.Point.TopRight,
-		                             PictureForm.Anchor.TopRight,
-		                             new PivotPair(_bottomLeft, _center));
+				PictureForm.Anchor.TopRight, new PivotPair(_bottomLeft, _center));
 
 		_bottomLeftHandle = new Handle(formId, PictureForm.Point.BottomLeft,
-		                               PictureForm.Anchor.BottomLeft,
-		                               new PivotPair(_topRight, _center));
+				PictureForm.Anchor.BottomLeft, new PivotPair(_topRight, _center));
 
 		_bottomRightHandle = new Handle(formId, PictureForm.Point.BottomRight,
-		                                PictureForm.Anchor.BottomRight,
-		                                new PivotPair(_topLeft, _center));
+				PictureForm.Anchor.BottomRight, new PivotPair(_topLeft, _center));
 
 		_leftHandle = new Handle(formId, PictureForm.Point.Left, PictureForm.Anchor.Left,
-		                         new PivotPair(_right, _center));
+				new PivotPair(_right, _center));
 
 		_rightHandle = new Handle(formId, PictureForm.Point.Right,
-		                          PictureForm.Anchor.Right,
-		                          new PivotPair(_left, _center));
+				PictureForm.Anchor.Right, new PivotPair(_left, _center));
 
 		_topHandle = new Handle(formId, PictureForm.Point.Top, PictureForm.Anchor.Top,
-		                        new PivotPair(_bottom, _center));
+				new PivotPair(_bottom, _center));
 
 		_bottomHandle = new Handle(formId, PictureForm.Point.Bottom,
-		                           PictureForm.Anchor.Bottom,
-		                           new PivotPair(_top, _center));
+				PictureForm.Anchor.Bottom, new PivotPair(_top, _center));
 
 		_handles.add(_topHandle);
 		_handles.add(_bottomHandle);
@@ -179,18 +173,11 @@ public class PictureEntity implements Entity
 	{
 
 		return Vector.isInTriangle(position.x, position.y, _topLeft.getX(),
-		                           _topLeft.getY(), _bottomLeft.getX(),
-		                           _bottomLeft.getY(), _bottomRight.getX(),
-		                           _bottomRight.getY()) || Vector.isInTriangle
-				(position.x, position.y,
-		                                                                       _topRight
-						 .getX(),
-		                                                                       _topRight
-						 .getY(),
-		                                                                       _bottomLeft.getX(),
-		                                                                       _bottomLeft.getY(),
-		                                                                       _bottomRight.getX(),
-		                                                                       _bottomRight.getY());
+				_topLeft.getY(), _bottomLeft.getX(), _bottomLeft.getY(),
+				_bottomRight.getX(), _bottomRight.getY()) || Vector.isInTriangle(
+				position.x, position.y, _topRight.getX(), _topRight.getY(),_bottomRight.getX(),
+				_bottomRight.getY(),
+				_topLeft.getX(), _topLeft.getY());
 	}
 
 	@Override
