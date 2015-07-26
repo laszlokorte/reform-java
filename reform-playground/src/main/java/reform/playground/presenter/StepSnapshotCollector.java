@@ -7,8 +7,8 @@ import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.core.procedure.instructions.NullInstruction;
-import reform.core.runtime.Evaluable;
-import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.*;
+import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StepSnapshotCollector implements ProjectRuntime.Listener
+public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listener
 {
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
@@ -54,7 +54,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onBeginEvaluation(final ProjectRuntime runtime)
+	public void onBeginEvaluation(final Runtime runtime)
 	{
 		_recordedInstructions.clear();
 		_failedInstructions.clear();
@@ -75,7 +75,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onFinishEvaluation(final ProjectRuntime runtime)
+	public void onFinishEvaluation(final Runtime runtime)
 	{
 		final Iterator<Evaluable> iterator = _instructionBitmaps.keySet().iterator();
 		while (iterator.hasNext())
@@ -97,7 +97,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
+	public void onEvalInstruction(final Runtime runtime, final Evaluable
 			evaluable)
 	{
 		if (evaluable instanceof NullInstruction)
@@ -192,7 +192,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<?
+	public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
 			extends Form>> poppedIds)
 	{
 		for (int i = 0, j = poppedIds.size(); i < j; i++)
@@ -210,7 +210,7 @@ public class StepSnapshotCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final
+	public void onError(final Runtime runtime, final Evaluable instruction, final
 	RuntimeError error)
 	{
 		_failedInstructions.add(instruction);

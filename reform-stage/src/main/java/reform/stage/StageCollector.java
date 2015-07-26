@@ -6,8 +6,8 @@ import reform.core.graphics.ColoredShape;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
-import reform.core.runtime.Evaluable;
-import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.*;
+import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
@@ -18,7 +18,7 @@ import reform.stage.elements.factory.ControlFactory;
 import reform.stage.elements.factory.EntityCache;
 import reform.stage.elements.factory.EntityFactory;
 
-public class StageCollector implements ProjectRuntime.Listener
+public class StageCollector implements Runtime.Listener
 {
 	private final Analyzer _analyzer;
 	private final Stage _stage;
@@ -40,7 +40,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onBeginEvaluation(final ProjectRuntime runtime)
+	public void onBeginEvaluation(final Runtime runtime)
 	{
 		_entityCache.coolDown();
 		_collected = false;
@@ -50,7 +50,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onFinishEvaluation(final ProjectRuntime runtime)
+	public void onFinishEvaluation(final Runtime runtime)
 	{
 		_entityCache.cleanUp();
 		_buffer.flush(_stage);
@@ -58,7 +58,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
+	public void onEvalInstruction(final Runtime runtime, final Evaluable
 			instruction)
 	{
 		if (_adapter.isInFocus(instruction))
@@ -101,7 +101,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onPopScope(final ProjectRuntime runtime, final FastIterable<Identifier<?
+	public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
 			extends Form>> poppedIds)
 	{
 		for (int i = 0, j = poppedIds.size(); i < j; i++)
@@ -125,7 +125,7 @@ public class StageCollector implements ProjectRuntime.Listener
 	}
 
 	@Override
-	public void onError(final ProjectRuntime runtime, final Evaluable instruction, final
+	public void onError(final reform.core.runtime.Runtime runtime, final Evaluable instruction, final
 	RuntimeError error)
 	{
 		if (_adapter.isInFocus(instruction) && !_collected)

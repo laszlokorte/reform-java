@@ -8,8 +8,8 @@ import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
 import reform.core.project.Picture;
-import reform.core.runtime.Evaluable;
-import reform.core.runtime.ProjectRuntime;
+import reform.core.runtime.*;
+import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
 import reform.data.sheet.DataSet;
 import reform.data.sheet.Definition;
@@ -569,16 +569,16 @@ public class PicturePresenter
 		_runtime.addListener(_stageCollector);
 		_runtime.addListener(_stepCollector);
 
-		_runtime.addListener(new ProjectRuntime.Listener()
+		_runtime.addListener(new Runtime.Listener()
 		{
 
 			@Override
-			public void onBeginEvaluation(final ProjectRuntime runtime)
+			public void onBeginEvaluation(final Runtime runtime)
 			{
 				// TODO Auto-generated method stub
 
 			}			@Override
-			public void onPopScope(final ProjectRuntime runtime, final
+			public void onPopScope(final Runtime runtime, final
 			FastIterable<Identifier<? extends Form>> ids)
 			{
 				// TODO Auto-generated method stub
@@ -586,7 +586,7 @@ public class PicturePresenter
 			}
 
 			@Override
-			public void onFinishEvaluation(final ProjectRuntime runtime)
+			public void onFinishEvaluation(final Runtime runtime)
 			{
 				if (_selection.isSet() && _stage.getEntityForId(
 						_selection.getSelected()) == null)
@@ -611,7 +611,7 @@ public class PicturePresenter
 			}
 
 			@Override
-			public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
+			public void onEvalInstruction(final Runtime runtime, final Evaluable
 					instruction)
 			{
 				// TODO Auto-generated method stub
@@ -619,7 +619,7 @@ public class PicturePresenter
 			}
 
 			@Override
-			public void onError(final ProjectRuntime runtime, final Evaluable
+			public void onError(final Runtime runtime, final Evaluable
 					instruction, final RuntimeError error)
 			{
 				// TODO Auto-generated method stub
@@ -924,7 +924,7 @@ public class PicturePresenter
 		void onPreviewChange(PicturePresenter presenter);
 	}
 
-	private static class PreviewCollector implements Preview, ProjectRuntime.Listener
+	private static class PreviewCollector implements Preview, reform.core.runtime.Runtime.Listener
 	{
 
 		private final Pool<GeneralPath.Double> _pathPool = new SimplePool<>(
@@ -958,34 +958,34 @@ public class PicturePresenter
 		}
 
 		@Override
-		public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
+		public void onEvalInstruction(final Runtime runtime, final Evaluable
 				evaluable)
 		{
 
 		}
 
 		@Override
-		public void onError(final ProjectRuntime runtime, final Evaluable instruction,
+		public void onError(final Runtime runtime, final Evaluable instruction,
 		                    final RuntimeError error)
 		{
 
 		}
 
 		@Override
-		public void onBeginEvaluation(final ProjectRuntime runtime)
+		public void onBeginEvaluation(final Runtime runtime)
 		{
 			_collectedShapes.clear();
 			_size.set(runtime.getSize());
 		}
 
 		@Override
-		public void onFinishEvaluation(final ProjectRuntime runtime)
+		public void onFinishEvaluation(final Runtime runtime)
 		{
 			_pathPool.release();
 		}
 
 		@Override
-		public void onPopScope(final ProjectRuntime runtime, final
+		public void onPopScope(final Runtime runtime, final
 		FastIterable<Identifier<? extends Form>> poppedIds)
 		{
 			for (int i = 0, j = poppedIds.size(); i < j; i++)

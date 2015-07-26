@@ -10,6 +10,8 @@ import reform.math.Vec2i;
 
 public interface Runtime
 {
+	int MAX_DEPTH = 3;
+
 	Picture subCall(Identifier<? extends Picture> id, int width, int height);
 
 	void subEnd();
@@ -43,4 +45,24 @@ public interface Runtime
 	DataSet getDataSet();
 
 	Vec2i getSize();
+
+	void addListener(final Listener listener);
+
+	void removeListener(final Listener listener);
+
+	int getDepth();
+
+	interface Listener
+	{
+		void onBeginEvaluation(Runtime runtime);
+
+		void onFinishEvaluation(Runtime runtime);
+
+		void onEvalInstruction(Runtime runtime, Evaluable instruction);
+
+		void onPopScope(Runtime runtime, FastIterable<Identifier<? extends Form>>
+				ids);
+
+		void onError(Runtime runtime, Evaluable instruction, RuntimeError error);
+	}
 }

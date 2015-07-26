@@ -11,7 +11,6 @@ import reform.core.graphics.ColoredShape;
 import reform.core.graphics.DrawingType;
 import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
-import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
 import reform.identity.FastIterable;
@@ -22,7 +21,6 @@ import reform.naming.Name;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
-import java.util.ArrayList;
 
 public final class PictureForm extends BaseForm<PictureForm>
 {
@@ -51,60 +49,62 @@ public final class PictureForm extends BaseForm<PictureForm>
 			                                                                         2));
 
 	private final Identifier<? extends Picture> _pictureId;
-	private final ArrayList[] _shapes = new ArrayList[3];
-	private final int[] _sizes = new int[6];
+	private final ColoredShape[] _shapes = new ColoredShape[Runtime.MAX_DEPTH];
+	private final int[] _sizes = new int[Runtime.MAX_DEPTH * 2];
 
 	{
 		for (int i = 0; i < _shapes.length; i++)
 		{
-			_shapes[i] = new ArrayList<ColoredShape>();
+			_shapes[i] = new ColoredShape();
 		}
 	}
 
-	private final ProjectRuntime.Listener _listener = new ProjectRuntime.Listener()
+	private final Runtime.Listener _listener = new Runtime.Listener()
 	{
 
 		@Override
-		public void onBeginEvaluation(final ProjectRuntime runtime)
+		public void onBeginEvaluation(final Runtime runtime)
 		{
-
-			int d = runtime.getDepth() - 1;
-			_sizes[2*d] = runtime.getSize().x;
-			_sizes[2*d+1] = runtime.getSize().y;
-			_shapes[d].clear();
+			int depth = runtime.getDepth();
+			_sizes[2 * depth - 2] = runtime.getSize().x;
+			_sizes[2 * depth -1] = runtime.getSize().y;
 		}
 
 		@Override
-		public void onFinishEvaluation(final ProjectRuntime runtime)
+		public void onFinishEvaluation(final Runtime runtime)
 		{
 		}
 
 		@Override
-		public void onEvalInstruction(final ProjectRuntime runtime, final Evaluable
-				instruction)
+		public void onEvalInstruction(final Runtime runtime, final Evaluable instruction)
 		{
 
 		}
 
 		@Override
-		public void onPopScope(final ProjectRuntime runtime, final
-		FastIterable<Identifier<? extends Form>> ids)
+		public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
+				extends Form>> ids)
 		{
+			int depth = runtime.getDepth();
 			for (int i = 0, j = ids.size(); i < j; i++)
 			{
 				Form form = runtime.get(ids.get(i));
-				if(form.getType() == DrawingType.Draw)
+				if (form.getType() == DrawingType.Draw)
 				{
 					ColoredShape s = new ColoredShape();
 					form.writeColoredShapeForRuntime(runtime, s);
-					_shapes[runtime.getDepth() - 1].add(s);
+
+					ColoredShape parentShape = _shapes[depth-1];
+					parentShape.addSubShape(s);
 				}
 			}
+			_shapes[depth].reset();
+
 		}
 
 		@Override
-		public void onError(final ProjectRuntime runtime, final Evaluable instruction,
-		                    final RuntimeError error)
+		public void onError(final Runtime runtime, final Evaluable instruction, final
+		RuntimeError error)
 		{
 
 		}
@@ -119,89 +119,107 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 		addSnapPoint(new ExposedPoint(_centerPoint, new Name("Center"), Point.Center));
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width,PictureAnchor.Side.Right.x * 0.5),
-				                           new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
+						new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
 				_rotation)), new Name("Top Right"), Point.TopRight));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
-				                           new ScaledLength(_height,
-				                                            PictureAnchor.Side.Bottom.y * 0.5)),
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
+						new ScaledLength(_height, PictureAnchor.Side.Bottom.y * 0.5)),
 				_rotation)), new Name("Bottom Right"), Point.BottomRight));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
-				                           new ScaledLength(_height,
-				                                            PictureAnchor.Side.Bottom.y * 0.5)),
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
+						new ScaledLength(_height, PictureAnchor.Side.Bottom.y * 0.5)),
 				_rotation)), new Name("Bottom Left"), Point.BottomLeft));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
-				                           new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
+						new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
 				_rotation)), new Name("Top Left"), Point.TopLeft));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
-				                           new ConstantLength(0)), _rotation)),
-		                              new Name("Right"), Point.Right));
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
+						new ConstantLength(0)), _rotation)), new Name("Right"),
+		                              Point.Right));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ConstantLength(0),
 				                           new ScaledLength(_height,
-				                                            PictureAnchor.Side.Bottom.y * 0.5)),
+				                                            PictureAnchor.Side.Bottom.y
+						                                            * 0.5)),
 				_rotation)), new Name("Bottom"), Point.Bottom));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
-				new ComposedCartesianPoint(new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
-				                           new ConstantLength(0)), _rotation)),
-		                              new Name("Left"), Point.Left));
+				new ComposedCartesianPoint(
+						new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
+						new ConstantLength(0)), _rotation)), new Name("Left"),
+		                              Point.Left));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ConstantLength(0),
-				                           new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
+				                           new ScaledLength(_height,
+				                                            PictureAnchor.Side.Top.y * 0.5)),
 				_rotation)), new Name("Top"), Point.Top));
 
 		addAnchor(new PictureAnchor(Anchor.TopLeft, new Name("Top Left"), _centerPoint,
-		                              _rotation, _width, _height, PictureAnchor.Side.TopLeft));
-		addAnchor(
-				new PictureAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint,
-				                    _rotation, _width, _height, PictureAnchor.Side.TopRight));
+		                            _rotation, _width, _height,
+		                            PictureAnchor.Side.TopLeft));
+		addAnchor(new PictureAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint,
+		                            _rotation, _width, _height,
+		                            PictureAnchor.Side.TopRight));
 		addAnchor(new PictureAnchor(Anchor.BottomRight, new Name("Bottom Right"),
-		                              _centerPoint, _rotation, _width, _height,
+		                            _centerPoint, _rotation, _width, _height,
 		                            PictureAnchor.Side.BottomRight));
 		addAnchor(new PictureAnchor(Anchor.BottomLeft, new Name("Bottom Left"),
-		                              _centerPoint, _rotation, _width, _height,
+		                            _centerPoint, _rotation, _width, _height,
 		                            PictureAnchor.Side.BottomLeft));
 
-		addAnchor(new PictureAnchor(Anchor.Top, new Name("Center"), _centerPoint,
-		                              _rotation, _width, _height, PictureAnchor.Side.Top));
+		addAnchor(
+				new PictureAnchor(Anchor.Top, new Name("Center"), _centerPoint,
+				                  _rotation,
+				                  _width, _height, PictureAnchor.Side.Top));
 		addAnchor(new PictureAnchor(Anchor.Right, new Name("Right"), _centerPoint,
-		                              _rotation, _width, _height, PictureAnchor.Side.Right));
+		                            _rotation, _width, _height,
+		                            PictureAnchor.Side.Right));
 		addAnchor(new PictureAnchor(Anchor.Bottom, new Name("Bottom"), _centerPoint,
-		                              _rotation, _width, _height, PictureAnchor.Side.Bottom));
-		addAnchor(new PictureAnchor(Anchor.Left, new Name("Left"), _centerPoint,
-		                              _rotation, _width, _height, PictureAnchor.Side.Left));
+		                            _rotation, _width, _height,
+		                            PictureAnchor.Side.Bottom));
+		addAnchor(
+				new PictureAnchor(Anchor.Left, new Name("Left"), _centerPoint, _rotation,
+				                  _width, _height, PictureAnchor.Side.Left));
 	}
 
 	@Override
 	public void initialize(final Runtime runtime, final double minX, final double minY,
 	                       final double maxX, final double maxY)
 	{
-		ProjectRuntime pr = (ProjectRuntime) runtime;
-
 		double width = Math.abs(maxX - minX);
-		double height =  Math.abs(maxY - minY);
+		double height = Math.abs(maxY - minY);
 		_rotation.setForRuntime(runtime, 0);
 		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
 		_width.setForRuntime(runtime, maxX - minX);
 		_height.setForRuntime(runtime, maxY - minY);
+		int depth = runtime.getDepth();
 
 		Picture p = runtime.subCall(_pictureId, (int) (width), (int) (height));
 		if (p != null)
 		{
-			pr.addListener(_listener);
+			_shapes[depth].reset();
+			runtime.addListener(_listener);
 			p.getProcedure().evaluate(runtime);
 			runtime.subEnd();
+
+		}
+		else
+		{
+			_sizes[2 * depth] = (int) width;
+			_sizes[2 * depth + 1] = (int) height;
 		}
 	}
 
@@ -256,31 +274,34 @@ public final class PictureForm extends BaseForm<PictureForm>
 			coloredShape)
 	{
 
+		int depth = runtime.getDepth();
+
+		if (depth == Runtime.MAX_DEPTH)
+		{
+			return;
+		}
+
 		final double width2 = _width.getValueForRuntime(runtime) / 2;
 		final double height2 = _height.getValueForRuntime(runtime) / 2;
 		final double x = _centerPoint.getXValueForRuntime(runtime);
 		final double y = _centerPoint.getYValueForRuntime(runtime);
 		double rot = _rotation.getValueForRuntime(runtime);
 
-		int d = ((ProjectRuntime) runtime).getDepth();
+		int d = depth;
 
-		double origWidth2 = _sizes[2*d] / 2;
-		double origHeight2 = _sizes[2*d+1] / 2;
-		double widthRatio = width2/origWidth2;
-		double heightRatio = height2/origHeight2;
+		double origWidth2 = _sizes[2 * d] / 2;
+		double origHeight2 = _sizes[2 * d + 1] / 2;
+		double widthRatio = width2 / origWidth2;
+		double heightRatio = height2 / origHeight2;
+
 		_t.setToIdentity();
 		_t.translate(x, y);
 		_t.rotate(rot);
 		_t.translate(-width2, -height2);
-		_t.scale(widthRatio,heightRatio);
-		coloredShape.setStrokeColor(0xff883377);
-		coloredShape.setStrokeWidth(5);
-		ArrayList<ColoredShape> shapes = _shapes[d];
-		for (int i = 0; i < shapes.size(); i++)
-		{
-			coloredShape.getPath().append(
-					_t.createTransformedShape(shapes.get(i).getPath()), false);
-		}
+		_t.scale(widthRatio, heightRatio);
+		coloredShape.setChildTransform(_t);
+		System.out.println(String.format("[OUT] write: %s", d));
+		coloredShape.addSubShapesFrom(_shapes[d]);
 	}
 
 	@Override
@@ -376,9 +397,9 @@ public final class PictureForm extends BaseForm<PictureForm>
 		private final StaticLength _height;
 		private final Side _side;
 
-		public PictureAnchor(final IdentityToken id, final Name
-				name, final StaticPoint center, final StaticAngle rotation, final
-		StaticLength width, final StaticLength height, final Side side)
+		public PictureAnchor(final IdentityToken id, final Name name, final StaticPoint
+				center, final StaticAngle rotation, final StaticLength width, final
+		StaticLength height, final Side side)
 		{
 			super(id, name);
 			_center = center;

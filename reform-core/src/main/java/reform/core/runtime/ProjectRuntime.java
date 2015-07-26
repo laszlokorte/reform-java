@@ -18,7 +18,7 @@ public class ProjectRuntime implements Runtime
 	private final Project _project;
 	private boolean _stopped = false;
 	private int _depth = 0;
-	private Frame[] _frames = new Frame[3];
+	private Frame[] _frames = new Frame[MAX_DEPTH];
 
 	{
 		for (int i = 0, j = _frames.length; i < j; i++)
@@ -225,20 +225,6 @@ public class ProjectRuntime implements Runtime
 
 	public int getDepth() {
 		return _depth;
-	}
-
-	public interface Listener
-	{
-		void onBeginEvaluation(ProjectRuntime runtime);
-
-		void onFinishEvaluation(ProjectRuntime runtime);
-
-		void onEvalInstruction(ProjectRuntime runtime, Evaluable instruction);
-
-		void onPopScope(ProjectRuntime runtime, FastIterable<Identifier<? extends Form>>
-				ids);
-
-		void onError(ProjectRuntime runtime, Evaluable instruction, RuntimeError error);
 	}
 
 	private static class Frame
