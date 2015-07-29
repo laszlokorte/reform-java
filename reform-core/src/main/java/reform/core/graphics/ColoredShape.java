@@ -80,9 +80,9 @@ public class ColoredShape
 
 	}
 
-	public void setStrokeWidth(final int strokeWidth)
+	public void setStrokeWidth(final double strokeWidth)
 	{
-		_stroke = strokeWidth > 0 ? new BasicStroke(strokeWidth) : null;
+		_stroke = strokeWidth > 0 ? new BasicStroke((float)strokeWidth) : null;
 	}
 
 	public void addSubShape(final ColoredShape subShape)

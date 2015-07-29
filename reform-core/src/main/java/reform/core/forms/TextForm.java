@@ -1,7 +1,6 @@
 package reform.core.forms;
 
-import reform.core.attributes.Attribute;
-import reform.core.attributes.AttributeSet;
+import reform.core.attributes.*;
 import reform.core.forms.anchors.OrthogonalLengthAnchor;
 import reform.core.forms.anchors.StaticPointAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -30,8 +29,9 @@ public final class TextForm extends BaseForm<TextForm>
 	public static final int ANCHOR_START = 0;
 	public static final int ANCHOR_END = 1;
 	public static final int ANCHOR_CENTER = 2;
-	private final static Value DEFAULT_TEXT = new Value("Lorem ipsum");
-	private final static Value DEFAULT_SCALE = new Value(1);
+	private final static String DEFAULT_TEXT = "Lorem ipsum";
+	private final static double DEFAULT_SCALE = 1;
+	private final static int DEFAULT_TEXT_COLOR = 0xff000000;
 	static private final int SIZE = 5;
 	private final static AffineTransform _trans = new AffineTransform();
 	private static final Font _font = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
@@ -47,14 +47,16 @@ public final class TextForm extends BaseForm<TextForm>
 			new BasicPointScaler(_startPoint, _endPoint), new AbsoluteScaler(
 			new BasicLengthScaler(_height, new ConstantRotationAngle(0), 0)));
 	private final Outline _outline = new NullOutline();
-	private final Attribute _textColorAttribute = new Attribute("Text Color",
-	                                                            Attribute.Type.Color,
-	                                                            DEFAULT_STROKE_COLOR);
-	private final Attribute _fontSizeAttribute = new Attribute("Relative Font Size",
-	                                                           Attribute.Type.Number,
-	                                                           DEFAULT_SCALE);
-	private final Attribute _textAttribute = new Attribute("Text", Attribute.Type.String,
-	                                                       DEFAULT_TEXT);
+
+	private final Attribute<ColorValue> _textColorAttribute = new Attribute<>("Fill Color",
+			ColorValue.class,  new ConstantColorValue(DEFAULT_TEXT_COLOR));
+	private final Attribute<ScalarValue> _fontSizeAttribute = new Attribute<>("Font Size",
+			ScalarValue.class, new ConstantScalarValue(DEFAULT_SCALE));
+
+	private final Attribute<StringValue> _textAttribute = new Attribute<>("Text",
+			StringValue.class, new ConstantStringValue(DEFAULT_TEXT));
+
+
 	private final AttributeSet _attributes = new AttributeSet(_textColorAttribute,
 	                                                          _fontSizeAttribute,
 	                                                          _textAttribute);
@@ -96,15 +98,13 @@ public final class TextForm extends BaseForm<TextForm>
 
 		final GlyphVector v = _font.createGlyphVector(_metrics.getFontRenderContext(),
 		                                              _textAttribute.getValue()
-				                                              .getValueFor(dataSet)
-				                                              .getString());
+				                                              .getValueForRuntime(runtime));
 
 		final double endX = _endPoint.getXValueForRuntime(runtime);
 		final double endY = _endPoint.getYValueForRuntime(runtime);
 		final double startX = _startPoint.getXValueForRuntime(runtime);
 		final double startY = _startPoint.getYValueForRuntime(runtime);
-		final double scale = _fontSizeAttribute.getValue().getValueFor(
-				dataSet).getDouble();
+		final double scale = _fontSizeAttribute.getValue().getValueForRuntime(runtime);
 		final double height = _height.getValueForRuntime(runtime) / 16;
 
 
@@ -125,10 +125,10 @@ public final class TextForm extends BaseForm<TextForm>
 		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(
-				_textColorAttribute.getValue().getValueFor(dataSet).getColor());
+				_textColorAttribute.getValue().getValueForRuntime(runtime));
 		coloredShape.setStrokeColor(0);
 		coloredShape.setStrokeWidth(
-				_fontSizeAttribute.getValue().getValueFor(dataSet).getInteger());
+				_fontSizeAttribute.getValue().getValueForRuntime(runtime));
 
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}

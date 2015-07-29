@@ -13,6 +13,7 @@ public class ColorModel
 	private double _hue = 0;
 	private double _saturation = 0;
 	private double _value = 0;
+	private int _hexARGB;
 
 	public void setHexARGB(final int hexARGB)
 	{
@@ -230,6 +231,11 @@ public class ColorModel
 	public void removeListener(final Listener l)
 	{
 		_listeners.remove(l);
+	}
+
+	public int getHexARGB()
+	{
+		return ((int)(255 * _alpha) << 24) | ((int)(255 * _red) << 16) | ((int)(255 * _green) << 8) | (int)(255 * _blue);
 	}
 
 	public interface Listener

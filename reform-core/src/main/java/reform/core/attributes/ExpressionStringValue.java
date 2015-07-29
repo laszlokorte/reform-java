@@ -2,18 +2,18 @@ package reform.core.attributes;
 
 import reform.data.sheet.expression.Expression;
 
-public class ExpressionColorValue implements ColorValue
+public class ExpressionStringValue implements StringValue
 {
 	private Expression _expression;
 
-	public ExpressionColorValue(Expression expression) {
+	public ExpressionStringValue(Expression expression) {
 		_expression = expression;
 	}
 
 	@Override
-	public int getValueForRuntime(final reform.core.runtime.Runtime runtime)
+	public String getValueForRuntime(final reform.core.runtime.Runtime runtime)
 	{
-		return _expression.getValueFor(runtime.getDataSet()).getColor();
+		return _expression.getValueFor(runtime.getDataSet()).getString();
 	}
 
 	public Expression getExpression() {

@@ -4,17 +4,14 @@ import reform.components.colorpicker.ColorModel;
 import reform.components.colorpicker.ColorPicker;
 import reform.components.expression.ExpressionEditor;
 import reform.core.analyzer.Analyzer;
-import reform.core.attributes.Attribute;
-import reform.core.attributes.AttributeSet;
+import reform.core.attributes.*;
 import reform.core.forms.Form;
-import reform.core.forms.PictureForm;
 import reform.core.graphics.DrawingType;
 import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.InstructionGroup;
 import reform.core.project.Picture;
-import reform.data.sheet.Value;
 import reform.data.sheet.expression.ConstantExpression;
 import reform.data.sheet.expression.Expression;
 import reform.evented.core.EventedProcedure;
@@ -26,7 +23,6 @@ import reform.stage.tooling.FormSelection;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,10 +35,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private final JComponent _panel = Box.createHorizontalBox();
 	private final Pool<ColorPanel> _colorPanels = new SimplePool<>(
 			() -> new ColorPanel(this));
-	private final Pool<ExpressionPanel> _expressionPanels = new SimplePool<>(
-			() -> new ExpressionPanel(this));
+	private final Pool<NumberPanel> _numberPanels = new SimplePool<>(
+			() -> new NumberPanel(this));
 	private final Pool<PictureIdPanel> _pictureIdPool = new SimplePool<>(
 			() -> new PictureIdPanel(this));
+	private final Pool<StringPanel> _stringPanels = new SimplePool<>(
+			() -> new StringPanel(this));
 	private final Pool<Component> _struts = new SimplePool<>(
 			() -> Box.createHorizontalStrut(5));
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
@@ -54,7 +52,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	private boolean _ownChange = false;
 	private final EventedProject _eProject;
 
-	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer, final FormSelection selection, final ExpressionEditor.Parser parser, final EventedProject eProject)
+	public FormOptionPanel(final EventedProcedure eProcedure, final Analyzer analyzer,
+	                       final FormSelection selection, final ExpressionEditor.Parser
+			                       parser, final EventedProject eProject)
 	{
 		_eProcedure = eProcedure;
 		_selection = selection;
@@ -128,7 +128,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	public void onSelectionChanged(final FormSelection selection)
 	{
 		releaseColorPanels();
-		releaseExpressionPanels();
+		releaseNumberPanels();
+		releaseStringPanels();
 		_struts.release();
 		_panel.remove(_guideToggle);
 		_panel.removeAll();
@@ -148,24 +149,35 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			final AttributeSet attributes = form.getAttributes();
 			for (int i = 0, j = attributes.size(); i < j; i++)
 			{
-				final Attribute attr = attributes.get(i);
-				final Attribute.Type type = attr.getType();
+				final Attribute<?> attr = attributes.get(i);
+				final Class<?> type = attr.getType();
 
-				if (type == Attribute.Type.Color)
+				if (type == ColorValue.class)
 				{
-					final ColorPanel panel = getColorPanelFor(attr);
+					final ColorPanel panel = getColorPanelFor(
+							(Attribute<ColorValue>) attr);
 					_panel.add(panel.getButton());
 					panel.setEnabled(drawType == DrawingType.Draw);
 
 				}
-				else if (type == Attribute.Type.Number || type == Attribute.Type.String)
+				else if (type == ScalarValue.class)
 				{
-					final ExpressionPanel panel = getExpressionPanel(attr);
+					final NumberPanel panel = getNumberPanel(
+							(Attribute<ScalarValue>) attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
-				}else if (type == Attribute.Type.PictureId)
+				}
+				else if (type == StringValue.class)
 				{
-					final PictureIdPanel panel = getPictureIdPanel(attr);
+					final StringPanel panel = getStringPanel(
+							(Attribute<StringValue>) attr);
+					_panel.add(panel.getComponent());
+					panel.setEnabled(drawType == DrawingType.Draw);
+				}
+				else if (type == IdValue.class)
+				{
+					final PictureIdPanel panel = getPictureIdPanel(
+							(Attribute<IdValue<? extends Picture>>) attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
@@ -185,16 +197,25 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_colorPanels.clean(ColorPanel::dispose);
 	}
 
-	private ExpressionPanel getExpressionPanel(final Attribute attr)
+	private NumberPanel getNumberPanel(final Attribute<ScalarValue> attr)
 	{
-		final ExpressionPanel p = _expressionPanels.take();
+		final NumberPanel p = _numberPanels.take();
+		p.setAttribute(attr);
+
+		return p;
+	}
+
+	private StringPanel getStringPanel(final Attribute<StringValue> attr)
+	{
+		final StringPanel p = _stringPanels.take();
 		p.setAttribute(attr);
 
 		return p;
 	}
 
 
-	private PictureIdPanel getPictureIdPanel(final Attribute attr)
+	private PictureIdPanel getPictureIdPanel(final Attribute<IdValue<? extends Picture>>
+			                                         attr)
 	{
 		final PictureIdPanel p = _pictureIdPool.take();
 		p.setAttribute(attr);
@@ -202,7 +223,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		return p;
 	}
 
-	private ColorPanel getColorPanelFor(final Attribute attr)
+	private ColorPanel getColorPanelFor(final Attribute<ColorValue> attr)
 	{
 		final ColorPanel p = _colorPanels.take();
 		p.setAttribute(attr);
@@ -218,9 +239,17 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		});
 	}
 
-	private void releaseExpressionPanels()
+	private void releaseNumberPanels()
 	{
-		_expressionPanels.release((p) -> {
+		_numberPanels.release((p) -> {
+			p.setAttribute(null);
+			_panel.remove(p.getComponent());
+		});
+	}
+
+	private void releaseStringPanels()
+	{
+		_stringPanels.release((p) -> {
 			p.setAttribute(null);
 			_panel.remove(p.getComponent());
 		});
@@ -247,8 +276,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 						_guideToggle.isSelected() ? DrawingType.Guide : DrawingType
 								.Draw);
 				_colorPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
-				_expressionPanels.eachActive(
-						(p) -> p.setEnabled(!_guideToggle.isSelected()));
+				_numberPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected
+						()));
 				_pictureIdPool.eachActive(
 						(p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
@@ -271,15 +300,16 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		}
 	}
 
-	private static class ExpressionPanel
+	private static class NumberPanel
 	{
 		private final ExpressionEditor _expressionEditor;
 		private final FormOptionPanel _delegate;
-		private Attribute _attribute;
-		private final JLabel _label= new JLabel();
-		private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		private Attribute<ScalarValue> _attribute;
+		private final JLabel _label = new JLabel();
+		private final JPanel _panel = new JPanel(
+				new FlowLayout(FlowLayout.LEADING, 0, 0));
 
-		ExpressionPanel(final FormOptionPanel delegate)
+		NumberPanel(final FormOptionPanel delegate)
 		{
 			_delegate = delegate;
 			_expressionEditor = new ExpressionEditor(_delegate._parser);
@@ -292,19 +322,115 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		{
 			if (_attribute != null)
 			{
-				_attribute.setValue(_expressionEditor.getExpression());
+				ScalarValue v = _attribute.getValue();
+
+				if (v instanceof ConstantScalarValue)
+				{
+					_attribute.setValue(
+							new ExpressionScalarValue(_expressionEditor.getExpression
+									()));
+				}
+				else if (v instanceof ExpressionScalarValue)
+				{
+					((ExpressionScalarValue) v).setExpression(
+							_expressionEditor.getExpression());
+				}
 
 				_delegate.onChange();
 			}
 		}
 
-		void setAttribute(final Attribute attr)
+		void setAttribute(final Attribute<ScalarValue> attr)
 		{
 			if (attr != null)
 			{
 				_attribute = null; // prevent cycle
+				ScalarValue v = attr.getValue();
 
-				_expressionEditor.setExpression(attr.getValue());
+				if (v instanceof ConstantScalarValue)
+				{
+					_expressionEditor.setValue(((ConstantScalarValue) v).getValue());
+				}
+				else if (v instanceof ExpressionScalarValue)
+				{
+					_expressionEditor.setExpression(
+							((ExpressionScalarValue) v).getExpression());
+				}
+				_expressionEditor.setToolTipText(attr.getName());
+				//_label.setText(attr.getName());
+			}
+			_attribute = attr;
+		}
+
+		public Component getComponent()
+		{
+			return _panel;
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_panel.setVisible(enabled);
+		}
+	}
+
+	private static class StringPanel
+	{
+		private final ExpressionEditor _expressionEditor;
+		private final FormOptionPanel _delegate;
+		private Attribute<StringValue> _attribute;
+		private final JLabel _label = new JLabel();
+		private final JPanel _panel = new JPanel(
+				new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+		StringPanel(final FormOptionPanel delegate)
+		{
+			_delegate = delegate;
+			_expressionEditor = new ExpressionEditor(_delegate._parser);
+			_expressionEditor.addChangeListener(this::onModelChange);
+			//_panel.add(_label);
+			_panel.add(_expressionEditor);
+		}
+
+		private void onModelChange(final ChangeEvent changeEvent)
+		{
+			if (_attribute != null)
+			{
+				StringValue v = _attribute.getValue();
+
+
+				if (v instanceof ConstantStringValue)
+				{
+					_attribute.setValue(
+							new ExpressionStringValue(_expressionEditor.getExpression
+									()));
+				}
+				else if (v instanceof ExpressionStringValue)
+				{
+					((ExpressionStringValue) v).setExpression(
+							_expressionEditor.getExpression());
+				}
+
+
+				_delegate.onChange();
+			}
+		}
+
+		void setAttribute(final Attribute<StringValue> attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+				StringValue v = attr.getValue();
+
+				if (v instanceof ConstantStringValue)
+				{
+					_expressionEditor.setValue(((ConstantStringValue) v).getString());
+				}
+				else if (v instanceof ExpressionStringValue)
+				{
+					_expressionEditor.setExpression(
+							((ExpressionStringValue) v).getExpression());
+				}
 				_expressionEditor.setToolTipText(attr.getName());
 				//_label.setText(attr.getName());
 			}
@@ -324,10 +450,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private static class PictureIdPanel
 	{
-		private final JComboBox<Identifier<?extends Picture>> _optionPane = new JComboBox<>();
+		private final JComboBox<Identifier<? extends Picture>> _optionPane = new
+				JComboBox<>();
 		private final FormOptionPanel _delegate;
-		private Attribute _attribute;
-		private final JPanel _panel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		private Attribute<IdValue<? extends Picture>> _attribute;
+		private final JPanel _panel = new JPanel(
+				new FlowLayout(FlowLayout.LEADING, 0, 0));
 
 		PictureIdPanel(final FormOptionPanel delegate)
 		{
@@ -343,13 +471,20 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		{
 			if (_attribute != null)
 			{
-				_attribute.setValue(new ConstantExpression(new Value(Identifier.getValue((Identifier)_optionPane.getSelectedItem()))));
+				IdValue<? extends Picture> v = _attribute.getValue();
+
+				if (v instanceof ConstantIdValue)
+				{
+					Identifier<? extends Picture> id = (Identifier<? extends Picture>)
+							_optionPane.getSelectedItem();
+					((ConstantIdValue) v).setIdentifier(id);
+				}
 
 				_delegate.onChange();
 			}
 		}
 
-		void setAttribute(final Attribute attr)
+		void setAttribute(final Attribute<IdValue<? extends Picture>> attr)
 		{
 			if (attr != null)
 			{
@@ -359,10 +494,11 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				//_expressionEditor.setToolTipText(attr.getName());
 				//_label.setText(attr.getName());
 				_optionPane.removeAllItems();
-				for(int i=0,j=_delegate._eProject.getPictureCount();i<j;i++) {
+				for (int i = 0, j = _delegate._eProject.getPictureCount(); i < j; i++)
+				{
 					_optionPane.addItem(_delegate._eProject.getPictures().get(i));
 				}
-				_optionPane.setSelectedItem(new Identifier(attr.getValue().getValueFor(null).getInteger()));
+				_optionPane.setSelectedItem(attr.getValue().getValueForRuntime(null));
 			}
 			_attribute = attr;
 		}
@@ -383,9 +519,10 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		private final ExpressionEditor _expressionEditor;
 		private final ColorPicker _colorPicker;
 		private final FormOptionPanel _delegate;
-		private Attribute _attribute;
+		private Attribute<ColorValue> _attribute;
 		private boolean _expressionChanged = false;
 		private boolean _colorChanged = false;
+
 		ColorPanel(final FormOptionPanel delegate)
 		{
 			_expressionEditor = new ExpressionEditor(delegate._parser);
@@ -402,76 +539,99 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				return;
 			}
 			_expressionChanged = true;
-			final Expression expression = _expressionEditor.getExpression();
 
-			if (expression instanceof ConstantExpression)
-			{
-				final ConstantExpression c = (ConstantExpression) expression;
-				if (c.getValue().type == Value.Type.Color)
+			try {
+				Expression expression = _expressionEditor.getExpression();
+				ColorValue v = _attribute.getValue();
+
+				if (expression instanceof ConstantExpression)
 				{
-					if (!_colorChanged)
+					int value = ((ConstantExpression) expression).getValue().getColor();
+
+					if (v instanceof ConstantColorValue)
 					{
-						_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+						_attribute.setValue(new ExpressionColorValue(expression));
 					}
+					else if (v instanceof ExpressionColorValue)
+					{
+						((ExpressionColorValue) v).setExpression(expression);
+					}
+
+					_colorPicker.getModel().setHexARGB(value);
 				}
 				else
 				{
-					_colorPicker.getModel().setHexARGB(0xff000000);
+					if (v instanceof ConstantColorValue)
+					{
+						_attribute.setValue(new ExpressionColorValue(expression));
+					}
+					else if (v instanceof ExpressionColorValue)
+					{
+						((ExpressionColorValue) v).setExpression(expression);
+					}
+					System.out.println(String.format("[OUT] %s", "aaa"));
 					_colorPicker.setMixed();
 				}
-			}
-			else
+
+				_delegate.onChange();
+			} finally
 			{
-				_colorPicker.getModel().setHexARGB(0xff000000);
-				_colorPicker.setMixed();
+				_expressionChanged = false;
 			}
-			_attribute.setValue(expression);
-			_delegate.onChange();
-			_expressionChanged = false;
 		}
 
 		private void onModelChange(final ColorModel colorModel)
 		{
-			if (_expressionChanged)
+			if (_expressionChanged || _attribute == null || _colorChanged)
 			{
 				return;
 			}
-			if (_attribute != null && _colorPicker.getButton().isEnabled())
-			{
-				_colorChanged = true;
-				final Expression expression = new ConstantExpression(
-						new Value(colorModel.getAlpha(), colorModel.getRed(),
-						          colorModel.getGreen(), colorModel.getBlue()));
+			_colorChanged = true;
 
-				_expressionEditor.setExpression(expression);
-				onExpressionChange(null);
+			try {
+				ColorValue v = _attribute.getValue();
+
+				if (v instanceof ConstantColorValue)
+				{
+					((ConstantColorValue) v).setColor(colorModel.getHexARGB());
+				}
+				else if (v instanceof ExpressionColorValue)
+				{
+					_attribute.setValue(new ConstantColorValue(colorModel.getHexARGB()));
+				}
+
+				_expressionEditor.setValue(colorModel.getHexARGB(), true);
+
+
+				_delegate.onChange();
+			} finally
+			{
 				_colorChanged = false;
 			}
 		}
 
-		void setAttribute(final Attribute attr)
+		void setAttribute(final Attribute<ColorValue> attr)
 		{
 			if (attr != null)
 			{
 				_attribute = null; // prevent cycle
-				final Expression currentExpression = attr.getValue();
+				final ColorValue v = attr.getValue();
 
-				_expressionEditor.setExpression(currentExpression);
-				if (currentExpression instanceof ConstantExpression)
+				if (v instanceof ConstantColorValue)
 				{
-					final ConstantExpression c = (ConstantExpression) currentExpression;
-
-					_colorPicker.getModel().setHexARGB(c.getValue().getColor());
+					int val =
+							((ConstantColorValue) v).getColor();
+					_expressionEditor.setValue(val, true);
+					_colorPicker.getModel().setHexARGB(val);
 				}
-				else
+				else if (v instanceof ExpressionColorValue)
 				{
+					_expressionEditor.setExpression(((ExpressionColorValue) v).getExpression());
 					_colorPicker.getModel().setHexARGB(0);
 					_colorPicker.setMixed();
 				}
 
 				_colorPicker.getButton().setToolTipText(attr.getName());
-
-
 			}
 			_attribute = attr;
 		}

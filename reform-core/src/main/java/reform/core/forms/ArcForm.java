@@ -1,7 +1,6 @@
 package reform.core.forms;
 
-import reform.core.attributes.Attribute;
-import reform.core.attributes.AttributeSet;
+import reform.core.attributes.*;
 import reform.core.forms.anchors.OrthogonalLengthAnchor;
 import reform.core.forms.anchors.StaticPointAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -29,10 +28,10 @@ public final class ArcForm extends BaseForm<ArcForm>
 	private final transient StaticLength _offset = new StaticLength(getId(), 4);
 
 	private final transient Translator _translator = new BasicTranslator(_startPoint,
-	                                                                     _endPoint);
+			_endPoint);
 
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint,
-	                                                                 _endPoint);
+			_endPoint);
 
 	private final transient Scaler _scaler = new CompositeScaler(
 			new BasicPointScaler(_startPoint, _endPoint), new AbsoluteScaler(
@@ -40,20 +39,16 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color",
-	                                                            Attribute.Type.Color,
-	                                                            DEFAULT_FILL_COLOR);
-	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color",
-	                                                              Attribute.Type.Color,
-	                                                              DEFAULT_STROKE_COLOR);
+	private final Attribute<ColorValue> _fillColorAttribute = new Attribute<>("Fill Color",
+			ColorValue.class, new ConstantColorValue(DEFAULT_FILL_COLOR));
+	private final Attribute<ColorValue> _strokeColorAttribute = new Attribute<>("Stroke Color",
+			ColorValue.class, new ConstantColorValue(DEFAULT_STROKE_COLOR));
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width",
-	                                                              Attribute.Type.Number,
-	                                                              DEFAULT_STROKE_WIDTH);
+	private final Attribute<ScalarValue> _strokeWidthAttribute = new Attribute<>("Stroke Width",
+			ScalarValue.class, new ConstantScalarValue(DEFAULT_STROKE_WIDTH));
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute,
-	                                                          _strokeColorAttribute,
-	                                                          _strokeWidthAttribute);
+			_strokeColorAttribute, _strokeWidthAttribute);
 	private final Arc2D.Double _arc = new Arc2D.Double();
 
 	private ArcForm(final Identifier<ArcForm> id, final Name name)
@@ -65,13 +60,13 @@ public final class ArcForm extends BaseForm<ArcForm>
 
 		addSnapPoint(
 				new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _offset),
-				                 new Name("Center"), Point.Center));
+						new Name("Center"), Point.Center));
 
 		addAnchor(new StaticPointAnchor(Anchor.Start, new Name("Start"), _startPoint));
 		addAnchor(new StaticPointAnchor(Anchor.End, new Name("End"), _endPoint));
 
 		addAnchor(new OrthogonalLengthAnchor(Anchor.Center, new Name("ControlPoint"),
-		                                     _offset, _startPoint, _endPoint));
+				_offset, _startPoint, _endPoint));
 	}
 
 	@Override
@@ -103,11 +98,9 @@ public final class ArcForm extends BaseForm<ArcForm>
 		final double deltaLength = Math.sqrt(distance2) / 2;
 
 		final double orthogonalDxNorm = distance2 == 0 ? 0 : Vector.orthogonalX(deltaX,
-		                                                                        deltaY)
-				/ deltaLength;
+				deltaY) / deltaLength;
 		final double orthogonalDyNorm = distance2 == 0 ? 1 : Vector.orthogonalY(deltaX,
-		                                                                        deltaY)
-				/ deltaLength;
+				deltaY) / deltaLength;
 
 		final double centerX = midX - orthogonalDxNorm * offset;
 		final double centerY = midY - orthogonalDyNorm * offset;
@@ -123,8 +116,7 @@ public final class ArcForm extends BaseForm<ArcForm>
 		}
 
 		_arc.setArc(centerX - absRad, centerY - absRad, 2 * absRad, 2 * absRad,
-		            Math.toDegrees(angleA), Math.toDegrees(angleB - angleA), Arc2D
-				            .CHORD);
+				Math.toDegrees(angleA), Math.toDegrees(angleB - angleA), Arc2D.CHORD);
 
 		target.append(_arc, false);
 	}
@@ -133,13 +125,12 @@ public final class ArcForm extends BaseForm<ArcForm>
 	public void writeColoredShapeForRuntime(final Runtime runtime, final ColoredShape
 			coloredShape)
 	{
-		final DataSet dataSet = runtime.getDataSet();
 		coloredShape.setBackgroundColor(
-				_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
+				_fillColorAttribute.getValue().getValueForRuntime(runtime));
 		coloredShape.setStrokeColor(
-				_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
+				_strokeColorAttribute.getValue().getValueForRuntime(runtime));
 		coloredShape.setStrokeWidth(
-				_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
+				_strokeWidthAttribute.getValue().getValueForRuntime(runtime));
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
 

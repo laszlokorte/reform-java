@@ -1,6 +1,6 @@
 package reform.core.forms;
 
-import reform.core.attributes.AttributeSet;
+import reform.core.attributes.*;
 import reform.core.forms.anchors.Anchor;
 import reform.core.forms.outline.Outline;
 import reform.core.forms.relations.ExposedPoint;
@@ -20,9 +20,9 @@ import java.awt.geom.GeneralPath;
 
 public interface Form extends Identifiable<Form>, Named
 {
-	Value DEFAULT_FILL_COLOR = new Value(0x99888888, true);
-	Value DEFAULT_STROKE_COLOR = new Value(0xff333333, true);
-	Value DEFAULT_STROKE_WIDTH = new Value(1);
+	int DEFAULT_FILL_COLOR = 0x99888888;
+	int DEFAULT_STROKE_COLOR = 0xff333333;
+	double DEFAULT_STROKE_WIDTH = 1;
 
 	int getSizeOnStack();
 

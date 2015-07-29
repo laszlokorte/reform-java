@@ -8,6 +8,10 @@ public class ConstantScalarValue implements ScalarValue
 {
 	private double _scalar;
 
+	public ConstantScalarValue(double scalar) {
+		_scalar = scalar;
+	}
+
 	@Override
 	public double getValueForRuntime(final reform.core.runtime.Runtime runtime)
 	{

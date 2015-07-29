@@ -7,6 +7,12 @@ public class ConstantIdValue<T> implements IdValue<T>
 {
 	private Identifier<T> _identifier;
 
+
+	public ConstantIdValue(Identifier<T> id) {
+		_identifier = id;
+	}
+
+
 	@Override
 	public Identifier<T> getValueForRuntime(final reform.core.runtime.Runtime runtime)
 	{

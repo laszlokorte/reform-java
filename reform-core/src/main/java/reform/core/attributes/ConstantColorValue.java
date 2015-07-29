@@ -7,6 +7,10 @@ public class ConstantColorValue implements ColorValue
 
 	private int _color= 0;
 
+	public ConstantColorValue(int color) {
+		_color = color;
+	}
+
 	@Override
 	public int getValueForRuntime(final reform.core.runtime.Runtime runtime)
 	{

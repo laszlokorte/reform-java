@@ -2,6 +2,8 @@ package reform.core.forms;
 
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
+import reform.core.attributes.ConstantIdValue;
+import reform.core.attributes.IdValue;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.NullOutline;
 import reform.core.forms.outline.Outline;
@@ -14,8 +16,6 @@ import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.RuntimeError;
-import reform.data.sheet.Value;
-import reform.data.sheet.expression.Expression;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
@@ -28,7 +28,8 @@ import java.awt.geom.GeneralPath;
 public final class PictureForm extends BaseForm<PictureForm>
 {
 
-	static private final Value DEFAULT_PICTURE_ID = new Value(0);
+	static private final Identifier<?extends  Picture> DEFAULT_PICTURE_ID =
+			new Identifier<>(-1);
 	static private final int SIZE = 5;
 
 	private final transient StaticPoint _centerPoint = new StaticPoint(getId(), 0);
@@ -42,18 +43,15 @@ public final class PictureForm extends BaseForm<PictureForm>
 	private final Rotator _rotator = new CompositeRotator(
 			new BasicPointRotator(_centerPoint), new BasicAngleRotator(_rotation));
 	private final Scaler _scaler = new CompositeScaler(new BasicPointScaler
-			                                                   (_centerPoint), new
-			BasicLengthScaler(_width,
-	                                                                         _rotation,
-	                                                                         0),
-	                                                   new BasicLengthScaler(_height,
-	                                                                         _rotation,
-	                                                                         Math.PI /
-			                                                                         2));
+			(_centerPoint),
+			new BasicLengthScaler(_width, _rotation, 0),
+			new BasicLengthScaler(_height, _rotation, Math.PI / 2));
 
-	private final Attribute _pictureIdAttribute = new Attribute("Picture Id",
-			Attribute.Type.PictureId,
-			DEFAULT_PICTURE_ID);
+	private final Attribute<IdValue<? extends Picture>> _pictureIdAttribute = new
+			Attribute<>(
+			"Picture", IdValue.class, new
+			ConstantIdValue<>(DEFAULT_PICTURE_ID));
+
 	private final AttributeSet _attributes = new AttributeSet(_pictureIdAttribute);
 
 
@@ -75,7 +73,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		{
 			int depth = runtime.getDepth();
 			_sizes[2 * depth - 2] = runtime.getSize().x;
-			_sizes[2 * depth -1] = runtime.getSize().y;
+			_sizes[2 * depth - 1] = runtime.getSize().y;
 		}
 
 		@Override
@@ -104,7 +102,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 					ColoredShape s = new ColoredShape();
 					form.writeColoredShapeForRuntime(runtime, s);
 
-					ColoredShape parentShape = _shapes[depth-1];
+					ColoredShape parentShape = _shapes[depth - 1];
 					parentShape.addSubShape(s);
 				}
 			}
@@ -152,35 +150,31 @@ public final class PictureForm extends BaseForm<PictureForm>
 				new ComposedCartesianPoint(
 						new ScaledLength(_width, PictureAnchor.Side.Right.x * 0.5),
 						new ConstantLength(0)), _rotation)), new Name("Right"),
-		                              Point.Right));
+				Point.Right));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ConstantLength(0),
-				                           new ScaledLength(_height,
-				                                            PictureAnchor.Side.Bottom.y
-						                                            * 0.5)),
+						new ScaledLength(_height, PictureAnchor.Side.Bottom.y * 0.5)),
 				_rotation)), new Name("Bottom"), Point.Bottom));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(
 						new ScaledLength(_width, PictureAnchor.Side.Left.x * 0.5),
 						new ConstantLength(0)), _rotation)), new Name("Left"),
-		                              Point.Left));
+				Point.Left));
 
 		addSnapPoint(new ExposedPoint(new SummedPoint(_centerPoint, new RotatedPoint(
 				new ComposedCartesianPoint(new ConstantLength(0),
-				                           new ScaledLength(_height,
-				                                            PictureAnchor.Side.Top.y * 0.5)),
+						new ScaledLength(_height, PictureAnchor.Side.Top.y * 0.5)),
 				_rotation)), new Name("Top"), Point.Top));
 
 		addAnchor(new PictureAnchor(Anchor.TopLeft, new Name("Top Left"), _centerPoint,
-		                            _rotation, _width, _height,
-		                            PictureAnchor.Side.TopLeft));
+				_rotation, _width, _height, PictureAnchor.Side.TopLeft));
 		addAnchor(new PictureAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint,
 				_rotation, _width, _height, PictureAnchor.Side.TopRight));
 		addAnchor(new PictureAnchor(Anchor.BottomRight, new Name("Bottom Right"),
-				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
-				.BottomRight));
+				_centerPoint, _rotation, _width, _height,
+				PictureAnchor.Side.BottomRight));
 		addAnchor(new PictureAnchor(Anchor.BottomLeft, new Name("Bottom Left"),
 				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
 				.BottomLeft));
@@ -190,14 +184,12 @@ public final class PictureForm extends BaseForm<PictureForm>
 						_rotation,
 						_width, _height, PictureAnchor.Side.Top));
 		addAnchor(new PictureAnchor(Anchor.Right, new Name("Right"), _centerPoint,
-		                            _rotation, _width, _height,
-		                            PictureAnchor.Side.Right));
+				_rotation, _width, _height, PictureAnchor.Side.Right));
 		addAnchor(new PictureAnchor(Anchor.Bottom, new Name("Bottom"), _centerPoint,
-		                            _rotation, _width, _height,
-		                            PictureAnchor.Side.Bottom));
+				_rotation, _width, _height, PictureAnchor.Side.Bottom));
 		addAnchor(
 				new PictureAnchor(Anchor.Left, new Name("Left"), _centerPoint, _rotation,
-				                  _width, _height, PictureAnchor.Side.Left));
+						_width, _height, PictureAnchor.Side.Left));
 	}
 
 	@Override
@@ -212,7 +204,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 		_height.setForRuntime(runtime, maxY - minY);
 		int depth = runtime.getDepth();
 
-		Identifier<?extends Picture> pictureId = new Identifier<>(_pictureIdAttribute.getValue().getValueFor(runtime.getDataSet()).getInteger());
+		Identifier<? extends Picture> pictureId = _pictureIdAttribute.getValue()
+				.getValueForRuntime(runtime);
 
 		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height));
 		if (p != null)
@@ -298,7 +291,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 		double origWidth2 = _sizes[2 * d] / 2.0;
 		double origHeight2 = _sizes[2 * d + 1] / 2.0;
-		if(origWidth2 > 10 && origHeight2 >10)
+		if (origWidth2 > 10 && origHeight2 > 10)
 		{
 			double widthRatio = width2 / origWidth2;
 			double heightRatio = height2 / origHeight2;
@@ -426,12 +419,10 @@ public final class PictureForm extends BaseForm<PictureForm>
 			final double oldCenterY = _center.getYValueForRuntime(runtime);
 
 			final double oldDeltaX = Vector.getRotatedX(_side.x * oldHalfWidth,
-			                                            _side.y * oldHalfHeight,
-			                                            oldRotation);
+					_side.y * oldHalfHeight, oldRotation);
 
 			final double oldDeltaY = Vector.getRotatedY(_side.x * oldHalfWidth,
-			                                            _side.y * oldHalfHeight,
-			                                            oldRotation);
+					_side.y * oldHalfHeight, oldRotation);
 
 			final double oldX = oldCenterX + oldDeltaX;
 			final double oldY = oldCenterY + oldDeltaY;
@@ -440,25 +431,19 @@ public final class PictureForm extends BaseForm<PictureForm>
 			final double oppY = oldCenterY - oldDeltaY;
 
 			final double newX = oldX + Vector.projectionX(deltaX, deltaY,
-			                                              _side.projectionMultiplier *
-					                                              oldDeltaX,
-			                                              _side.projectionMultiplier *
-					                                              oldDeltaY);
+					_side.projectionMultiplier * oldDeltaX,
+					_side.projectionMultiplier * oldDeltaY);
 			final double newY = oldY + Vector.projectionY(deltaX, deltaY,
-			                                              _side.projectionMultiplier *
-					                                              oldDeltaX,
-			                                              _side.projectionMultiplier *
-					                                              oldDeltaY);
+					_side.projectionMultiplier * oldDeltaX,
+					_side.projectionMultiplier * oldDeltaY);
 
 			final double newCenterX = (oppX + newX) / 2;
 			final double newCenterY = (oppY + newY) / 2;
 
 			final double newHalfWidth = Vector.getRotatedX(newX - newCenterX,
-			                                               newY - newCenterY,
-			                                               -oldRotation);
+					newY - newCenterY, -oldRotation);
 			final double newHalfHeight = Vector.getRotatedY(newX - newCenterX,
-			                                                newY - newCenterY,
-			                                                -oldRotation);
+					newY - newCenterY, -oldRotation);
 
 			final double newWidth = 2 * (oldHalfWidth + _side.x * (newHalfWidth - _side
 					.x * oldHalfWidth));
@@ -483,7 +468,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 			final double centerX = _center.getXValueForRuntime(runtime);
 
 			final double deltaX = Vector.getRotatedX(_side.x * halfWidth,
-			                                         _side.y * halfHeight, rotation);
+					_side.y * halfHeight, rotation);
 
 			return centerX + deltaX;
 		}
@@ -499,7 +484,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 			final double centerY = _center.getXValueForRuntime(runtime);
 
 			final double deltaY = Vector.getRotatedY(_side.x * halfWidth,
-			                                         _side.y * halfHeight, rotation);
+					_side.y * halfHeight, rotation);
 
 			return centerY + deltaY;
 		}

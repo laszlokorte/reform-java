@@ -16,8 +16,10 @@ import java.util.Locale;
 public class ExpressionEditor extends JPanel
 {
 	private static final Color _errorColor = Color.RED.darker();
-	private static final Border _errorBorder = BorderFactory.createLineBorder(_errorColor);
-	private static final Border _defaultBorder = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
+	private static final Border _errorBorder = BorderFactory.createLineBorder(
+			_errorColor);
+	private static final Border _defaultBorder = BorderFactory.createLineBorder(
+			Color.LIGHT_GRAY);
 
 	private final ArrayList<ChangeListener> _listeners = new ArrayList<>();
 	private final Parser _parser;
@@ -51,8 +53,9 @@ public class ExpressionEditor extends JPanel
 		setBorder(_defaultBorder);
 
 		add(_textField);
-		_textField.setVisible(false);
+
 		_textField.addActionListener(this::onAction);
+		_textField.setVisible(false);
 
 		addMouseListener(new MouseAdapter()
 		{
@@ -79,8 +82,11 @@ public class ExpressionEditor extends JPanel
 			@Override
 			public void focusLost(final FocusEvent e)
 			{
-				onAction(null);
-				super.focusLost(e);
+				if(_textField.isVisible())
+				{
+					super.focusLost(e);
+					onAction(null);
+				}
 			}
 		});
 	}
@@ -116,6 +122,15 @@ public class ExpressionEditor extends JPanel
 	public void setValue(final double value)
 	{
 		String string = String.format(Locale.ENGLISH, "%.2f", value);
+		setText(string);
+		_label.setForeground(Color.GRAY);
+		setBorder(_defaultBorder);
+
+	}
+
+	public void setValue(final String value)
+	{
+		String string = String.format(Locale.ENGLISH, "\"%s\"", value);
 		setText(string);
 		_label.setForeground(Color.GRAY);
 		setBorder(_defaultBorder);
@@ -172,6 +187,19 @@ public class ExpressionEditor extends JPanel
 		_textField.setText(_prevValue);
 		_textField.setVisible(false);
 		_labelPanel.setVisible(true);
+	}
+
+	public void setValue(final int value, final boolean isColor)
+	{
+		final String string;
+		if(isColor) {
+			string = String.format(Locale.ENGLISH, "#%08X", value);
+		} else  {
+			string = String.format(Locale.ENGLISH, "%d", value);
+		}
+		setText(string);
+		_label.setForeground(Color.GRAY);
+		setBorder(_defaultBorder);
 	}
 
 	public interface Parser

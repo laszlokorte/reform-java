@@ -1,7 +1,6 @@
 package reform.core.forms;
 
-import reform.core.attributes.Attribute;
-import reform.core.attributes.AttributeSet;
+import reform.core.attributes.*;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.CircleOutline;
 import reform.core.forms.outline.Outline;
@@ -39,16 +38,13 @@ public final class CircleForm extends BaseForm<CircleForm>
 
 	private final Outline _outline = new CircleOutline(_centerPoint, _radius, _rotation);
 
-	private final Attribute _fillColorAttribute = new Attribute("Fill Color",
-	                                                            Attribute.Type.Color,
-	                                                            DEFAULT_FILL_COLOR);
-	private final Attribute _strokeColorAttribute = new Attribute("Stroke Color",
-	                                                              Attribute.Type.Color,
-	                                                              DEFAULT_STROKE_COLOR);
+	private final Attribute<ColorValue> _fillColorAttribute = new Attribute<>("Fill Color",
+			ColorValue.class, new ConstantColorValue(DEFAULT_FILL_COLOR));
+	private final Attribute<ColorValue> _strokeColorAttribute = new Attribute<>("Stroke Color",
+			ColorValue.class, new ConstantColorValue(DEFAULT_STROKE_COLOR));
 
-	private final Attribute _strokeWidthAttribute = new Attribute("Stroke Width",
-	                                                              Attribute.Type.Number,
-	                                                              DEFAULT_STROKE_WIDTH);
+	private final Attribute<ScalarValue> _strokeWidthAttribute = new Attribute<>("Stroke Width",
+			ScalarValue.class, new ConstantScalarValue(DEFAULT_STROKE_WIDTH));
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute,
 	                                                          _strokeColorAttribute,
@@ -126,11 +122,11 @@ public final class CircleForm extends BaseForm<CircleForm>
 		final DataSet dataSet = runtime.getDataSet();
 
 		coloredShape.setBackgroundColor(
-				_fillColorAttribute.getValue().getValueFor(dataSet).getColor());
+				_fillColorAttribute.getValue().getValueForRuntime(runtime));
 		coloredShape.setStrokeColor(
-				_strokeColorAttribute.getValue().getValueFor(dataSet).getColor());
+				_strokeColorAttribute.getValue().getValueForRuntime(runtime));
 		coloredShape.setStrokeWidth(
-				_strokeWidthAttribute.getValue().getValueFor(dataSet).getInteger());
+				_strokeWidthAttribute.getValue().getValueForRuntime(runtime));
 
 		appendToPathForRuntime(runtime, coloredShape.getPath());
 	}
