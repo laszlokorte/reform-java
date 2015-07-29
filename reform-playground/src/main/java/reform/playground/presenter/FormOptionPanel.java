@@ -142,7 +142,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 			_guideToggle.setSelected(drawType == DrawingType.Guide);
 			_panel.add(_guideToggle);
-			_panel.add(_struts.take());
 
 			_panel.add(_glue);
 
@@ -160,10 +159,10 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					panel.setEnabled(drawType == DrawingType.Draw);
 
 				}
-				else if (type == ScalarValue.class)
+				else if (type == NumberValue.class)
 				{
 					final NumberPanel panel = getNumberPanel(
-							(Attribute<ScalarValue>) attr);
+							(Attribute<NumberValue>) attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
@@ -177,7 +176,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				else if (type == IdValue.class)
 				{
 					final PictureIdPanel panel = getPictureIdPanel(
-							(Attribute<IdValue<? extends Picture>>) attr);
+							(Attribute<IdValue<Picture>>) attr);
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
@@ -197,7 +196,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		_colorPanels.clean(ColorPanel::dispose);
 	}
 
-	private NumberPanel getNumberPanel(final Attribute<ScalarValue> attr)
+	private NumberPanel getNumberPanel(final Attribute<NumberValue> attr)
 	{
 		final NumberPanel p = _numberPanels.take();
 		p.setAttribute(attr);
@@ -214,8 +213,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	}
 
 
-	private PictureIdPanel getPictureIdPanel(final Attribute<IdValue<? extends Picture>>
-			                                         attr)
+	private PictureIdPanel getPictureIdPanel(final Attribute<IdValue<Picture>> attr)
 	{
 		final PictureIdPanel p = _pictureIdPool.take();
 		p.setAttribute(attr);
@@ -304,7 +302,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 	{
 		private final ExpressionEditor _expressionEditor;
 		private final FormOptionPanel _delegate;
-		private Attribute<ScalarValue> _attribute;
+		private Attribute<NumberValue> _attribute;
 		private final JLabel _label = new JLabel();
 		private final JPanel _panel = new JPanel(
 				new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -322,40 +320,25 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		{
 			if (_attribute != null)
 			{
-				ScalarValue v = _attribute.getValue();
+				NumberValue v = _attribute.getValue();
 
-				if (v instanceof ConstantScalarValue)
-				{
-					_attribute.setValue(
-							new ExpressionScalarValue(_expressionEditor.getExpression
-									()));
-				}
-				else if (v instanceof ExpressionScalarValue)
-				{
-					((ExpressionScalarValue) v).setExpression(
-							_expressionEditor.getExpression());
-				}
+
+				v.setExpression(_expressionEditor.getExpression());
+
 
 				_delegate.onChange();
 			}
 		}
 
-		void setAttribute(final Attribute<ScalarValue> attr)
+		void setAttribute(final Attribute<NumberValue> attr)
 		{
 			if (attr != null)
 			{
 				_attribute = null; // prevent cycle
-				ScalarValue v = attr.getValue();
+				NumberValue v = attr.getValue();
 
-				if (v instanceof ConstantScalarValue)
-				{
-					_expressionEditor.setValue(((ConstantScalarValue) v).getValue());
-				}
-				else if (v instanceof ExpressionScalarValue)
-				{
-					_expressionEditor.setExpression(
-							((ExpressionScalarValue) v).getExpression());
-				}
+				_expressionEditor.setExpression(v.getExpression());
+
 				_expressionEditor.setToolTipText(attr.getName());
 				//_label.setText(attr.getName());
 			}
@@ -397,19 +380,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			{
 				StringValue v = _attribute.getValue();
 
-
-				if (v instanceof ConstantStringValue)
-				{
-					_attribute.setValue(
-							new ExpressionStringValue(_expressionEditor.getExpression
-									()));
-				}
-				else if (v instanceof ExpressionStringValue)
-				{
-					((ExpressionStringValue) v).setExpression(
-							_expressionEditor.getExpression());
-				}
-
+				v.setExpression(_expressionEditor.getExpression());
 
 				_delegate.onChange();
 			}
@@ -422,15 +393,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				_attribute = null; // prevent cycle
 				StringValue v = attr.getValue();
 
-				if (v instanceof ConstantStringValue)
-				{
-					_expressionEditor.setValue(((ConstantStringValue) v).getString());
-				}
-				else if (v instanceof ExpressionStringValue)
-				{
-					_expressionEditor.setExpression(
-							((ExpressionStringValue) v).getExpression());
-				}
+				_expressionEditor.setExpression(v.getExpression());
+
 				_expressionEditor.setToolTipText(attr.getName());
 				//_label.setText(attr.getName());
 			}
@@ -450,10 +414,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private static class PictureIdPanel
 	{
-		private final JComboBox<Identifier<? extends Picture>> _optionPane = new
-				JComboBox<>();
+		private final JComboBox<Picture> _optionPane = new JComboBox<>();
 		private final FormOptionPanel _delegate;
-		private Attribute<IdValue<? extends Picture>> _attribute;
+		private Attribute<IdValue<Picture>> _attribute;
 		private final JPanel _panel = new JPanel(
 				new FlowLayout(FlowLayout.LEADING, 0, 0));
 
@@ -464,27 +427,68 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			//_expressionEditor.addChangeListener(this::onModelChange);
 			//_panel.add(_label);
 			_panel.add(_optionPane);
+			_optionPane.setFocusable(false);
 			_optionPane.addActionListener(this::onModelChange);
-		}
+			_optionPane.setRenderer(new DefaultListCellRenderer()
+			{
+				@Override
+				public Component getListCellRendererComponent(final JList<?> list, final
+				Object value, final int index, final boolean isSelected, final boolean
+						                                              cellHasFocus)
+				{
+					return super.getListCellRendererComponent(list,
+							value == null ? "" : ((Picture) value).getName().getValue(),
+							index, isSelected, cellHasFocus);
+				}
+			});
+
+			delegate._eProject.addListener(new EventedProject.Listener()
+			{
+				@Override
+				public void onPictureAdded(final EventedProject project, final Identifier<? extends Picture> pictureId)
+				{
+					setAttribute(_attribute);
+				}
+
+				@Override
+				public void onPictureRemoved(final EventedProject project, final Identifier<? extends Picture> pictureId)
+				{
+					setAttribute(_attribute);
+				}
+
+				@Override
+				public void onPictureChanged(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
+				{
+
+				}
+			});
+	}
 
 		private void onModelChange(final ActionEvent changeEvent)
 		{
 			if (_attribute != null)
 			{
-				IdValue<? extends Picture> v = _attribute.getValue();
+				IdValue<Picture> v = _attribute.getValue();
+				Picture picture = (Picture) _optionPane.getSelectedItem();
 
-				if (v instanceof ConstantIdValue)
+				if (picture == null)
 				{
-					Identifier<? extends Picture> id = (Identifier<? extends Picture>)
-							_optionPane.getSelectedItem();
-					((ConstantIdValue) v).setIdentifier(id);
+					v.setIdentifier(null);
+				}
+				else
+				{
+					Identifier<Picture> id = (Identifier<Picture>) (picture).getId();
+					v.setIdentifier(id);
 				}
 
-				_delegate.onChange();
+				SwingUtilities.invokeLater(() -> {
+					_delegate.onChange();
+				});
 			}
 		}
 
-		void setAttribute(final Attribute<IdValue<? extends Picture>> attr)
+		void setAttribute(final Attribute<IdValue<Picture>> attr)
 		{
 			if (attr != null)
 			{
@@ -494,11 +498,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				//_expressionEditor.setToolTipText(attr.getName());
 				//_label.setText(attr.getName());
 				_optionPane.removeAllItems();
+				_optionPane.addItem(null);
+
 				for (int i = 0, j = _delegate._eProject.getPictureCount(); i < j; i++)
 				{
-					_optionPane.addItem(_delegate._eProject.getPictures().get(i));
+					_optionPane.addItem(_delegate._eProject.getRaw().getPicture(
+							_delegate._eProject.getPictures().get(i)));
 				}
-				_optionPane.setSelectedItem(attr.getValue().getValueForRuntime(null));
+				_optionPane.setSelectedItem(_delegate._eProject.getRaw().getPicture(attr.getValue().getIdentifier()));
 			}
 			_attribute = attr;
 		}
@@ -540,7 +547,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			}
 			_expressionChanged = true;
 
-			try {
+			try
+			{
 				Expression expression = _expressionEditor.getExpression();
 				ColorValue v = _attribute.getValue();
 
@@ -588,7 +596,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			}
 			_colorChanged = true;
 
-			try {
+			try
+			{
 				ColorValue v = _attribute.getValue();
 
 				if (v instanceof ConstantColorValue)
@@ -619,14 +628,14 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 				if (v instanceof ConstantColorValue)
 				{
-					int val =
-							((ConstantColorValue) v).getColor();
+					int val = ((ConstantColorValue) v).getColor();
 					_expressionEditor.setValue(val, true);
 					_colorPicker.getModel().setHexARGB(val);
 				}
 				else if (v instanceof ExpressionColorValue)
 				{
-					_expressionEditor.setExpression(((ExpressionColorValue) v).getExpression());
+					_expressionEditor.setExpression(
+							((ExpressionColorValue) v).getExpression());
 					_colorPicker.getModel().setHexARGB(0);
 					_colorPicker.setMixed();
 				}

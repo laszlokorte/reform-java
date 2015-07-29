@@ -9,6 +9,7 @@ import reform.data.sheet.DataSet;
 import reform.identity.FastIterable;
 import reform.identity.Identifier;
 import reform.math.Vec2i;
+import reform.math.Vector;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class ProjectRuntime implements Runtime
 	}
 
 	@Override
-	public Picture subCall(Identifier<? extends Picture> picId, int width, int height)
+	public Picture subCall(Identifier<? extends Picture> picId, int width, int height, boolean proportional)
 	{
 		Picture picture = _project.getPicture(picId);
 		if (_depth + 1 >= _frames.length || picture == null)
@@ -44,7 +45,16 @@ public class ProjectRuntime implements Runtime
 		}
 
 		_depth += 1;
-		_frames[_depth]._size.set(width, height);
+		if(proportional) {
+			Vec2i size = picture.getSize();
+			double scaleFactor = (1.0*width / height > 1.0*size.x / size.y)
+					? 1.0*height / size.y
+					: 1.0*width / size.x;
+			_frames[_depth]._size.set((int)(scaleFactor * size.x), (int)(scaleFactor * size.y));
+		} else
+		{
+			_frames[_depth]._size.set(width, height);
+		}
 		return picture;
 	}
 

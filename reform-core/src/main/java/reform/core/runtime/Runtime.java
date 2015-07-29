@@ -12,7 +12,7 @@ public interface Runtime
 {
 	int MAX_DEPTH = 3;
 
-	Picture subCall(Identifier<? extends Picture> id, int width, int height);
+	Picture subCall(Identifier<? extends Picture> id, int width, int height, boolean fit);
 
 	void subEnd();
 

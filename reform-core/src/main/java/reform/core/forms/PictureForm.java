@@ -2,7 +2,6 @@ package reform.core.forms;
 
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
-import reform.core.attributes.ConstantIdValue;
 import reform.core.attributes.IdValue;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -49,8 +48,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final Attribute<IdValue<? extends Picture>> _pictureIdAttribute = new
 			Attribute<>(
-			"Picture", IdValue.class, new
-			ConstantIdValue<>(DEFAULT_PICTURE_ID));
+			"Picture", IdValue.class, new IdValue<>(DEFAULT_PICTURE_ID));
 
 	private final AttributeSet _attributes = new AttributeSet(_pictureIdAttribute);
 
@@ -207,7 +205,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		Identifier<? extends Picture> pictureId = _pictureIdAttribute.getValue()
 				.getValueForRuntime(runtime);
 
-		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height));
+		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height), true);
 		if (p != null)
 		{
 			_shapes[depth].reset();

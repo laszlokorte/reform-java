@@ -34,8 +34,8 @@ public final class RectangleForm extends BaseForm<RectangleForm>
 	private final Attribute<ColorValue> _strokeColorAttribute = new Attribute<>("Stroke Color",
 			ColorValue.class, new ConstantColorValue(DEFAULT_STROKE_COLOR));
 
-	private final Attribute<ScalarValue> _strokeWidthAttribute = new Attribute<>("Stroke Width",
-			ScalarValue.class, new ConstantScalarValue(DEFAULT_STROKE_WIDTH));
+	private final Attribute<NumberValue> _strokeWidthAttribute = new Attribute<>("Stroke Width",
+			NumberValue.class, new NumberValue(DEFAULT_STROKE_WIDTH));
 
 
 	private final AttributeSet _attributes = new AttributeSet(_fillColorAttribute,

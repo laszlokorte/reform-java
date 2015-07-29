@@ -2,6 +2,7 @@ package reform.core.forms.relations;
 
 import reform.core.runtime.Runtime;
 import reform.core.runtime.relations.Direction;
+import reform.math.Vector;
 
 public class ProportionalDirection implements Direction
 {
@@ -38,16 +39,12 @@ public class ProportionalDirection implements Direction
 
 	private double getProportionedX(final double dx, final double dy)
 	{
-		final double min = Math.min(Math.abs(dx), Math.abs(dy / _proportion));
-
-		return Math.signum(dx) * min;
+		return Vector.getProportionedX(dx, dy, _proportion);
 	}
 
 	private double getProportionedY(final double dx, final double dy)
 	{
-		final double min = Math.min(Math.abs(dx), Math.abs(dy / _proportion));
-
-		return Math.signum(dy) * min * _proportion;
+		return Vector.getProportionedX(dx, dy, _proportion);
 	}
 
 	public double getProportion()

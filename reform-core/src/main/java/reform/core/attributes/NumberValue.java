@@ -1,16 +1,21 @@
 package reform.core.attributes;
 
+import reform.data.sheet.Value;
+import reform.data.sheet.expression.ConstantExpression;
 import reform.data.sheet.expression.Expression;
 
-public class ExpressionScalarValue implements ScalarValue
+public class NumberValue
 {
 	private Expression _expression;
 
-	public ExpressionScalarValue(Expression expression) {
+	public NumberValue(Expression expression) {
 		_expression = expression;
 	}
 
-	@Override
+	public NumberValue(double value) {
+		_expression = new ConstantExpression(new Value(value));
+	}
+
 	public double getValueForRuntime(final reform.core.runtime.Runtime runtime)
 	{
 		return _expression.getValueFor(runtime.getDataSet()).getDouble();

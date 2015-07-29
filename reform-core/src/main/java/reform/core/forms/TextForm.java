@@ -11,7 +11,6 @@ import reform.core.forms.transformation.*;
 import reform.core.graphics.ColoredShape;
 import reform.core.runtime.Runtime;
 import reform.data.sheet.DataSet;
-import reform.data.sheet.Value;
 import reform.identity.Identifier;
 import reform.identity.IdentityToken;
 import reform.math.Vector;
@@ -40,26 +39,26 @@ public final class TextForm extends BaseForm<TextForm>
 	private final transient StaticPoint _endPoint = new StaticPoint(getId(), 2);
 	private final transient StaticLength _height = new StaticLength(getId(), 4);
 	private final transient Translator _translator = new BasicTranslator(_startPoint,
-	                                                                     _endPoint);
+			_endPoint);
 	private final transient Rotator _rotator = new BasicPointRotator(_startPoint,
-	                                                                 _endPoint);
+			_endPoint);
 	private final transient Scaler _scaler = new CompositeScaler(
 			new BasicPointScaler(_startPoint, _endPoint), new AbsoluteScaler(
 			new BasicLengthScaler(_height, new ConstantRotationAngle(0), 0)));
 	private final Outline _outline = new NullOutline();
 
-	private final Attribute<ColorValue> _textColorAttribute = new Attribute<>("Fill Color",
-			ColorValue.class,  new ConstantColorValue(DEFAULT_TEXT_COLOR));
-	private final Attribute<ScalarValue> _fontSizeAttribute = new Attribute<>("Font Size",
-			ScalarValue.class, new ConstantScalarValue(DEFAULT_SCALE));
+	private final Attribute<ColorValue> _textColorAttribute = new Attribute<>(
+			"Fill Color", ColorValue.class, new ConstantColorValue(DEFAULT_TEXT_COLOR));
+	private final Attribute<NumberValue> _fontSizeAttribute = new Attribute<>("Font " +
+			"Size",
+			NumberValue.class, new NumberValue(DEFAULT_SCALE));
 
 	private final Attribute<StringValue> _textAttribute = new Attribute<>("Text",
-			StringValue.class, new ConstantStringValue(DEFAULT_TEXT));
+			StringValue.class, new StringValue(DEFAULT_TEXT));
 
 
 	private final AttributeSet _attributes = new AttributeSet(_textColorAttribute,
-	                                                          _fontSizeAttribute,
-	                                                          _textAttribute);
+			_fontSizeAttribute, _textAttribute);
 
 	private TextForm(final Identifier<TextForm> id, final Name name)
 	{
@@ -68,9 +67,9 @@ public final class TextForm extends BaseForm<TextForm>
 		addSnapPoint(new ExposedPoint(_endPoint, new Name("End"), Point.End));
 		addSnapPoint(
 				new ExposedPoint(new OffsetCenterPoint(_startPoint, _endPoint, _height),
-				                 new Name("Top"), Point.Top));
+						new Name("Top"), Point.Top));
 		addSnapPoint(new ExposedPoint(new CenterPoint(_startPoint, _endPoint),
-		                              new Name("Bottom"), Point.Bottom));
+				new Name("Bottom"), Point.Bottom));
 
 
 		addAnchor(new StaticPointAnchor(Anchor.Start, new Name("Start"), _startPoint));
@@ -78,7 +77,7 @@ public final class TextForm extends BaseForm<TextForm>
 
 		addAnchor(
 				new OrthogonalLengthAnchor(Anchor.Top, new Name("ControlPoint"), _height,
-				                           _startPoint, _endPoint));
+						_startPoint, _endPoint));
 	}
 
 	@Override
@@ -97,8 +96,7 @@ public final class TextForm extends BaseForm<TextForm>
 		final DataSet dataSet = runtime.getDataSet();
 
 		final GlyphVector v = _font.createGlyphVector(_metrics.getFontRenderContext(),
-		                                              _textAttribute.getValue()
-				                                              .getValueForRuntime(runtime));
+				_textAttribute.getValue().getValueForRuntime(runtime));
 
 		final double endX = _endPoint.getXValueForRuntime(runtime);
 		final double endY = _endPoint.getYValueForRuntime(runtime);

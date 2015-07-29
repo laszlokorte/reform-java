@@ -5,6 +5,20 @@ public final class Vector
 
 	public static final double EPSILON = 0.000001;
 
+	public static double getProportionedX(final double dx, final double dy, double prop)
+	{
+		final double min = Math.min(Math.abs(dx), Math.abs(dy / prop));
+
+		return Math.signum(dx) * min;
+	}
+
+	public static double getProportionedY(final double dx, final double dy, double prop)
+	{
+		final double min = Math.min(Math.abs(dx), Math.abs(dy / prop));
+
+		return Math.signum(dy) * min * prop;
+	}
+
 	/**
 	 * Return the length of the given vector.
 	 */
