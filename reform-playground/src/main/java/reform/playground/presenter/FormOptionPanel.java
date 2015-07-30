@@ -666,10 +666,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				}
 				else if (v instanceof ExpressionColorValue)
 				{
-					_expressionEditor.setExpression(
-							((ExpressionColorValue) v).getExpression());
-					_colorPicker.getModel().setHexARGB(0);
-					_colorPicker.setMixed();
+					Expression ce =
+							((ExpressionColorValue) v).getExpression();
+					_expressionEditor.setExpression(ce);
+					if(ce instanceof ConstantExpression) {
+						_colorPicker.getModel().setHexARGB(((ConstantExpression) ce).getValue().getColor());
+					} else {
+						_colorPicker.getModel().setHexARGB(0);
+						_colorPicker.setMixed();
+					}
 				}
 
 				_colorPicker.getButton().setToolTipText(attr.getName());

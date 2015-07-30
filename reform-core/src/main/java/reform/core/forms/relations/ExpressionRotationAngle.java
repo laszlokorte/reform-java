@@ -18,13 +18,13 @@ public class ExpressionRotationAngle implements RotationAngle
 	@Override
 	public double getValueForRuntime(final Runtime runtime)
 	{
-		return _angleExpression.getValueFor(runtime.getDataSet()).getDouble();
+		return _angleExpression.getValueFor(runtime.getDataSet()).getDouble() * 2 * Math.PI;
 	}
 
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return _angleExpression.asString(false);
+		return _angleExpression.asString(true);
 	}
 
 	@Override

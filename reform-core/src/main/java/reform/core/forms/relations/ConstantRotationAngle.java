@@ -17,13 +17,13 @@ public class ConstantRotationAngle implements RotationAngle
 	@Override
 	public double getValueForRuntime(final Runtime runtime)
 	{
-		return _angle;
+		return _angle * 2 * Math.PI;
 	}
 
 	@Override
 	public String getDescription(final Analyzer analyzer)
 	{
-		return String.format("%.2f%%", 50 * _angle / Math.PI);
+		return String.format("%.2f%%", _angle * 100);
 	}
 
 	@Override

@@ -265,7 +265,7 @@ public class RotateFormTool implements Tool
 		                                                              pivotPos.x,
 		                                                              pivotPos.y);
 
-		return stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle;
+		return (stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle) / (2*Math.PI);
 	}
 
 
