@@ -30,6 +30,7 @@
  - simplify arc calculation
 
  - color picker Hue slider singularity
+ - keep selection when canceling tool (focus get's reset)
 
  - sort shapes correctly
 
