@@ -2,6 +2,7 @@ package reform.core.forms;
 
 import reform.core.attributes.Attribute;
 import reform.core.attributes.AttributeSet;
+import reform.core.attributes.BooleanValue;
 import reform.core.attributes.IdValue;
 import reform.core.forms.anchors.BaseAnchor;
 import reform.core.forms.outline.NullOutline;
@@ -49,8 +50,11 @@ public final class PictureForm extends BaseForm<PictureForm>
 	private final Attribute<IdValue<? extends Picture>> _pictureIdAttribute = new
 			Attribute<>(
 			"Picture", IdValue.class, new IdValue<>(DEFAULT_PICTURE_ID));
+	private final Attribute<BooleanValue> _proportionallyAttribute = new
+			Attribute<>(
+			"Proportionally", BooleanValue.class, new BooleanValue(true));
 
-	private final AttributeSet _attributes = new AttributeSet(_pictureIdAttribute);
+	private final AttributeSet _attributes = new AttributeSet(_proportionallyAttribute, _pictureIdAttribute);
 
 
 	private final ColoredShape[] _shapes = new ColoredShape[Runtime.MAX_DEPTH];
@@ -171,8 +175,8 @@ public final class PictureForm extends BaseForm<PictureForm>
 		addAnchor(new PictureAnchor(Anchor.TopRight, new Name("Top Right"), _centerPoint,
 				_rotation, _width, _height, PictureAnchor.Side.TopRight));
 		addAnchor(new PictureAnchor(Anchor.BottomRight, new Name("Bottom Right"),
-				_centerPoint, _rotation, _width, _height,
-				PictureAnchor.Side.BottomRight));
+				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
+				.BottomRight));
 		addAnchor(new PictureAnchor(Anchor.BottomLeft, new Name("Bottom Left"),
 				_centerPoint, _rotation, _width, _height, PictureAnchor.Side
 				.BottomLeft));
@@ -205,7 +209,9 @@ public final class PictureForm extends BaseForm<PictureForm>
 		Identifier<? extends Picture> pictureId = _pictureIdAttribute.getValue()
 				.getValueForRuntime(runtime);
 
-		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height), true);
+		boolean keepProportion = _proportionallyAttribute.getValue().getValueForRuntime(
+				runtime);
+		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height), keepProportion);
 		if (p != null)
 		{
 			_shapes[depth].reset();
@@ -342,6 +348,11 @@ public final class PictureForm extends BaseForm<PictureForm>
 	private void refresh(final Runtime runtime)
 	{
 
+	}
+
+	public void setPicture(final Identifier<?extends Picture> pictureId)
+	{
+		_pictureIdAttribute.setValue(new IdValue<>(pictureId));
 	}
 
 	public static PictureForm construct(final Identifier<PictureForm> id, final Name

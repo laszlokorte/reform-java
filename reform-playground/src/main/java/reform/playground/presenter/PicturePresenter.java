@@ -7,6 +7,7 @@ import reform.core.pool.Pool;
 import reform.core.pool.SimplePool;
 import reform.core.procedure.instructions.Instruction;
 import reform.core.procedure.instructions.NullInstruction;
+import reform.core.project.Picture;
 import reform.core.runtime.Evaluable;
 import reform.core.runtime.ProjectRuntime;
 import reform.core.runtime.Runtime;
@@ -428,7 +429,7 @@ public class PicturePresenter
 					                                                  FormFactory<PictureForm>(
 					                                                  "Picture",
 					                                                  idEmitter,
-					                                                  PictureForm::construct),
+					                                                  PictureForm::construct, this::setupPictureForm),
 			                                                  _toolState, _cursor,
 			                                                  _hitTester, _focus,
 			                                                  eProcedure);
@@ -876,6 +877,11 @@ public class PicturePresenter
 		actionMapProcedure.put("up", new FocusPreviousInstructionAction(_focus));
 
 		actionMapProcedure.put("down", new FocusNextInstructionAction(_focus));
+	}
+
+	private void setupPictureForm(final PictureForm pictureForm)
+	{
+		pictureForm.setPicture(_picture.getNearestPicture());
 	}
 
 	public void addListener(final Listener listener)

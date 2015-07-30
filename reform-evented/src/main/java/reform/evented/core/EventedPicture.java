@@ -126,6 +126,20 @@ public class EventedPicture
 		return _pictureId;
 	}
 
+	public Identifier<? extends Picture> getNearestPicture()
+	{
+		int ownIndex = _evtProject.getIndexOf(_pictureId);
+		int count = _evtProject.getPictureCount();
+
+		if(ownIndex+1 < count) {
+			return _evtProject.getPictureAtIndex(ownIndex+1);
+		} else if(ownIndex > 0) {
+			return _evtProject.getPictureAtIndex(ownIndex-1);
+		} else {
+			return _pictureId;
+		}
+	}
+
 	public interface Listener
 	{
 		void onNameChanged(EventedPicture picture);

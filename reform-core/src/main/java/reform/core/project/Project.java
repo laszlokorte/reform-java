@@ -42,4 +42,9 @@ public final class Project
 	{
 		return _pictures.size();
 	}
+
+	public int getIndexOf(final Identifier<? extends Picture> pictureId)
+	{
+		return _pictures.indexOf(pictureId);
+	}
 }

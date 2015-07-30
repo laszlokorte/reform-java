@@ -37,10 +37,12 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			() -> new ColorPanel(this));
 	private final Pool<NumberPanel> _numberPanels = new SimplePool<>(
 			() -> new NumberPanel(this));
-	private final Pool<PictureIdPanel> _pictureIdPool = new SimplePool<>(
+	private final Pool<PictureIdPanel> _pictureIdPanels = new SimplePool<>(
 			() -> new PictureIdPanel(this));
 	private final Pool<StringPanel> _stringPanels = new SimplePool<>(
 			() -> new StringPanel(this));
+	private final Pool<BooleanPanel> _booleanPanels = new SimplePool<>(
+			() -> new BooleanPanel(this));
 	private final Pool<Component> _struts = new SimplePool<>(
 			() -> Box.createHorizontalStrut(5));
 	private final SwingIcon _rulerIcon = new SwingIcon(new RulerIcon());
@@ -130,6 +132,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		releaseColorPanels();
 		releaseNumberPanels();
 		releaseStringPanels();
+		releaseBooleanPanels();
 		_struts.release();
 		_panel.remove(_guideToggle);
 		_panel.removeAll();
@@ -180,6 +183,13 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					_panel.add(panel.getComponent());
 					panel.setEnabled(drawType == DrawingType.Draw);
 				}
+				else if (type == BooleanValue.class)
+				{
+					final BooleanPanel panel = getBooleanPanel(
+							(Attribute<BooleanValue>) attr);
+					_panel.add(panel.getComponent());
+					panel.setEnabled(drawType == DrawingType.Draw);
+				}
 				_panel.add(_struts.take());
 
 			}
@@ -215,7 +225,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 
 	private PictureIdPanel getPictureIdPanel(final Attribute<IdValue<Picture>> attr)
 	{
-		final PictureIdPanel p = _pictureIdPool.take();
+		final PictureIdPanel p = _pictureIdPanels.take();
+		p.setAttribute(attr);
+
+		return p;
+	}
+
+	private BooleanPanel getBooleanPanel(final Attribute<BooleanValue> attr)
+	{
+		final BooleanPanel p = _booleanPanels.take();
 		p.setAttribute(attr);
 
 		return p;
@@ -253,9 +271,17 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 		});
 	}
 
+	private void releaseBooleanPanels()
+	{
+		_booleanPanels.release((p) -> {
+			p.setAttribute(null);
+			_panel.remove(p.getComponent());
+		});
+	}
+
 	private void releasePictureIdPanels()
 	{
-		_pictureIdPool.release((p) -> {
+		_pictureIdPanels.release((p) -> {
 			p.setAttribute(null);
 			_panel.remove(p.getComponent());
 		});
@@ -276,7 +302,9 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 				_colorPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected()));
 				_numberPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected
 						()));
-				_pictureIdPool.eachActive(
+				_pictureIdPanels.eachActive((p) -> p.setEnabled(!_guideToggle.isSelected
+						()));
+				_booleanPanels.eachActive(
 						(p) -> p.setEnabled(!_guideToggle.isSelected()));
 			}
 
@@ -437,7 +465,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 						                                              cellHasFocus)
 				{
 					return super.getListCellRendererComponent(list,
-							value == null ? "---" : ((Picture) value).getName().getValue(),
+							value == null ? "---" : ((Picture) value).getName()
+									.getValue(),
 							index, isSelected, cellHasFocus);
 				}
 			});
@@ -445,13 +474,15 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			delegate._eProject.addListener(new EventedProject.Listener()
 			{
 				@Override
-				public void onPictureAdded(final EventedProject project, final Identifier<? extends Picture> pictureId)
+				public void onPictureAdded(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
 				{
 					setAttribute(_attribute);
 				}
 
 				@Override
-				public void onPictureRemoved(final EventedProject project, final Identifier<? extends Picture> pictureId)
+				public void onPictureRemoved(final EventedProject project, final
+				Identifier<? extends Picture> pictureId)
 				{
 					setAttribute(_attribute);
 				}
@@ -505,7 +536,8 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					_optionPane.addItem(_delegate._eProject.getRaw().getPicture(
 							_delegate._eProject.getPictures().get(i)));
 				}
-				_optionPane.setSelectedItem(_delegate._eProject.getRaw().getPicture(attr.getValue().getIdentifier()));
+				_optionPane.setSelectedItem(_delegate._eProject.getRaw().getPicture(
+						attr.getValue().getIdentifier()));
 			}
 			_attribute = attr;
 		}
@@ -662,6 +694,63 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 			{
 				_colorPicker.dispose();
 			}
+		}
+	}
+
+
+	private static class BooleanPanel
+	{
+		private final JCheckBox _checkbox;
+		private final FormOptionPanel _delegate;
+		private Attribute<BooleanValue> _attribute;
+		private final JLabel _label = new JLabel();
+		private final JPanel _panel = new JPanel(
+				new FlowLayout(FlowLayout.LEADING, 0, 0));
+
+		BooleanPanel(final FormOptionPanel delegate)
+		{
+			_delegate = delegate;
+			_checkbox = new JCheckBox();
+			_checkbox.addChangeListener(this::onModelChange);
+			_checkbox.setFocusable(false);
+			_panel.add(_checkbox);
+		}
+
+		private void onModelChange(final ChangeEvent changeEvent)
+		{
+			if (_attribute != null)
+			{
+				BooleanValue v = _attribute.getValue();
+
+				v.setValue(_checkbox.isSelected());
+
+				_delegate.onChange();
+			}
+		}
+
+		void setAttribute(final Attribute<BooleanValue> attr)
+		{
+			if (attr != null)
+			{
+				_attribute = null; // prevent cycle
+				BooleanValue v = attr.getValue();
+
+				_checkbox.setSelected(v.getValue());
+
+				_checkbox.setToolTipText(attr.getName());
+				//_label.setText(attr.getName());
+			}
+			_attribute = attr;
+		}
+
+		public Component getComponent()
+		{
+			return _panel;
+		}
+
+		public void setEnabled(final boolean enabled)
+		{
+			_panel.setVisible(enabled);
 		}
 	}
 }

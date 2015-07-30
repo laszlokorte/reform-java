@@ -90,6 +90,11 @@ public class EventedProject
 		return _project.getPictureCount();
 	}
 
+	int getIndexOf(final Identifier<? extends Picture> pictureId)
+	{
+		return _project.getIndexOf(pictureId);
+	}
+
 	public interface Listener
 	{
 		void onPictureAdded(EventedProject project, Identifier<? extends Picture>

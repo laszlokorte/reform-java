@@ -121,4 +121,9 @@ public class IdentifiableList<E extends Identifiable<E>> implements
 	{
 		return _ids.iterator();
 	}
+
+	public int indexOf(final Identifier<? extends E> id)
+	{
+		return _ids.indexOf(id);
+	}
 }
