@@ -294,11 +294,16 @@ public final class PictureForm extends BaseForm<PictureForm>
 			double widthRatio = width2 / origWidth2;
 			double heightRatio = height2 / origHeight2;
 
+			double scaleFactor = Math.min(Math.abs(widthRatio), Math.abs(heightRatio));
+			double scaleX = Math.signum(widthRatio) * scaleFactor;
+			double scaleY = Math.signum(heightRatio) * scaleFactor;
+
+
 			_t.setToIdentity();
 			_t.translate(x, y);
 			_t.rotate(rot);
-			_t.translate(-width2, -height2);
-			_t.scale(widthRatio, heightRatio);
+			_t.translate(-origWidth2*scaleX, -origHeight2*scaleY);
+			_t.scale(scaleX, scaleY);
 			coloredShape.setChildTransform(_t);
 			coloredShape.addSubShapesFrom(_shapes[d]);
 		}

@@ -437,7 +437,7 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 						                                              cellHasFocus)
 				{
 					return super.getListCellRendererComponent(list,
-							value == null ? "" : ((Picture) value).getName().getValue(),
+							value == null ? "---" : ((Picture) value).getName().getValue(),
 							index, isSelected, cellHasFocus);
 				}
 			});
