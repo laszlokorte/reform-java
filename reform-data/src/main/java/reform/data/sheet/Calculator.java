@@ -599,6 +599,17 @@ public final class Calculator
 
 	}
 
+	public enum Constant {
+		PI(new Value(Math.PI)),
+		E(new Value(Math.E));
+
+		public final Value value;
+
+		Constant(Value v) {
+			value = v;
+		}
+	}
+
 	public static class SemanticException extends RuntimeException
 	{
 		private static final long serialVersionUID = 1L;

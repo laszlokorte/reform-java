@@ -52,6 +52,18 @@ public class Parser<E>
 						context.wereValues.push(false);
 						needOpen = true;
 					}
+					else if(_delegate.hasConstantOfName(token))
+					{
+						context.lastTokenAtom = true;
+
+						context.output.push(_delegate.constantTokenToNode(token));
+
+						if (!context.wereValues.isEmpty())
+						{
+							context.wereValues.pop();
+							context.wereValues.push(true);
+						}
+					}
 					else
 					{
 						context.lastTokenAtom = true;
@@ -360,12 +372,13 @@ public class Parser<E>
 					.ParenthesisRight;
 		}
 
-		default boolean hasFunctionOfName(final Token left)
-		{
-			return false;
-		}
+		boolean hasFunctionOfName(final Token name);
+
+		boolean hasConstantOfName(final Token name);
 
 		E variableTokenToNode(Token token);
+
+		E constantTokenToNode(Token token);
 
 		E emptyNode();
 

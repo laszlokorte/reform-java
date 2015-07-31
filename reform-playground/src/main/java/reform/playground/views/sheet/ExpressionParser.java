@@ -22,6 +22,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 	private final Lexer _lexer = getLexer();
 	private final Parser<Expression> _parser;
 	private final HashSet<String> _functionNames = new HashSet<>();
+	private final HashSet<String> _constantNames = new HashSet<>();
 
 
 	public ExpressionParser(final EventedSheet sheet)
@@ -33,9 +34,15 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		{
 			_functionNames.add(functions[i].name().toLowerCase());
 		}
+		final Calculator.Constant[] constants = Calculator.Constant.values();
+
+		for (int i = 0; i < constants.length; i++)
+		{
+			_constantNames.add(constants[i].name());
+		}
 		_sheet = sheet.getRaw();
 		Parser.ParserDelegate<Expression> delegate = new Delegate(sheet.getRaw(),
-		                                                          _functionNames);
+		                                                          _functionNames, _constantNames);
 		_parser = new Parser<>(delegate);
 	}
 
@@ -60,7 +67,7 @@ public class ExpressionParser implements ExpressionEditor.Parser
 		String testName = wantedName;
 		int postfix = 0;
 		Definition otherDef = _sheet.findDefinitionWithName(testName);
-		while (otherDef != null && otherDef != def || _functionNames.contains(testName))
+		while (otherDef != null && otherDef != def || _functionNames.contains(testName) || _constantNames.contains(testName))
 		{
 			testName = wantedName + ++postfix;
 			otherDef = _sheet.findDefinitionWithName(testName);
@@ -129,17 +136,25 @@ public class ExpressionParser implements ExpressionEditor.Parser
 				"^#[0-9a-fA-F]{8}$");
 		private final Sheet _sheet;
 		private final HashSet<String> _functionNames;
+		private final HashSet<String> _constantNames;
 
-		public Delegate(final Sheet sheet, final HashSet<String> functionNames)
+		public Delegate(final Sheet sheet, final HashSet<String> functionNames, final HashSet<String> constantNames)
 		{
 			_sheet = sheet;
 			_functionNames = functionNames;
+			_constantNames = constantNames;
 		}
 
 		@Override
 		public boolean hasFunctionOfName(final Token left)
 		{
 			return _functionNames.contains(left.value.toString());
+		}
+
+		@Override
+		public boolean hasConstantOfName(final Token name)
+		{
+			return _constantNames.contains(name.value.toString());
 		}
 
 		@Override
@@ -152,6 +167,12 @@ public class ExpressionParser implements ExpressionEditor.Parser
 				return new ReferenceExpression(new Identifier<>(-1), name);
 			}
 			return new ReferenceExpression(def.getId(), name);
+		}
+
+		@Override
+		public Expression constantTokenToNode(final Token token)
+		{
+			return new NamedConstantExpression(token.value.toString(), Calculator.Constant.valueOf(token.value.toString()).value);
 		}
 
 		@Override
