@@ -1,47 +1,42 @@
+Open:
  - Tool State description (anymore???)
  - changeable Form names
  - Glomp Points
  - Undo/Redo
- - Recursion
- - Text Shape
  - Rectangle Width/Height scale
  - Manual No-Snap mode
- - later instruction changes
  - merge consecutive instructions if possible
  - Iterate over points
  - Form Groups
  - Export animation (eg gif)
- - Export SVG
  - Export JavaScript (eg d3)
+ - Export bytecode
  - Snap point filter: option to show only snap points of selected form
  - Zoom
-
- - Data Grid
- - Shunting Yard
- - Cycle resolving
- - Measurements
-
- - Rewrite tokenizer
- - Fix loop-nesting-protection
-
- - serialize colors
-
  - improve scrolling when resizing canvas
- - simplify arc calculation
 
- - color picker Hue slider singularity
+In Progress:
+ - Recursion
+     - simplify recursion runtime listener
+     - refresh outer picture if embedded picture changes
+ - later instruction changes
+ - Data Grid / Measurements
+ - Fix loop-nesting-protection
+ - Adjust serializer to support latest changes
+
+Bugs:
+ - fix degenerated arc rotation
  - keep selection when canceling tool (focus get's reset)
-
  - sort shapes correctly
 
- - simplify recursion runtime listener
+Done:
+ - Text Shape
+ - Export SVG
+ - Shunting Yard
+ - Cycle resolving
+ - color picker Hue slider singularity
 
- - refresh outer picture if embedded picture changes
 
- - improve export
-
- - fix degenerated arc rotation
-
-Done
-====
- - Shape Styles
+Not important:
+ - Rewrite tokenizer
+ - simplify arc calculation
