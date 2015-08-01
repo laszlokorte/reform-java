@@ -16,7 +16,7 @@ public class SubtractionExpression extends BinaryExpressionBase implements Expre
 	@Override
 	public String asString(final boolean parens)
 	{
-		final String s = _lhs.asString(false) + " - " + _rhs.asString(false);
+		final String s = _lhs.asString(false) + " - " + _rhs.asString(_rhs instanceof SubtractionExpression || _rhs instanceof AdditionExpression);
 		if (parens)
 		{
 			return "(" + s + ")";

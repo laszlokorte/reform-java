@@ -17,7 +17,9 @@ public class DivisionExpression extends BinaryExpressionBase implements Expressi
 		final boolean leftParen = _lhs instanceof AdditionExpression || _lhs instanceof
 				SubtractionExpression;
 		final boolean rightParen = _rhs instanceof AdditionExpression || _rhs instanceof
-				SubtractionExpression;
+				SubtractionExpression || _rhs instanceof
+				DivisionExpression || _rhs instanceof
+				MultiplicationExpression;
 		final String op = " / ";
 		final String s = _lhs.asString(leftParen) + op + _rhs.asString(rightParen);
 		if (parens)

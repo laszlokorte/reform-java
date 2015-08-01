@@ -98,6 +98,9 @@ public final class Calculator
 		}
 		else
 		{
+			if(rhs.getInteger() == 0) {
+				throw new SemanticException();
+			}
 			return new Value(lhs.getInteger() / rhs.getInteger());
 		}
 	}
