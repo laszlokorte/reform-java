@@ -222,6 +222,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		}
 		else
 		{
+			_shapes[depth].reset();
 			_sizes[2 * depth] = (int) width;
 			_sizes[2 * depth + 1] = (int) height;
 		}

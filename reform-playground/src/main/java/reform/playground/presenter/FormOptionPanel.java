@@ -609,7 +609,6 @@ public final class FormOptionPanel implements FormSelection.Listener, EventedPro
 					{
 						((ExpressionColorValue) v).setExpression(expression);
 					}
-					System.out.println(String.format("[OUT] %s", "aaa"));
 					_colorPicker.setMixed();
 				}
 
