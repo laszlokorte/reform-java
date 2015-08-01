@@ -35,6 +35,7 @@ public class MoveFormTool implements Tool
 	private EntityPoint _currentPoint;
 	private TranslateInstruction _currentInstruction;
 	private TranslationDistance _currentDistance;
+
 	public MoveFormTool(final SelectionTool selectionTool, final ToolState toolState,
 	                    final Cursor cursor, final HitTester hitTester, final
 	                    InstructionFocus focus, final EventedProcedure eProcedure)
@@ -78,6 +79,7 @@ public class MoveFormTool implements Tool
 		}
 		else
 		{
+			_state = State.Idle;
 			_selectionTool.cancel();
 			_toolState.clearEntityPoints();
 		}
@@ -95,17 +97,18 @@ public class MoveFormTool implements Tool
 			_startPosition.set(_currentPoint.getX(), _currentPoint.getY());
 			_currentDistance = new ConstantDistance(new Vec2());
 			_currentInstruction = new TranslateInstruction(_currentPoint.getFormId(),
-			                                               _currentDistance);
+					_currentDistance);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
-			                           _focus.getFocused());
+					_focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _currentPoint.getX(),
-			                   _cursor.getPosition().y - _currentPoint.getY());
+					_cursor.getPosition().y - _currentPoint.getY());
 			_focus.setFocus(_currentInstruction);
 
 			_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
 		}
 		else
 		{
+			_state = State.PressedIdle;
 			_selectionTool.press();
 			_toolState.setEntityPoints(
 					_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
@@ -130,8 +133,9 @@ public class MoveFormTool implements Tool
 				_toolState.setViewState(ToolState.ViewState.EntityPoint);
 			}
 		}
-		else
+		else if (_state == State.PressedIdle)
 		{
+			_state = State.Idle;
 			_selectionTool.release();
 		}
 
@@ -166,11 +170,14 @@ public class MoveFormTool implements Tool
 		{
 			_cursor.cycleNextEntityPoint();
 		}
+		else if (_state == State.PressedIdle)
+		{
+			_selectionTool.cycle();
+		}
 		else
 		{
 			_cursor.cycleNextSnap();
 		}
-		_selectionTool.cycle();
 
 		_toolState.setEntityPoints(
 				_hitTester.getAllEntityPoints(EntityFilter.OnlySelected));
@@ -240,7 +247,7 @@ public class MoveFormTool implements Tool
 					else
 					{
 						d = new RelativeDistance(_currentPoint.createReference(),
-						                         currentSnapPoint.createReference());
+								currentSnapPoint.createReference());
 					}
 					if (input.getShiftModifier().isActive())
 					{
@@ -319,7 +326,7 @@ public class MoveFormTool implements Tool
 
 	private enum State
 	{
-		Idle, Snapped, Pressed, PressedSnapped
+		Idle, PressedIdle, Snapped, Pressed, PressedSnapped
 	}
 
 }

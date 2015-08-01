@@ -45,6 +45,7 @@ public class CreateFormTool implements Tool
 	private CreateFormInstruction _currentInstruction;
 	private InitialDestination _currentDestination;
 	private ReferencePoint _currentStart;
+
 	public CreateFormTool(final SelectionTool selectionTool, final FormFactory<? extends
 			Form> formFactory, final ToolState toolState, final Cursor cursor, final
 	HitTester hitTester, final InstructionFocus focus, final EventedProcedure eProcedure)
@@ -64,7 +65,7 @@ public class CreateFormTool implements Tool
 		_toolState.setViewState(ToolState.ViewState.Snap);
 		_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
 		_toolState.setSnapPoints(_hitTester.getAllSnapPoints(HitTester.EntityFilter
-				                                                     .Any));
+				.Any));
 	}
 
 	@Override
@@ -92,6 +93,7 @@ public class CreateFormTool implements Tool
 		}
 		else
 		{
+			_state = State.Idle;
 			_selectionTool.cancel();
 		}
 	}
@@ -105,14 +107,14 @@ public class CreateFormTool implements Tool
 			_startPoint = IntersectionSnapPointPool.copyIfNeeded(_currentPoint);
 			_currentStart = _startPoint.createReference();
 			_currentDestination = new RelativeFixSizeDestination(_currentStart,
-			                                                     new Vec2());
+					new Vec2());
 			final Form currentForm = _formFactory.build();
 			_currentInstruction = new CreateFormInstruction(currentForm,
-			                                                _currentDestination);
+					_currentDestination);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
-			                           _focus.getFocused());
+					_focus.getFocused());
 			_currentOffset.set(_cursor.getPosition().x - _startPoint.getX(),
-			                   _cursor.getPosition().y - _startPoint.getY());
+					_cursor.getPosition().y - _startPoint.getY());
 			_focus.setFocus(_currentInstruction);
 			_toolState.setViewState(ToolState.ViewState.SnapEntity);
 			_toolState.setEntityPoints(
@@ -120,6 +122,7 @@ public class CreateFormTool implements Tool
 		}
 		else
 		{
+			_state = State.PressedIdle;
 			_selectionTool.press();
 		}
 	}
@@ -144,8 +147,9 @@ public class CreateFormTool implements Tool
 				_toolState.clearEntityPoints();
 			}
 		}
-		else
+		else if (_state == State.PressedIdle)
 		{
+			_state = State.Idle;
 			_selectionTool.release();
 		}
 
@@ -179,8 +183,14 @@ public class CreateFormTool implements Tool
 	@Override
 	public void cycle()
 	{
-		_cursor.cycleNextSnap();
-		_selectionTool.cycle();
+		if (_state == State.PressedIdle)
+		{
+			_selectionTool.cycle();
+		}
+		else
+		{
+			_cursor.cycleNextSnap();
+		}
 	}
 
 	@Override
@@ -243,15 +253,14 @@ public class CreateFormTool implements Tool
 					else
 					{
 						d = new RelativeDynamicSizeDestination(_currentStart,
-						                                       _currentPoint
-								                                       .createReference());
+								_currentPoint.createReference());
 					}
 					if (input.getShiftModifier().isActive())
 					{
 						d.setDirection(
 								getDirectionFor(_currentPoint.getX() - _startPoint
-										                .getX(), _currentPoint.getY() - _startPoint.getY
-										                ()));
+												.getX(),
+										_currentPoint.getY() - _startPoint.getY()));
 					}
 					else
 					{
@@ -353,7 +362,7 @@ public class CreateFormTool implements Tool
 
 	private enum State
 	{
-		Idle, Snapped, Pressed, PressedSnapped
+		Idle, PressedIdle, Snapped, Pressed, PressedSnapped
 
 	}
 }

@@ -37,6 +37,7 @@ public class MorphFormTool implements Tool
 	private MorphInstruction _currentInstruction;
 	private TranslationDistance _currentDistance;
 	private Instruction _baseInstruction;
+
 	public MorphFormTool(final SelectionTool selectionTool, final ToolState toolState,
 	                     final Cursor cursor, final HitTester hitTester, final
 	                     InstructionFocus focus, final EventedProcedure eProcedure)
@@ -80,6 +81,7 @@ public class MorphFormTool implements Tool
 		}
 		else
 		{
+			_state = State.Idle;
 			_selectionTool.cancel();
 		}
 		_toolState.setSelectionState(ToolState.SelectionState.Handle);
@@ -95,18 +97,18 @@ public class MorphFormTool implements Tool
 			_baseInstruction = _focus.getFocused();
 			_currentDistance = new ConstantDistance(new Vec2());
 			_currentInstruction = new MorphInstruction(_currentHandle.getFormId(),
-			                                           _currentHandle.getAnchorId(),
-			                                           _currentDistance);
+					_currentHandle.getAnchorId(), _currentDistance);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
-			                           _baseInstruction);
+					_baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
-			                   _cursor.getPosition().y - _currentHandle.getY());
+					_cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 			_toolState.setViewState(ToolState.ViewState.SnapHandle);
 			_toolState.setSelectionState(ToolState.SelectionState.SnapPoint);
 		}
 		else
 		{
+			_state = State.PressedIdle;
 			_selectionTool.press();
 			refreshHandles();
 		}
@@ -132,8 +134,9 @@ public class MorphFormTool implements Tool
 				_toolState.setActiveSnapPoint(null);
 			}
 		}
-		else
+		else if (_state == State.PressedIdle)
 		{
+			_state = State.Idle;
 			_selectionTool.release();
 		}
 		_toolState.setSelectionState(ToolState.SelectionState.Handle);
@@ -166,11 +169,14 @@ public class MorphFormTool implements Tool
 		{
 			_cursor.cycleNextHandle();
 		}
+		else if (_state == State.PressedIdle)
+		{
+			_selectionTool.cycle();
+		}
 		else
 		{
 			_cursor.cycleNextSnap();
 		}
-		_selectionTool.cycle();
 
 		refreshHandles();
 
@@ -185,7 +191,7 @@ public class MorphFormTool implements Tool
 			case Snapped:
 			{
 				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected,
-				                                   HandleFilter.Any);
+						HandleFilter.Any);
 				if (_currentHandle == null)
 				{
 					_state = State.Idle;
@@ -240,13 +246,12 @@ public class MorphFormTool implements Tool
 					else
 					{
 						d = new RelativeDistance(_currentHandle.createReference(),
-						                         currentSnapPoint.createReference());
+								currentSnapPoint.createReference());
 					}
 					if (input.getShiftModifier().isActive())
 					{
 						d.setDirection(getDirectionFor(_cursor.getX() - _startPosition.x,
-						                               _cursor.getY() - _startPosition
-								                               .y));
+								_cursor.getY() - _startPosition.y));
 					}
 					else
 					{
@@ -323,7 +328,7 @@ public class MorphFormTool implements Tool
 
 	private enum State
 	{
-		Idle, Snapped, Pressed, PressedSnapped
+		Idle, PressedIdle, Snapped, Pressed, PressedSnapped
 	}
 
 }

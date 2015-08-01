@@ -41,6 +41,7 @@ public class SelectionTool implements Tool
 	@Override
 	public void cancel()
 	{
+		_state = State.Idle;
 		_formSelection.setSelection(null);
 	}
 

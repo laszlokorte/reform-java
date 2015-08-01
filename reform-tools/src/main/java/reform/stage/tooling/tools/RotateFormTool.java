@@ -41,6 +41,7 @@ public class RotateFormTool implements Tool
 	private RotateInstruction _currentInstruction;
 	private ConstantRotationAngle _currentAngle;
 	private Instruction _baseInstruction;
+
 	public RotateFormTool(final SelectionTool selectionTool, final ToolState toolState,
 	                      final Cursor cursor, final HitTester hitTester, final
 	                      InstructionFocus focus, final EventedProcedure eProcedure)
@@ -82,6 +83,7 @@ public class RotateFormTool implements Tool
 		}
 		else
 		{
+			_state = State.Idle;
 			_selectionTool.cancel();
 			_toolState.clearHandles();
 		}
@@ -102,17 +104,18 @@ public class RotateFormTool implements Tool
 					_pivotPrimary : _pivotSecondary;
 
 			_currentInstruction = new RotateInstruction(_currentHandle.getFormId(),
-			                                            _currentAngle, pivotPoint);
+					_currentAngle, pivotPoint);
 			_eProcedure.addInstruction(_currentInstruction, Position.After,
-			                           _baseInstruction);
+					_baseInstruction);
 			_currentOffset.set(_cursor.getPosition().x - _currentHandle.getX(),
-			                   _cursor.getPosition().y - _currentHandle.getY());
+					_cursor.getPosition().y - _currentHandle.getY());
 			_focus.setFocus(_currentInstruction);
 
 			_toolState.setSelectionState(ToolState.SelectionState.None);
 		}
 		else
 		{
+			_state = State.PressedIdle;
 			_selectionTool.press();
 			refreshHandles();
 		}
@@ -136,8 +139,9 @@ public class RotateFormTool implements Tool
 				_toolState.setActiveHandle(null);
 			}
 		}
-		else
+		else if (_state == State.PressedIdle)
 		{
+			_state = State.Idle;
 			_selectionTool.release();
 		}
 
@@ -166,11 +170,14 @@ public class RotateFormTool implements Tool
 		{
 			_cursor.cycleNextHandle();
 		}
+		else if (_state == State.PressedIdle)
+		{
+			_selectionTool.cycle();
+		}
 		else
 		{
 			_cursor.cycleNextSnap();
 		}
-		_selectionTool.cycle();
 
 		refreshHandles();
 
@@ -188,7 +195,7 @@ public class RotateFormTool implements Tool
 			case Snapped:
 			{
 				_currentHandle = _cursor.getHandle(HitTester.EntityFilter.OnlySelected,
-				                                   HandleFilter.Pivot);
+						HandleFilter.Pivot);
 				if (_currentHandle == null)
 				{
 					_state = State.Idle;
@@ -199,9 +206,9 @@ public class RotateFormTool implements Tool
 					_pivotPrimary = pivotPair.createReference(Choice.Primary);
 					_pivotSecondary = pivotPair.createReference(Choice.Secondary);
 					_pivotPrimaryPos.set(pivotPair.getX(Choice.Primary),
-					                     pivotPair.getY(Choice.Primary));
+							pivotPair.getY(Choice.Primary));
 					_pivotSecondaryPos.set(pivotPair.getX(Choice.Secondary),
-					                       pivotPair.getY(Choice.Secondary));
+							pivotPair.getY(Choice.Secondary));
 					_state = State.Snapped;
 				}
 
@@ -220,7 +227,7 @@ public class RotateFormTool implements Tool
 			}
 		}
 
-		if (_state != State.Idle)
+		if (_state != State.Idle && _state != State.PressedIdle)
 		{
 			_toolState.setPivot(
 					_pivotChoice == Choice.Primary ? _pivotPrimaryPos :
@@ -259,18 +266,16 @@ public class RotateFormTool implements Tool
 				_pivotSecondaryPos;
 
 		final double angle = -Vector.angle(_cursor.getX() - _currentOffset.x,
-		                                   _cursor.getY() - _currentOffset.y, pivotPos.x,
-		                                   pivotPos.y) + Vector.angle(_startPosition.x,
-		                                                              _startPosition.y,
-		                                                              pivotPos.x,
-		                                                              pivotPos.y);
+				_cursor.getY() - _currentOffset.y, pivotPos.x, pivotPos.y) + Vector
+				.angle(
+				_startPosition.x, _startPosition.y, pivotPos.x, pivotPos.y);
 
-		return (stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle) / (2*Math.PI);
+		return (stepped ? Vector.inStepsOf(angle, Math.PI / 50) : angle) / (2 * Math.PI);
 	}
 
 
 	private enum State
 	{
-		Idle, Snapped, Pressed
+		Idle, PressedIdle, Snapped, Pressed
 	}
 }
