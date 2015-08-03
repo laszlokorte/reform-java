@@ -19,6 +19,7 @@ public class ProjectRuntime implements Runtime
 	private final Project _project;
 	private boolean _stopped = false;
 	private int _depth = 0;
+	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private Frame[] _frames = new Frame[MAX_DEPTH];
 
 	{
@@ -55,14 +56,27 @@ public class ProjectRuntime implements Runtime
 		{
 			_frames[_depth]._size.set(width, height);
 		}
+		// synchronized (_lock)
+		{
+			for (int i = 0, j = _listeners.size(); i < j; i++)
+			{
+				_listeners.get(i).onSubCallBegin(this);
+			}
+		}
 		return picture;
 	}
 
 	@Override
 	public void subEnd()
 	{
-		_frames[_depth]._listeners.clear();
 		_depth -= 1;
+		// synchronized (_lock)
+		{
+			for (int i = 0, j = _listeners.size(); i < j; i++)
+			{
+				_listeners.get(i).onSubCallEnd(this);
+			}
+		}
 	}
 
 	@Override
@@ -73,9 +87,9 @@ public class ProjectRuntime implements Runtime
 
 		// synchronized (_lock)
 		{
-			for (int i = 0, j = _frames[_depth]._listeners.size(); i < j; i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
-				_frames[_depth]._listeners.get(i).onBeginEvaluation(this);
+				_listeners.get(i).onBeginEvaluation(this);
 			}
 		}
 	}
@@ -93,9 +107,9 @@ public class ProjectRuntime implements Runtime
 			{
 				// synchronized  (_lock)
 				{
-					for (int i = 0, j = _frames[_depth]._listeners.size(); i < j; i++)
+					for (int i = 0, j = _listeners.size(); i < j; i++)
 					{
-						_frames[_depth]._listeners.get(i).onFinishEvaluation(this);
+						_listeners.get(i).onFinishEvaluation(this);
 					}
 				}
 				if (_depth == 0)
@@ -118,9 +132,9 @@ public class ProjectRuntime implements Runtime
 
 		// synchronized  (_lock)
 		{
-			for (int i = 0, j = _frames[_depth]._listeners.size(); i < j; i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
-				_frames[_depth]._listeners.get(i).onEvalInstruction(this, instruction);
+				_listeners.get(i).onEvalInstruction(this, instruction);
 			}
 		}
 	}
@@ -139,9 +153,9 @@ public class ProjectRuntime implements Runtime
 					.getForms();
 			// synchronized  (_lock)
 			{
-				for (int i = 0, j = _frames[_depth]._listeners.size(); i < j; i++)
+				for (int i = 0, j = _listeners.size(); i < j; i++)
 				{
-					_frames[_depth]._listeners.get(i).onPopScope(this, ids);
+					_listeners.get(i).onPopScope(this, ids);
 				}
 			}
 		}
@@ -186,9 +200,9 @@ public class ProjectRuntime implements Runtime
 	{
 		// synchronized  (_lock)
 		{
-			for (int i = 0, j = _frames[_depth]._listeners.size(); i < j; i++)
+			for (int i = 0, j = _listeners.size(); i < j; i++)
 			{
-				_frames[_depth]._listeners.get(i).onError(this, instruction, error);
+				_listeners.get(i).onError(this, instruction, error);
 			}
 		}
 	}
@@ -218,12 +232,12 @@ public class ProjectRuntime implements Runtime
 
 	public void addListener(final Listener listener)
 	{
-		_frames[_depth]._listeners.add(listener);
+		_listeners.add(listener);
 	}
 
 	public void removeListener(final Listener listener)
 	{
-		_frames[_depth]._listeners.remove(listener);
+		_listeners.remove(listener);
 	}
 
 	public void stop()
@@ -240,7 +254,6 @@ public class ProjectRuntime implements Runtime
 
 	private static class Frame
 	{
-		private final ArrayList<Listener> _listeners = new ArrayList<>();
 		private final Vec2i _size = new Vec2i();
 		private DataSet _dataSet = null;
 		private final Stack _stack = new Stack();

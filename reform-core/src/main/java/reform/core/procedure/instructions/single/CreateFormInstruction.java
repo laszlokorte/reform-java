@@ -2,6 +2,7 @@ package reform.core.procedure.instructions.single;
 
 import reform.core.analyzer.Analyzer;
 import reform.core.forms.Form;
+import reform.core.forms.PictureForm;
 import reform.core.procedure.instructions.BaseInstruction;
 import reform.core.runtime.Runtime;
 import reform.core.runtime.errors.InvalidDestinationError;
@@ -46,6 +47,9 @@ public class CreateFormInstruction extends BaseInstruction
 		analyzer.publish(this,
 		                 "Create " + _form.getName().getValue() + " " + _destination
 				                 .getDescription(analyzer));
+		if(_form instanceof PictureForm) {
+			analyzer.announceDepencency(((PictureForm) _form).getPicture());
+		}
 	}
 
 	@Override

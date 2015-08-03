@@ -99,4 +99,9 @@ public class ColoredShape
 	{
 		_subShapes.addAll(subShapesFrom._subShapes);
 	}
+
+	public int size()
+	{
+		return _subShapes.size();
+	}
 }
