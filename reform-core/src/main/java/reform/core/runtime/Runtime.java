@@ -64,9 +64,5 @@ public interface Runtime
 				ids);
 
 		void onError(Runtime runtime, Evaluable instruction, RuntimeError error);
-
-		void onSubCallBegin(Runtime runtime);
-
-		void onSubCallEnd(Runtime runtime);
 	}
 }

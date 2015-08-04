@@ -1,7 +1,6 @@
 package reform.core.analyzer;
 
 import reform.core.forms.Form;
-import reform.core.project.Picture;
 import reform.identity.Identifier;
 
 public interface Analyzer
@@ -19,8 +18,6 @@ public interface Analyzer
 	void popScope();
 
 	void announceForm(Form form);
-
-	void announceDepencency(Identifier<? extends Picture> pictureId);
 
 	Form getForm(Identifier<? extends Form> _formId);
 }

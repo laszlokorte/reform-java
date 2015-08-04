@@ -97,9 +97,6 @@ public class ProjectPresenter implements Listener
 	private void updatePicture(final Identifier<? extends Picture> pictureId)
 	{
 		_pictures.get(pictureId).update();
-		for(int i=0,j=_project.getPictureCount();i<j;i++) {
-			_pictures.get(_project.getPictureAtIndex(i)).notifyPictureChange(pictureId);
-		}
 	}
 
 	private void selectPicture(final Identifier<? extends Picture> pictureId)

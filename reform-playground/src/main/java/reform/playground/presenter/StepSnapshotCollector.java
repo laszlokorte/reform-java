@@ -56,11 +56,6 @@ public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listen
 	@Override
 	public void onBeginEvaluation(final Runtime runtime)
 	{
-
-		if(runtime.getDepth() > 0) {
-			return;
-		}
-
 		_recordedInstructions.clear();
 		_failedInstructions.clear();
 		_collectedShapes.clear();
@@ -82,11 +77,6 @@ public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listen
 	@Override
 	public void onFinishEvaluation(final Runtime runtime)
 	{
-
-		if(runtime.getDepth() > 0) {
-			return;
-		}
-
 		final Iterator<Evaluable> iterator = _instructionBitmaps.keySet().iterator();
 		while (iterator.hasNext())
 		{
@@ -110,10 +100,6 @@ public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listen
 	public void onEvalInstruction(final Runtime runtime, final Evaluable
 			evaluable)
 	{
-		if(runtime.getDepth() > 0) {
-			return;
-		}
-
 		if (evaluable instanceof NullInstruction)
 		{
 			return;
@@ -209,11 +195,6 @@ public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listen
 	public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
 			extends Form>> poppedIds)
 	{
-
-		if(runtime.getDepth() > 0) {
-			return;
-		}
-
 		for (int i = 0, j = poppedIds.size(); i < j; i++)
 		{
 			final Identifier<? extends Form> id = poppedIds.get(i);
@@ -232,23 +213,8 @@ public class StepSnapshotCollector implements reform.core.runtime.Runtime.Listen
 	public void onError(final Runtime runtime, final Evaluable instruction, final
 	RuntimeError error)
 	{
-		if(runtime.getDepth() > 0) {
-			return;
-		}
 		_failedInstructions.add(instruction);
 		_errorMap.put(instruction, error);
-	}
-
-	@Override
-	public void onSubCallBegin(final Runtime runtime)
-	{
-
-	}
-
-	@Override
-	public void onSubCallEnd(final Runtime runtime)
-	{
-
 	}
 
 	private BufferedImage getBufferedImage(final Evaluable instruction)

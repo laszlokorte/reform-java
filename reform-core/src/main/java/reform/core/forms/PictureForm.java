@@ -56,6 +56,69 @@ public final class PictureForm extends BaseForm<PictureForm>
 
 	private final AttributeSet _attributes = new AttributeSet(_proportionallyAttribute, _pictureIdAttribute);
 
+
+	private final ColoredShape[] _shapes = new ColoredShape[Runtime.MAX_DEPTH];
+	private final int[] _sizes = new int[Runtime.MAX_DEPTH * 2];
+
+	{
+		for (int i = 0; i < _shapes.length; i++)
+		{
+			_shapes[i] = new ColoredShape();
+		}
+	}
+
+	private final Runtime.Listener _listener = new Runtime.Listener()
+	{
+
+		@Override
+		public void onBeginEvaluation(final Runtime runtime)
+		{
+			int depth = runtime.getDepth();
+			_sizes[2 * depth - 2] = runtime.getSize().x;
+			_sizes[2 * depth - 1] = runtime.getSize().y;
+		}
+
+		@Override
+		public void onFinishEvaluation(final Runtime runtime)
+		{
+			_shapes[runtime.getDepth()].reset();
+
+		}
+
+		@Override
+		public void onEvalInstruction(final Runtime runtime, final Evaluable instruction)
+		{
+
+		}
+
+		@Override
+		public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
+				extends Form>> ids)
+		{
+			int depth = runtime.getDepth();
+			for (int i = 0, j = ids.size(); i < j; i++)
+			{
+				Form form = runtime.get(ids.get(i));
+				if (form.getType() == DrawingType.Draw)
+				{
+					ColoredShape s = new ColoredShape();
+					form.writeColoredShapeForRuntime(runtime, s);
+
+					ColoredShape parentShape = _shapes[depth - 1];
+					parentShape.addSubShape(s);
+				}
+			}
+
+		}
+
+		@Override
+		public void onError(final Runtime runtime, final Evaluable instruction, final
+		RuntimeError error)
+		{
+
+		}
+	};
+
 	private PictureForm(final Identifier<PictureForm> id, final Name name)
 	{
 		super(id, SIZE, name);
@@ -141,6 +204,7 @@ public final class PictureForm extends BaseForm<PictureForm>
 		_centerPoint.setForRuntime(runtime, (minX + maxX) / 2, (minY + maxY) / 2);
 		_width.setForRuntime(runtime, maxX - minX);
 		_height.setForRuntime(runtime, maxY - minY);
+		int depth = runtime.getDepth();
 
 		Identifier<? extends Picture> pictureId = _pictureIdAttribute.getValue()
 				.getValueForRuntime(runtime);
@@ -150,8 +214,17 @@ public final class PictureForm extends BaseForm<PictureForm>
 		Picture p = runtime.subCall(pictureId, (int) (width), (int) (height), keepProportion);
 		if (p != null)
 		{
+			_shapes[depth].reset();
+			runtime.addListener(_listener);
 			p.getProcedure().evaluate(runtime);
 			runtime.subEnd();
+
+		}
+		else
+		{
+			_shapes[depth].reset();
+			_sizes[2 * depth] = (int) width;
+			_sizes[2 * depth + 1] = (int) height;
 		}
 	}
 
@@ -219,6 +292,28 @@ public final class PictureForm extends BaseForm<PictureForm>
 		final double y = _centerPoint.getYValueForRuntime(runtime);
 		double rot = _rotation.getValueForRuntime(runtime);
 
+		int d = depth;
+
+		double origWidth2 = _sizes[2 * d] / 2.0;
+		double origHeight2 = _sizes[2 * d + 1] / 2.0;
+		if (origWidth2 > 10 && origHeight2 > 10)
+		{
+			double widthRatio = width2 / origWidth2;
+			double heightRatio = height2 / origHeight2;
+
+			double scaleFactor = Math.min(Math.abs(widthRatio), Math.abs(heightRatio));
+			double scaleX = Math.signum(widthRatio) * scaleFactor;
+			double scaleY = Math.signum(heightRatio) * scaleFactor;
+
+
+			_t.setToIdentity();
+			_t.translate(x, y);
+			_t.rotate(rot);
+			_t.translate(-origWidth2*scaleX, -origHeight2*scaleY);
+			_t.scale(scaleX, scaleY);
+			coloredShape.setChildTransform(_t);
+			coloredShape.addSubShapesFrom(_shapes[d]);
+		}
 	}
 
 	@Override
@@ -259,10 +354,6 @@ public final class PictureForm extends BaseForm<PictureForm>
 	public void setPicture(final Identifier<?extends Picture> pictureId)
 	{
 		_pictureIdAttribute.setValue(new IdValue<>(pictureId));
-	}
-
-	public Identifier<?extends Picture> getPicture() {
-		return _pictureIdAttribute.getValue().getIdentifier();
 	}
 
 	public static PictureForm construct(final Identifier<PictureForm> id, final Name

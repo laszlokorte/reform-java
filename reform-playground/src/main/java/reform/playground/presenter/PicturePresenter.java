@@ -598,10 +598,6 @@ public class PicturePresenter
 			@Override
 			public void onFinishEvaluation(final Runtime runtime)
 			{
-				if(runtime.getDepth() > 0) {
-					return;
-				}
-
 				if (_selection.isSet() && _stage.getEntityForId(
 						_selection.getSelected()) == null)
 				{
@@ -637,18 +633,6 @@ public class PicturePresenter
 			                    final RuntimeError error)
 			{
 				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onSubCallBegin(final Runtime runtime)
-			{
-
-			}
-
-			@Override
-			public void onSubCallEnd(final Runtime runtime)
-			{
 
 			}
 
@@ -915,12 +899,6 @@ public class PicturePresenter
 		_picture.getEventedProcedure().analyze(_analyzer);
 	}
 
-	public void notifyPictureChange(Identifier<?extends Picture> picture) {
-		if(_analyzer.dependsOn(picture)) {
-			evaluateProcedure();
-		}
-	}
-
 	private void evaluateProcedure()
 	{
 		_runtime.stop();
@@ -1009,23 +987,8 @@ public class PicturePresenter
 		}
 
 		@Override
-		public void onSubCallBegin(final Runtime runtime)
-		{
-
-		}
-
-		@Override
-		public void onSubCallEnd(final Runtime runtime)
-		{
-
-		}
-
-		@Override
 		public void onBeginEvaluation(final Runtime runtime)
 		{
-			if(runtime.getDepth() > 0) {
-				return;
-			}
 			_collectedShapes.clear();
 			_size.set(runtime.getSize());
 		}
@@ -1033,9 +996,6 @@ public class PicturePresenter
 		@Override
 		public void onFinishEvaluation(final Runtime runtime)
 		{
-			if(runtime.getDepth() > 0) {
-				return;
-			}
 			_pathPool.release();
 		}
 
@@ -1043,10 +1003,6 @@ public class PicturePresenter
 		public void onPopScope(final Runtime runtime, final FastIterable<Identifier<?
 				extends Form>> poppedIds)
 		{
-
-			if(runtime.getDepth() > 0) {
-				return;
-			}
 			for (int i = 0, j = poppedIds.size(); i < j; i++)
 			{
 				final Identifier<? extends Form> id = poppedIds.get(i);
