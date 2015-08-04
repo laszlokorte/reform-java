@@ -1,22 +1,24 @@
+Conceptually open:
+ - Iterate over points
+ - Form Groups
+ - Snap point filter: option to show only snap points of selected form
+ - Path Tool
+ - Array-Values in Exressions
+ - Export animation (eg gif)
+ - Export JavaScript (eg d3)
+ - Export bytecode
+ - Zoom
+ - Rectangle Width/Height scale
+
 Open:
  - Tool State description (anymore???)
  - changeable Form names
  - Glomp Points
  - Undo/Redo
- - Rectangle Width/Height scale
  - Manual No-Snap mode
  - merge consecutive instructions if possible
- - Iterate over points
- - Form Groups
- - Export animation (eg gif)
- - Export JavaScript (eg d3)
- - Export bytecode
- - Snap point filter: option to show only snap points of selected form
- - Zoom
  - improve scrolling when resizing canvas
- - Array-Values in Exressions
  - Increment/Decrement Expressions
- - Path Tool
  - Iteration Focus
  - Multiple Instruction Selection
  - Improve Error-Checking in analyzer and runtime regarding expressions
