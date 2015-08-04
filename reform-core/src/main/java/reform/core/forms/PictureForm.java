@@ -356,6 +356,11 @@ public final class PictureForm extends BaseForm<PictureForm>
 		_pictureIdAttribute.setValue(new IdValue<>(pictureId));
 	}
 
+	public Identifier<?extends Picture> getPicture() {
+		return _pictureIdAttribute.getValue().getIdentifier();
+	}
+	
+
 	public static PictureForm construct(final Identifier<PictureForm> id, final Name
 			name)
 	{

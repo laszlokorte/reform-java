@@ -899,6 +899,12 @@ public class PicturePresenter
 		_picture.getEventedProcedure().analyze(_analyzer);
 	}
 
+	public void notifyPictureChange(Identifier<?extends Picture> picture) {
+		if(_analyzer.dependsOn(picture)) {
+			evaluateProcedure();
+		}
+	}
+
 	private void evaluateProcedure()
 	{
 		_runtime.stop();

@@ -1,13 +1,17 @@
 package reform.core.analyzer;
 
 import reform.core.forms.Form;
+import reform.core.project.Picture;
 import reform.identity.IdentifiableList;
 import reform.identity.Identifier;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProjectAnalyzer implements Analyzer
 {
+	private final Set<Identifier<?extends Picture>> _dependencies = new HashSet<>();
 
 	private final ArrayList<Listener> _listeners = new ArrayList<>();
 	private final ArrayList<FlatNode> _nodes = new ArrayList<>();
@@ -20,6 +24,7 @@ public class ProjectAnalyzer implements Analyzer
 		_depth = -1;
 		_nodes.clear();
 		_forms.clear();
+		_dependencies.clear();
 
 	}
 
@@ -73,6 +78,12 @@ public class ProjectAnalyzer implements Analyzer
 	}
 
 	@Override
+	public void announceDepencency(final Identifier<? extends Picture> pictureId)
+	{
+		_dependencies.add(pictureId);
+	}
+
+	@Override
 	public Form getForm(final Identifier<? extends Form> formId)
 	{
 		return _forms.getById(formId);
@@ -108,6 +119,10 @@ public class ProjectAnalyzer implements Analyzer
 			}
 		}
 		return -1;
+	}
+
+	public boolean dependsOn(Identifier<?extends Picture> pictureId) {
+		return _dependencies.contains(pictureId);
 	}
 
 	public interface Listener
