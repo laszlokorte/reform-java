@@ -15,7 +15,7 @@ When will it be releaed?
 
 This java implementation is not developt anymore.
 
-"Currently a Swift implementation is developed"[https://github.com/laszlokorte/reform-swift]
+[Currently a Swift implementation is developed](https://github.com/laszlokorte/reform-swift)
 
 Links
 -----
