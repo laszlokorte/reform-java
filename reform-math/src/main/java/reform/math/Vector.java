@@ -1,5 +1,12 @@
 package reform.math;
 
+
+//
+//  The intersection algorithms are based on 
+//  the ones provided by Paul Bourke
+//  http://paulbourke.net/geometry/
+//
+
 public final class Vector
 {
 
@@ -210,10 +217,6 @@ public final class Vector
 	double x2, final double y2, final double x3, final double y3, final double x4, final
 	double y4)
 	{
-		// line segment from (x1,y1) to (x2,y2) intersecting segment from
-		// (x3,y3) to (x4,y4)
-		// ref http://paulbourke.net/geometry/pointlineplane/
-
 		final double d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
 
 		final double na = (x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3);
