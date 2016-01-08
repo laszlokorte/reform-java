@@ -1,6 +1,8 @@
 Reform - Drawing Dynamic Visualizations
 =======================================
 
+![screenshot of the applciation](https://static.laszlokorte.de/reform/screenshot-java.png "screenshot of the applciation")
+
 What is Reform?
 ---------------
 
@@ -16,6 +18,15 @@ When will it be releaed?
 This java implementation is not developt anymore.
 
 [Currently a Swift implementation is developed](https://github.com/laszlokorte/reform-swift)
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Links
 -----
