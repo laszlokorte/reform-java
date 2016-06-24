@@ -12,8 +12,13 @@ It is based on Bret Victor's talk "Drawing Dynamic Visualizations".
 
 Currently it is still under development and not yet released.
 
-When will it be releaed?
-------------------------
+Demo
+----
+
+Take a look [at this youtube playlist](https://www.youtube.com/watch?v=3aRMPKpRA8c&list=PLfGbKGqfmpEJofmpKra57N0FTgd33SnGG&index=27) to see the application in action.
+
+When will it be released?
+-------------------------
 
 This java implementation is not developt anymore.
 
@@ -38,4 +43,10 @@ Bret Victor's talk "Drawing Dynamic Visualisations":
 http://vimeo.com/66085662
 
 Bret's talk notes:  
-http://worrydream.com/DrawingDynamicVisualizationsTalkAddendum/'
+http://worrydream.com/DrawingDynamicVisualizationsTalkAddendum/
+
+Youtube demo playlist:
+https://www.youtube.com/playlist?list=PLfGbKGqfmpEJofmpKra57N0FTgd33SnGG
+
+Swift implementation:
+https://github.com/laszlokorte/reform-swift
