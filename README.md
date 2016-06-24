@@ -1,6 +1,8 @@
 Reform - Drawing Dynamic Visualizations
 =======================================
 
+[![Join the chat at https://gitter.im/laszlokorte/reform-java](https://badges.gitter.im/laszlokorte/reform-java.svg)](https://gitter.im/laszlokorte/reform-java?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![screenshot of the applciation](https://static.laszlokorte.de/reform/screenshot-java.png "screenshot of the applciation")
 
 What is Reform?
